@@ -1,0 +1,30 @@
+{
+  "name": "geode",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "args": {
+      "USERNAME": "developer"
+    },
+    "context": ".."
+  },
+  "remoteUser": "developer",
+  "customizations": {
+    "vscode": {
+      "extensions": [],
+      "settings": {
+        "editor.formatOnSave": false,
+        "editor.codeActionsOnSave": {
+          "source.organizeImports": "explicit"
+        },
+        "[python]": {}
+      }
+    }
+  },
+  "postCreateCommand": "echo \"Container setup complete\"",
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {}
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/home/developer/,type=bind,consistency=cached"
+  ]
+}
