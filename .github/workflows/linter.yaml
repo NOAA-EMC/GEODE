@@ -49,8 +49,8 @@ jobs:
             echo "WARNING: no Python files found"
             exit 0
           fi
-          python -m ruff format --check "${python_files[@]}"
-          python -m ruff check "${python_files[@]}"
+          python -m ruff format --check --diff "${python_files[@]}"
+          python -m ruff check --output-format=github "${python_files[@]}"
 
       - name: Check C++ coding norms
         shell: bash
