@@ -8,8 +8,6 @@ jobs:
   lint:
     name: Python and C++ norms
     runs-on: ubuntu-latest
-    container: 
-      image: noaaepic/rocky9-gcc13.3.1-spack-stack:v1.9.2-ufs-env-ompi507
 
     steps:
       - name: Check out repository
