@@ -32,7 +32,7 @@ def build_bufr_url(cycle_time: datetime) -> str:
     )
 
 
-def download_file(url: str, output_path: Path) -> None:
+def download_file(url: str,output_path: Path) -> None:
     """Download URL content to output_path."""
     with urlopen(url) as response, output_path.open("wb") as out_file:
         out_file.write(response.read())
