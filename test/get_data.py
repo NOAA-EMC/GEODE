@@ -51,8 +51,7 @@ def download_file(url: str, output_path: Path) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Download a BUFR file for the cycle nearest to "
-            "12 hours ago in UTC."
+            "Download a BUFR file for the cycle nearest to 12 hours ago in UTC."
         )
     )
     parser.add_argument(
