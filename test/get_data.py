@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import re
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.request import urlopen
@@ -22,14 +23,23 @@ def nearest_cycle_time(now_utc: datetime) -> datetime:
     return min(candidates, key=lambda dt: (abs(dt - target), dt))
 
 
-def build_bufr_url(cycle_time: datetime) -> str:
+def build_bufr_url(cycle_time: datetime, bufr_type: str) -> str:
     """Construct the NOMADS BUFR URL for the given cycle time."""
     ymd = cycle_time.strftime("%Y%m%d")
     hh = cycle_time.strftime("%H")
     return (
         "https://nomads.ncep.noaa.gov/pub/data/nccf/com/obsproc/prod/"
-        f"gfs.{ymd}/gfs.t{hh}z.uprair.tm00.bufr_d"
+        f"gfs.{ymd}/gfs.t{hh}z.{bufr_type}.tm00.bufr_d"
     )
+
+
+def parse_bufr_type(value: str) -> str:
+    """Validate a BUFR subtype token used in the NOMADS filename."""
+    if not re.fullmatch(r"[a-z0-9_]+", value):
+        raise argparse.ArgumentTypeError(
+            "bufr type must contain only lowercase letters, digits, or underscores"
+        )
+    return value
 
 
 def download_file(url: str, output_path: Path) -> None:
@@ -41,9 +51,15 @@ def download_file(url: str, output_path: Path) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Download the uprair BUFR file for the cycle nearest to "
+            "Download a BUFR file for the cycle nearest to "
             "12 hours ago in UTC."
         )
+    )
+    parser.add_argument(
+        "--bufr-type",
+        type=parse_bufr_type,
+        default="uprair",
+        help="BUFR subtype in filename (examples: uprair, adpsfc).",
     )
     parser.add_argument(
         "--output-dir",
@@ -63,7 +79,7 @@ def main() -> None:
     args = parse_args()
     now_utc = datetime.now(timezone.utc)
     cycle_time = nearest_cycle_time(now_utc)
-    url = build_bufr_url(cycle_time)
+    url = build_bufr_url(cycle_time, args.bufr_type)
 
     filename = Path(url).name
     output_dir = args.output_dir
