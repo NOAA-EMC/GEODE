@@ -9,7 +9,7 @@ jobs:
     name: Python and C++ norms
     runs-on: ubuntu-latest
     container: 
-      image: noaaepic/rocky9-gcc13.3.1-spack-stack1.9:latest
+      image: noaaepic/rocky9-gcc13.3.1-spack-stack:latest
 
     steps:
       - name: Check out repository
