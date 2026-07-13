@@ -64,10 +64,12 @@ def plot_observations(bufr_file: str, output_img: str):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Plot ADPSFC observations from BUFR file.")
+        description="Plot ADPSFC observations from BUFR file."
+    )
     parser.add_argument("bufr_file", help="Path to the BUFR file")
     parser.add_argument(
-        "--output", default="adpsfc_plot.png", help="Output image filename")
+        "--output", default="adpsfc_plot.png", help="Output image filename"
+    )
     args = parser.parse_args()
 
     plot_observations(args.bufr_file, args.output)

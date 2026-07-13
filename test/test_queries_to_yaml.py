@@ -34,7 +34,7 @@ NC000101
     generate_yaml(queries, str(out_file))
 
     # Read generated yaml and ensure structure
-    with open(out_file, 'r') as f:
+    with open(out_file, "r") as f:
         data = yaml.safe_load(f)
 
     assert "bufr" in data
