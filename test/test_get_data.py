@@ -34,10 +34,10 @@ def test_download_adpsfc(tmp_path: Path) -> None:
     assert "Download complete" in result.stdout
 
     # Verify that the downloaded file exists in tmp_path and is not empty
-    downloaded_files = list(tmp_path.glob("*.bufr_d"))
+    downloaded_files = list(tmp_path.glob("*.bufr_d*"))
     assert len(downloaded_files) == 1
 
     downloaded_file = downloaded_files[0]
     assert downloaded_file.exists()
-    assert downloaded_file.name.endswith(".adpsfc.tm00.bufr_d")
+    assert downloaded_file.name.endswith(".adpsfc.tm00.bufr_d.nr")
     assert downloaded_file.stat().st_size > 0

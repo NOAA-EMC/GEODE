@@ -27,9 +27,11 @@ def build_bufr_url(cycle_time: datetime, bufr_type: str) -> str:
     """Construct the NOMADS BUFR URL for the given cycle time."""
     ymd = cycle_time.strftime("%Y%m%d")
     hh = cycle_time.strftime("%H")
+    nr_types = {"adpsfc", "aircar", "aircft", "gpsipw", "gpsro", "sfcsno"}
+    suffix = ".nr" if bufr_type in nr_types else ""
     return (
         "https://nomads.ncep.noaa.gov/pub/data/nccf/com/obsproc/prod/"
-        f"gfs.{ymd}/gfs.t{hh}z.{bufr_type}.tm00.bufr_d"
+        f"gfs.{ymd}/gfs.t{hh}z.{bufr_type}.tm00.bufr_d{suffix}"
     )
 
 
