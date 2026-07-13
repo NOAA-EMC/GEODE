@@ -1,0 +1,3 @@
+[submodule "src/spoc"]
+	path = src/spoc
+	url = https://github.com/noaa-emc/spoc
