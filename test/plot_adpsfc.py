@@ -40,7 +40,7 @@ def plot_observations(bufr_file: str, output_img: str):
     ax.add_feature(cfeature.BORDERS, linewidth=0.5, linestyle=":")
     ax.add_feature(cfeature.LAND, facecolor="lightgray", alpha=0.5)
     ax.add_feature(cfeature.OCEAN, facecolor="azure", alpha=0.5)
-    
+
     # Plot observations colored by temperature
     sc = ax.scatter(
         valid_lon,
@@ -51,20 +51,23 @@ def plot_observations(bufr_file: str, output_img: str):
         alpha=0.8,
         transform=ccrs.PlateCarree(),
     )
-    
+
     # Add colorbar on the side
     cbar = plt.colorbar(sc, ax=ax, orientation="vertical", shrink=0.8, pad=0.02)
     cbar.set_label("Temperature / Dry Bulb (K)")
-    
+
     ax.set_title("ADPSFC Observations (TMDB)")
-    
+
     plt.savefig(output_img, dpi=300, bbox_inches="tight")
     print(f"Plot saved to {output_img}")
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Plot ADPSFC observations from BUFR file.")
+    parser = argparse.ArgumentParser(
+        description="Plot ADPSFC observations from BUFR file.")
     parser.add_argument("bufr_file", help="Path to the BUFR file")
-    parser.add_argument("--output", default="adpsfc_plot.png", help="Output image filename")
+    parser.add_argument(
+        "--output", default="adpsfc_plot.png", help="Output image filename")
     args = parser.parse_args()
-    
+
     plot_observations(args.bufr_file, args.output)

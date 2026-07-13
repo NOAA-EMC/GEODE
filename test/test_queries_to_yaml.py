@@ -30,7 +30,7 @@ NC000101
     assert len(queries) == 7
     assert queries[-1]["mnemonic"] == "WMOB"
     assert queries[-1]["query"] == "*/WMOB"
-    
+
     generate_yaml(queries, str(out_file))
 
     # Read generated yaml and ensure structure
@@ -39,12 +39,12 @@ NC000101
 
     assert "bufr" in data
     assert "encoder" in data
-    
+
     bufr_vars = data["bufr"]["variables"]
     assert "timestamp" in bufr_vars
     assert "wmoBlockNumber" in bufr_vars
     assert "temperaturedryBulbTemperature" in bufr_vars
-    
+
     enc_vars = data["encoder"]["variables"]
     names = [v["name"] for v in enc_vars]
     assert "MetaData/dateTime" in names

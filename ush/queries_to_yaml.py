@@ -41,7 +41,7 @@ def parse_queries(filename: str) -> List[Dict[str, str]]:
     Returns
     -------
     List[Dict[str, str]]
-        A list of parsed query definitions, each containing dimensions, 
+        A list of parsed query definitions, each containing dimensions,
         data types, BUFR queries, descriptions, and root mnemonics.
 
     Examples
@@ -52,7 +52,7 @@ def parse_queries(filename: str) -> List[Dict[str, str]]:
     queries = []
     with open(filename, "r") as f:
         lines = f.readlines()
-        
+
     start_parsing = False
     for line in lines:
         if line.strip() == "Queries:":
@@ -66,49 +66,50 @@ def parse_queries(filename: str) -> List[Dict[str, str]]:
                 dim = parts[0]
                 typ = parts[1]
                 query = parts[2]
-                desc = parts[3].strip() if len(parts) > 3 else query.split('/')[-1]
-                
+                desc = parts[3].strip() if len(parts) > 3 else query.split("/")[-1]
+
                 # Replace root node with '*'
-                query_parts = query.split('/', 1)
+                query_parts = query.split("/", 1)
                 if len(query_parts) > 1:
-                    query_path = '*/' + query_parts[1]
+                    query_path = "*/" + query_parts[1]
                 else:
                     query_path = query
                 queries.append({
-                    'dim': dim,
-                    'type': typ,
-                    'query': query_path,
-                    'desc': desc,
-                    'mnemonic': query.split('/')[-1].split('[')[0]
+                    "dim": dim,
+                    "type": typ,
+                    "query": query_path,
+                    "desc": desc,
+                    "mnemonic": query.split("/")[-1].split("[")[0]
                 })
     return queries
+
 
 def generate_yaml(queries: List[Dict[str, str]], outfile: str) -> None:
     """
     Generate an IODA-compliant BUFR configuration YAML file.
-    
+
     Parameters
     ----------
     queries : List[Dict[str, str]]
         A list of parsed BUFR queries containing variable definitions.
     outfile : str
         The destination file path for the generated YAML.
-        
+
     Returns
     -------
     None
         Writes the structured configuration directly to the filesystem.
-        
+
     Examples
     --------
     >>> generate_yaml(queries, "output_mapping.yaml")
     """
     # Determine timestamp components
-    time_mnemonics = ['YEAR', 'MNTH', 'DAYS', 'HOUR', 'MINU']
-    time_queries = {q['mnemonic']: q['query'] for q in queries}
+    time_mnemonics = ["YEAR", "MNTH", "DAYS", "HOUR", "MINU"]
+    time_queries = {q["mnemonic"]: q["query"] for q in queries}
     has_time = all(k in time_queries for k in time_mnemonics)
     
-    receipt_mnemonics = ['RCYR', 'RCMO', 'RCDY', 'RCHR', 'RCMI']
+    receipt_mnemonics = ["RCYR", "RCMO", "RCDY", "RCHR", "RCMI"]
     has_receipt = all(k in time_queries for k in receipt_mnemonics)
 
     with open(outfile, "w") as f:
@@ -121,20 +122,20 @@ def generate_yaml(queries: List[Dict[str, str]], outfile: str) -> None:
         if has_time:
             f.write("    timestamp:\n")
             f.write("      datetime:\n")
-            f.write(f"        year: \"{time_queries['YEAR']}\"\n")
-            f.write(f"        month: \"{time_queries['MNTH']}\"\n")
-            f.write(f"        day: \"{time_queries['DAYS']}\"\n")
-            f.write(f"        hour: \"{time_queries['HOUR']}\"\n")
-            f.write(f"        minute: \"{time_queries['MINU']}\"\n\n")
+            f.write(f"        year: \"{time_queries[\"YEAR\"]}\"\n")
+            f.write(f"        month: \"{time_queries[\"MNTH\"]}\"\n")
+            f.write(f"        day: \"{time_queries[\"DAYS\"]}\"\n")
+            f.write(f"        hour: \"{time_queries[\"HOUR\"]}\"\n")
+            f.write(f"        minute: \"{time_queries[\"MINU\"]}\"\n\n")
 
         if has_receipt:
             f.write("    dataReceiptTime:\n")
             f.write("      datetime:\n")
-            f.write(f"        year: \"{time_queries['RCYR']}\"\n")
-            f.write(f"        month: \"{time_queries['RCMO']}\"\n")
-            f.write(f"        day: \"{time_queries['RCDY']}\"\n")
-            f.write(f"        hour: \"{time_queries['RCHR']}\"\n")
-            f.write(f"        minute: \"{time_queries['RCMI']}\"\n\n")
+            f.write(f"        year: \"{time_queries[\"RCYR\"]}\"\n")
+            f.write(f"        month: \"{time_queries[\"RCMO\"]}\"\n")
+            f.write(f"        day: \"{time_queries[\"RCDY\"]}\"\n")
+            f.write(f"        hour: \"{time_queries[\"RCHR\"]}\"\n")
+            f.write(f"        minute: \"{time_queries[\"RCMI\"]}\"\n\n")
 
         seen_names = {}
         meta_mnemonics = ["CLATH", "CLONH", "CLAT", "CLON", "HSMSL", "HBMSL", "STSN", "WMOB", "WMOS", "RPID"]
