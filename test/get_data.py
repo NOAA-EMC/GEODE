@@ -57,7 +57,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--bufr-type",
         type=parse_bufr_type,
-        default="uprair",
+        default="adpsfc",
         help="BUFR subtype in filename (examples: uprair, adpsfc).",
     )
     parser.add_argument(
