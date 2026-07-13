@@ -2,6 +2,7 @@ import os
 import yaml
 from ush.queries_to_yaml import parse_queries, generate_yaml
 
+
 def test_queries_to_yaml(tmp_path):
     """
     Test the parsing and YAML generation logic.
@@ -22,30 +23,30 @@ NC000101
     """
     in_file = tmp_path / "query.txt"
     out_file = tmp_path / "output.yaml"
-    
+
     in_file.write_text(input_text.strip())
-    
+
     queries = parse_queries(str(in_file))
     assert len(queries) == 7
-    assert queries[-1]['mnemonic'] == 'WMOB'
-    assert queries[-1]['query'] == '*/WMOB'
+    assert queries[-1]["mnemonic"] == "WMOB"
+    assert queries[-1]["query"] == "*/WMOB"
     
     generate_yaml(queries, str(out_file))
-    
+
     # Read generated yaml and ensure structure
     with open(out_file, 'r') as f:
         data = yaml.safe_load(f)
-        
-    assert 'bufr' in data
-    assert 'encoder' in data
+
+    assert "bufr" in data
+    assert "encoder" in data
     
-    bufr_vars = data['bufr']['variables']
-    assert 'timestamp' in bufr_vars
-    assert 'wmoBlockNumber' in bufr_vars
-    assert 'temperaturedryBulbTemperature' in bufr_vars
+    bufr_vars = data["bufr"]["variables"]
+    assert "timestamp" in bufr_vars
+    assert "wmoBlockNumber" in bufr_vars
+    assert "temperaturedryBulbTemperature" in bufr_vars
     
-    enc_vars = data['encoder']['variables']
-    names = [v['name'] for v in enc_vars]
-    assert 'MetaData/dateTime' in names
-    assert 'MetaData/wmoBlockNumber' in names
-    assert 'ObsValue/temperaturedryBulbTemperature' in names
+    enc_vars = data["encoder"]["variables"]
+    names = [v["name"] for v in enc_vars]
+    assert "MetaData/dateTime" in names
+    assert "MetaData/wmoBlockNumber" in names
+    assert "ObsValue/temperaturedryBulbTemperature" in names

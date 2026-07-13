@@ -3,6 +3,9 @@ FROM ghcr.io/noaa-emc/i-jedi:latest
 
 RUN useradd -ms /bin/bash developer
 
+# add some extra Python packages
+RUN pip install pytest zarr
+
 # Set working directory
 WORKDIR /home/developer
 
