@@ -1,5 +1,5 @@
 # Use noaaepic/rocky9-gcc13.3.1-spack-stack as base image
-FROM noaaepic/rocky9-gcc13.3.1-spack-stack:latest
+FROM noaaepic/rocky9-gcc13.3.1-spack-stack:v1.9.2-ufs-env-ompi507
 
 RUN useradd -ms /bin/bash developer
 
