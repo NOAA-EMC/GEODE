@@ -1,6 +1,6 @@
 import sys
 import re
-from typing import List, Dict, Any
+from typing import List, Dict
 
 
 def to_camel_case(text: str) -> str:
@@ -122,20 +122,20 @@ def generate_yaml(queries: List[Dict[str, str]], outfile: str) -> None:
         if has_time:
             f.write("    timestamp:\n")
             f.write("      datetime:\n")
-            f.write(f"        year: \"{time_queries[\"YEAR\"]}\"\n")
-            f.write(f"        month: \"{time_queries[\"MNTH\"]}\"\n")
-            f.write(f"        day: \"{time_queries[\"DAYS\"]}\"\n")
-            f.write(f"        hour: \"{time_queries[\"HOUR\"]}\"\n")
-            f.write(f"        minute: \"{time_queries[\"MINU\"]}\"\n\n")
+            f.write(f"        year: \"{time_queries['YEAR']}\"\n")
+            f.write(f"        month: \"{time_queries['MNTH']}\"\n")
+            f.write(f"        day: \"{time_queries['DAYS']}\"\n")
+            f.write(f"        hour: \"{time_queries['HOUR']}\"\n")
+            f.write(f"        minute: \"{time_queries['MINU']}\"\n\n")
 
         if has_receipt:
             f.write("    dataReceiptTime:\n")
             f.write("      datetime:\n")
-            f.write(f"        year: \"{time_queries[\"RCYR\"]}\"\n")
-            f.write(f"        month: \"{time_queries[\"RCMO\"]}\"\n")
-            f.write(f"        day: \"{time_queries[\"RCDY\"]}\"\n")
-            f.write(f"        hour: \"{time_queries[\"RCHR\"]}\"\n")
-            f.write(f"        minute: \"{time_queries[\"RCMI\"]}\"\n\n")
+            f.write(f"        year: \"{time_queries['RCYR']}\"\n")
+            f.write(f"        month: \"{time_queries['RCMO']}\"\n")
+            f.write(f"        day: \"{time_queries['RCDY']}\"\n")
+            f.write(f"        hour: \"{time_queries['RCHR']}\"\n")
+            f.write(f"        minute: \"{time_queries['RCMI']}\"\n\n")
 
         seen_names = {}
         meta_mnemonics = ["CLATH", "CLONH", "CLAT", "CLON", "HSMSL", "HBMSL", "STSN", "WMOB", "WMOS", "RPID"]
@@ -173,9 +173,9 @@ def generate_yaml(queries: List[Dict[str, str]], outfile: str) -> None:
             var_text = f"    {var_name}:\n"
             var_text += f"      query: \"{q['query']}\"\n"
             if q['type'] == 'float':
-                var_text += f"      type: float\n"
+                var_text += "      type: float\n"
             if q['type'] == 'string':
-                var_text += f"      type: string\n"
+                var_text += "      type: string\n"
             var_text += "\n"
             
             if is_meta:

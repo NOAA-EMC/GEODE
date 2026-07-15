@@ -1,4 +1,3 @@
-import os
 import yaml
 from ush.queries_to_yaml import parse_queries, generate_yaml
 

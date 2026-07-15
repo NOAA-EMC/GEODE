@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 import argparse
-from pathlib import Path
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
 import cartopy.feature as cfeature
-import numpy as np
 
 import bufr
 
@@ -32,7 +30,7 @@ def plot_observations(bufr_file: str, output_img: str):
 
     print(f"Plotting {len(valid_lat)} valid observations...")
 
-    fig = plt.figure(figsize=(12, 6))
+    plt.figure(figsize=(12, 6))
     ax = plt.axes(projection=ccrs.PlateCarree())
 
     # Add map features
