@@ -240,4 +240,4 @@ if __name__ == '__main__':
     
     queries = parse_queries(input_file)
     generate_yaml(queries, output_file)
-    print(f"Generated {output_file}\n")
+    print(f"Generated {output_file}")
