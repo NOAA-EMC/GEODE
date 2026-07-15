@@ -74,13 +74,15 @@ def parse_queries(filename: str) -> List[Dict[str, str]]:
                     query_path = "*/" + query_parts[1]
                 else:
                     query_path = query
-                queries.append({
-                    "dim": dim,
-                    "type": typ,
-                    "query": query_path,
-                    "desc": desc,
-                    "mnemonic": query.split("/")[-1].split("[")[0]
-                })
+                queries.append(
+                    {
+                        "dim": dim,
+                        "type": typ,
+                        "query": query_path,
+                        "desc": desc,
+                        "mnemonic": query.split("/")[-1].split("[")[0],
+                    }
+                )
     return queries
 
 
@@ -108,7 +110,7 @@ def generate_yaml(queries: List[Dict[str, str]], outfile: str) -> None:
     time_mnemonics = ["YEAR", "MNTH", "DAYS", "HOUR", "MINU"]
     time_queries = {q["mnemonic"]: q["query"] for q in queries}
     has_time = all(k in time_queries for k in time_mnemonics)
-    
+
     receipt_mnemonics = ["RCYR", "RCMO", "RCDY", "RCHR", "RCMI"]
     has_receipt = all(k in time_queries for k in receipt_mnemonics)
 
@@ -116,128 +118,142 @@ def generate_yaml(queries: List[Dict[str, str]], outfile: str) -> None:
         f.write("# Auto-generated BUFR YAML mapping\n\n")
         f.write("bufr:\n")
         f.write("  variables:\n")
-        
+
         # MetaData section
         f.write("    # MetaData\n")
         if has_time:
             f.write("    timestamp:\n")
             f.write("      datetime:\n")
-            f.write(f"        year: \"{time_queries['YEAR']}\"\n")
-            f.write(f"        month: \"{time_queries['MNTH']}\"\n")
-            f.write(f"        day: \"{time_queries['DAYS']}\"\n")
-            f.write(f"        hour: \"{time_queries['HOUR']}\"\n")
-            f.write(f"        minute: \"{time_queries['MINU']}\"\n\n")
+            f.write(f'        year: "{time_queries["YEAR"]}"\n')
+            f.write(f'        month: "{time_queries["MNTH"]}"\n')
+            f.write(f'        day: "{time_queries["DAYS"]}"\n')
+            f.write(f'        hour: "{time_queries["HOUR"]}"\n')
+            f.write(f'        minute: "{time_queries["MINU"]}"\n\n')
 
         if has_receipt:
             f.write("    dataReceiptTime:\n")
             f.write("      datetime:\n")
-            f.write(f"        year: \"{time_queries['RCYR']}\"\n")
-            f.write(f"        month: \"{time_queries['RCMO']}\"\n")
-            f.write(f"        day: \"{time_queries['RCDY']}\"\n")
-            f.write(f"        hour: \"{time_queries['RCHR']}\"\n")
-            f.write(f"        minute: \"{time_queries['RCMI']}\"\n\n")
+            f.write(f'        year: "{time_queries["RCYR"]}"\n')
+            f.write(f'        month: "{time_queries["RCMO"]}"\n')
+            f.write(f'        day: "{time_queries["RCDY"]}"\n')
+            f.write(f'        hour: "{time_queries["RCHR"]}"\n')
+            f.write(f'        minute: "{time_queries["RCMI"]}"\n\n')
 
         seen_names = {}
-        meta_mnemonics = ["CLATH", "CLONH", "CLAT", "CLON", "HSMSL", "HBMSL", "STSN", "WMOB", "WMOS", "RPID"]
-        
+        meta_mnemonics = [
+            "CLATH",
+            "CLONH",
+            "CLAT",
+            "CLON",
+            "HSMSL",
+            "HBMSL",
+            "STSN",
+            "WMOB",
+            "WMOS",
+            "RPID",
+        ]
+
         obs_vars = []
         meta_vars = []
-        
+
         for q in queries:
             mnemonic = q["mnemonic"]
             if has_time and mnemonic in time_mnemonics:
                 continue
             if has_receipt and mnemonic in receipt_mnemonics:
                 continue
-                
+
             base_name = to_camel_case(q["desc"])
             if not base_name:
                 base_name = mnemonic.lower()
-                
+
             # clean up name to handle uniqueness without being too long
             # check if it contains array index
             array_idx = ""
             if "[" in q["query"] and "]" in q["query"]:
                 array_idx = "_" + q["query"].split("[")[1].split("]")[0]
-                
+
             var_name = base_name + array_idx
-            
+
             if var_name in seen_names:
                 seen_names[var_name] += 1
                 var_name = f"{var_name}_{mnemonic}_{seen_names[var_name]}"
             else:
                 seen_names[var_name] = 1
-                
+
             is_meta = mnemonic in meta_mnemonics
-            
+
             var_text = f"    {var_name}:\n"
-            var_text += f"      query: \"{q['query']}\"\n"
-            if q['type'] == 'float':
+            var_text += f'      query: "{q["query"]}"\n'
+            if q["type"] == "float":
                 var_text += "      type: float\n"
-            if q['type'] == 'string':
+            if q["type"] == "string":
                 var_text += "      type: string\n"
             var_text += "\n"
-            
+
             if is_meta:
                 meta_vars.append((var_name, q, var_text))
             else:
                 obs_vars.append((var_name, q, var_text))
-                
+
         for _, _, text in meta_vars:
             f.write(text)
-            
+
         f.write("    # ObsValue\n")
         for _, _, text in obs_vars:
             f.write(text)
-            
+
         f.write("encoder:\n")
         f.write("  variables:\n\n")
         f.write("    # MetaData\n")
-        
+
         if has_time:
-            f.write("    - name: \"MetaData/dateTime\"\n")
-            f.write("      coordinates: \"longitude latitude\"\n")
+            f.write('    - name: "MetaData/dateTime"\n')
+            f.write('      coordinates: "longitude latitude"\n')
             f.write("      source: variables/timestamp\n")
-            f.write("      longName: \"Datetime\"\n")
-            f.write("      units: \"seconds since 1970-01-01T00:00:00Z\"\n\n")
-            
+            f.write('      longName: "Datetime"\n')
+            f.write('      units: "seconds since 1970-01-01T00:00:00Z"\n\n')
+
         if has_receipt:
-            f.write("    - name: \"MetaData/dataReceiptTime\"\n")
+            f.write('    - name: "MetaData/dataReceiptTime"\n')
             f.write("      source: variables/dataReceiptTime\n")
-            f.write("      longName: \"Observation Receipt Time\"\n")
-            f.write("      units: \"seconds since 1970-01-01T00:00:00Z\"\n\n")
-            
+            f.write('      longName: "Observation Receipt Time"\n')
+            f.write('      units: "seconds since 1970-01-01T00:00:00Z"\n\n')
+
         for var_name, q, _ in meta_vars:
-            f.write(f"    - name: \"MetaData/{var_name}\"\n")
+            f.write(f'    - name: "MetaData/{var_name}"\n')
             f.write(f"      source: variables/{var_name}\n")
-            f.write(f"      longName: \"{q['desc']}\"\n")
-            if 'CLAT' in q['mnemonic']:
-                f.write("      units: \"degree_north\"\n")
+            f.write(f'      longName: "{q["desc"]}"\n')
+            if "CLAT" in q["mnemonic"]:
+                f.write('      units: "degree_north"\n')
                 f.write("      range: [-90, 90]\n")
-            elif 'CLON' in q['mnemonic']:
-                f.write("      units: \"degree_east\"\n")
+            elif "CLON" in q["mnemonic"]:
+                f.write('      units: "degree_east"\n')
                 f.write("      range: [-180, 180]\n")
             else:
-                f.write("      units: \"\"\n")
-            f.write("\n")
-            
-        f.write("    # ObsValue\n")
-        for var_name, q, _ in obs_vars:
-            f.write(f"    - name: \"ObsValue/{var_name}\"\n")
-            f.write("      coordinates: \"longitude latitude\"\n")
-            f.write(f"      source: variables/{var_name}\n")
-            f.write(f"      longName: \"{q['desc']}\"\n")
-            f.write("      units: \"\"\n")
+                f.write('      units: ""\n')
             f.write("\n")
 
-if __name__ == '__main__':
+        f.write("    # ObsValue\n")
+        for var_name, q, _ in obs_vars:
+            f.write(f'    - name: "ObsValue/{var_name}"\n')
+            f.write('      coordinates: "longitude latitude"\n')
+            f.write(f"      source: variables/{var_name}\n")
+            f.write(f'      longName: "{q["desc"]}"\n')
+            f.write('      units: ""\n')
+            f.write("\n")
+
+
+if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python queries_to_yaml.py <show_queries_output.txt> [output.yaml]")
+        print(
+            "Usage: python queries_to_yaml.py <show_queries_output.txt> [output.yaml]"
+        )
         sys.exit(1)
-        
+
     input_file = sys.argv[1]
     output_file = sys.argv[2] if len(sys.argv) > 2 else "output.yaml"
-    
+
     queries = parse_queries(input_file)
     generate_yaml(queries, output_file)
     print(f"Generated {output_file}")
