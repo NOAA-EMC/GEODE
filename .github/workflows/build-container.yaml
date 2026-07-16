@@ -1,0 +1,111 @@
+name: Build and Push Container
+
+on:
+  push:
+    branches: [feature/container]
+  schedule:
+    # Runs at 22:00 UTC every Saturday
+    - cron: '0 22 * * 6'
+  workflow_dispatch: # Allows manual triggering
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: false
+
+env:
+  REGISTRY: ghcr.io
+  BASE_IMAGE: jcsda/docker-gnu-openmpi-dev:1.9
+  INSTALL_PREFIX: /opt/jedi
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+    - name: Free disk space
+      run: |
+        sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+        sudo docker image prune --all --force
+        df -h
+
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        path: geode
+        submodules: recursive
+        ssh-key: ${{ secrets.JCSDA_MIST_KEY }}
+
+    - name: Log in to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.REGISTRY }}
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Generate image metadata
+      id: meta
+      run: |
+        IMAGE_NAME=$(echo "${{ env.REGISTRY }}/${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+        DATE_TAG=$(date +'%Y%m%d')
+        SHA_TAG=$(echo "${{ github.sha }}" | cut -c1-7)
+        echo "image=${IMAGE_NAME}" >> $GITHUB_OUTPUT
+        echo "date_tag=${DATE_TAG}" >> $GITHUB_OUTPUT
+        echo "sha_tag=${SHA_TAG}" >> $GITHUB_OUTPUT
+
+    - name: Build JEDI libraries in container
+      run: |
+        docker run --name jedi-build \
+          -v ${{ github.workspace }}:/src \
+          ${{ env.BASE_IMAGE }} \
+          bash -euo pipefail -c '
+            source /opt/spack-environment/activate.sh
+            export jedi_cmake_ROOT=/opt/view
+            mkdir -p /build && cd /build
+            ls -l /src
+            ecbuild \
+              -DCMAKE_INSTALL_PREFIX=${{ env.INSTALL_PREFIX }} \
+              -DMPI_ARGS="--map-by :OVERSUBSCRIBE" \
+              /src/geode/dev/bundle        
+            make -j$(nproc) install
+            rm -rf /build
+
+            # Align image content with devcontainer conveniences.
+            python3 -m pip install --no-cache-dir pytest zarr ruff
+            if ! id -u developer >/dev/null 2>&1; then
+              useradd -ms /bin/bash developer
+            fi
+            cat >> /home/developer/.bashrc <<EOF
+alias ls="ls --color=auto"
+alias ll="ls -alF --color=auto"
+export PS1="\\[\\033[01;32m\\]\\u@GEODE-container\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ "
+git config --global --add safe.directory /workspaces/GEODE
+source /opt/spack-environment/activate.sh
+EOF
+            chown developer:developer /home/developer/.bashrc
+          '
+
+    - name: Commit and tag container image
+      run: |
+        docker commit \
+          --change 'CMD ["/bin/bash"]' \
+          --change 'WORKDIR /home/developer' \
+          --change 'USER developer' \
+          --change 'ENV JEDI_INSTALL_PREFIX=${{ env.INSTALL_PREFIX }}' \
+          --change 'ENV CMAKE_PREFIX_PATH=${{ env.INSTALL_PREFIX }}:/opt/view' \
+          --change 'ENV PATH=${{ env.INSTALL_PREFIX }}/bin:/opt/view/bin:$PATH' \
+          --change 'ENV LD_LIBRARY_PATH=${{ env.INSTALL_PREFIX }}/lib:/opt/view/lib:$LD_LIBRARY_PATH' \
+          --change 'ENV BASH_ENV=/opt/spack-environment/activate.sh' \
+          jedi-build ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.date_tag }}
+        docker tag ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.date_tag }} \
+          ${{ steps.meta.outputs.image }}:latest
+        docker tag ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.date_tag }} \
+          ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha_tag }}
+
+    - name: Push container image
+      run: |
+        docker push ${{ steps.meta.outputs.image }}:latest
+        docker push ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.date_tag }}
+        docker push ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.sha_tag }}
