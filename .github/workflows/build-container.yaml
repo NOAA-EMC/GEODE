@@ -78,11 +78,12 @@ jobs:
             if ! id -u developer >/dev/null 2>&1; then
               useradd -ms /bin/bash developer
             fi
-            echo 'alias ls="ls --color=auto"' >> /home/developer/.bashrc
-            echo 'alias ll="ls -alF --color=auto"' >> /home/developer/.bashrc
-            echo 'export PS1="\[\033[01;32m\]\u@GEODE-container\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "' >> /home/developer/.bashrc
-            echo 'git config --global --add safe.directory /workspaces/GEODE' >> /home/developer/.bashrc
-            echo 'source /opt/spack-environment/activate.sh' >> /home/developer/.bashrc
+            echo 'alias ls="ls --color=auto"' >> /home/developer/environment-setup.sh
+            echo 'alias ll="ls -alF --color=auto"' >> /home/developer/environment-setup.sh
+            echo 'export PS1="\[\033[01;32m\]\u@GEODE-container\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "' >> /home/developer/environment-setup.sh
+            echo 'git config --global --add safe.directory /workspaces/GEODE' >> /home/developer/environment-setup.sh
+            echo 'source /opt/spack-environment/activate.sh' >> /home/developer/environment-setup.sh
+            echo 'source /home/developer/environment-setup.sh' >> /home/developer/.bashrc
             chown developer:developer /home/developer/.bashrc
           '
 
@@ -96,7 +97,7 @@ jobs:
           --change 'ENV CMAKE_PREFIX_PATH=${{ env.INSTALL_PREFIX }}:/opt/view' \
           --change 'ENV PATH=${{ env.INSTALL_PREFIX }}/bin:/opt/view/bin:$PATH' \
           --change 'ENV LD_LIBRARY_PATH=${{ env.INSTALL_PREFIX }}/lib:/opt/view/lib:$LD_LIBRARY_PATH' \
-          --change 'ENV BASH_ENV=/opt/spack-environment/activate.sh' \
+          --change 'ENV BASH_ENV=/home/developer/environment-setup.sh' \
           jedi-build ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.date_tag }}
         docker tag ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.date_tag }} \
           ${{ steps.meta.outputs.image }}:latest
