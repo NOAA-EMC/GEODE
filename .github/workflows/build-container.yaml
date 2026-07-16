@@ -77,13 +77,13 @@ jobs:
             if ! id -u developer >/dev/null 2>&1; then
               useradd -ms /bin/bash developer
             fi
-            cat >> /home/developer/.bashrc <<EOF
-alias ls="ls --color=auto"
-alias ll="ls -alF --color=auto"
-export PS1="\\[\\033[01;32m\\]\\u@GEODE-container\\[\\033[00m\\]:\\[\\033[01;34m\\]\\w\\[\\033[00m\\]\\$ "
-git config --global --add safe.directory /workspaces/GEODE
-source /opt/spack-environment/activate.sh
-EOF
+            {
+              echo 'alias ls="ls --color=auto"'
+              echo 'alias ll="ls -alF --color=auto"'
+              echo 'export PS1="\[\033[01;32m\]\u@GEODE-container\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "'
+              echo 'git config --global --add safe.directory /workspaces/GEODE'
+              echo 'source /opt/spack-environment/activate.sh'
+            } >> /home/developer/.bashrc
             chown developer:developer /home/developer/.bashrc
           '
 
