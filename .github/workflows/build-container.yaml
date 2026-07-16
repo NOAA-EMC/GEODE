@@ -74,7 +74,7 @@ jobs:
             rm -rf /build
 
             # Align image content with devcontainer conveniences.
-            python3 -m pip install --no-cache-dir pytest zarr==3.1 ruff pytorch
+            python3 -m pip install --no-cache-dir pytest zarr==3.1 ruff torch
             if ! id -u developer >/dev/null 2>&1; then
               useradd -ms /bin/bash developer
             fi
