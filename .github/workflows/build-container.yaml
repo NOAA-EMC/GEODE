@@ -70,6 +70,7 @@ jobs:
               -DMPI_ARGS="--map-by :OVERSUBSCRIBE" \
               /src/geode/dev/bundle        
             make -j$(nproc) install
+            cd /src/geode
             rm -rf /build
 
             # Align image content with devcontainer conveniences.
