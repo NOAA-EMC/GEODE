@@ -19,6 +19,7 @@ jobs:
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user 0
 
     steps:
       - name: Check out repository
