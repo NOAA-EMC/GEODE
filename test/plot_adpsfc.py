@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import argparse
-import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
-import cartopy.feature as cfeature
 
 import bufr
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+import matplotlib.pyplot as plt
 
 
 def plot_observations(bufr_file: str, output_img: str):
