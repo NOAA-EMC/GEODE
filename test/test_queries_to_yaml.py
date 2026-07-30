@@ -1,5 +1,6 @@
 import yaml
-from ush.queries_to_yaml import parse_queries, generate_yaml
+
+from ush.queries_to_yaml import generate_yaml, parse_queries
 
 
 def test_queries_to_yaml(tmp_path):

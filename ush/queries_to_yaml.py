@@ -1,6 +1,6 @@
-import sys
+#!/usr/bin/env python3
 import re
-from typing import List, Dict
+import sys
 
 
 def to_camel_case(text: str) -> str:
@@ -29,7 +29,7 @@ def to_camel_case(text: str) -> str:
     return words[0].lower() + "".join(w.capitalize() for w in words[1:])
 
 
-def parse_queries(filename: str) -> List[Dict[str, str]]:
+def parse_queries(filename: str) -> list[dict[str, str]]:
     """
     Parse a show_queries.x output file into a structured dictionary.
 
@@ -40,7 +40,7 @@ def parse_queries(filename: str) -> List[Dict[str, str]]:
 
     Returns
     -------
-    List[Dict[str, str]]
+    list[dict[str, str]]
         A list of parsed query definitions, each containing dimensions,
         data types, BUFR queries, descriptions, and root mnemonics.
 
@@ -86,13 +86,13 @@ def parse_queries(filename: str) -> List[Dict[str, str]]:
     return queries
 
 
-def generate_yaml(queries: List[Dict[str, str]], outfile: str) -> None:
+def generate_yaml(queries: list[dict[str, str]], outfile: str) -> None:
     """
     Generate an IODA-compliant BUFR configuration YAML file.
 
     Parameters
     ----------
-    queries : List[Dict[str, str]]
+    queries : list[dict[str, str]]
         A list of parsed BUFR queries containing variable definitions.
     outfile : str
         The destination file path for the generated YAML.
@@ -196,12 +196,10 @@ def generate_yaml(queries: List[Dict[str, str]], outfile: str) -> None:
             else:
                 obs_vars.append((var_name, q, var_text))
 
-        for _, _, text in meta_vars:
-            f.write(text)
+        f.writelines(text for _, _, text in meta_vars)
 
         f.write("    # ObsValue\n")
-        for _, _, text in obs_vars:
-            f.write(text)
+        f.writelines(text for _, _, text in obs_vars)
 
         f.write("encoder:\n")
         f.write("  variables:\n\n")
