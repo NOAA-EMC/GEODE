@@ -54,4 +54,3 @@ def test_wis2_watcher(tmp_path: Path):
     assert len(downloaded_files) > 0, (
         "No .bufr4 files were downloaded within 60 seconds."
     )
-
