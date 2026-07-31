@@ -36,4 +36,4 @@ jobs:
 
       - name: Show downloaded files
         run: |
-          ls -l wis2-data-tmp 
+          ls -l /tmp/pytest-of-root/pytest-0/test_wis2_watcher0/
