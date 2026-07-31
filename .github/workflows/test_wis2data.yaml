@@ -4,12 +4,12 @@ on:
   push:
   pull_request:
   schedule:
-    # Run daily at midnight to verify data downloads remain functional
-    - cron: '0 0 * * *'
+    # Run daily at 11:30 UTC to verify data downloads remain functional
+    - cron: '30 11 * * *'
 
 jobs:
   test-data:
-    name: Run uprair retrieval test
+    name: Run WIS2 Data Retrieval Test
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -27,4 +27,4 @@ jobs:
 
       - name: Run test using pytest
         run: |
-          python -m pytest test/test_get_data.py -v
+          python -m pytest test/test_wis2_watcher.py -v
