@@ -97,7 +97,7 @@ def on_message(client, userdata, msg):
             print("[-] Could not find a valid download URL in the payload.")
             print(
                 f"    Payload excerpt: {payload_str[:200]}..."
-            ) # Print first 200 chars for debugging
+            )  # Print first 200 chars for debugging
 
     except json.JSONDecodeError:
         print("[-] Invalid payload format: Message must be valid JSON")
