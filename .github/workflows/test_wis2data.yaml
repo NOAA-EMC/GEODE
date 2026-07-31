@@ -32,7 +32,7 @@ jobs:
 
       - name: Run test using pytest
         run: |
-          python -m pytest test/test_wis2_watcher.py -v
+          python -m pytest test/test_wis2_watcher.py -v -s
 
       - name: Show downloaded files
         run: |
