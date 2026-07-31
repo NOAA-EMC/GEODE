@@ -16,6 +16,7 @@ DOWNLOAD_DIR = "./wis2-data-tmp"
 # Ensure the download directory exists
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
+
 # ==========================================
 # Core Functions
 # ==========================================
@@ -23,24 +24,25 @@ def download_file(url, filename):
     """Downloads a file over HTTP(S) and saves it locally."""
     try:
         print(f"[*] Starting download: {url}")
-        
+
         # stream=True ensures we don't load huge files entirely into memory
         response = requests.get(url, stream=True, timeout=15)
         response.raise_for_status() 
-        
+
         # Sanitize filename
         safe_filename = os.path.basename(filename)
         filepath = os.path.join(DOWNLOAD_DIR, safe_filename)
-        
+
         with open(filepath, 'wb') as f:
             f.writelines(response.iter_content(chunk_size=8192))
-                
+    
         print(f"[+] Successfully saved to: {filepath}")
-        
+
     except requests.exceptions.RequestException as e:
         print(f"[-] Network error downloading {url}: {e}")
     except OSError as e:
         print(f"[-] Error saving file: {e}")
+
 
 # ==========================================
 # MQTT Callbacks
@@ -63,12 +65,12 @@ def on_message(client, userdata, msg):
 
     payload_str = msg.payload.decode('utf-8')
     print(f"\n[*] Notification received on {msg.topic}")
-    
+
     try:
         data = json.loads(payload_str)
         url = None
         filename = None
-        
+
         # Parse standard WIS2 Notification Message (GeoJSON)
         # The download link is typically found in the 'links' array
         if "links" in data:
@@ -79,7 +81,7 @@ def on_message(client, userdata, msg):
                     # WIS2 payloads rarely provide a explicit local "filename" field, 
                     # so we extract the file name directly from the end of the URL
                     filename = url.split("/")[-1]
-                    
+
                     # Stop at the first valid link found
                     break 
 
@@ -87,13 +89,12 @@ def on_message(client, userdata, msg):
         if not url:
             url = data.get("url")
             filename = data.get("filename")
-        
+
         if url and filename:
             download_file(url, filename)
         else:
             print("[-] Could not find a valid download URL in the payload.")
             print(f"    Payload excerpt: {payload_str[:200]}...") # Print first 200 chars for debugging
-            
+
     except json.JSONDecodeError:
         print("[-] Invalid payload format: Message must be valid JSON")
-
