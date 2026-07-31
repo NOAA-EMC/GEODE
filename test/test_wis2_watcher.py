@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src"))  # Add src/ to sys.path
 
-import geode.ingest.watcher as watcher
+from geode.ingest import watcher
 
 # ==========================
 # MQTT Client Configuration

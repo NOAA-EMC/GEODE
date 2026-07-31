@@ -33,14 +33,13 @@ def download_file(url, filename):
         filepath = os.path.join(DOWNLOAD_DIR, safe_filename)
         
         with open(filepath, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
+            f.writelines(response.iter_content(chunk_size=8192))
                 
         print(f"[+] Successfully saved to: {filepath}")
         
     except requests.exceptions.RequestException as e:
         print(f"[-] Network error downloading {url}: {e}")
-    except Exception as e:
+    except OSError as e:
         print(f"[-] Error saving file: {e}")
 
 # ==========================================
