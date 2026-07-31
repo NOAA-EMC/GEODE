@@ -33,3 +33,7 @@ jobs:
       - name: Run test using pytest
         run: |
           python -m pytest test/test_wis2_watcher.py -v
+
+      - name: Show downloaded files
+        run: |
+          ls -l wis2-data-tmp 
