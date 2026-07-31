@@ -27,15 +27,15 @@ def download_file(url, filename):
 
         # stream=True ensures we don't load huge files entirely into memory
         response = requests.get(url, stream=True, timeout=15)
-        response.raise_for_status() 
+        response.raise_for_status()
 
         # Sanitize filename
         safe_filename = os.path.basename(filename)
         filepath = os.path.join(DOWNLOAD_DIR, safe_filename)
 
-        with open(filepath, 'wb') as f:
+        with open(filepath, "wb") as f:
             f.writelines(response.iter_content(chunk_size=8192))
-    
+
         print(f"[+] Successfully saved to: {filepath}")
 
     except requests.exceptions.RequestException as e:
@@ -56,14 +56,15 @@ def on_connect(client, userdata, flags, reason_code, properties):
     else:
         print(f"[-] Connection failed with code {reason_code}")
 
+
 def on_message(client, userdata, msg):
     """Fired when a new message is published to the subscribed topic."""
     # Double-check that we are only processing messages from our target topic tree
     # (Helpful if you add more subscriptions later)
-    if not msg.topic.startswith(TOPIC[:-2]):  # Remove the trailing '#' for prefix matching
+    if not msg.topic.startswith(TOPIC[:-2]):
         return
 
-    payload_str = msg.payload.decode('utf-8')
+    payload_str = msg.payload.decode("utf-8")
     print(f"\n[*] Notification received on {msg.topic}")
 
     try:
@@ -78,12 +79,12 @@ def on_message(client, userdata, msg):
                 # Look for the actual data payload URL (often marked as canonical or just having an href)
                 if "href" in link:
                     url = link["href"]
-                    # WIS2 payloads rarely provide a explicit local "filename" field, 
+                    # WIS2 payloads rarely provide a explicit local "filename" field,
                     # so we extract the file name directly from the end of the URL
                     filename = url.split("/")[-1]
 
                     # Stop at the first valid link found
-                    break 
+                    break
 
         # Fallback for the older simple schema, just in case
         if not url:
@@ -94,7 +95,9 @@ def on_message(client, userdata, msg):
             download_file(url, filename)
         else:
             print("[-] Could not find a valid download URL in the payload.")
-            print(f"    Payload excerpt: {payload_str[:200]}...") # Print first 200 chars for debugging
+            print(
+                f"    Payload excerpt: {payload_str[:200]}..."
+            ) # Print first 200 chars for debugging
 
     except json.JSONDecodeError:
         print("[-] Invalid payload format: Message must be valid JSON")
