@@ -130,9 +130,12 @@ def process_and_plot_iasi_bt(bufr_file: str, target_channels: list[int], output_
     print("Extracted channel IDs sample:", channel_ids[:10], "Max channel ID:", np.max(channel_ids))
 
     # -------------------------------------------------------------------------
-    # SCALE FACTOR CALCULATION (STRICT BAND MAP BY CHANNEL NUMBER)
+    # SCALE FACTOR CALCULATION 
     # -------------------------------------------------------------------------
     scale_factors = np.ones(num_channels, dtype=np.float64)
+
+    # Flag to track if we successfully parsed from header
+    parsed_from_header = False
 
     # 1. Parse from BUFR header bounds if present
     if scale_exp is not None and getattr(scale_exp, "size", 0) > 0:
@@ -140,22 +143,29 @@ def process_and_plot_iasi_bt(bufr_file: str, target_channels: list[int], output_
         en_vals = np.ravel(np.asarray(scale_end))[0:10]
         exp_vals = np.ravel(np.asarray(scale_exp))[0:10]
 
+        matches = 0
         for i in range(num_channels):
             ch_num = int(channel_ids[i])
             for st, en, ex in zip(st_vals, en_vals, exp_vals):
                 if st > 0 and en > 0 and st <= ch_num <= en:
                     scale_factors[i] = 10.0 ** (-(float(ex) - 5.0))
+                    matches += 1
                     break
 
-    # 2. Strict Band Enforcement by Channel ID (NOT Array Index)
-    for i in range(num_channels):
-        ch_num = int(channel_ids[i])
-        if ch_num <= 2000:
-            scale_factors[i] = 0.01      # 10^-2 for Band 1 & 2 (1 to 2000)
-        elif ch_num <= 4000:
-            scale_factors[i] = 0.001    # 10^-3 for Band 3 Water Vapor (2001 to 4000)
-        else:
-            scale_factors[i] = 0.000001  # 10^-6 for Band 4 Shortwave (> 4000)
+        if matches > 0:
+            parsed_from_header = True
+
+    # 2. Fallback to Strict Band Enforcement IF header bounds were missing or invalid
+    if not parsed_from_header:
+        print("Warning: Scale factors missing in BUFR header. Applying hardcoded band defaults.")
+        for i in range(num_channels):
+            ch_num = int(channel_ids[i])
+            if ch_num <= 2261:
+                scale_factors[i] = 0.01      # 10^-2 for Band 1 & 2 (1 to 2000)
+            elif ch_num <= 5421:
+                scale_factors[i] = 0.001     # 10^-3 for Band 3 Water Vapor (2001 to 4000)
+            else:
+                scale_factors[i] = 0.000001  # 10^-6 for Band 4 Shortwave (> 4000)
 
     # -------------------------------------------------------------------------
     # DEBUG PRINT: Verify what channel_ids and scale_factors actually contain
