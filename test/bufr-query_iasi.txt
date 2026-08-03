@@ -1,0 +1,56 @@
+[Hyundeok.Choi@ufe03 bin]$ ./show_queries.x /scratch3/NCEPDEV/da/Hyundeok.Choi/bufr_tank/b021/xx241
+Available subset variants:
+NC021241
+Total number of subset variants found: 1
+
+NC021241
+ Dimensioning Sub-paths:
+  1d  *
+  2d  */IASICHN
+  2d  */IASIL1CB
+  2d  */IASIL1CS
+  3d  */IASIL1CS/AVHRCHN
+
+ Queries:
+1d  int     NC021241/SAID                      SATELLITE IDENTIFIER
+1d  int     NC021241/GCLONG                    ORIGINATING/GENERATING CENTER
+1d  int     NC021241/SIID[1]                   SATELLITE INSTRUMENTS
+1d  int     NC021241/SCLF                      SATELLITE CLASSIFICATION
+1d  int     NC021241/YEAR                      YEAR
+1d  int     NC021241/MNTH                      MONTH
+1d  int     NC021241/DAYS                      DAY
+1d  int     NC021241/HOUR                      HOUR
+1d  int     NC021241/MINU                      MINUTE
+1d  int     NC021241/SECO                      SECOND
+1d  float   NC021241/CLATH                     LATITUDE (HIGH ACCURACY)
+1d  float   NC021241/CLONH                     LONGITUDE (HIGH ACCURACY)
+1d  float   NC021241/SAZA                      SATELLITE ZENITH ANGLE
+1d  float   NC021241/BEARAZ                    BEARING OR AZIMUTH
+1d  float   NC021241/SOZA                      SOLAR ZENITH ANGLE
+1d  float   NC021241/SOLAZI                    SOLAR AZIMUTH
+1d  int     NC021241/FOVN                      FIELD OF VIEW NUMBER
+1d  int     NC021241/ORBN                      ORBIT NUMBER
+1d  int     NC021241/SLNM                      SCAN LINE NUMBER
+1d  int     NC021241/MJFC                      MAJOR FRAME COUNT
+1d  int     NC021241/SELV                      HEIGHT OF STATION
+1d  int     NC021241/QGFQ                      INDIVIDUAL IASI-SYSTEM QUALITY FLAG
+1d  int     NC021241/QGQI                      INSTR. NOISE PERF. INDICATOR (SPECTRAL & RADIOMETRIC)
+1d  int     NC021241/QGQIL                     GEOMETRIC QUALITY INDEX INDICATOR
+1d  int     NC021241/QGQIR                     INSTR. NOISE PERF. INDICATOR (RADIOMETRIC CALIBRATION)
+1d  int     NC021241/QGQIS                     INSTRUMENT NOISE PERF. INDICATOR (SPECTRAL CALIBRATION
+1d  int     NC021241/QGSSQ                     OUTPUT OF TEC FUNCTION
+2d  int     NC021241/IASIL1CB/STCH             START CHANNEL
+2d  int     NC021241/IASIL1CB/ENCH             END CHANNEL
+2d  int     NC021241/IASIL1CB/CHSF             CHANNEL SCALE FACTOR
+2d  int     NC021241/IASICHN/CHNM              CHANNEL NUMBER
+2d  int     NC021241/IASICHN/SCRA              SCALED IASI RADIANCE
+1d  int     NC021241/SIID[2]                   SATELLITE INSTRUMENTS
+1d  int     NC021241/AVHCST                    AVHRR CHANNEL COMBINATION
+2d  float   NC021241/IASIL1CS/YAPCG            Y ANGULAR POSITION OF CENTER OF GRAVITY
+2d  float   NC021241/IASIL1CS/ZAPCG            Z ANGULAR POSITION OF CENTER OF GRAVITY
+2d  int     NC021241/IASIL1CS/FCPH             FRACTION OF CLEAR PIXELS IN HIRS FOV
+3d  int     NC021241/IASIL1CS/AVHRCHN/CHNM     CHANNEL NUMBER
+3d  int     NC021241/IASIL1CS/AVHRCHN/CHSF[1]  CHANNEL SCALE FACTOR
+3d  int     NC021241/IASIL1CS/AVHRCHN/SMRA     SCALED MEAN AVHRR RADIANCE
+3d  int     NC021241/IASIL1CS/AVHRCHN/CHSF[2]  CHANNEL SCALE FACTOR
+3d  int     NC021241/IASIL1CS/AVHRCHN/SSDR     SCALED STANDARD DEVIATION OF AVHRR RADIANCE
