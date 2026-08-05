@@ -133,40 +133,117 @@ def process_and_plot_iasi_bt(bufr_file: str, target_channels: list[int], output_
     # SCALE FACTOR CALCULATION 
     # -------------------------------------------------------------------------
     scale_factors = np.ones(num_channels, dtype=np.float64)
-
-    # Flag to track if we successfully parsed from header
     parsed_from_header = False
+    bmiss = 100.0  # BUFR missing value threshold for scale exponents
 
-    # 1. Parse from BUFR header bounds if present
+    # Dictionary to track how many channels matched each of the 10 header groups
+    group_match_counts = {}
+
+    # List to track unmatched channels
+    unmatched_channels = []
+
+############################################
+## TEST 1 match with Fortran "read_iasi.f90"
+############################################
     if scale_exp is not None and getattr(scale_exp, "size", 0) > 0:
-        st_vals = np.ravel(np.asarray(scale_start))[0:10]
-        en_vals = np.ravel(np.asarray(scale_end))[0:10]
-        exp_vals = np.ravel(np.asarray(scale_exp))[0:10]
+        st_vals = np.atleast_2d(scale_start)[0][:10]
+        en_vals = np.atleast_2d(scale_end)[0][:10]
+        exp_vals = np.atleast_2d(scale_exp)[0][:10]
 
+        # --- Step 1: Matches Fortran `do i=1,10` (Compute sscale array) ---
+        sscale = np.zeros(10, dtype=np.float64)
+        for j in range(len(exp_vals)):
+            ex = exp_vals[j]
+            if np.isfinite(ex) and ex < 1000:
+                iexponent = -(int(round(ex)) - 5)  # -(nint(cscale(3,i)) - 5)
+                sscale[j] = 10.0 ** iexponent      # ten**iexponent
+            else:
+                sscale[j] = 0.0                    # sscale(i) = 0.0_r_kind
+
+        # --- Step 2: Matches Fortran `scaleloop` (Assign to channels) ---
+        scale_factors = np.zeros(num_channels, dtype=np.float64)
         matches = 0
+
         for i in range(num_channels):
             ch_num = int(channel_ids[i])
-            for st, en, ex in zip(st_vals, en_vals, exp_vals):
-                if st > 0 and en > 0 and st <= ch_num <= en:
-                    scale_factors[i] = 10.0 ** (-(float(ex) - 5.0))
+            for j in range(len(st_vals)):
+                if st_vals[j] > 0 and en_vals[j] > 0 and (st_vals[j] <= ch_num <= en_vals[j]):
+                    scale_factors[i] = sscale[j]
                     matches += 1
                     break
 
         if matches > 0:
             parsed_from_header = True
 
-    # 2. Fallback to Strict Band Enforcement IF header bounds were missing or invalid
+    # --- Step 3: Matches Fortran header error fallback ---
     if not parsed_from_header:
-        print("Warning: Scale factors missing in BUFR header. Applying hardcoded band defaults.")
+        print("Warning: Scale factors missing in BUFR header. Setting scale factors to 0.0 (GSI style).")
+        scale_factors[:] = 0.0
+    '''
+#########################################
+# TEST2  Fallback to Strict Band Enforcement
+#########################################
+    # 1. Parse from BUFR header bounds if present
+    if scale_exp is not None and getattr(scale_exp, "size", 0) > 0:
+        st_vals = np.ravel(np.asarray(scale_start))[0:10]
+        en_vals = np.ravel(np.asarray(scale_end))[0:10]
+        exp_vals = np.ravel(np.asarray(scale_exp))[0:10]
+
+        # Initialize match counters for the header groups present
+        for group_idx in range(len(st_vals)):
+            group_match_counts[group_idx] = 0
+
+        matches = 0
+        for i in range(num_channels):
+            ch_num = int(channel_ids[i])
+            matched_this_channel = False
+
+            for group_idx, (st, en, ex) in enumerate(zip(st_vals, en_vals, exp_vals)):
+                 if st > 0 and en > 0 and st <= ch_num <= en and float(ex) < bmiss:
+                    sf = 10.0 ** (-(float(ex) - 5.0))
+
+                    # PHYSICAL SANITY CORRECTION:
+                    # IASI Band 2 surface window channels (up to 2261) must be 0.01
+                    if ch_num <= 2261 and sf < 0.01:
+                        sf = 0.01
+
+                    scale_factors[i] = sf
+                    matches += 1
+                    group_match_counts[group_idx] += 1
+                    matched_this_channel = True
+                    break
+
+            if not matched_this_channel:
+                unmatched_channels.append(ch_num)
+
+        # Print detailed header match summary
+        print("\n" + "=" * 70)
+        print("BUFR HEADER MATCH DIAGNOSTICS")
+        print("=" * 70)
+        for group_idx, (st, en, ex) in enumerate(zip(st_vals, en_vals, exp_vals)):
+            count = group_match_counts[group_idx]
+            print(f"Group {group_idx + 1:2d} | Range [{st:4d} to {en:4d}] | ex = {ex:4.1f} | Matched {count:3d} channels")
+
+        print(f"Total Matched Channels: {matches} / {num_channels} ({matches / num_channels * 100:.1f}%)")
+        if unmatched_channels:
+            print(f"Unmatched Channel IDs ({len(unmatched_channels)}): {unmatched_channels[:10]}...")
+        print("=" * 70 + "\n")
+
+        if matches >= int(0.9 * num_channels):
+            parsed_from_header = True
+
+    # Fallback to Strict Band Enforcement IF header bounds were missing or incomplete
+    if not parsed_from_header:
+        print("Warning: Scale factors missing or incomplete in BUFR header. Applying hardcoded band defaults.")
         for i in range(num_channels):
             ch_num = int(channel_ids[i])
             if ch_num <= 2261:
-                scale_factors[i] = 0.01      # 10^-2 for Band 1 & 2 (1 to 2000)
+                scale_factors[i] = 0.01       # 10^-2 (Band 1 & 2 Window)
             elif ch_num <= 5421:
-                scale_factors[i] = 0.001     # 10^-3 for Band 3 Water Vapor (2001 to 4000)
+                scale_factors[i] = 0.001      # 10^-3 (Band 3 Water Vapor)
             else:
-                scale_factors[i] = 0.000001  # 10^-6 for Band 4 Shortwave (> 4000)
-
+                scale_factors[i] = 0.000001   # 10^-6 (Band 4 Shortwave)
+    '''
     # -------------------------------------------------------------------------
     # DEBUG PRINT: Verify what channel_ids and scale_factors actually contain
     # -------------------------------------------------------------------------
