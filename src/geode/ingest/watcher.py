@@ -33,8 +33,10 @@ def download_file(url, filename):
         safe_filename = os.path.basename(filename)
         filepath = os.path.join(DOWNLOAD_DIR, safe_filename)
 
-        with open(filepath, "wb") as f:
+        temporary_filepath = f"{filepath}.part"
+        with open(temporary_filepath, "wb") as f:
             f.writelines(response.iter_content(chunk_size=8192))
+        os.replace(temporary_filepath, filepath)
 
         print(f"[+] Successfully saved to: {filepath}")
 
@@ -76,14 +78,13 @@ def on_message(client, userdata, msg):
         # The download link is typically found in the 'links' array
         if "links" in data:
             for link in data.get("links", []):
-                # Look for the actual data payload URL (often marked as canonical or just having an href)
-                if "href" in link:
+                if (
+                    link.get("rel") in {"canonical", "update"}
+                    and link.get("type") == "application/bufr"
+                    and link.get("href")
+                ):
                     url = link["href"]
-                    # WIS2 payloads rarely provide a explicit local "filename" field,
-                    # so we extract the file name directly from the end of the URL
-                    filename = url.split("/")[-1]
-
-                    # Stop at the first valid link found
+                    filename = os.path.basename(requests.utils.urlparse(url).path)
                     break
 
         # Fallback for the older simple schema, just in case
