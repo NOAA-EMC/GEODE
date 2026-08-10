@@ -1,4 +1,9 @@
 #!/usr/bin/env python3
+
+"""
+python3 plot_iasi_bt_map.py /path/to/bufr --channels chn1 chn2 chn3 chn4 --output iasi_multi_channel_bt_map.png
+"""
+
 import argparse
 import math
 import os
