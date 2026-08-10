@@ -71,34 +71,35 @@ def on_message(client, userdata, msg):
 
     try:
         data = json.loads(payload_str)
-        url = None
-        filename = None
-
-        # Parse standard WIS2 Notification Message (GeoJSON)
-        # The download link is typically found in the 'links' array
-        if "links" in data:
-            for link in data.get("links", []):
-                if (
-                    link.get("rel") in {"canonical", "update"}
-                    and link.get("type") == "application/bufr"
-                    and link.get("href")
-                ):
-                    url = link["href"]
-                    filename = os.path.basename(requests.utils.urlparse(url).path)
-                    break
-
-        # Fallback for the older simple schema, just in case
-        if not url:
-            url = data.get("url")
-            filename = data.get("filename")
-
-        if url and filename:
-            download_file(url, filename)
-        else:
-            print("[-] Could not find a valid download URL in the payload.")
-            print(
-                f"    Payload excerpt: {payload_str[:200]}..."
-            )  # Print first 200 chars for debugging
-
     except json.JSONDecodeError:
         print("[-] Invalid payload format: Message must be valid JSON")
+        return
+    
+    url = None
+    filename = None
+
+    # Parse standard WIS2 Notification Message (GeoJSON)
+    # The download link is typically found in the 'links' array
+    if "links" in data:
+        for link in data.get("links", []):
+            if (
+                link.get("rel") in {"canonical", "update"}
+                and link.get("type") == "application/bufr"
+                and link.get("href")
+            ):
+                url = link["href"]
+                filename = os.path.basename(requests.utils.urlparse(url).path)
+                break
+
+    # Fallback for the older simple schema, just in case
+    if not url:
+        url = data.get("url")
+        filename = data.get("filename")
+
+    if url and filename:
+        download_file(url, filename)
+    else:
+        print("[-] Could not find a valid download URL in the payload.")
+        print(
+            f"    Payload excerpt: {payload_str[:200]}..."
+        )  # Print first 200 chars for debugging
