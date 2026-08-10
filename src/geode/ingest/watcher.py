@@ -74,7 +74,7 @@ def on_message(client, userdata, msg):
     except json.JSONDecodeError:
         print("[-] Invalid payload format: Message must be valid JSON")
         return
-    
+
     url = None
     filename = None
 
