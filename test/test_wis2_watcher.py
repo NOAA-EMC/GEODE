@@ -17,7 +17,9 @@ def test_wis2_watcher(tmp_path: Path):
     # Override watcher's download directory to use pytest's tmp_path
     watcher.DOWNLOAD_DIR = str(tmp_path)
 
-    client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2, transport="websockets")  # Use websockets for port 443
+    client = mqtt.Client(
+        mqtt.CallbackAPIVersion.VERSION2, transport="websockets"
+    )  # Use websockets for port 443
 
     # Add the WIS2 public credentials here
     client.username_pw_set("everyone", "everyone")
