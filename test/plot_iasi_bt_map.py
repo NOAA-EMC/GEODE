@@ -128,6 +128,9 @@ def process_and_plot_iasi_bt(bufr_file: str, target_channels: list[int], output_
     valid_lon = lon_values[valid_mask]
     valid_scra = scra_values[valid_mask, :]
     valid_chnm = chnm_values[valid_mask, :]
+    valid_scale_start = scale_start[valid_mask, :] if scale_start is not None else None
+    valid_scale_end = scale_end[valid_mask, :] if scale_end is not None else None
+    valid_scale_exp = scale_exp[valid_mask, :] if scale_exp is not None else None
 
     num_obs, num_channels = valid_scra.shape
     print(f"Loaded {num_obs} valid observations across {num_channels} channels.")
@@ -140,9 +143,9 @@ def process_and_plot_iasi_bt(bufr_file: str, target_channels: list[int], output_
     scale_factors = np.zeros((num_obs, num_channels), dtype=np.float64)
 
     if scale_exp is not None and np.size(scale_exp) > 0:
-        scale_start_arr = np.atleast_2d(np.asarray(scale_start))
-        scale_end_arr = np.atleast_2d(np.asarray(scale_end))
-        scale_exp_arr = np.atleast_2d(np.asarray(scale_exp))
+        scale_start_arr = np.atleast_2d(np.asarray(valid_scale_start))
+        scale_end_arr = np.atleast_2d(np.asarray(valid_scale_end))
+        scale_exp_arr = np.atleast_2d(np.asarray(valid_scale_exp))
 
         # Vectorized lookup across observations and channel bounds
         for obs_i in range(num_obs):
