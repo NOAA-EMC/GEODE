@@ -9,7 +9,7 @@ import requests
 # or environment variables for better security and flexibility
 # =========================
 BROKER_ADDRESS = "wis2node.globaldata.nws.noaa.gov"
-BROKER_PORT = 8883
+BROKER_PORT = 443
 TOPIC = "origin/a/wis2/us-noaa-nws/data/core/weather/#"
 DOWNLOAD_DIR = "./wis2-data-tmp"
 
