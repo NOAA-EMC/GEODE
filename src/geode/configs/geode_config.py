@@ -1,11 +1,12 @@
 import yaml
 
-from .config_base import ConfigBase, StrField, Optional, IntField
+from .config_base import ConfigBase, StrField, Optional, IntField, BoolField
 
 
 class MqttConfig(ConfigBase):
     broker_address = Optional(StrField(), default="wis2node.globaldata.nws.noaa.gov")
     broker_port = Optional(IntField(), default=8883)
+    use_websockets = Optional(BoolField(), default=False)
     topic = Optional(StrField(), default="origin/a/wis2/us-noaa-nws/data/core/weather/#")
     download_dir = StrField()
 

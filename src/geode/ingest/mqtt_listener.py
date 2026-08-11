@@ -11,15 +11,19 @@ import paho.mqtt.client as mqtt
 
 from configs.geode_config import GeodeConfig
 from ingest.atms_ingestor import AtmsIngestor
+# from ingest.synop_ingestor import SynopIngestor
 
-
-# ingestors = {'ATMS', AtmsIngestor}
+ingestors = {
+    # 'synop': SynopIngestor,
+    'atms': AtmsIngestor
+}
 
 
 class MqttListener:
     def __init__(self, geode_config: GeodeConfig):
         self.broker_address = geode_config.mqtt.broker_address
         self.broker_port = geode_config.mqtt.broker_port
+        self.use_websockets = geode_config.mqtt.use_websockets
         self.topic = geode_config.mqtt.topic
         self.download_dir = geode_config.mqtt.download_dir
 
@@ -30,7 +34,10 @@ class MqttListener:
     def listen(self):
         print (f"[*] Connecting to MQTT broker at {self.broker_address}:{self.broker_port}...")
 
-        client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
+        if self.use_websockets:
+            client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2, transport="websockets")
+        else:
+            client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
 
         # Add the WIS2 public credentials here
         client.username_pw_set("everyone", "everyone")
@@ -61,32 +68,6 @@ class MqttListener:
             client.loop_stop()
             client.disconnect()
             
-
-    def download_file(self, url, filename):
-        """Downloads a file over HTTP(S) and saves it locally."""
-        try:
-            print(f"[*] Starting download: {url}")
-
-            # stream=True ensures we don't load huge files entirely into memory
-            response = requests.get(url, stream=True, timeout=15)
-            response.raise_for_status()
-
-            # Sanitize filename
-            safe_filename = os.path.basename(filename)
-            filepath = os.path.join(self.download_dir, safe_filename)
-
-            temporary_filepath = f"{filepath}.part"
-            with open(temporary_filepath, "wb") as f:
-                f.writelines(response.iter_content(chunk_size=8192))
-            os.replace(temporary_filepath, filepath)
-
-            print(f"[+] Successfully saved to: {filepath}")
-
-        except requests.exceptions.RequestException as e:
-            print(f"[-] Network error downloading {url}: {e}")
-        except OSError as e:
-            print(f"[-] Error saving file: {e}")
-
 
     # ==========================================
     # MQTT Callbacks
@@ -139,12 +120,38 @@ class MqttListener:
             filename = data.get("filename")
 
         if url and filename:
-            download_file(url, filename)
+            self._download_file(url, filename)
         else:
             print("[-] Could not find a valid download URL in the payload.")
             print(
                 f"    Payload excerpt: {payload_str[:200]}..."
             )  # Print first 200 chars for debugging
+
+
+    def _download_file(self, url, filename):
+        """Downloads a file over HTTP(S) and saves it locally."""
+        try:
+            print(f"[*] Starting download: {url}")
+
+            # stream=True ensures we don't load huge files entirely into memory
+            response = requests.get(url, stream=True, timeout=15)
+            response.raise_for_status()
+
+            # Sanitize filename
+            safe_filename = os.path.basename(filename)
+            filepath = os.path.join(self.download_dir, safe_filename)
+
+            temporary_filepath = f"{filepath}.part"
+            with open(temporary_filepath, "wb") as f:
+                f.writelines(response.iter_content(chunk_size=8192))
+            os.replace(temporary_filepath, filepath)
+
+            print(f"[+] Successfully saved to: {filepath}")
+
+        except requests.exceptions.RequestException as e:
+            print(f"[-] Network error downloading {url}: {e}")
+        except OSError as e:
+            print(f"[-] Error saving file: {e}")
 
 
 if __name__ == "__main__":
