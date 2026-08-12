@@ -11,7 +11,7 @@ from pywis_pubsub.mqtt import MQTTPubSubClient
 # =========================
 BROKER_HOST = "wis2node.globaldata.nws.noaa.gov"
 BROKER_PORT = 443
-TOPIC = "origin/a/wis2/us-noaa-nws/data/core/weather/#"
+TOPIC = "origin/a/wis2/+/data/core/weather/surface-based-observations/#"
 DOWNLOAD_DIR = "./wis2-data-tmp"
 
 # Ensure the download directory exists
@@ -121,7 +121,7 @@ def run(topics: list[str] | None = None) -> None:
     # stored as an inspectable module-level attribute.
     username = os.getenv("WIS2_BROKER_USERNAME", "everyone")
     password = os.getenv("WIS2_BROKER_PASSWORD", "everyone")
-    broker_url = f"mqtts://{username}:{password}@{BROKER_HOST}:{BROKER_PORT}"
+    broker_url = f"wss://{username}:{password}@{BROKER_HOST}:{BROKER_PORT}"
 
     client = MQTTPubSubClient(broker_url)
     client.bind("on_message", _make_on_message(topics))

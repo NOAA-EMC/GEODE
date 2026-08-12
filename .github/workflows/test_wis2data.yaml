@@ -35,5 +35,6 @@ jobs:
           python -m pytest test/test_wis2_watcher.py -v -s
 
       - name: Show downloaded files
+        if: always()
         run: |
-          ls -l /tmp/pytest-of-root/pytest-0/test_wis2_watcher0/
+          ls -l /tmp/pytest-of-root/pytest-0/test_wis2_watcher0/ || echo "No files downloaded"
