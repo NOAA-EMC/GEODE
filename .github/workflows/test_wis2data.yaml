@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest paho-mqtt requests
+          pip install pytest pywis-pubsub requests
 
       - name: Run test using pytest
         run: |

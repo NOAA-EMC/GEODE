@@ -2,13 +2,14 @@ import json
 import os
 
 import requests
+from pywis_pubsub.mqtt import MQTTPubSubClient
 
 # ==========================
 # MQTT Client Configuration
 # TODO: Move this externally to a config file
 # or environment variables for better security and flexibility
 # =========================
-BROKER_ADDRESS = "wis2node.globaldata.nws.noaa.gov"
+BROKER_HOST = "wis2node.globaldata.nws.noaa.gov"
 BROKER_PORT = 443
 TOPIC = "origin/a/wis2/us-noaa-nws/data/core/weather/#"
 DOWNLOAD_DIR = "./wis2-data-tmp"
@@ -49,57 +50,81 @@ def download_file(url, filename):
 # ==========================================
 # MQTT Callbacks
 # ==========================================
-def on_connect(client, userdata, flags, reason_code, properties):
-    """Fired when the client successfully connects to the broker."""
-    if reason_code == 0:
-        print(f"[+] Connected to MQTT broker at {BROKER_ADDRESS}:{BROKER_PORT}")
-        client.subscribe(TOPIC)
-        print(f"[*] Subscribed to topic: {TOPIC}")
-    else:
-        print(f"[-] Connection failed with code {reason_code}")
+def _make_on_message(subscribed_topics: list[str]):
+    """Return an on_message callback that filters to ``subscribed_topics``."""
+
+    # Build a tuple of prefixes to guard against unexpected broker routing
+    prefixes = tuple(t.rstrip("#").rstrip("/") for t in subscribed_topics)
+
+    def on_message(client, userdata, msg):
+        """Fired when a new message is published to the subscribed topic."""
+        # Defensive filter: only process messages from our subscribed topic tree
+        if prefixes and not any(msg.topic.startswith(p) for p in prefixes):
+            return
+
+        payload_str = msg.payload.decode("utf-8")
+        print(f"\n[*] Notification received on {msg.topic}")
+
+        try:
+            data = json.loads(payload_str)
+        except json.JSONDecodeError:
+            print("[-] Invalid payload format: Message must be valid JSON")
+            return
+
+        url = None
+        filename = None
+
+        # Parse standard WIS2 Notification Message (GeoJSON)
+        # The download link is typically found in the 'links' array
+        if "links" in data:
+            for link in data.get("links", []):
+                if (
+                    link.get("rel") in {"canonical", "update"}
+                    and link.get("type") == "application/bufr"
+                    and link.get("href")
+                ):
+                    url = link["href"]
+                    filename = os.path.basename(requests.utils.urlparse(url).path)
+                    break
+
+        # Fallback for the older simple schema, just in case
+        if not url:
+            url = data.get("url")
+            filename = data.get("filename")
+
+        if url and filename:
+            download_file(url, filename)
+        else:
+            print("[-] Could not find a valid download URL in the payload.")
+            print(
+                f"    Payload excerpt: {payload_str[:200]}..."
+            )  # Print first 200 chars for debugging
+
+    return on_message
 
 
-def on_message(client, userdata, msg):
-    """Fired when a new message is published to the subscribed topic."""
-    # Double-check that we are only processing messages from our target topic tree
-    # (Helpful if you add more subscriptions later)
-    if not msg.topic.startswith(TOPIC[:-2]):
-        return
+# ==========================================
+# Entrypoint
+# ==========================================
+def run(topics: list[str] | None = None) -> None:
+    """Subscribe to WIS2 topics and process incoming notifications.
 
-    payload_str = msg.payload.decode("utf-8")
-    print(f"\n[*] Notification received on {msg.topic}")
+    :param topics: list of MQTT topic strings to subscribe to.
+                   Defaults to :data:`TOPIC` when ``None``.
+    """
+    if topics is None:
+        topics = [TOPIC]
 
-    try:
-        data = json.loads(payload_str)
-    except json.JSONDecodeError:
-        print("[-] Invalid payload format: Message must be valid JSON")
-        return
+    os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-    url = None
-    filename = None
+    # Build the broker URL inside this function so credentials are not
+    # stored as an inspectable module-level attribute.
+    username = os.getenv("WIS2_BROKER_USERNAME", "everyone")
+    password = os.getenv("WIS2_BROKER_PASSWORD", "everyone")
+    broker_url = f"wss://{username}:{password}@{BROKER_HOST}:{BROKER_PORT}"
 
-    # Parse standard WIS2 Notification Message (GeoJSON)
-    # The download link is typically found in the 'links' array
-    if "links" in data:
-        for link in data.get("links", []):
-            if (
-                link.get("rel") in {"canonical", "update"}
-                and link.get("type") == "application/bufr"
-                and link.get("href")
-            ):
-                url = link["href"]
-                filename = os.path.basename(requests.utils.urlparse(url).path)
-                break
+    client = MQTTPubSubClient(broker_url)
+    client.bind("on_message", _make_on_message(topics))
 
-    # Fallback for the older simple schema, just in case
-    if not url:
-        url = data.get("url")
-        filename = data.get("filename")
-
-    if url and filename:
-        download_file(url, filename)
-    else:
-        print("[-] Could not find a valid download URL in the payload.")
-        print(
-            f"    Payload excerpt: {payload_str[:200]}..."
-        )  # Print first 200 chars for debugging
+    print(f"[*] Subscribing to topics: {topics}")
+    client.sub(topics)
