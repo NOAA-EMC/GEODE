@@ -5,6 +5,7 @@ import time
 from importlib.util import find_spec
 from pathlib import Path
 from types import ModuleType
+from typing import ClassVar
 
 import pytest
 
@@ -23,15 +24,15 @@ def test_build_broker_url_defaults(monkeypatch) -> None:
 
     broker_url = watcher._build_broker_url()
 
-    assert broker_url.startswith("******")
-    assert broker_url.endswith("/mqtt")
+    assert watcher.BROKER_HOST in broker_url
+    assert f":{watcher.BROKER_PORT}/mqtt" in broker_url
 
 
 def test_run_uses_configured_websocket_path(monkeypatch, tmp_path: Path) -> None:
     """Test that run wires the MQTT client with the configured websocket path."""
 
     class DummyClient:
-        instances: list["DummyClient"] = []
+        instances: ClassVar[list["DummyClient"]] = []
 
         def __init__(self, broker_url: str) -> None:
             self.broker_url = broker_url
@@ -68,7 +69,9 @@ def test_run_uses_configured_websocket_path(monkeypatch, tmp_path: Path) -> None
 def test_wis2_watcher(tmp_path: Path):
     """Test that the WIS2 watcher successfully connects, listens, and downloads .bufr4 files."""
     if os.getenv("RUN_WIS2_WATCHER_INTEGRATION_TEST") != "1":
-        pytest.skip("Set RUN_WIS2_WATCHER_INTEGRATION_TEST=1 to run the live watcher test.")
+        pytest.skip(
+            "Set RUN_WIS2_WATCHER_INTEGRATION_TEST=1 to run the live watcher test."
+        )
     if find_spec("pywis_pubsub") is None:
         pytest.skip("pywis-pubsub is required for the live watcher test.")
 

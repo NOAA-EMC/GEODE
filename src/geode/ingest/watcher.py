@@ -118,9 +118,7 @@ def _build_broker_url() -> str:
     if not websocket_path.startswith("/"):
         websocket_path = f"/{websocket_path}"
 
-    return (
-        f"wss://{username}:{password}@{BROKER_HOST}:{BROKER_PORT}{websocket_path}"
-    )
+    return f"wss://{username}:{password}@{BROKER_HOST}:{BROKER_PORT}{websocket_path}"
 
 
 # ==========================================
