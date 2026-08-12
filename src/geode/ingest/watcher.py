@@ -121,7 +121,7 @@ def run(topics: list[str] | None = None) -> None:
     # stored as an inspectable module-level attribute.
     username = os.getenv("WIS2_BROKER_USERNAME", "everyone")
     password = os.getenv("WIS2_BROKER_PASSWORD", "everyone")
-    broker_url = f"wss://{username}:{password}@{BROKER_HOST}:{BROKER_PORT}"
+    broker_url = f"mqtts://{username}:{password}@{BROKER_HOST}:{BROKER_PORT}"
 
     client = MQTTPubSubClient(broker_url)
     client.bind("on_message", _make_on_message(topics))
