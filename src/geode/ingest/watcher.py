@@ -1,8 +1,8 @@
 import json
 import os
+from urllib.parse import quote
 
 import requests
-from pywis_pubsub.mqtt import MQTTPubSubClient
 
 # ==========================
 # MQTT Client Configuration
@@ -11,6 +11,7 @@ from pywis_pubsub.mqtt import MQTTPubSubClient
 # =========================
 BROKER_HOST = "wis2node.globaldata.nws.noaa.gov"
 BROKER_PORT = 443
+BROKER_WEBSOCKET_PATH = "/mqtt"
 TOPIC = "origin/a/wis2/+/data/core/weather/surface-based-observations/#"
 DOWNLOAD_DIR = "./wis2-data-tmp"
 
@@ -103,6 +104,25 @@ def _make_on_message(subscribed_topics: list[str]):
     return on_message
 
 
+def _build_broker_url() -> str:
+    """Build the WIS2 broker URL with a valid websocket path."""
+
+    username = quote(os.getenv("WIS2_BROKER_USERNAME", "everyone"), safe="")
+    password = quote(os.getenv("WIS2_BROKER_PASSWORD", "everyone"), safe="")
+    websocket_path = os.getenv(
+        "WIS2_BROKER_WEBSOCKET_PATH", BROKER_WEBSOCKET_PATH
+    ).strip()
+
+    if not websocket_path:
+        websocket_path = BROKER_WEBSOCKET_PATH
+    if not websocket_path.startswith("/"):
+        websocket_path = f"/{websocket_path}"
+
+    return (
+        f"wss://{username}:{password}@{BROKER_HOST}:{BROKER_PORT}{websocket_path}"
+    )
+
+
 # ==========================================
 # Entrypoint
 # ==========================================
@@ -117,13 +137,14 @@ def run(topics: list[str] | None = None) -> None:
 
     os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
-    # Build the broker URL inside this function so credentials are not
-    # stored as an inspectable module-level attribute.
-    username = os.getenv("WIS2_BROKER_USERNAME", "everyone")
-    password = os.getenv("WIS2_BROKER_PASSWORD", "everyone")
-    broker_url = f"wss://{username}:{password}@{BROKER_HOST}:{BROKER_PORT}"
+    try:
+        from pywis_pubsub.mqtt import MQTTPubSubClient
+    except ModuleNotFoundError as exc:
+        raise RuntimeError(
+            "FATAL ERROR: pywis-pubsub must be installed to run the WIS2 watcher."
+        ) from exc
 
-    client = MQTTPubSubClient(broker_url)
+    client = MQTTPubSubClient(_build_broker_url())
     client.bind("on_message", _make_on_message(topics))
 
     print(f"[*] Subscribing to topics: {topics}")
