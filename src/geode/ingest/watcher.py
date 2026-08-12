@@ -1,5 +1,6 @@
 import json
 import os
+import sys
 from urllib.parse import quote
 
 import requests
@@ -138,8 +139,13 @@ def run(topics: list[str] | None = None) -> None:
     try:
         from pywis_pubsub.mqtt import MQTTPubSubClient
     except ModuleNotFoundError as exc:
+        print(
+            "FATAL ERROR: pywis-pubsub must be installed to run the WIS2 watcher.",
+            file=sys.stderr,
+        )
         raise RuntimeError(
-            "FATAL ERROR: pywis-pubsub must be installed to run the WIS2 watcher."
+            "pywis_pubsub import failed; install pywis-pubsub before running the "
+            "WIS2 watcher."
         ) from exc
 
     client = MQTTPubSubClient(_build_broker_url())
