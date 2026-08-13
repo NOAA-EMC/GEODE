@@ -39,6 +39,7 @@ jobs:
           find /tmp/pytest-of-root -type f -exec sh -c '
             for file do
               echo "Contents of $file:"
-              debufr "$file"
+              debufr -o "$file".debufr.out "$file"
+              cat "$file".debufr.out
             done
           ' sh {} +
