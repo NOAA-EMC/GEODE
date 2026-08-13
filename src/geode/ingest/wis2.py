@@ -1,8 +1,7 @@
+from geode.ingest import workers
 import json
 import os
-
 import requests
-import geode.ingest.workers as workers
 
 # ==========================================
 # GEODE WIS2 Ingest
@@ -33,7 +32,7 @@ def download_file(url, download_dir, filename):
 
         # Sanitize filename
         safe_filename = os.path.basename(filename)
-        filepath = os.path.join(DOWNLOAD_DIR_ROOT, download_dir, filename)
+        filepath = os.path.join(DOWNLOAD_DIR_ROOT, download_dir, safe_filename)
 
         # ensure the directory exists
         os.makedirs(os.path.dirname(filepath), exist_ok=True)
