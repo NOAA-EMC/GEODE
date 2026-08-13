@@ -6,10 +6,7 @@ import geode.ingest.workers as workers
 
 # ==========================================
 # GEODE WIS2 Ingest 
-
-wis2_factory = {
-    "synop": workers.synop,
-}
+# ==========================================
 
 # ==========================
 # MQTT Client Configuration
@@ -111,8 +108,8 @@ def on_message(client, userdata, msg):
         download_file(url, msg.topic, filename)
         # get the data type from the topic, e.g., "synop" from "origin/a/wis2/us-noaa-nws/data/core/weather/synop"
         data_type = msg.topic.split("/")[-1]
-        if data_type in wis2_factory:
-            wis2_factory[data_type]()
+        if data_type in workers.wis2_factory:
+            workers.wis2_factory[data_type]()
     else:
         print("[-] Could not find a valid download URL in the payload.")
         print(
