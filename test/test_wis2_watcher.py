@@ -37,9 +37,7 @@ def test_wis2_watcher(tmp_path: Path):
 
     client.bind("on_message", wis2.on_message)
 
-    print(
-        f"[*] Connecting to {wis2.BROKER_ADDRESS}:{wis2.BROKER_PORT} via WSS..."
-    )
+    print(f"[*] Connecting to {wis2.BROKER_ADDRESS}:{wis2.BROKER_PORT} via WSS...")
 
     # Run subscription in a background thread; client.close() will trigger loop exit.
     subscribe_thread = threading.Thread(

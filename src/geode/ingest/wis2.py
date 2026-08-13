@@ -5,7 +5,7 @@ import requests
 import geode.ingest.workers as workers
 
 # ==========================================
-# GEODE WIS2 Ingest 
+# GEODE WIS2 Ingest
 # ==========================================
 
 # ==========================
