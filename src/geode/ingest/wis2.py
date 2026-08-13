@@ -1,7 +1,7 @@
-from geode.ingest import workers
 import json
 import os
 import requests
+from geode.ingest import workers
 
 # ==========================================
 # GEODE WIS2 Ingest
