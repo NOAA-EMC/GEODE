@@ -10,9 +10,13 @@ class MqttConfig(ConfigBase):
     topic = Optional(StrField(), default="origin/a/wis2/us-noaa-nws/data/core/weather/#")
     download_dir = StrField()
 
+class BufrIngestConfig(ConfigBase):
+    table_path = StrField()
+
 
 class GeodeConfig(ConfigBase):
     mqtt = MqttConfig()
+    bufr_ingest = BufrIngestConfig()
 
     def __init__(self, config_path: str):
         super().__init__()

@@ -5,3 +5,22 @@ mqtt:
   use_websockets: true
   topic: "origin/a/wis2/us-noaa-nws/data/core/weather/#"
   download_dir: "./wis2-data-tmp"
+
+bufr_ingest:
+  table_path: "/scratch3/NCEPDEV/da/Ronald.McLaren/installs/tables"
+
+database:
+  sql_lite:
+    db_path: "/scratch4/NAGAPE/gpu-ai4wp/Ronald.McLaren/geode/geode.db"
+
+  # postgres:
+  #   host: "localhost"
+  #   port: 5432
+  #   database: "geode"
+  #   user: "geode_user"
+  #   password: "geode_password"
+
+data_lake:
+  root_path: "/scratch4/NAGAPE/gpu-ai4wp/Ronald.McLaren/geode/lake"
+  split_by: "month"  # Options: "year", "month", "day"
+
