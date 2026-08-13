@@ -103,9 +103,8 @@ def on_message(client, userdata, msg):
         filename = data.get("filename")
 
     if url and filename:
-        print(f"url: {url}")
-        print(f"filename: {filename}")
-        print(msg.topic.split("/"))
+        # eventually move download into the factory workers but for now just call the download function directly
+        # because we might want to download the file even if we don't have a worker for that data type yet
         download_file(url, msg.topic, filename)
         # get the data type from the topic, e.g., "synop" from "origin/a/wis2/us-noaa-nws/data/core/weather/synop"
         data_type = msg.topic.split("/")[-1]
