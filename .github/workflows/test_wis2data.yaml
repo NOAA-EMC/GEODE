@@ -39,10 +39,6 @@ jobs:
           find /tmp/pytest-of-root -type f -exec sh -c '
             for file do
               echo "Contents of $file:"
-              if command -v debufr >/dev/null 2>&1; then
-                debufr "$file"
-              else
-                cat "$file"
-              fi
+              debufr "$file"
             done
           ' sh {} +
