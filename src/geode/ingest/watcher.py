@@ -95,10 +95,10 @@ def on_message(client, userdata, msg):
     if not url:
         url = data.get("url")
         filename = data.get("filename")
-        print(f"url: {url}")
-        print(f"filename: {filename}")
 
     if url and filename:
+        print(f"url: {url}")
+        print(f"filename: {filename}")
         download_file(url, filename)
     else:
         print("[-] Could not find a valid download URL in the payload.")
