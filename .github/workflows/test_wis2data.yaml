@@ -37,3 +37,7 @@ jobs:
       - name: Show downloaded files
         run: |
           ls -l /tmp/pytest-of-root/pytest-0/test_wis2_watcher0/
+          for file in /tmp/pytest-of-root/pytest-0/test_wis2_watcher0/*; do
+            echo "Contents of $file:"
+            debufr "$file"
+          done
