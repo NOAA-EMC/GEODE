@@ -13,6 +13,7 @@ sys.path.append(
 from geode.ingest import watcher
 
 # RFC1738 broker URL: wss scheme enables websockets transport + TLS on port 443.
+# The /mqtt path is required for the broker's websocket upgrade endpoint.
 # 'everyone'/'everyone' are the publicly documented WIS2 Global Broker credentials.
 BROKER_URL = (
     "wss://"
@@ -23,6 +24,7 @@ BROKER_URL = (
     + watcher.BROKER_ADDRESS
     + ":"
     + str(watcher.BROKER_PORT)
+    + "/mqtt"
 )
 
 
