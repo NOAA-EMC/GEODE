@@ -14,7 +14,16 @@ from geode.ingest import watcher
 
 # RFC1738 broker URL: wss scheme enables websockets transport + TLS on port 443.
 # 'everyone'/'everyone' are the publicly documented WIS2 Global Broker credentials.
-BROKER_URL = "wss://" + "everyone" + ":" + "everyone" + "@" + watcher.BROKER_ADDRESS + ":" + str(watcher.BROKER_PORT)
+BROKER_URL = (
+    "wss://"
+    + "everyone"
+    + ":"
+    + "everyone"
+    + "@"
+    + watcher.BROKER_ADDRESS
+    + ":"
+    + str(watcher.BROKER_PORT)
+)
 
 
 def test_wis2_watcher(tmp_path: Path):
@@ -22,11 +31,13 @@ def test_wis2_watcher(tmp_path: Path):
     # Override watcher's download directory to use pytest's tmp_path
     watcher.DOWNLOAD_DIR = str(tmp_path)
 
-    client = MQTTPubSubClient(BROKER_URL, options={'verify_certs': True})
+    client = MQTTPubSubClient(BROKER_URL, options={"verify_certs": True})
 
     client.bind("on_message", watcher.on_message)
 
-    print(f"[*] Connecting to {watcher.BROKER_ADDRESS}:{watcher.BROKER_PORT} via WSS...")
+    print(
+        f"[*] Connecting to {watcher.BROKER_ADDRESS}:{watcher.BROKER_PORT} via WSS..."
+    )
 
     # Run subscription in a background thread; client.close() will trigger loop exit.
     subscribe_thread = threading.Thread(
