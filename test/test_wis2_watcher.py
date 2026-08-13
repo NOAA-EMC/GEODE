@@ -55,7 +55,7 @@ def test_wis2_watcher(tmp_path: Path):
         )
         start_time = time.time()
         while time.time() - start_time < 180:
-            downloaded_files = list(tmp_path.glob("*.bufr4"))
+            downloaded_files = list(tmp_path.rglob("*.bufr4"))
             if downloaded_files:
                 print(f"[+] Found downloaded .bufr4 files: {downloaded_files}")
                 break
@@ -68,7 +68,7 @@ def test_wis2_watcher(tmp_path: Path):
         subscribe_thread.join(timeout=5)
 
     # Assert that at least one .bufr4 file was downloaded
-    downloaded_files = list(tmp_path.glob("*.bufr4"))
+    downloaded_files = list(tmp_path.rglob("*.bufr4"))
     assert len(downloaded_files) > 0, (
         "No .bufr4 files were downloaded within 180 seconds."
     )
