@@ -28,6 +28,18 @@ BROKER_URL = (
 )
 
 
+def test_wis2_compat_module_exports_watcher_symbols():
+    """Test that legacy geode.ingest.wis2 imports remain valid."""
+    from geode.ingest import wis2
+
+    assert wis2.BROKER_ADDRESS == watcher.BROKER_ADDRESS
+    assert wis2.BROKER_PORT == watcher.BROKER_PORT
+    assert wis2.TOPIC == watcher.TOPIC
+    assert wis2.DOWNLOAD_DIR == watcher.DOWNLOAD_DIR
+    assert wis2.on_message is watcher.on_message
+    assert wis2.download_file is watcher.download_file
+
+
 def test_wis2_watcher(tmp_path: Path):
     """Test that the WIS2 watcher successfully connects, listens, and downloads .bufr4 files."""
     # Override watcher's download directory to use pytest's tmp_path
