@@ -36,7 +36,13 @@ jobs:
 
       - name: Show downloaded files
         run: |
-          find /tmp/pytest-of-root/pytest-0/test_wis2_watcher0/ -type f -print0 | while IFS= read -r -d '' file; do
-            echo "Contents of $file:"
-            debufr "$file"
-          done
+          find /tmp/pytest-of-root -type f -exec sh -c '
+            for file do
+              echo "Contents of $file:"
+              if command -v debufr >/dev/null 2>&1; then
+                debufr "$file"
+              else
+                cat "$file"
+              fi
+            done
+          ' sh {} +
