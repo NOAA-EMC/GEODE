@@ -14,7 +14,7 @@ class File(Base):
     catalog_id = Column(Integer, ForeignKey("catalogs.id"), nullable=False)
 
     # make a forign key that references the data type table
-    data_type_id = Column(Integer, ForeignKey("data_types.id"), nullable=False)
+    data_set_id = Column(Integer, ForeignKey("data_sets.id"), nullable=False)
 
     # Absolute canonical path (must be unique)
     path = Column(String, nullable=False, unique=True, index=True)

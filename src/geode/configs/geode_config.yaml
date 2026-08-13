@@ -14,7 +14,8 @@ database:
 
 data_lake:
   dir: "lake"
-  split_by: "month"  # Options: "year", "month", "day"
+  format: "netcdf"
+  split_by: "day"  # Options: "year", "month", "day"
 
 wis2:
   broker_address: "wis2node.globaldata.nws.noaa.gov"
@@ -25,6 +26,4 @@ wis2:
 
 bufr_ingest:
   table_path: "/scratch3/NCEPDEV/da/Ronald.McLaren/installs/tables"
-
-
 

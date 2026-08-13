@@ -44,6 +44,7 @@ class SqliteConfig(ConfigBase):
 
 class DataLakeConfig(ConfigBase):
     dir = StrField()
+    format = Choices({"netcdf", "zarr", "icechunk"})
     split_by = Choices({"year", "month", "day"})
 
     def __init__(self, root_dir: str):
