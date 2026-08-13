@@ -1,26 +1,30 @@
 
-mqtt:
+root_dir: "/scratch4/NAGAPE/gpu-ai4wp/Ronald.McLaren/geode"
+
+database:
+  type: sqlite
+  db_path: "geode.db"
+
+  # type: postgres
+  # host: "localhost"
+  # port: 5432
+  # database: "geode"
+  # user: "geode_user"
+  # password: "geode_password"
+
+data_lake:
+  dir: "lake"
+  split_by: "month"  # Options: "year", "month", "day"
+
+wis2:
   broker_address: "wis2node.globaldata.nws.noaa.gov"
   broker_port: 443
   use_websockets: true
   topic: "origin/a/wis2/us-noaa-nws/data/core/weather/#"
-  download_dir: "./wis2-data-tmp"
+  download_dir: "downloads"
 
 bufr_ingest:
   table_path: "/scratch3/NCEPDEV/da/Ronald.McLaren/installs/tables"
 
-database:
-  sql_lite:
-    db_path: "/scratch4/NAGAPE/gpu-ai4wp/Ronald.McLaren/geode/geode.db"
 
-  # postgres:
-  #   host: "localhost"
-  #   port: 5432
-  #   database: "geode"
-  #   user: "geode_user"
-  #   password: "geode_password"
-
-data_lake:
-  root_path: "/scratch4/NAGAPE/gpu-ai4wp/Ronald.McLaren/geode/lake"
-  split_by: "month"  # Options: "year", "month", "day"
 
