@@ -10,7 +10,7 @@ sys.path.append(
     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src")
 )  # Add src/ to sys.path
 
-from geode.ingest import watcher
+from geode.ingest import wis2
 
 # RFC1738 broker URL: wss scheme enables websockets transport + TLS on port 443.
 # The /mqtt path is required for the broker's websocket upgrade endpoint.
@@ -21,9 +21,9 @@ BROKER_URL = (
     + ":"
     + "everyone"
     + "@"
-    + watcher.BROKER_ADDRESS
+    + wis2.BROKER_ADDRESS
     + ":"
-    + str(watcher.BROKER_PORT)
+    + str(wis2.BROKER_PORT)
     + "/mqtt"
 )
 
@@ -31,20 +31,20 @@ BROKER_URL = (
 def test_wis2_watcher(tmp_path: Path):
     """Test that the WIS2 watcher successfully connects, listens, and downloads .bufr4 files."""
     # Override watcher's download directory to use pytest's tmp_path
-    watcher.DOWNLOAD_DIR = str(tmp_path)
+    wis2.DOWNLOAD_DIR_ROOT = str(tmp_path)
 
     client = MQTTPubSubClient(BROKER_URL, options={"verify_certs": True})
 
-    client.bind("on_message", watcher.on_message)
+    client.bind("on_message", wis2.on_message)
 
     print(
-        f"[*] Connecting to {watcher.BROKER_ADDRESS}:{watcher.BROKER_PORT} via WSS..."
+        f"[*] Connecting to {wis2.BROKER_ADDRESS}:{wis2.BROKER_PORT} via WSS..."
     )
 
     # Run subscription in a background thread; client.close() will trigger loop exit.
     subscribe_thread = threading.Thread(
         target=client.sub,
-        args=([watcher.TOPIC],),
+        args=([wis2.TOPIC],),
         daemon=True,
     )
     subscribe_thread.start()
