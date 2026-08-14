@@ -11,6 +11,7 @@ sys.path.append(
 )  # Add src/ to sys.path
 
 from geode.ingest import watcher
+from geode.configs.geode_config import geode_config
 
 # RFC1738 broker URL: wss scheme enables websockets transport + TLS on port 443.
 # The /mqtt path is required for the broker's websocket upgrade endpoint.
@@ -27,8 +28,10 @@ BROKER_URL = (
     + "/mqtt"
 )
 
+def test_wis2_watcher():
+   
+    tmp_path = Path(geode_config.wis2.full_download_dir)  # Use the download directory from the config
 
-def test_wis2_watcher(tmp_path: Path):
     """Test that the WIS2 watcher successfully connects, listens, and downloads .bufr4 files."""
     # Override watcher's download directory to use pytest's tmp_path
     watcher.DOWNLOAD_DIR = str(tmp_path)
@@ -72,3 +75,6 @@ def test_wis2_watcher(tmp_path: Path):
     assert len(downloaded_files) > 0, (
         "No .bufr4 files were downloaded within 180 seconds."
     )
+
+if __name__ == "__main__":
+    test_wis2_watcher()

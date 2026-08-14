@@ -2,7 +2,7 @@ import os
 import bufr
 import xarray as xr
 
-from configs.geode_config import GeodeConfig
+from configs.geode_config import geode_config
 
 bufrMappingDir = os.path.join(os.path.dirname(__file__), "../configs/bufr_mappings")
 
@@ -32,9 +32,9 @@ def container_to_xarray(container: bufr.Container,
 
 
 class ShipIngestor:
-    def __init__(self, config: GeodeConfig):
+    def __init__(self):
         self.ship_yaml = os.path.join(bufrMappingDir, "ship.yaml")
-        self.table_path = config.bufr_ingest.table_path
+        self.table_path = geode_config.bufr_ingest.table_path
     
     def ingest(self, file_path: str) -> xr.DataTree:
         container = bufr.Parser(file_path, self.ship_yaml, self.table_path).parse()
@@ -43,6 +43,4 @@ class ShipIngestor:
 
 
 if __name__ == "__main__":
-    from configs.geode_config import GeodeConfig
-    config = GeodeConfig(os.path.join(os.path.dirname(__file__), "../configs/geode_config.yaml"))
-    ingestor = ShipIngestor(config)
+    ingestor = ShipIngestor()

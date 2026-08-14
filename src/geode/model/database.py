@@ -12,7 +12,7 @@ import xarray as xr
 
 from sqlalchemy import create_engine
 
-from geode.configs.geode_config import GeodeConfig
+from geode.configs.geode_config import geode_config
 from geode.model.catalog import Catalog
 from geode.model.data_set import DataSet
 from geode.model.data_file import File
@@ -78,9 +78,9 @@ def add_data(data: xr.DataTree, catalog: Catalog, data_set_name: str) -> None:
         catalog.session.add(new_data_file)
         catalog.session.commit()
 
-def create_db(config: GeodeConfig) -> None:
+def create_db() -> None:
     # Create a new SQLite database and return the engine
-    db_config = config.database
+    db_config = geode_config.database
     if db_config.type == "sqlite":
         engine = create_engine(f"sqlite:///{db_config.full_db_path}")
     else:
@@ -107,5 +107,5 @@ if __name__ == "__main__":
     args = argument_parser.parse_args()
 
     if args.create_db:
-        create_db(GeodeConfig(args.config))
+        create_db()
     

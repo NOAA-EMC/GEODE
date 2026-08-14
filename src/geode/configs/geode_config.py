@@ -1,9 +1,6 @@
 
 
 import sys, os
-if __name__ == "__main__":
-    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "..")))
-
 import yaml
 
 from geode.configs.config_base import ConfigBase, \
@@ -28,6 +25,11 @@ class Wis2Config(ConfigBase):
     @property
     def full_download_dir(self) -> str:
         return os.path.join(self.root_dir, self.download_dir)
+
+    @property
+    def broker_url(self) -> str:
+        protocol = "wss" if self.use_websockets else "ssl"
+        return f"{protocol}://everyone:everyone@{self.broker_address}:{self.broker_port}"
 
 
 class SqliteConfig(ConfigBase):
@@ -75,10 +77,5 @@ class GeodeConfig(ConfigBase):
             self.load(yaml.safe_load(config_file))
 
 
-if __name__ == "__main__":
-    config_path = os.path.join(os.path.dirname(__file__), "geode_config.yaml")
-    geode_config = GeodeConfig(config_path)
-    
-    print(geode_config.wis2.full_download_dir)  # This will ensure the download directory exists
-    print(geode_config.database.full_db_path)
-    print(geode_config.data_lake.full_dir)  # This will ensure the data lake directory path is correct
+# create singleton instance of GeodeConfig on module load
+geode_config = GeodeConfig(os.path.join(os.path.dirname(__file__), "geode_config.yaml"))

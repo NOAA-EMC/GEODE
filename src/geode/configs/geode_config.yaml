@@ -26,4 +26,3 @@ wis2:
 
 bufr_ingest:
   table_path: "/scratch3/NCEPDEV/da/Ronald.McLaren/installs/tables"
-

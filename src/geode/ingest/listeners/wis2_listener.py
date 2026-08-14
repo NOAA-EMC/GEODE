@@ -1,17 +1,19 @@
 import os
 import sys
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "../..")))
 
 import json
 import time
 import argparse
-
 import requests
-import paho.mqtt.client as mqtt
+import threading
+from pathlib import Path
 
-from configs.geode_config import GeodeConfig
-from ingest.atms_ingestor import AtmsIngestor
-# from ingest.synop_ingestor import SynopIngestor
+from pywis_pubsub.mqtt import MQTTPubSubClient
+
+from geode.configs.geode_config import geode_config
+from geode.ingest.ingestors.atms_ingestor import AtmsIngestor
+# from geode.ingest.ingestors.synop_ingestor import SynopIngestor
 
 ingestors = {
     # 'synop': SynopIngestor,
@@ -19,54 +21,51 @@ ingestors = {
 }
 
 
-class MqttListener:
-    def __init__(self, geode_config: GeodeConfig):
-        self.broker_address = geode_config.mqtt.broker_address
-        self.broker_port = geode_config.mqtt.broker_port
-        self.use_websockets = geode_config.mqtt.use_websockets
-        self.topic = geode_config.mqtt.topic
-        self.download_dir = geode_config.mqtt.download_dir
+class Wis2Listener:
+    def __init__(self):
+        self.topic = geode_config.wis2.topic
+        self.download_dir = geode_config.wis2.download_dir
+        self.broker_url = geode_config.wis2.broker_url
+        self.topic = geode_config.wis2.topic
 
         # Ensure the download directory exists
         os.makedirs(self.download_dir, exist_ok=True)
 
 
     def listen(self):
-        print (f"[*] Connecting to MQTT broker at {self.broker_address}:{self.broker_port}...")
+        print (f"[*] Connecting to MQTT broker... {self.broker_url}")
 
-        if self.use_websockets:
-            client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2, transport="websockets")
-        else:
-            client = mqtt.Client(callback_api_version=mqtt.CallbackAPIVersion.VERSION2)
+        client = MQTTPubSubClient(self.broker_url, options={"verify_certs": True})
+        # client.bind("on_connect", self._on_connect)
+        client.bind("on_message", self._on_message)
 
-        # Add the WIS2 public credentials here
-        client.username_pw_set("everyone", "everyone")
+        print(f"[*] Connecting via WSS...")
 
-        # Enable TLS/SSL (Crucial for port 8883)
-        client.tls_set()
+        # Run subscription in a background thread; client.close() will trigger loop exit.
+        subscribe_thread = threading.Thread(
+            target=client.sub,
+            args=([self.topic],),
+            daemon=True,
+        )
+        subscribe_thread.start()
 
-        client.on_connect = self._on_connect
-        client.on_message = self._on_message
-
-        client.connect(self.broker_address, self.broker_port, keepalive=60)
-
-        client.loop_start()
         try:
             print(
-                "[*] Running listener (up to 120 seconds) or until a .bufr4 file is downloaded..."
+                "[*] Running listener (up to 180 seconds) or until a .bufr4 file is downloaded..."
             )
             start_time = time.time()
-            while time.time() - start_time < 120:
-                # Check if any .bufr4 files exist in tmp_path
-                downloaded_files = [f for f in os.listdir(self.download_dir) if f.endswith(".bufr4")]
+            while time.time() - start_time < 180:
+                downloaded_files = list(Path(self.download_dir).glob("*.bufr4"))
                 if downloaded_files:
                     print(f"[+] Found downloaded .bufr4 files: {downloaded_files}")
                     break
                 time.sleep(1)
         finally:
-            print("[*] Stopping loop and disconnecting...")
-            client.loop_stop()
-            client.disconnect()
+            print("[*] Disconnecting...")
+            # close() calls disconnect(), which causes loop_forever() to return and
+            # the subscribe_thread to exit cleanly.
+            client.close()
+            subscribe_thread.join(timeout=5)
             
 
     # ==========================================
@@ -75,7 +74,7 @@ class MqttListener:
     def _on_connect(self, client, userdata, flags, reason_code, properties):
         """Fired when the client successfully connects to the broker."""
         if reason_code == 0:
-            print(f"[+] Connected to MQTT broker at {self.broker_address}:{self.broker_port}")
+            print(f"[+] Connected to MQTT broker.")
             client.subscribe(self.topic)
             print(f"[*] Subscribed to topic: {self.topic}")
         else:
@@ -155,16 +154,8 @@ class MqttListener:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="MQTT Listener for WIS2 Notifications")
-    parser.add_argument(
-        "--config",
-        type=str,
-        default=os.path.join(os.path.dirname(__file__), "../configs/geode_config.yaml"),
-        help="Path to the Geode configuration YAML file",
-    )
-    
+    parser = argparse.ArgumentParser(description="MQTT Listener for WIS2 Notifications")    
     args = parser.parse_args()
-    geode_config = GeodeConfig(args.config)
 
-    listener = MqttListener(geode_config)
+    listener = Wis2Listener()
     listener.listen()
