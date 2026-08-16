@@ -12,19 +12,13 @@ from pathlib import Path
 from pywis_pubsub.mqtt import MQTTPubSubClient
 
 from geode.configs.geode_config import geode_config
-from geode.ingest.ingestors.atms_ingestor import AtmsIngestor
-# from geode.ingest.ingestors.synop_ingestor import SynopIngestor
-
-ingestors = {
-    # 'synop': SynopIngestor,
-    'atms': AtmsIngestor
-}
+from geode.ingest.ingestors.ingestor_factory import get_ingestor
 
 
 class Wis2Listener:
     def __init__(self):
         self.topic = geode_config.wis2.topic
-        self.download_dir = geode_config.wis2.download_dir
+        self.download_dir = geode_config.wis2.full_download_dir
         self.broker_url = geode_config.wis2.broker_url
         self.topic = geode_config.wis2.topic
 
@@ -36,7 +30,6 @@ class Wis2Listener:
         print (f"[*] Connecting to MQTT broker... {self.broker_url}")
 
         client = MQTTPubSubClient(self.broker_url, options={"verify_certs": True})
-        # client.bind("on_connect", self._on_connect)
         client.bind("on_message", self._on_message)
 
         print(f"[*] Connecting via WSS...")
@@ -49,37 +42,22 @@ class Wis2Listener:
         )
         subscribe_thread.start()
 
-        try:
-            print(
-                "[*] Running listener (up to 180 seconds) or until a .bufr4 file is downloaded..."
-            )
-            start_time = time.time()
-            while time.time() - start_time < 180:
-                downloaded_files = list(Path(self.download_dir).glob("*.bufr4"))
-                if downloaded_files:
-                    print(f"[+] Found downloaded .bufr4 files: {downloaded_files}")
-                    break
-                time.sleep(1)
-        finally:
-            print("[*] Disconnecting...")
-            # close() calls disconnect(), which causes loop_forever() to return and
-            # the subscribe_thread to exit cleanly.
-            client.close()
-            subscribe_thread.join(timeout=5)
+        if geode_config.debug:
+            print(f"[*] Download directory: {self.download_dir}")
+            try:
+                print("[*] Running listener (for 180 seconds).")
+                start_time = time.time()
+                while time.time() - start_time < 180:
+                    time.sleep(1)  # Sleep to reduce CPU usage
+            finally:
+                print("[*] Disconnecting...")
+                client.close()
+                subscribe_thread.join(timeout=5)
             
 
     # ==========================================
     # MQTT Callbacks
     # ==========================================
-    def _on_connect(self, client, userdata, flags, reason_code, properties):
-        """Fired when the client successfully connects to the broker."""
-        if reason_code == 0:
-            print(f"[+] Connected to MQTT broker.")
-            client.subscribe(self.topic)
-            print(f"[*] Subscribed to topic: {self.topic}")
-        else:
-            print(f"[-] Connection failed with code {reason_code}")
-
 
     def _on_message(self, client, userdata, msg):
         """Fired when a new message is published to the subscribed topic."""
@@ -96,39 +74,50 @@ class Wis2Listener:
         except json.JSONDecodeError:
             print("[-] Invalid payload format: Message must be valid JSON")
             return
+            
+        wis_id = os.path.join(msg.topic.split('/')[-2], msg.topic.split('/')[-1])
 
-        url = None
-        filename = None
+        print (f"[*] WIS ID: {wis_id}")
 
-        # Parse standard WIS2 Notification Message (GeoJSON)
-        # The download link is typically found in the 'links' array
-        if "links" in data:
-            for link in data.get("links", []):
-                if (
-                    link.get("rel") in {"canonical", "update"}
-                    and link.get("type") == "application/bufr"
-                    and link.get("href")
-                ):
-                    url = link["href"]
-                    filename = os.path.basename(requests.utils.urlparse(url).path)
-                    break
+        def _get_file_download_info(data):
+            """Extracts the download URL and filename from the WIS2 notification payload."""
+            url = None
+            filename = None
 
-        # Fallback for the older simple schema, just in case
-        if not url:
-            url = data.get("url")
-            filename = data.get("filename")
+            # Parse standard WIS2 Notification Message (GeoJSON)
+            # The download link is typically found in the 'links' array
+            if "links" in data:
+                for link in data.get("links", []):
+                    if (link.get("rel") in {"canonical", "update"}
+                        and link.get("type") == "application/bufr"
+                        and link.get("href")):
+                        url = link["href"]
+                        filename = os.path.basename(requests.utils.urlparse(url).path)
+                        break
 
-        if url and filename:
-            self._download_file(url, filename)
-        else:
-            print("[-] Could not find a valid download URL in the payload.")
-            print(
-                f"    Payload excerpt: {payload_str[:200]}..."
-            )  # Print first 200 chars for debugging
+            # Fallback for the older simple schema, just in case
+            if not url:
+                url = data.get("url")
+                filename = data.get("filename")
+
+            return url, filename
+
+        file_url, file_name = _get_file_download_info(data)
+
+        # Use WIS ID as subdirectory name, replacing slashes with underscores
+        downloaded_file_path = self._download_file(file_url, file_name, wis_id)
+
+        if not downloaded_file_path:
+            return
+
+        # Process the downloaded file with the appropriate ingestor if available
+        ingestor_class = get_ingestor(wis_id)
+        if ingestor_class:
+            ingestor = ingestor_class()
+            ingestor.process(downloaded_file_path)
 
 
-    def _download_file(self, url, filename):
-        """Downloads a file over HTTP(S) and saves it locally."""
+    def _download_file(self, url: str, filename: str, sub_dir: str) -> str:
         try:
             print(f"[*] Starting download: {url}")
 
@@ -138,7 +127,10 @@ class Wis2Listener:
 
             # Sanitize filename
             safe_filename = os.path.basename(filename)
-            filepath = os.path.join(self.download_dir, safe_filename)
+            filepath = os.path.join(geode_config.wis2.full_download_dir, sub_dir, safe_filename)
+
+            # ensure the directory exists
+            os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
             temporary_filepath = f"{filepath}.part"
             with open(temporary_filepath, "wb") as f:
@@ -146,12 +138,14 @@ class Wis2Listener:
             os.replace(temporary_filepath, filepath)
 
             print(f"[+] Successfully saved to: {filepath}")
+            return filepath
 
         except requests.exceptions.RequestException as e:
             print(f"[-] Network error downloading {url}: {e}")
+            return ""
         except OSError as e:
             print(f"[-] Error saving file: {e}")
-
+            return ""
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="MQTT Listener for WIS2 Notifications")    

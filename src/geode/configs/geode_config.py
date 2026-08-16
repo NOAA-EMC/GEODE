@@ -8,8 +8,16 @@ from geode.configs.config_base import ConfigBase, \
                                       Optional, \
                                       IntField, \
                                       BoolField, \
+                                      ListField, \
                                       Choices
 
+ConfigDir = os.path.realpath(
+    os.path.join(os.path.dirname(__file__), "..", "..", "..", "configs"))
+
+class Wis2IngestorConfig(ConfigBase):
+    wis_id = StrField()
+    name = StrField()
+    module = StrField()
 
 class Wis2Config(ConfigBase):
     broker_address = Optional(StrField(), default="wis2node.globaldata.nws.noaa.gov")
@@ -29,7 +37,7 @@ class Wis2Config(ConfigBase):
     @property
     def broker_url(self) -> str:
         protocol = "wss" if self.use_websockets else "ssl"
-        return f"{protocol}://everyone:everyone@{self.broker_address}:{self.broker_port}"
+        return f"{protocol}://everyone:everyone@{self.broker_address}:{self.broker_port}/mqtt"
 
 
 class SqliteConfig(ConfigBase):
@@ -48,6 +56,7 @@ class DataLakeConfig(ConfigBase):
     dir = StrField()
     format = Choices({"netcdf", "zarr", "icechunk"})
     split_by = Choices({"year", "month", "day"})
+    filename_template = StrField()  
 
     def __init__(self, root_dir: str):
         super().__init__()
@@ -58,18 +67,23 @@ class DataLakeConfig(ConfigBase):
         return os.path.join(self.root_dir, self.dir)
 
 
-class BufrIngestConfig(ConfigBase):
+class BufrConfig(ConfigBase):
     table_path = StrField()
+
+    @property
+    def map_dir(self) -> str:
+        return os.path.join(ConfigDir, "bufr")
 
 
 class GeodeConfig(ConfigBase):
     root_dir = StrField()
+    debug = Optional(BoolField(), default=False)
     database = Choices({"sqlite": SqliteConfig(root_dir=root_dir)}
                         # "postgres": PostgresConfig()  # Uncomment if Postgres support is added
                         )
     data_lake = DataLakeConfig(root_dir=root_dir)
     wis2 = Wis2Config(root_dir=root_dir)
-    bufr_ingest = BufrIngestConfig()
+    bufr = BufrConfig()
 
     def __init__(self, config_path: str):
         super().__init__()
@@ -78,4 +92,4 @@ class GeodeConfig(ConfigBase):
 
 
 # create singleton instance of GeodeConfig on module load
-geode_config = GeodeConfig(os.path.join(os.path.dirname(__file__), "geode_config.yaml"))
+geode_config = GeodeConfig(os.path.join(ConfigDir, "geode_config.yaml"))

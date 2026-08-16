@@ -179,7 +179,11 @@ class ListField(ConfigField):
         for item in value:
             field = deepcopy(self.inner_type)
             field.load(item)
-            items.append(field.value)
+            items.append(field)
+
+        if isinstance(self.inner_type, ConfigField):
+            items = [item.value for item in items]
+
         self.value = items
 
 

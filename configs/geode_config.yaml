@@ -1,5 +1,6 @@
 
 root_dir: "/scratch4/NAGAPE/gpu-ai4wp/Ronald.McLaren/geode"
+debug: true
 
 database:
   type: sqlite
@@ -16,6 +17,7 @@ data_lake:
   dir: "lake"
   format: "netcdf"
   split_by: "day"  # Options: "year", "month", "day"
+  filename_template: "{name}_{year}{month}{day}.nc"  # Template for output filenames
 
 wis2:
   broker_address: "wis2node.globaldata.nws.noaa.gov"
@@ -24,5 +26,5 @@ wis2:
   topic: "origin/a/wis2/us-noaa-nws/data/core/weather/#"
   download_dir: "downloads"
 
-bufr_ingest:
+bufr:
   table_path: "/scratch3/NCEPDEV/da/Ronald.McLaren/installs/tables"
