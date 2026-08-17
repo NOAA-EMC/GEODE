@@ -3,7 +3,6 @@ from datetime import datetime
 
 import zarr
 import icechunk as ic
-from icechunk.xarray import to_icechunk
 import xarray as xr
 
 from geode.configs.geode_config import geode_config
