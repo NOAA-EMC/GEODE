@@ -36,4 +36,10 @@ jobs:
 
       - name: Show downloaded files
         run: |
-          ls -l /tmp/pytest-of-root/pytest-0/test_wis2_watcher0/
+          find /tmp/pytest-of-root -type f -exec sh -c '
+            for file do
+              echo "Contents of $file:"
+              debufr -o "$file".debufr.out "$file"
+              cat "$file".debufr.out
+            done
+          ' sh {} +

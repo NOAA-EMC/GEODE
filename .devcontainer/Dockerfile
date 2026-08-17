@@ -4,7 +4,7 @@ FROM ghcr.io/noaa-emc/i-jedi:latest
 RUN useradd -ms /bin/bash developer
 
 # add some extra Python packages
-RUN pip install pytest zarr ruff paho-mqtt
+RUN pip install pytest zarr ruff paho-mqtt pywis-pubsub requests
 
 # Set working directory
 WORKDIR /home/developer
