@@ -3,33 +3,20 @@ from geode.ingest.ingestors.base_ingestor import BaseIngestor
 import os
 import bufr
 import xarray as xr
+import tempfile
 
 from geode.configs.geode_config import geode_config
-# from geode.lake.lake_manager import lake_manager
 
 
 def container_to_xarray(container: bufr.DataContainer, 
                         description: bufr.encoders.Description) -> xr.DataTree:
 
-    def get_description_var(field_name: str):
-        for var in description.get_variables():
-            if field_name == os.path.split(var["source"])[-1]:
-                return var
-
-    datatree = xr.DataTree()
-    for field_name in container.list():
-        var = get_description_var(field_name)
-        print (f"Processing field: {field_name}, Description: {var}")
-        if var is not None:
-            # Get the data from the container and create a DataArray
-            data = container.get(field_name)
-            datatree[var["name"]] = xr.DataArray(data=data)
-            
-            # Add attributes to the DataArray
-            for key, value in var.items():
-                if key != "name":
-                    datatree[var["name"]].attrs[key] = value
-            
+    # Use the NetCDF encoder as a bridge to XArray for now.
+    encoder = bufr.encoders.netcdf.Encoder(description)
+    with tempfile.NamedTemporaryFile(delete=True) as named_temp:
+        encoder.encode(container, named_temp.name, False).values()
+        datatree = xr.open_datatree(named_temp.name)
+        
     return datatree
     
 

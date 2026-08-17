@@ -42,12 +42,12 @@ class Wis2Listener:
         )
         subscribe_thread.start()
 
-        if geode_config.debug:
+        if geode_config.run_for_num_sec:
             print(f"[*] Download directory: {self.download_dir}")
             try:
-                print("[*] Running listener (for 180 seconds).")
+                print(f"[*] Running listener (for {geode_config.run_for_num_sec} seconds).")
                 start_time = time.time()
-                while time.time() - start_time < 180:
+                while time.time() - start_time < geode_config.run_for_num_sec:
                     time.sleep(1)  # Sleep to reduce CPU usage
             finally:
                 print("[*] Disconnecting...")

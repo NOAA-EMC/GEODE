@@ -14,6 +14,8 @@ from geode.configs.config_base import ConfigBase, \
 ConfigDir = os.path.realpath(
     os.path.join(os.path.dirname(__file__), "..", "..", "..", "configs"))
 
+#Ingestor Configuration
+
 class Wis2IngestorConfig(ConfigBase):
     wis_id = StrField()
     name = StrField()
@@ -39,6 +41,14 @@ class Wis2Config(ConfigBase):
         protocol = "wss" if self.use_websockets else "ssl"
         return f"{protocol}://everyone:everyone@{self.broker_address}:{self.broker_port}/mqtt"
 
+class BufrConfig(ConfigBase):
+    table_path = StrField()
+
+    @property
+    def map_dir(self) -> str:
+        return os.path.join(ConfigDir, "bufr")
+
+# Database Configuration
 
 class SqliteConfig(ConfigBase):
     db_path = StrField()
@@ -52,36 +62,45 @@ class SqliteConfig(ConfigBase):
         return os.path.join(self.root_dir, self.db_path)
 
 
-class DataLakeConfig(ConfigBase):
-    dir = StrField()
-    format = Choices({"netcdf", "zarr", "icechunk"})
-    split_by = Choices({"year", "month", "day"})
-    filename_template = StrField()  
+# DataLake Configuration
+
+class LakeConfig(ConfigBase):
+    base_dir = StrField()
 
     def __init__(self, root_dir: str):
         super().__init__()
         self.root_dir = root_dir
 
     @property
-    def full_dir(self) -> str:
-        return os.path.join(self.root_dir, self.dir)
+    def full_base_path(self) -> str:
+        return os.path.join(self.root_dir, self.base_dir)
 
 
-class BufrConfig(ConfigBase):
-    table_path = StrField()
+class ZarrLakeConfig(LakeConfig):
+    chunk_size = Optional(IntField(), default=5000)
+    split_by = Optional(Choices({"year", "month", "day", "none"}), default="none")
 
-    @property
-    def map_dir(self) -> str:
-        return os.path.join(ConfigDir, "bufr")
 
+class IceChunkLakeConfig(LakeConfig):
+    pass
+
+
+class NetCDFLakeConfig(LakeConfig):
+    split_by = Choices({"year", "month", "day"})
+
+# Main Configuration Class
 
 class GeodeConfig(ConfigBase):
     root_dir = StrField()
-    debug = Optional(BoolField(), default=False)
+    run_for_num_sec= Optional(IntField(), default=None)
     database = Choices({"sqlite": SqliteConfig(root_dir=root_dir)}
                         # "postgres": PostgresConfig()  # Uncomment if Postgres support is added
                         )
-    data_lake = DataLakeConfig(root_dir=root_dir)
+    data_lake = Choices({
+        "zarr": ZarrLakeConfig(root_dir=root_dir),
+        "icechunk": IceChunkLakeConfig(root_dir=root_dir),
+        "netcdf": NetCDFLakeConfig(root_dir=root_dir)
+    })
     wis2 = Wis2Config(root_dir=root_dir)
     bufr = BufrConfig()
 

@@ -1,23 +1,14 @@
 
 root_dir: "/scratch4/NAGAPE/gpu-ai4wp/Ronald.McLaren/geode"
-debug: true
+run_for_num_sec: 180
 
 database:
   type: sqlite
   db_path: "geode.db"
 
-  # type: postgres
-  # host: "localhost"
-  # port: 5432
-  # database: "geode"
-  # user: "geode_user"
-  # password: "geode_password"
-
 data_lake:
-  dir: "lake"
-  format: "netcdf"
-  split_by: "day"  # Options: "year", "month", "day"
-  filename_template: "{name}_{year}{month}{day}.nc"  # Template for output filenames
+  type : "icechunk"
+  base_dir: "lake"
 
 wis2:
   broker_address: "wis2node.globaldata.nws.noaa.gov"
