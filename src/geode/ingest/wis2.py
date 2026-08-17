@@ -3,6 +3,12 @@ import os
 
 import requests
 
+from geode.ingest import workers
+
+# ==========================================
+# GEODE WIS2 Ingest
+# ==========================================
+
 # ==========================
 # MQTT Client Configuration
 # TODO: Move this externally to a config file
@@ -11,16 +17,13 @@ import requests
 BROKER_ADDRESS = "wis2node.globaldata.nws.noaa.gov"
 BROKER_PORT = 443
 TOPIC = "origin/a/wis2/us-noaa-nws/data/core/weather/#"
-DOWNLOAD_DIR = "./wis2-data-tmp"
-
-# Ensure the download directory exists
-os.makedirs(DOWNLOAD_DIR, exist_ok=True)
+DOWNLOAD_DIR_ROOT = "./wis2-data-tmp"
 
 
 # ==========================================
 # Core Functions
 # ==========================================
-def download_file(url, filename):
+def download_file(url, download_dir, filename):
     """Downloads a file over HTTP(S) and saves it locally."""
     try:
         print(f"[*] Starting download: {url}")
@@ -31,7 +34,10 @@ def download_file(url, filename):
 
         # Sanitize filename
         safe_filename = os.path.basename(filename)
-        filepath = os.path.join(DOWNLOAD_DIR, safe_filename)
+        filepath = os.path.join(DOWNLOAD_DIR_ROOT, download_dir, safe_filename)
+
+        # ensure the directory exists
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
 
         temporary_filepath = f"{filepath}.part"
         with open(temporary_filepath, "wb") as f:
@@ -97,7 +103,13 @@ def on_message(client, userdata, msg):
         filename = data.get("filename")
 
     if url and filename:
-        download_file(url, filename)
+        # eventually move download into the factory workers but for now just call the download function directly
+        # because we might want to download the file even if we don't have a worker for that data type yet
+        download_file(url, msg.topic, filename)
+        # get the data type from the topic, e.g., "synop" from "origin/a/wis2/us-noaa-nws/data/core/weather/synop"
+        data_type = msg.topic.split("/")[-1]
+        if data_type in workers.wis2_factory:
+            workers.wis2_factory[data_type]()
     else:
         print("[-] Could not find a valid download URL in the payload.")
         print(
