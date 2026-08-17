@@ -19,6 +19,9 @@ class LakeManager:
     def put(self, data_type: str, data_tree: xr.DataTree) -> None:
         raise NotImplementedError("This method should be implemented by subclasses.")
 
+    def get(self, data_type: str, start_time: datetime, end_time: datetime) -> xr.DataTree:
+        raise NotImplementedError("This method should be implemented by subclasses.")
+
 
 class IceChunkLakeManager(LakeManager):
     def __init__(self):
