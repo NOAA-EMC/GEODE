@@ -9,7 +9,7 @@ import xarray as xr
 from geode.configs.geode_config import geode_config
 
 
-class LakeManager:
+class DataManager:
     def __init__(self):
         self.config = geode_config.data_lake
 
@@ -23,7 +23,7 @@ class LakeManager:
         raise NotImplementedError("This method should be implemented by subclasses.")
 
 
-class IceChunkLakeManager(LakeManager):
+class IceChunkDataManager(DataManager):
     def __init__(self):
         super().__init__()
 
@@ -62,10 +62,9 @@ class IceChunkLakeManager(LakeManager):
                 data_tree.to_zarr(store, mode="w", zarr_format=3, consolidated=False)
 
 
-class ZarrLakeManager(LakeManager):
+class ZarrDataManager(DataManager):
     def __init__(self):
         super().__init__()
-        # Additional initialization for ZarrLakeManager if needed
 
     def get_file_path(self, data_type :str, timestamp: datetime = None) -> str:
         if self.config.split_by == "none":
@@ -98,10 +97,9 @@ class ZarrLakeManager(LakeManager):
             data_tree.to_zarr(file_path, mode='a', append_dim='Location', consolidated=True)
 
 
-class NetCDFLakeManager(LakeManager):
+class NetCDFDataManager(DataManager):
     def __init__(self):
         super().__init__()
-        # Additional initialization for NetCDFLakeManager if needed
 
     def get_file_path(self, data_type :str, timestamp: datetime = None) -> str:
         assert timestamp is not None, "Timestamp must be provided for split_by option."
@@ -132,15 +130,15 @@ class NetCDFLakeManager(LakeManager):
 
 
 manager_mapping = {
-    "icechunk": IceChunkLakeManager,
-    "zarr": ZarrLakeManager,
-    "netcdf": NetCDFLakeManager
+    "icechunk": IceChunkDataManager,
+    "zarr": ZarrDataManager,
+    "netcdf": NetCDFDataManager
 }
 
-def get_lake_manager():
-    lake_manager_class = manager_mapping.get(geode_config.data_lake.type.lower())
-    if lake_manager_class is None:
+def get_data_manager():
+    data_manager_class = manager_mapping.get(geode_config.data_lake.type.lower())
+    if data_manager_class is None:
         raise ValueError(f"Unsupported lake type: {geode_config.data_lake.type}")
-    return lake_manager_class()
+    return data_manager_class()
 
-lake_manager = get_lake_manager()
+data_manager = get_data_manager()

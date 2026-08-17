@@ -3,7 +3,7 @@ import bufr
 import xarray as xr
 
 from geode.configs.geode_config import geode_config
-from geode.lake.lake_manager import lake_manager
+from geode.data.data_manager import data_manager
 
 
 class BaseIngestor:
@@ -19,4 +19,4 @@ class BaseIngestor:
         raise NotImplementedError("Subclasses should implement this method.")
 
     def _store(self, data_tree: xr.DataTree) -> None:
-        lake_manager.put(self.data_type, data_tree)
+        data_manager.put(self.data_type, data_tree)
