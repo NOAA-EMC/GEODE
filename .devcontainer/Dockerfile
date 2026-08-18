@@ -36,7 +36,6 @@ RUN git clone --branch "${GSL_LITE_REF}" --depth 1 \
       -DCMAKE_INSTALL_PREFIX=/usr/local \
       -DGSL_LITE_OPT_BUILD_TESTS=OFF && \
     cmake --install /tmp/gsl-lite/build && \
-    ls -l /usr/local/include/gsl* && \
     rm -rf /tmp/gsl-lite
 
 RUN git clone --branch "${NCEPLIBS_BUFR_REF}" --depth 1 \
