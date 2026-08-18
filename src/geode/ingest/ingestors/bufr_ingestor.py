@@ -7,15 +7,16 @@ from geode.ingest.ingestors.base_ingestor import BaseIngestor
 from geode.configs.geode_config import geode_config
 
 
-def container_to_xarray(container: bufr.DataContainer, 
-                        description: bufr.encoders.Description) -> xr.DataTree:
+def container_to_xarray(
+    container: bufr.DataContainer, description: bufr.encoders.Description
+    ) -> xr.DataTree:
 
     # Use the NetCDF encoder as a bridge to XArray for now.
     encoder = bufr.encoders.netcdf.Encoder(description)
     with tempfile.NamedTemporaryFile(delete=True) as named_temp:
         encoder.encode(container, named_temp.name, False).values()
         datatree = xr.open_datatree(named_temp.name)
-        
+
     return datatree
     
 

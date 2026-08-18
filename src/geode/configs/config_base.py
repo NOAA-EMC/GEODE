@@ -11,12 +11,15 @@ _MISSING = object()
 class ConfigItem:
     pass
 
+
 class ConfigField(ConfigItem):
     def __init__(self):
         self.value = None
 
     def load(self, value: Any) -> None:
-        assert False, f"load method not implemented for field type {self.__class__.__name__}"
+        assert False, (
+            f"load method not implemented for field type {self.__class__.__name__}"
+        )
 
     def __call__(self):
         return self.value
@@ -27,9 +30,9 @@ class ConfigMeta(type):
     def __new__(cls, name, bases, attrs):
         fields = {}
         for base in bases:
-            fields.update(getattr(base, '_fields', {}))
+            fields.update(getattr(base, "_fields", {}))
         fields.update({k: v for k, v in attrs.items() if isinstance(v, ConfigItem)})
-        attrs['_fields'] = fields
+        attrs["_fields"] = fields
         return super().__new__(cls, name, bases, attrs)
 
 
@@ -40,7 +43,7 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
 
     def _initialize_fields(self) -> None:
         fields = deepcopy(type(self)._fields)
-        self.__dict__['_fields'] = fields
+        self.__dict__["_fields"] = fields
         self.__dict__.update(fields)
 
     def load(self, config_dict: dict) -> None:
@@ -48,11 +51,13 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
             self._initialize_fields()
 
         if not isinstance(config_dict, dict):
-            raise ValueError(f"Expected config dictionary but got {type(config_dict).__name__}")
+            raise ValueError(
+                f"Expected config dictionary but got {type(config_dict).__name__}"
+            )
 
         unknown_fields = config_dict.keys() - self._fields.keys()
         if unknown_fields:
-            names = ', '.join(sorted(unknown_fields))
+            names = ", ".join(sorted(unknown_fields))
             raise ValueError(f"Unknown field(s) for {type(self).__name__}: {names}")
 
         for field_name in self._fields:
@@ -61,7 +66,7 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
             if field_name not in config_dict:
                 if isinstance(field, Optional):
                     field.load()
-                    continue     
+                    continue
                 raise ValueError(f"Missing required field '{field_name}' in config")
             if isinstance(field, ConfigBase):
                 field.load(config_dict[field_name])
@@ -74,9 +79,11 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
             value = getattr(self, field_name)
             if isinstance(value, ConfigBase):
                 value_dict = value.to_dict()
-                choice_field = field.inner_type if isinstance(field, Optional) else field
+                choice_field = (
+                    field.inner_type if isinstance(field, Optional) else field
+                )
                 if isinstance(choice_field, Choices):
-                    value_dict = {'type': value.type, **value_dict}
+                    value_dict = {"type": value.type, **value_dict}
                 value = value_dict
             config_dict[field_name] = value
         return config_dict
@@ -87,7 +94,7 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
         if isinstance(attr, ConfigField):
             return attr()
         return attr
-    
+
 
 class Choices(ConfigField):
     def __init__(self, choices: dict[str, ConfigBase] | list[str]):
@@ -108,15 +115,21 @@ class Choices(ConfigField):
             if not isinstance(value, dict):
                 raise ValueError(f"Expected value of type dict but got {type(value)}")
             
-            if 'type' not in value:
-                raise ValueError(f"Missing 'type' key in value: {value}. Possible types are: {list(self.choices.keys())}")
+            if "type" not in value:
+                raise ValueError(
+                    f"Missing 'type' key in value: {value}. Possible types are: {list(self.choices.keys())}"
+                )
 
-            if value['type'] not in self.choices.keys():
-                raise ValueError(f"Value '{value['type']}' not in allowed choices: {list(self.choices.keys())}")
+            if value["type"] not in self.choices.keys():
+                raise ValueError(
+                    f"Value '{value['type']}' not in allowed choices: {list(self.choices.keys())}"
+                )
         
-            choice_type = value['type']
+            choice_type = value["type"]
             self.choice = deepcopy(self.choices[choice_type])
-            self.choice.load({key: item for key, item in value.items() if key != 'type'})
+            self.choice.load(
+                {key: item for key, item in value.items() if key != 'type'}
+            )
             self.choice.type = choice_type
     
         
@@ -135,7 +148,7 @@ class Optional(ConfigField):
         if isinstance(self.inner_type, ConfigField):
             return self.inner_type.value
         return self.inner_type
-    
+
     def load(self, value=_MISSING):
         if value is _MISSING:
             value = self.default
@@ -150,12 +163,12 @@ class IntField(ConfigField):
     def load(self, value):
         self.value = int(value)
 
-        
+
 class BoolField(ConfigField):
     def load(self, value):
         self.value = bool(value)
 
-        
+
 class FloatField(ConfigField):
     def load(self, value):
         self.value = float(value)
@@ -173,7 +186,9 @@ class ListField(ConfigField):
 
     def load(self, value):
         if not isinstance(value, list):
-            raise ValueError(f"Expected value of type list but got {type(value).__name__}")
+            raise ValueError(
+                f"Expected value of type list but got {type(value).__name__}"
+            )
 
         items = []
         for item in value:

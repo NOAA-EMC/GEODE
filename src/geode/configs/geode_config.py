@@ -3,16 +3,19 @@
 import sys, os
 import yaml
 
-from geode.configs.config_base import ConfigBase, \
-                                      StrField, \
-                                      Optional, \
-                                      IntField, \
-                                      BoolField, \
-                                      ListField, \
-                                      Choices
+from geode.configs.config_base import (
+    ConfigBase,
+    StrField,
+    Optional,
+    IntField,
+    BoolField,
+    ListField,
+    Choices,
+)
 
 ConfigDir = os.path.realpath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "..", "configs"))
+    os.path.join(os.path.dirname(__file__), "..", "..", "..", "configs")
+)
 
 #Ingestor Configuration
 
@@ -21,11 +24,14 @@ class Wis2IngestorConfig(ConfigBase):
     name = StrField()
     module = StrField()
 
+
 class Wis2Config(ConfigBase):
     broker_address = Optional(StrField(), default="wis2node.globaldata.nws.noaa.gov")
     broker_port = Optional(IntField(), default=8883)
     use_websockets = Optional(BoolField(), default=False)
-    topic = Optional(StrField(), default="origin/a/wis2/us-noaa-nws/data/core/weather/#")
+    topic = Optional(
+        StrField(), default="origin/a/wis2/us-noaa-nws/data/core/weather/#"
+    )
     download_dir = StrField()
 
     def __init__(self, root_dir: str):
@@ -41,12 +47,14 @@ class Wis2Config(ConfigBase):
         protocol = "wss" if self.use_websockets else "ssl"
         return f"{protocol}://everyone:everyone@{self.broker_address}:{self.broker_port}/mqtt"
 
+
 class BufrConfig(ConfigBase):
     table_path = StrField()
 
     @property
     def map_dir(self) -> str:
         return os.path.join(ConfigDir, "bufr")
+
 
 # Database Configuration
 
@@ -88,19 +96,24 @@ class IceChunkLakeConfig(LakeConfig):
 class NetCDFLakeConfig(LakeConfig):
     split_by = Choices({"year", "month", "day"})
 
+
 # Main Configuration Class
 
 class GeodeConfig(ConfigBase):
     root_dir = StrField()
     run_for_num_sec= Optional(IntField(), default=None)
-    database = Choices({"sqlite": SqliteConfig(root_dir=root_dir)}
-                        # "postgres": PostgresConfig()  # Uncomment if Postgres support is added
-                        )
-    data_lake = Choices({
-        "zarr": ZarrLakeConfig(root_dir=root_dir),
-        "icechunk": IceChunkLakeConfig(root_dir=root_dir),
-        "netcdf": NetCDFLakeConfig(root_dir=root_dir)
-    })
+    database = Choices(
+        {
+            "sqlite": SqliteConfig(root_dir=root_dir)
+        }
+    )
+    data_lake = Choices(
+        {
+            "zarr": ZarrLakeConfig(root_dir=root_dir),
+            "icechunk": IceChunkLakeConfig(root_dir=root_dir),
+            "netcdf": NetCDFLakeConfig(root_dir=root_dir)
+        }
+    )
     wis2 = Wis2Config(root_dir=root_dir)
     bufr = BufrConfig()
 

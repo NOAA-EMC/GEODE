@@ -20,7 +20,7 @@ def test_wis2_listener():
 
     test_data_dir = os.path.join(geode_config.root_dir, "test")
     geode_config.data_lake.base_dir = test_data_dir
-    
+
     if os.path.exists(test_data_dir):
         shutil.rmtree(test_data_dir)  # Clean up the test directory if it exists
 
@@ -32,14 +32,13 @@ def test_wis2_listener():
 
         # Check if it exists, is a directory, and contains any files or folders
         path = Path(test_data_dir)
-        
+
         if path.is_dir() and any(path.iterdir()):
             success = True
         else:
             success = False
-
+        
         shutil.rmtree(test_data_dir)  # Clean up the test directory
-
 
     # Create an instance of Wis2Listener and set the callback
     listener.on_message_callback = on_message_callback

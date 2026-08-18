@@ -1,6 +1,8 @@
 import os
 import sys
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "../..")))
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "../.."))
+)
 
 import json
 import time
@@ -34,10 +36,12 @@ class Wis2Listener:
 
 
     def listen(self):
-        print (f"[*] Connecting to MQTT broker... {self.broker_url}")
+        print(f"[*] Connecting to MQTT broker... {self.broker_url}")
         self.stop_event.clear()
 
-        self.mqtt_client = MQTTPubSubClient(self.broker_url, options={"verify_certs": True})
+        self.mqtt_client = MQTTPubSubClient(
+            self.broker_url, options={"verify_certs": True}
+        )
         self.mqtt_client.bind("on_message", self._on_message)
 
         print(f"[*] Connecting via WSS...")
@@ -53,10 +57,14 @@ class Wis2Listener:
         if geode_config.run_for_num_sec:
             print(f"[*] Download directory: {self.download_dir}")
             try:
-                print(f"[*] Running listener (for {geode_config.run_for_num_sec} seconds).")
+                print(
+                    f"[*] Running listener (for {geode_config.run_for_num_sec} seconds)."
+                )
                 start_time = time.time()
-                while (time.time() - start_time < geode_config.run_for_num_sec
-                       and not self.stop_event.wait(1)):
+                while (
+                    time.time() - start_time < geode_config.run_for_num_sec
+                    and not self.stop_event.wait(1)
+                ):
                     pass
             finally:
                 print("[*] Disconnecting...")
@@ -77,8 +85,10 @@ class Wis2Listener:
 
     def _join_subscribe_thread(self):
         """Wait for the subscription thread unless called from that thread."""
-        if (self.subscribe_thread
-                and self.subscribe_thread is not threading.current_thread()):
+        if (
+            self.subscribe_thread
+            and self.subscribe_thread is not threading.current_thread()
+        ):
             self.subscribe_thread.join(timeout=5)
             self.subscribe_thread = None
 
@@ -102,9 +112,9 @@ class Wis2Listener:
             print("[-] Invalid payload format: Message must be valid JSON")
             return
             
-        wis_id = os.path.join(msg.topic.split('/')[-2], msg.topic.split('/')[-1])
+        wis_id = os.path.join(msg.topic.split("/")[-2], msg.topic.split("/")[-1])
 
-        print (f"[*] WIS ID: {wis_id}")
+        print(f"[*] WIS ID: {wis_id}")
 
         def _get_file_download_info(data):
             """Extracts the download URL and filename from the WIS2 notification payload."""
@@ -115,9 +125,11 @@ class Wis2Listener:
             # The download link is typically found in the 'links' array
             if "links" in data:
                 for link in data.get("links", []):
-                    if (link.get("rel") in {"canonical", "update"}
+                    if (
+                        link.get("rel") in {"canonical", "update"}
                         and link.get("type") == "application/bufr"
-                        and link.get("href")):
+                        and link.get("href")
+                    ):
                         url = link["href"]
                         filename = os.path.basename(requests.utils.urlparse(url).path)
                         break
@@ -146,7 +158,6 @@ class Wis2Listener:
         if self.on_message_callback:
             self.on_message_callback()
 
-
     def _download_file(self, url: str, filename: str, sub_dir: str) -> str:
         try:
             print(f"[*] Starting download: {url}")
@@ -157,7 +168,9 @@ class Wis2Listener:
 
             # Sanitize filename
             safe_filename = os.path.basename(filename)
-            filepath = os.path.join(geode_config.wis2.full_download_dir, sub_dir, safe_filename)
+            filepath = os.path.join(
+                geode_config.wis2.full_download_dir, sub_dir, safe_filename
+            )
 
             # ensure the directory exists
             os.makedirs(os.path.dirname(filepath), exist_ok=True)
@@ -177,8 +190,9 @@ class Wis2Listener:
             print(f"[-] Error saving file: {e}")
             return ""
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="MQTT Listener for WIS2 Notifications")    
+    parser = argparse.ArgumentParser(description="MQTT Listener for WIS2 Notifications")
     args = parser.parse_args()
 
     listener = Wis2Listener()
