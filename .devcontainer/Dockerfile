@@ -22,7 +22,7 @@ RUN apt-get update && \
 
 # Install Python dependencies used by this repository.
 RUN python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir pytest ruff pywis-pubsub requests icechunk wxflow
+    python -m pip install --no-cache-dir pytest ruff pywis-pubsub requests icechunk wxflow==0.4.2
 
 # Set working directory
 WORKDIR /home/${USERNAME}
