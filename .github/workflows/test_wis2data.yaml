@@ -18,30 +18,36 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Install dependencies
+      - name: Build devcontainer image
         run: |
-          python -m pip install --upgrade pip
-          python -m pip install pytest pywis-pubsub requests icechunk pybind11==3.0.1
+          docker build -t geode-devcontainer-ci -f .devcontainer/Dockerfile .
 
-      - name: Run test using pytest
+      - name: Run test and show downloaded files in devcontainer
         run: |
-          python -m pytest test/test_wis2_watcher.py -v -s
-
-      - name: Show downloaded files
-        run: |
-          if ! command -v debufr >/dev/null 2>&1; then
-            echo "WARNING: debufr is unavailable; skipping BUFR decode output"
-          else
-            find /tmp/pytest-of-* -type f -exec sh -c '
-              for file do
-                echo "Contents of $file:"
-                debufr -o "$file".debufr.out "$file"
-                cat "$file".debufr.out
-              done
-            ' sh {} +
-          fi
+          mkdir -p "${RUNNER_TEMP}/geode-ci-tmp/pytest-of-geode" "${RUNNER_TEMP}/geode-ci-tmp/pytest-cache"
+          docker run --rm \
+            --user "$(id -u):$(id -g)" \
+            --cap-drop ALL \
+            -v "${GITHUB_WORKSPACE}:/workspaces/GEODE:ro" \
+            -v "${RUNNER_TEMP}/geode-ci-tmp:/ci-tmp" \
+            -w /workspaces/GEODE \
+            geode-devcontainer-ci \
+            bash -e -u -o pipefail -c '
+              artifact_dir=/ci-tmp/pytest-of-geode
+              cache_dir=/ci-tmp/pytest-cache
+              mkdir -p "${artifact_dir}" "${cache_dir}"
+              python -m pytest test/test_wis2_watcher.py -v -s \
+                --basetemp="${artifact_dir}" \
+                -o cache_dir="${cache_dir}"
+              if ! command -v debufr >/dev/null 2>&1; then
+                echo "WARNING: debufr is unavailable; skipping BUFR decode output"
+              elif [[ -z "$(find "${artifact_dir}" -type f -print -quit)" ]]; then
+                echo "WARNING: no pytest download artifacts found under ${artifact_dir}"
+              else
+                while IFS= read -r file; do
+                  echo "Contents of ${file}:"
+                  debufr -o "${file}".debufr.out "${file}"
+                  cat "${file}".debufr.out
+                done < <(find "${artifact_dir}" -type f ! -name "*.debufr.out" -print)
+              fi
+            '
