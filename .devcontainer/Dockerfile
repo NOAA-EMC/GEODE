@@ -6,7 +6,7 @@ RUN useradd -ms /bin/bash ${USERNAME}
 
 # Install Python dependencies used by this repository.
 RUN python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir pytest ruff pywis-pubsub requests
+    python -m pip install --no-cache-dir pytest ruff pywis-pubsub requests icechunk
 
 # Set working directory
 WORKDIR /home/${USERNAME}
