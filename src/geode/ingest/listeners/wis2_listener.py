@@ -1,5 +1,6 @@
 import os
 import sys
+
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "../.."))
 )
@@ -33,7 +34,6 @@ class Wis2Listener:
 
         # Ensure the download directory exists
         os.makedirs(self.download_dir, exist_ok=True)
-
 
     def listen(self):
         print(f"[*] Connecting to MQTT broker... {self.broker_url}")
@@ -111,9 +111,9 @@ class Wis2Listener:
         except json.JSONDecodeError:
             print("[-] Invalid payload format: Message must be valid JSON")
             return
-            
+        
         wis_id = os.path.join(msg.topic.split("/")[-2], msg.topic.split("/")[-1])
-
+        
         print(f"[*] WIS ID: {wis_id}")
 
         def _get_file_download_info(data):

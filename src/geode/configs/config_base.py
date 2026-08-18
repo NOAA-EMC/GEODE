@@ -37,7 +37,6 @@ class ConfigMeta(type):
 
 
 class ConfigBase(ConfigItem, metaclass=ConfigMeta):
-
     def __init__(self):
         self._initialize_fields()
 
@@ -47,7 +46,7 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
         self.__dict__.update(fields)
 
     def load(self, config_dict: dict) -> None:
-        if '_fields' not in self.__dict__:
+        if "_fields" not in self.__dict__:
             self._initialize_fields()
 
         if not isinstance(config_dict, dict):
@@ -108,7 +107,9 @@ class Choices(ConfigField):
     def load(self, value: dict | str) -> None:
         if isinstance(self.choices, list):
             if value not in self.choices:
-                raise ValueError(f"Value '{value}' not in allowed choices: {self.choices}")
+                raise ValueError(
+                    f"Value '{value}' not in allowed choices: {self.choices}"
+                )
             self.choice = value
 
         elif isinstance(self.choices, dict):
@@ -119,16 +120,16 @@ class Choices(ConfigField):
                 raise ValueError(
                     f"Missing 'type' key in value: {value}. Possible types are: {list(self.choices.keys())}"
                 )
-
+            
             if value["type"] not in self.choices.keys():
                 raise ValueError(
                     f"Value '{value['type']}' not in allowed choices: {list(self.choices.keys())}"
                 )
-        
+            
             choice_type = value["type"]
             self.choice = deepcopy(self.choices[choice_type])
             self.choice.load(
-                {key: item for key, item in value.items() if key != 'type'}
+                {key: item for key, item in value.items() if key != "type"}
             )
             self.choice.type = choice_type
     
@@ -211,5 +212,7 @@ class DatetimeField(ConfigField):
         elif isinstance(value, date):
             self.value = datetime(value.year, value.month, value.day)
         else:
-            raise ValueError(f"Expected value of type str or datetime but got {type(value)}")
+            raise ValueError(
+                f"Expected value of type str or datetime but got {type(value)}"
+            )
 

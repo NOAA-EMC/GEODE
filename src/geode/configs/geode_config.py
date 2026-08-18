@@ -1,5 +1,3 @@
-
-
 import sys, os
 import yaml
 
@@ -17,7 +15,8 @@ ConfigDir = os.path.realpath(
     os.path.join(os.path.dirname(__file__), "..", "..", "..", "configs")
 )
 
-#Ingestor Configuration
+# Ingestor Configuration
+
 
 class Wis2IngestorConfig(ConfigBase):
     wis_id = StrField()
@@ -58,6 +57,7 @@ class BufrConfig(ConfigBase):
 
 # Database Configuration
 
+
 class SqliteConfig(ConfigBase):
     db_path = StrField()
 
@@ -71,6 +71,7 @@ class SqliteConfig(ConfigBase):
 
 
 # DataLake Configuration
+
 
 class LakeConfig(ConfigBase):
     base_dir = StrField()
@@ -99,19 +100,16 @@ class NetCDFLakeConfig(LakeConfig):
 
 # Main Configuration Class
 
+
 class GeodeConfig(ConfigBase):
     root_dir = StrField()
-    run_for_num_sec= Optional(IntField(), default=None)
-    database = Choices(
-        {
-            "sqlite": SqliteConfig(root_dir=root_dir)
-        }
-    )
+    run_for_num_sec = Optional(IntField(), default=None)
+    database = Choices({"sqlite": SqliteConfig(root_dir=root_dir)})
     data_lake = Choices(
         {
             "zarr": ZarrLakeConfig(root_dir=root_dir),
             "icechunk": IceChunkLakeConfig(root_dir=root_dir),
-            "netcdf": NetCDFLakeConfig(root_dir=root_dir)
+            "netcdf": NetCDFLakeConfig(root_dir=root_dir),
         }
     )
     wis2 = Wis2Config(root_dir=root_dir)
