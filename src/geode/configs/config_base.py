@@ -1,4 +1,4 @@
-# From in NOAA MDL Ocelot project
+# From in NOAA OMD Ocelot project
 
 from copy import deepcopy
 from datetime import datetime, date
