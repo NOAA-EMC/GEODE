@@ -36,12 +36,12 @@ jobs:
         run: |
           if ! command -v debufr >/dev/null 2>&1; then
             echo "WARNING: debufr is unavailable; skipping BUFR decode output"
-            exit 0
+          else
+            find /tmp/pytest-of-* -type f -exec sh -c '
+              for file do
+                echo "Contents of $file:"
+                debufr -o "$file".debufr.out "$file"
+                cat "$file".debufr.out
+              done
+            ' sh {} +
           fi
-          find /tmp/pytest-of-* -type f -exec sh -c '
-            for file do
-              echo "Contents of $file:"
-              debufr -o "$file".debufr.out "$file"
-              cat "$file".debufr.out
-            done
-          ' sh {} +
