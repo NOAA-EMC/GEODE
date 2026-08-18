@@ -120,12 +120,12 @@ class Choices(ConfigField):
                 raise ValueError(
                     f"Missing 'type' key in value: {value}. Possible types are: {list(self.choices.keys())}"
                 )
-            
+
             if value["type"] not in self.choices.keys():
                 raise ValueError(
                     f"Value '{value['type']}' not in allowed choices: {list(self.choices.keys())}"
                 )
-            
+
             choice_type = value["type"]
             self.choice = deepcopy(self.choices[choice_type])
             self.choice.load(
