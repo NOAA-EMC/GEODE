@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 ARG USERNAME=developer
 ARG GSL_LITE_REF=v1.1.0
