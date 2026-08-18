@@ -1,10 +1,9 @@
-from geode.ingest.ingestors.base_ingestor import BaseIngestor
-
 import os
 import bufr
 import xarray as xr
 import tempfile
 
+from geode.ingest.ingestors.base_ingestor import BaseIngestor
 from geode.configs.geode_config import geode_config
 
 

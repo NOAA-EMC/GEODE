@@ -22,38 +22,65 @@ class Wis2Listener:
         self.broker_url = geode_config.wis2.broker_url
         self.topic = geode_config.wis2.topic
 
+        self.mqtt_client = None
+        self.subscribe_thread = None
+        self.stop_event = threading.Event()
+
+        # for testing purposes, we can set a callback function to be called when a message is received
+        self.on_message_callback = None
+
         # Ensure the download directory exists
         os.makedirs(self.download_dir, exist_ok=True)
 
 
     def listen(self):
         print (f"[*] Connecting to MQTT broker... {self.broker_url}")
+        self.stop_event.clear()
 
-        client = MQTTPubSubClient(self.broker_url, options={"verify_certs": True})
-        client.bind("on_message", self._on_message)
+        self.mqtt_client = MQTTPubSubClient(self.broker_url, options={"verify_certs": True})
+        self.mqtt_client.bind("on_message", self._on_message)
 
         print(f"[*] Connecting via WSS...")
 
         # Run subscription in a background thread; client.close() will trigger loop exit.
-        subscribe_thread = threading.Thread(
-            target=client.sub,
+        self.subscribe_thread = threading.Thread(
+            target=self.mqtt_client.sub,
             args=([self.topic],),
             daemon=True,
         )
-        subscribe_thread.start()
+        self.subscribe_thread.start()
 
         if geode_config.run_for_num_sec:
             print(f"[*] Download directory: {self.download_dir}")
             try:
                 print(f"[*] Running listener (for {geode_config.run_for_num_sec} seconds).")
                 start_time = time.time()
-                while time.time() - start_time < geode_config.run_for_num_sec:
-                    time.sleep(1)  # Sleep to reduce CPU usage
+                while (time.time() - start_time < geode_config.run_for_num_sec
+                       and not self.stop_event.wait(1)):
+                    pass
             finally:
                 print("[*] Disconnecting...")
-                client.close()
-                subscribe_thread.join(timeout=5)
-            
+                if self.mqtt_client:
+                    self.mqtt_client.close()
+                self.mqtt_client = None
+                self._join_subscribe_thread()
+
+    def stop(self):
+        """Stop the listener."""
+        print("[*] Quitting listener...")
+        self.stop_event.set()
+        if self.mqtt_client:
+            self.mqtt_client.close()
+            self.mqtt_client = None
+
+        self._join_subscribe_thread()
+
+    def _join_subscribe_thread(self):
+        """Wait for the subscription thread unless called from that thread."""
+        if (self.subscribe_thread
+                and self.subscribe_thread is not threading.current_thread()):
+            self.subscribe_thread.join(timeout=5)
+            self.subscribe_thread = None
 
     # ==========================================
     # MQTT Callbacks
@@ -115,6 +142,9 @@ class Wis2Listener:
         if ingestor_class:
             ingestor = ingestor_class()
             ingestor.process(downloaded_file_path)
+
+        if self.on_message_callback:
+            self.on_message_callback()
 
 
     def _download_file(self, url: str, filename: str, sub_dir: str) -> str:
