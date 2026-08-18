@@ -13,22 +13,20 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      packages: read
-    container:
-      image: ghcr.io/noaa-emc/geode:latest
-      credentials:
-        username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
-      options: --user 0
 
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pytest pywis-pubsub requests
+          python -m pip install pytest pywis-pubsub requests
 
       - name: Run test using pytest
         run: |
@@ -36,6 +34,10 @@ jobs:
 
       - name: Show downloaded files
         run: |
+          if ! command -v debufr >/dev/null 2>&1; then
+            echo "WARNING: debufr is unavailable; skipping BUFR decode output"
+            exit 0
+          fi
           find /tmp/pytest-of-root -type f -exec sh -c '
             for file do
               echo "Contents of $file:"
