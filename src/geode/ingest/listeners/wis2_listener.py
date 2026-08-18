@@ -1,11 +1,12 @@
 import argparse
 import json
 import os
-from pywis_pubsub.mqtt import MQTTPubSubClient
-import requests
 import sys
 import threading
 import time
+
+import requests
+from pywis_pubsub.mqtt import MQTTPubSubClient
 
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "../.."))

@@ -1,9 +1,8 @@
 # From the NOAA OMD Ocelot project
 
 from copy import deepcopy
-from datetime import datetime, date
+from datetime import date, datetime
 from typing import Any
-
 
 _MISSING = object()
 
@@ -67,7 +66,7 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
                     field.load()
                     continue
                 raise ValueError(f"Missing required field '{field_name}' in config")
-            if isinstance(field, ConfigBase) or isinstance(field, ConfigField):
+            if isinstance(field, (ConfigBase, ConfigField)):
                 field.load(config_dict[field_name])
 
     def to_dict(self) -> dict[str, Any]:

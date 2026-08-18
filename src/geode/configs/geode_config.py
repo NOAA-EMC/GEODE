@@ -1,13 +1,14 @@
 import os
+
 import yaml
 
 from geode.configs.config_base import (
-    ConfigBase,
-    StrField,
-    Optional,
-    IntField,
     BoolField,
     Choices,
+    ConfigBase,
+    IntField,
+    Optional,
+    StrField,
 )
 
 ConfigDir = os.path.realpath(

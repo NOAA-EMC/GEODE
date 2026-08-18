@@ -1,10 +1,11 @@
-import bufr
 import os
 import tempfile
+
+import bufr
 import xarray as xr
 
-from geode.ingest.ingestors.base_ingestor import BaseIngestor
 from geode.configs.geode_config import geode_config
+from geode.ingest.ingestors.base_ingestor import BaseIngestor
 
 
 def container_to_xarray(
