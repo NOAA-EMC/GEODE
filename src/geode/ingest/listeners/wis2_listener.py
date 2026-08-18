@@ -111,7 +111,7 @@ class Wis2Listener:
         except json.JSONDecodeError:
             print("[-] Invalid payload format: Message must be valid JSON")
             return
-        
+    
         wis_id = os.path.join(msg.topic.split("/")[-2], msg.topic.split("/")[-1])
         
         print(f"[*] WIS ID: {wis_id}")

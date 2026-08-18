@@ -37,7 +37,7 @@ def test_wis2_listener():
             success = True
         else:
             success = False
-    
+        
         shutil.rmtree(test_data_dir)  # Clean up the test directory
 
     # Create an instance of Wis2Listener and set the callback
