@@ -1,6 +1,8 @@
 FROM python:3.11-slim
 
 ARG USERNAME=developer
+ARG GSL_LITE_REF=v1.1.0
+ARG NCEPLIBS_BUFR_REF=v12.3.0
 
 RUN useradd -ms /bin/bash ${USERNAME}
 
@@ -24,20 +26,27 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install gsl-lite headers and NCEPLIBS-bufr from source.
-RUN git clone https://github.com/gsl-lite/gsl-lite.git /tmp/gsl-lite && \
+RUN git clone --branch "${GSL_LITE_REF}" --depth 1 https://github.com/gsl-lite/gsl-lite.git /tmp/gsl-lite && \
     install -d /usr/local/include && \
     cp -r /tmp/gsl-lite/include/gsl /usr/local/include/ && \
     rm -rf /tmp/gsl-lite
 
-RUN git clone https://github.com/NOAA-EMC/NCEPLIBS-bufr.git /tmp/NCEPLIBS-bufr && \
+RUN git clone --branch "${NCEPLIBS_BUFR_REF}" --depth 1 https://github.com/NOAA-EMC/NCEPLIBS-bufr.git /tmp/NCEPLIBS-bufr && \
     cmake -S /tmp/NCEPLIBS-bufr -B /tmp/NCEPLIBS-bufr/build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local && \
     cmake --build /tmp/NCEPLIBS-bufr/build -j"$(nproc)" && \
     cmake --install /tmp/NCEPLIBS-bufr/build && \
-    rm -rf /tmp/NCEPLIBS-bufr
+    rm -rf /tmp/NCEPLIBS-bufr && \
+    ldconfig
 
 # Install Python dependencies used by this repository.
 RUN python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir pytest ruff pywis-pubsub requests icechunk wxflow==0.4.2
+    python -m pip install --no-cache-dir \
+      pytest==9.1.1 \
+      ruff==0.16.3 \
+      pywis-pubsub==0.13.0 \
+      requests==2.34.2 \
+      icechunk==2.1.2 \
+      wxflow==0.4.2
 
 # Set working directory
 WORKDIR /home/${USERNAME}
