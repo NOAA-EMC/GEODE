@@ -115,7 +115,7 @@ class Choices(ConfigField):
         elif isinstance(self.choices, dict):
             if not isinstance(value, dict):
                 raise ValueError(f"Expected value of type dict but got {type(value)}")
-            
+
             if "type" not in value:
                 raise ValueError(
                     f"Missing 'type' key in value: {value}. Possible types are: {list(self.choices.keys())}"
