@@ -38,7 +38,7 @@ jobs:
             echo "WARNING: debufr is unavailable; skipping BUFR decode output"
             exit 0
           fi
-          find /tmp/pytest-of-root -type f -exec sh -c '
+          find /tmp/pytest-of-* -type f -exec sh -c '
             for file do
               echo "Contents of $file:"
               debufr -o "$file".debufr.out "$file"
