@@ -39,6 +39,13 @@ RUN git clone --branch "${NCEPLIBS_BUFR_REF}" --depth 1 https://github.com/NOAA-
     rm -rf /tmp/NCEPLIBS-bufr && \
     ldconfig
 
+# Install bufr-query from source
+RUN git clone --branch "${BUFR_QUERY_REF}" --depth 1 https://github.com/NOAA-EMC/bufr-query.git /tmp/bufr-query && \
+    mkdir /tmp/bufr-query/build && cd /tmp/bufr-query/build && \
+    ecbuild ../ && \
+    make install && \
+    rm -rf /tmp/bufr-query
+
 # Install Python dependencies used by this repository.
 RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir \
