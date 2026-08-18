@@ -29,8 +29,9 @@ RUN apt-get update && \
 
 # Install gsl-lite headers and NCEPLIBS-bufr from source.
 RUN git clone --branch "${GSL_LITE_REF}" --depth 1 https://github.com/gsl-lite/gsl-lite.git /tmp/gsl-lite && \
-    install -d /usr/local/include && \
-    cp -r /tmp/gsl-lite/include/gsl /usr/local/include/ && \
+    cd /usr/local/include && install -d /usr/local/include && \
+    cp -r /tmp/gsl-lite/include/gsl* /usr/local/include/. && \
+    ls -l /usr/local/include/gsl* && \
     rm -rf /tmp/gsl-lite
 
 RUN git clone --branch "${NCEPLIBS_BUFR_REF}" --depth 1 https://github.com/NOAA-EMC/NCEPLIBS-bufr.git /tmp/NCEPLIBS-bufr && \
