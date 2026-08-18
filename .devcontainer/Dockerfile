@@ -22,6 +22,7 @@ RUN apt-get update && \
       libnetcdf-dev \
       libopenmpi-dev \
       libomp-dev \
+      pybind11-dev \
       openmpi-bin && \
     rm -rf /var/lib/apt/lists/*
 
@@ -46,6 +47,7 @@ RUN python -m pip install --no-cache-dir --upgrade pip && \
       pywis-pubsub==0.13.0 \
       requests==2.34.2 \
       icechunk==2.1.2 \
+      pybind11==3.0.1 \
       wxflow==0.4.2
 
 # Set working directory
