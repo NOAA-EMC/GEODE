@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
 
-import zarr
 import icechunk as ic
 import xarray as xr
 
@@ -12,7 +11,7 @@ class DataManager:
     def __init__(self):
         self.config = geode_config.data_lake
 
-    def get_file_path(self, data_type: str, timestamp: datetime = None) -> str:
+    def get_file_path(self, data_type: str, timestamp: datetime | None = None) -> str:
         raise NotImplementedError("This method should be implemented by subclasses.")
 
     def put(self, data_type: str, data_tree: xr.DataTree) -> None:
@@ -28,7 +27,7 @@ class IceChunkDataManager(DataManager):
     def __init__(self):
         super().__init__()
 
-    def get_file_path(self, data_type: str, timestamp: datetime = None) -> str:
+    def get_file_path(self, data_type: str, timestamp: datetime | None = None) -> str:
         return os.path.join(
             geode_config.data_lake.full_base_path, f"{data_type}.icechunk"
         )
@@ -68,7 +67,7 @@ class ZarrDataManager(DataManager):
     def __init__(self):
         super().__init__()
 
-    def get_file_path(self, data_type: str, timestamp: datetime = None) -> str:
+    def get_file_path(self, data_type: str, timestamp: datetime | None = None) -> str:
         if self.config.split_by == "none":
             return os.path.join(
                 geode_config.data_lake.full_base_path, f"{data_type}.zarr"
@@ -113,7 +112,7 @@ class NetCDFDataManager(DataManager):
     def __init__(self):
         super().__init__()
 
-    def get_file_path(self, data_type: str, timestamp: datetime = None) -> str:
+    def get_file_path(self, data_type: str, timestamp: datetime | None = None) -> str:
         assert timestamp is not None, "Timestamp must be provided for split_by option."
 
         year = timestamp.year

@@ -9,7 +9,7 @@ ingestors = {
 
 def get_ingestor(id: str) -> type | None:
     """Returns the appropriate ingestor class for a given an ID."""
-    if id in ingestors.keys():
+    if id in ingestors:
         return ingestors[id]
     else:
         print(f"[-] No ingestor found for ID: {id}")

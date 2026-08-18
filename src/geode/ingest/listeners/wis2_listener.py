@@ -1,18 +1,15 @@
+import argparse
+import json
 import os
+from pywis_pubsub.mqtt import MQTTPubSubClient
+import requests
 import sys
+import threading
+import time
 
 sys.path.append(
     os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "../.."))
 )
-
-import json
-import time
-import argparse
-import requests
-import threading
-from pathlib import Path
-
-from pywis_pubsub.mqtt import MQTTPubSubClient
 
 from geode.configs.geode_config import geode_config
 from geode.ingest.ingestors.ingestor_factory import get_ingestor
@@ -44,7 +41,7 @@ class Wis2Listener:
         )
         self.mqtt_client.bind("on_message", self._on_message)
 
-        print(f"[*] Connecting via WSS...")
+        print("[*] Connecting via WSS...")
 
         # Run subscription in a background thread; client.close() will trigger loop exit.
         self.subscribe_thread = threading.Thread(

@@ -1,4 +1,4 @@
-import sys, os
+import os
 import yaml
 
 from geode.configs.config_base import (
@@ -7,7 +7,6 @@ from geode.configs.config_base import (
     Optional,
     IntField,
     BoolField,
-    ListField,
     Choices,
 )
 

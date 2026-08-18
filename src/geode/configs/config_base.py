@@ -1,4 +1,4 @@
-# From in NOAA OMD Ocelot project
+# From the NOAA OMD Ocelot project
 
 from copy import deepcopy
 from datetime import datetime, date
@@ -50,7 +50,7 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
             self._initialize_fields()
 
         if not isinstance(config_dict, dict):
-            raise ValueError(
+            raise TypeError(
                 f"Expected config dictionary but got {type(config_dict).__name__}"
             )
 
@@ -67,9 +67,7 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
                     field.load()
                     continue
                 raise ValueError(f"Missing required field '{field_name}' in config")
-            if isinstance(field, ConfigBase):
-                field.load(config_dict[field_name])
-            elif isinstance(field, ConfigField):
+            if isinstance(field, ConfigBase) or isinstance(field, ConfigField):
                 field.load(config_dict[field_name])
 
     def to_dict(self) -> dict[str, Any]:
@@ -114,14 +112,14 @@ class Choices(ConfigField):
 
         elif isinstance(self.choices, dict):
             if not isinstance(value, dict):
-                raise ValueError(f"Expected value of type dict but got {type(value)}")
+                raise TypeError(f"Expected value of type dict but got {type(value)}")
 
             if "type" not in value:
                 raise ValueError(
                     f"Missing 'type' key in value: {value}. Possible types are: {list(self.choices.keys())}"
                 )
 
-            if value["type"] not in self.choices.keys():
+            if value["type"] not in self.choices:
                 raise ValueError(
                     f"Value '{value['type']}' not in allowed choices: {list(self.choices.keys())}"
                 )
@@ -187,7 +185,7 @@ class ListField(ConfigField):
 
     def load(self, value):
         if not isinstance(value, list):
-            raise ValueError(
+            raise TypeError(
                 f"Expected value of type list but got {type(value).__name__}"
             )
 
@@ -210,8 +208,10 @@ class DatetimeField(ConfigField):
         elif isinstance(value, datetime):
             self.value = value
         elif isinstance(value, date):
-            self.value = datetime(value.year, value.month, value.day)
+            self.value = datetime(
+                value.year, value.month, value.day, tzinfo=datetime.timezone.utc
+            )
         else:
-            raise ValueError(
+            raise TypeError(
                 f"Expected value of type str or datetime but got {type(value)}"
             )
