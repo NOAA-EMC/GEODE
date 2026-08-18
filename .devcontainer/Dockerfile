@@ -52,6 +52,7 @@ RUN git clone --branch "${BUFR_QUERY_REF}" --depth 1 \
       https://github.com/NOAA-EMC/bufr-query.git /tmp/bufr-query && \
     mkdir /tmp/bufr-query/build && cd /tmp/bufr-query/build && \
     ecbuild ../ && \
+    make -j"$(nproc)" && \
     make install && \
     rm -rf /tmp/bufr-query
 

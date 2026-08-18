@@ -48,6 +48,7 @@ jobs:
                   echo "Contents of ${file}:"
                   debufr -o "${file}".debufr.out "${file}"
                   cat "${file}".debufr.out
+                  show_queries.x -t /usr/local/tables "${file}"
                 done < <(find "${artifact_dir}" -type f ! -name "*.debufr.out" -print)
               fi
             '
