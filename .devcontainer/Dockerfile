@@ -44,7 +44,7 @@ RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir \
       pytest==9.1.1 \
       ruff==0.16.3 \
-      pywis-pubsub==0.13.0 \
+      pywis-pubsub==0.12.0 \
       requests==2.34.2 \
       icechunk==2.1.2 \
       pybind11==3.0.1 \
