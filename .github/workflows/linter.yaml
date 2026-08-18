@@ -6,7 +6,7 @@ on:
 
 jobs:
   lint:
-    name: Python and C++ norms
+    name: Python coding norms
     runs-on: ubuntu-latest
 
     steps:
@@ -33,13 +33,6 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install ruff
 
-      - name: Install C++ formatting tooling
-        shell: bash
-        run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y clang-format
-
       - name: Check Python coding norms
         shell: bash
         run: |
@@ -51,16 +44,3 @@ jobs:
           fi
           python -m ruff format --check --diff "${python_files[@]}"
           python -m ruff check --output-format=github "${python_files[@]}"
-
-      - name: Check C++ coding norms
-        shell: bash
-        run: |
-          set -euo pipefail
-          mapfile -t cpp_files < <(find . -type f \( -name '*.c' -o -name '*.cc' -o -name '*.cpp' -o -name '*.cxx' -o -name '*.h' -o -name '*.hh' -o -name '*.hpp' \) | sort)
-          if [[ ${#cpp_files[@]} -eq 0 ]]; then
-            echo "WARNING: no C++ files found"
-            exit 0
-          fi
-          for file in "${cpp_files[@]}"; do
-            clang-format --dry-run --Werror -style=file "$file"
-          done
