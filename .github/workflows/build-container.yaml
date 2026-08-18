@@ -58,6 +58,8 @@ jobs:
         context: .
         file: .devcontainer/Dockerfile
         push: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
         tags: |
           ${{ steps.meta.outputs.image }}:latest
           ${{ steps.meta.outputs.image }}:${{ steps.meta.outputs.date_tag }}
