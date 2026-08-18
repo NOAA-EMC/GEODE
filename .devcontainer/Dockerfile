@@ -63,6 +63,7 @@ RUN python -m pip install --no-cache-dir --upgrade pip && \
       ruff==0.16.3 \
       pywis-pubsub==0.12.0 \
       requests==2.34.2 \
+      xarray \
       icechunk==2.1.2 \
       pybind11==3.0.1 \
       wxflow==0.4.2
