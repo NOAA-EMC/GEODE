@@ -160,10 +160,12 @@ class Wis2Listener:
         # Process the downloaded file with the appropriate ingestor if available
         ingestor_class = get_ingestor(wis_id)
 
-        print("[*] EEEEEEE")
+        print(f"[*] EEEEEEE {ingestor_class}")
         if ingestor_class:
+            print("[*] FFFFFFFF")
             ingestor = ingestor_class()
             ingestor.process(downloaded_file_path)
+            print("[*] GGGGGGGG")
 
         print(f"!!!!! CALLING: {self.on_message_callback}")
         if self.on_message_callback:
