@@ -31,11 +31,11 @@ def test_wis2_listener():
         # Check if it exists, is a directory, and contains any files or folders
         path = Path(test_data_dir)
 
-        print ("############################")
-        print (f"Path: {path}")
-        print (f"Is directory: {path.is_dir()}")
-        print (f"Contents: {list(path.iterdir())}")
-        
+        print("############################")
+        print(f"Path: {path}")
+        print(f"Is directory: {path.is_dir()}")
+        print(f"Contents: {list(path.iterdir())}")
+
         success = True
 
         # if path.is_dir() and any(path.iterdir()):

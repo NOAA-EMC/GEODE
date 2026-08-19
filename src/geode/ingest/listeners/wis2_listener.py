@@ -153,6 +153,7 @@ class Wis2Listener:
             ingestor = ingestor_class()
             ingestor.process(downloaded_file_path)
 
+        print(f"!!!!! CALLING: {self.on_message_callback}")
         if self.on_message_callback:
             self.on_message_callback()
 
