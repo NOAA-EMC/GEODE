@@ -1,4 +1,5 @@
 # From the NOAA OMD Ocelot project
+import os
 
 from copy import deepcopy
 from datetime import date, datetime
@@ -175,6 +176,11 @@ class FloatField(ConfigField):
 class StrField(ConfigField):
     def load(self, value):
         self.value = str(value)
+
+
+class ResolvedPathField(ConfigField):
+    def load(self, value):
+        self.value = os.path.realpath(os.path.expanduser(str(value)))
 
 
 class ListField(ConfigField):

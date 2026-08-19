@@ -8,6 +8,7 @@ from geode.configs.config_base import (
     ConfigBase,
     IntField,
     Optional,
+    ResolvedPathField,
     StrField,
 )
 
@@ -48,7 +49,7 @@ class Wis2Config(ConfigBase):
 
 
 class BufrConfig(ConfigBase):
-    table_path = StrField()
+    table_path = ResolvedPathField()
 
     @property
     def map_dir(self) -> str:
@@ -102,7 +103,7 @@ class NetCDFLakeConfig(LakeConfig):
 
 
 class GeodeConfig(ConfigBase):
-    root_dir = StrField()
+    root_dir = ResolvedPathField()
     run_for_num_sec = Optional(IntField(), default=None)
     database = Choices({"sqlite": SqliteConfig(root_dir=root_dir)})
     data_lake = Choices(
@@ -123,3 +124,4 @@ class GeodeConfig(ConfigBase):
 
 # create singleton instance of GeodeConfig on module load
 geode_config = GeodeConfig(os.path.join(ConfigDir, "geode_config.yaml"))
+os.makedirs(geode_config.root_dir, exist_ok=True)

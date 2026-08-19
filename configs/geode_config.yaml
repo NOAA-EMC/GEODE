@@ -1,5 +1,5 @@
 
-root_dir: "/scratch4/NAGAPE/gpu-ai4wp/Ronald.McLaren/geode"
+root_dir: "~/geode"
 run_for_num_sec: 180
 
 database:
@@ -18,4 +18,4 @@ wis2:
   download_dir: "downloads"
 
 bufr:
-  table_path: "/scratch3/NCEPDEV/da/Ronald.McLaren/installs/tables"
+  table_path: "/usr/local/tables"
