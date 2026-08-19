@@ -48,6 +48,7 @@ class Wis2Config(ConfigBase):
         protocol = "wss" if self.use_websockets else "ssl"
         return f"{protocol}://everyone:everyone@{self.broker_address}:{self.broker_port}/mqtt"
 
+
 @staticmethod
 def _find_table_path() -> str:
     gettab_path = shutil.which("gettab")
@@ -57,6 +58,7 @@ def _find_table_path() -> str:
         )
 
     return os.path.realpath(os.path.join(gettab_path, "..", "..", "tables"))
+
 
 class BufrConfig(ConfigBase):
     table_path = Optional(ResolvedPathField(), default=_find_table_path())
