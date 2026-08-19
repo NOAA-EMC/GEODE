@@ -15,3 +15,9 @@ jobs:
         with:
           project-url: "https://github.com/orgs/NOAA-EMC/projects/170"
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+      - name: Add 'needs review' Label
+        run: gh pr edit "$PR_URL" --add-label "$LABEL_NAME"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          LABEL_NAME: "needs review"
