@@ -14,9 +14,12 @@ def container_to_xarray(
 
     # Use the NetCDF encoder as a bridge to XArray for now.
     encoder = bufr.encoders.netcdf.Encoder(description)
+    print("[*] JJJJJJJJJ")
     with tempfile.NamedTemporaryFile(delete=True) as named_temp:
         encoder.encode(container, named_temp.name, False).values()
+        print("[*] KKKKKKKKK")
         datatree = xr.open_datatree(named_temp.name)
+        print("[*] LLLLLLLL")
 
     return datatree
 
@@ -28,5 +31,7 @@ class BufrIngestor(BaseIngestor):
         self.table_path = geode_config.bufr.table_path
 
     def _process(self, file_path: str) -> xr.DataTree:
+        print("[*] HHHHHHHHH")
         container = bufr.Parser(file_path, self.bufr_yaml, self.table_path).parse()
+        print("[*] IIIIIIIIII")
         return container_to_xarray(container, bufr.encoders.Description(self.bufr_yaml))
