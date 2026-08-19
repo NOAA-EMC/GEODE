@@ -1,6 +1,5 @@
 # From the NOAA OMD Ocelot project
 import os
-
 from copy import deepcopy
 from datetime import date, datetime
 from typing import Any
