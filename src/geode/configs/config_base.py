@@ -44,7 +44,10 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
         self.__dict__["_fields"] = fields
         self.__dict__.update(fields)
 
-    def load(self, config_dict: dict) -> None:
+    def load(self, config_dict: dict | None) -> None:
+        if config_dict is None:
+            config_dict = {}
+
         if "_fields" not in self.__dict__:
             self._initialize_fields()
 

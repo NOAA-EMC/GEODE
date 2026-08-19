@@ -17,5 +17,4 @@ wis2:
   topic: "origin/a/wis2/us-noaa-nws/data/core/weather/#"
   download_dir: "downloads"
 
-bufr:
-  table_path: "/usr/local/tables"
+bufr: null
