@@ -19,6 +19,16 @@ jobs:
         with:
           project-url: "https://github.com/orgs/NOAA-EMC/projects/170"
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+      - name: Set Project Status to 'Under review'
+        run: |
+          gh project item-edit 170 \
+            --owner "NOAA-EMC" \
+            --url "$PR_URL" \
+            --field "Status" \
+            --value "Under review"
+        env:
+          GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
       - name: Label, Assign Author, and Request Reviewers
         if: ${{ !github.event.pull_request.head.repo.fork }}
         run: |
