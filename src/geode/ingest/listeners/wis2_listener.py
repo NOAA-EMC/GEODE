@@ -114,6 +114,8 @@ class Wis2Listener:
 
         print(f"[*] WIS ID: {wis_id}")
 
+        print(f"[*] 0000000")
+
         def _get_file_download_info(data):
             """Extracts the download URL and filename from the WIS2 notification payload."""
             url = None
@@ -139,16 +141,26 @@ class Wis2Listener:
 
             return url, filename
 
+        print(f"[*] AAAAAAAA")
+
         file_url, file_name = _get_file_download_info(data)
+
+        print(f"[*] BBBBBBBB")
 
         # Use WIS ID as subdirectory name, replacing slashes with underscores
         downloaded_file_path = self._download_file(file_url, file_name, wis_id)
 
+        print(f"[*] CCCCCCCC {downloaded_file_path}")
+
         if not downloaded_file_path:
             return
 
+        print(f"[*] DDDDDDD")
+
         # Process the downloaded file with the appropriate ingestor if available
         ingestor_class = get_ingestor(wis_id)
+
+        print(f"[*] EEEEEEE")
         if ingestor_class:
             ingestor = ingestor_class()
             ingestor.process(downloaded_file_path)
