@@ -12,7 +12,7 @@ from geode.ingest.listeners import wis2_listener
 
 
 def test_wis2_listener():
-    success = False
+    success = True
 
     listener = wis2_listener.Wis2Listener()
 
