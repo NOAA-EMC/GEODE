@@ -1,0 +1,17 @@
+name: Auto-Add Develop PRs to Project
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - develop
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add PR to GitHub Project
+        uses: actions/add-to-project@v1
+        with:
+          project-url: "https://github.com/orgs/NOAA-EMC/projects/170"
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
