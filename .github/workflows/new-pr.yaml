@@ -9,13 +9,18 @@ on:
 jobs:
   add-to-project:
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
     steps:
       - name: Add PR to GitHub Project
+        if: ${{ !github.event.pull_request.head.repo.fork }}
         uses: actions/add-to-project@v1
         with:
           project-url: "https://github.com/orgs/NOAA-EMC/projects/170"
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
       - name: Label, Assign Author, and Request Reviewers
+        if: ${{ !github.event.pull_request.head.repo.fork }}
         run: |
           # Split comma-separated reviewers and filter out the PR author
           VALID_REVIEWERS=""
