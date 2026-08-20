@@ -40,12 +40,12 @@ jobs:
         run: |
           python -m pytest test/test_wis2_listener.py -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
 
-      - name: Show downloaded files
-        run: |
-          find /tmp/pytest-of-root -type f -exec sh -c '
-            for file do
-              echo "Contents of $file:"
-              debufr -o "$file".debufr.out "$file"
-              cat "$file".debufr.out
-            done
-          ' sh {} +
+      # - name: Show downloaded files
+      #   run: |
+      #     find /tmp/pytest-of-root -type f -exec sh -c '
+      #       for file do
+      #         echo "Contents of $file:"
+      #         debufr -o "$file".debufr.out "$file"
+      #         cat "$file".debufr.out
+      #       done
+      #     ' sh {} +
