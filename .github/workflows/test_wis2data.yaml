@@ -1,7 +1,6 @@
 name: Exercise Data Retrieval Test
 
 on:
-  push:
   pull_request:
   schedule:
     # Run daily at 11:30 UTC to verify data downloads remain functional
