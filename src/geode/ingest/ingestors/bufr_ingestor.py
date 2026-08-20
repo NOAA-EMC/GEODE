@@ -16,7 +16,11 @@ def container_to_xarray(
     encoder = bufr.encoders.netcdf.Encoder(description)
     print("[*] JJJJJJJJJ")
     with tempfile.NamedTemporaryFile(delete=True) as named_temp:
-        print(f"[*] MMMMMMMMMM {named_temp.name} {encoder} {encoder.encoder}")
+        print(
+            "[*] MMMMMMMMMM "
+            f"{named_temp.name} {type(encoder).__module__}."
+            f"{type(encoder).__qualname__}"
+        )
         encoder.encode(container, named_temp.name, False)
         print("[*] KKKKKKKKK")
         datatree = xr.open_datatree(named_temp.name)
