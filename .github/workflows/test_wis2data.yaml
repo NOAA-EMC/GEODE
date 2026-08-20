@@ -20,7 +20,7 @@ jobs:
 
       - name: Build devcontainer image
         run: |
-          docker build -t geode-devcontainer-ci -f .devcontainer/Dockerfile .
+          docker build -t geode-devcontainer-ci -f .devcontainer/Dockerfile_CI .
 
       - name: Run test and show downloaded files in devcontainer
         run: |

@@ -1,11 +1,8 @@
 FROM python:3.12-slim
 
-ARG USERNAME=developer
 ARG GSL_LITE_REF=v1.1.0
 ARG NCEPLIBS_BUFR_REF=v12.3.0
 ARG BUFR_QUERY_REF=v0.0.5
-
-RUN useradd -ms /bin/bash ${USERNAME}
 
 # Install system dependencies required by BUFR tooling.
 RUN apt-get update && \
@@ -62,22 +59,10 @@ RUN python -m pip install --no-cache-dir --upgrade pip && \
       ruff==0.16.3 \
       pywis-pubsub==0.12.0 \
       requests==2.34.2 \
-      xarray>=2025.8.0 \
+      xarray \
       icechunk==2.1.2 \
       pybind11==3.0.1 \
       wxflow==0.4.2
-
-# Set working directory
-WORKDIR /home/${USERNAME}
-
-# Switch to the non-root user
-USER ${USERNAME}
-
-# Add aliases and colorful prompt
-RUN echo 'alias ls="ls --color=auto"' >> ~/.bashrc && \
-    echo 'alias ll="ls -alF --color=auto"' >> ~/.bashrc && \
-    echo 'export PS1="\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ "' >> ~/.bashrc && \
-    echo 'git config --global --add safe.directory /workspaces/GEODE' >> ~/.bashrc
 
 # Set default command
 CMD ["/bin/bash"]

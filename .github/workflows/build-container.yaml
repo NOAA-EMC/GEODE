@@ -3,7 +3,7 @@ name: Build and Push Container
 on:
   push:
     branches:
-      - feature/simple
+      - develop
       - feature/container
   schedule:
     # Runs at 22:00 UTC every Saturday
@@ -58,7 +58,7 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         context: .
-        file: .devcontainer/Dockerfile
+        file: .devcontainer/Dockerfile_CI
         push: true
         cache-from: type=gha
         cache-to: type=gha,mode=max
