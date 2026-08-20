@@ -13,6 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      packages: read
+    container:
+      image: ghcr.io/noaa-emc/geode:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user 0
 
     steps:
       - name: Check out repository
@@ -22,20 +29,7 @@ jobs:
         run: |
           docker build -t geode-devcontainer-ci -f .devcontainer/Dockerfile_CI .
 
-      - name: Run test in devcontainer
+      - name: Run test
         run: |
-          mkdir -p "${RUNNER_TEMP}/geode-ci-tmp/pytest-of-geode" "${RUNNER_TEMP}/geode-ci-tmp/pytest-cache"
-          docker run --rm \
-            --user "$(id -u):$(id -g)" \
-            --cap-drop ALL \
-            -v "${GITHUB_WORKSPACE}:/workspaces/GEODE:ro" \
-            -v "${RUNNER_TEMP}/geode-ci-tmp:/ci-tmp" \
-            -w /workspaces/GEODE \
-            geode-devcontainer-ci \
-            bash -e -u -o pipefail -c '
-              artifact_dir=/ci-tmp/pytest-of-geode
-              cache_dir=/ci-tmp/pytest-cache
-              mkdir -p "${artifact_dir}" "${cache_dir}"
-              python -m pytest test/test_wis2_listener.py -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning \
-            '
+          python -m pytest test/test_wis2_listener.py -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
   
