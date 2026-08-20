@@ -1,0 +1,20 @@
+
+root_dir: "~/geode"
+run_for_num_sec: 180
+
+database:
+  type: sqlite
+  db_path: "geode.db"
+
+data_lake:
+  type : "icechunk"
+  base_dir: "lake"
+
+wis2:
+  broker_address: "wis2node.globaldata.nws.noaa.gov"
+  broker_port: 443
+  use_websockets: true
+  topic: "origin/a/wis2/us-noaa-nws/data/core/weather/#"
+  download_dir: "downloads"
+
+bufr: null

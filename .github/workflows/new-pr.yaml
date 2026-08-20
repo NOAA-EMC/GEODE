@@ -1,0 +1,62 @@
+name: Auto-Setup Develop PRs
+
+on:
+  pull_request:
+    types: [opened]
+    branches:
+      - develop
+
+jobs:
+  add-to-project:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
+    steps:
+      - name: Add PR to GitHub Project
+        if: ${{ !github.event.pull_request.head.repo.fork }}
+        uses: actions/add-to-project@v2
+        with:
+          project-url: "https://github.com/orgs/NOAA-EMC/projects/170"
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+      - name: Set Project Status to 'Under review'
+        run: |
+          gh project item-edit 170 \
+            --owner "NOAA-EMC" \
+            --url "$PR_URL" \
+            --field "Status" \
+            --value "Under review"
+        env:
+          GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+      - name: Label, Assign Author, and Request Reviewers
+        if: ${{ !github.event.pull_request.head.repo.fork }}
+        run: |
+          # Split comma-separated reviewers and filter out the PR author
+          VALID_REVIEWERS=""
+          IFS=',' read -ra REVIEWER_ARRAY <<< "$TARGET_REVIEWERS"
+          
+          for reviewer in "${REVIEWER_ARRAY[@]}"; do
+            trimmed=$(echo "$reviewer" | xargs)
+            if [ "$trimmed" != "$PR_AUTHOR" ] && [ -n "$trimmed" ]; then
+              VALID_REVIEWERS="${VALID_REVIEWERS:+$VALID_REVIEWERS,}$trimmed"
+            fi
+          done
+
+          # Apply updates based on whether valid external reviewers remain
+          if [ -n "$VALID_REVIEWERS" ]; then
+            gh pr edit "$PR_URL" \
+              --add-label "$LABEL_NAME" \
+              --add-assignee "$PR_AUTHOR" \
+              --add-reviewer "$VALID_REVIEWERS"
+          else
+            gh pr edit "$PR_URL" \
+              --add-label "$LABEL_NAME" \
+              --add-assignee "$PR_AUTHOR"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          LABEL_NAME: "needs review"
+          TARGET_REVIEWERS: "CoryMartin-NOAA,nicholasesposito,ilianagenkova,givelberg,HyundeokChoi-NOAA,rmclaren" # Comma-separated usernames

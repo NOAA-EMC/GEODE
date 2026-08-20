@@ -1,0 +1,24 @@
+name: Auto-Label and Assign Issue to Project
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Assign Label
+        run: gh issue edit "$ISSUE_URL" --add-label "$LABEL_NAME"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_URL: ${{ github.event.issue.html_url }}
+          LABEL_NAME: "triage"
+
+      - name: Add to GitHub Project
+        uses: actions/add-to-project@v2
+        with:
+          project-url: "https://github.com/orgs/NOAA-EMC/projects/170"
+          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}

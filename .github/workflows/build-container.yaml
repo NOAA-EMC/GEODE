@@ -2,7 +2,9 @@ name: Build and Push Container
 
 on:
   push:
-    branches: [feature/container]
+    branches:
+      - feature/simple
+      - feature/container
   schedule:
     # Runs at 22:00 UTC every Saturday
     - cron: '0 22 * * 6'

@@ -36,19 +36,6 @@ jobs:
               artifact_dir=/ci-tmp/pytest-of-geode
               cache_dir=/ci-tmp/pytest-cache
               mkdir -p "${artifact_dir}" "${cache_dir}"
-              python -m pytest test/test_wis2_watcher.py -v -s \
-                --basetemp="${artifact_dir}" \
-                -o cache_dir="${cache_dir}"
-              if ! command -v debufr >/dev/null 2>&1; then
-                echo "WARNING: debufr is unavailable; skipping BUFR decode output"
-              elif [[ -z "$(find "${artifact_dir}" -type f -print -quit)" ]]; then
-                echo "WARNING: no pytest download artifacts found under ${artifact_dir}"
-              else
-                while IFS= read -r file; do
-                  echo "Contents of ${file}:"
-                  debufr -o "${file}".debufr.out "${file}"
-                  cat "${file}".debufr.out
-                  show_queries.x -t /usr/local/tables "${file}"
-                done < <(find "${artifact_dir}" -type f ! -name "*.debufr.out" -print)
-              fi
+              python -m pytest test/test_wis2_listener.py -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning \
             '
+  
