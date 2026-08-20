@@ -22,7 +22,7 @@ jobs:
         run: |
           docker build -t geode-devcontainer-ci -f .devcontainer/Dockerfile_CI .
 
-      - name: Run test and show downloaded files in devcontainer
+      - name: Run test in devcontainer
         run: |
           mkdir -p "${RUNNER_TEMP}/geode-ci-tmp/pytest-of-geode" "${RUNNER_TEMP}/geode-ci-tmp/pytest-cache"
           docker run --rm \
