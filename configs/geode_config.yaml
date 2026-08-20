@@ -1,5 +1,5 @@
 
-root_dir: "~/geode"
+root_dir: "./geode"
 run_for_num_sec: 180
 
 database:
