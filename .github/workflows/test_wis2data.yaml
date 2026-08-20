@@ -25,27 +25,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install pytest pywis-pubsub requests "xarray>=2025.8.0" zarr icechunk sqlalchemy netcdf4
-
-      - name: Show container runtime
-        run: |
-          echo "Container image: ghcr.io/noaa-emc/geode:latest"
-          python --version
-          python -c "import bufr; print('BUFR module:', bufr.__file__)"
-
-      - name: Run test using pytest
+      - name: Run test
         run: |
           python -m pytest test/test_wis2_listener.py -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
-
-      # - name: Show downloaded files
-      #   run: |
-      #     find /tmp/pytest-of-root -type f -exec sh -c '
-      #       for file do
-      #         echo "Contents of $file:"
-      #         debufr -o "$file".debufr.out "$file"
-      #         cat "$file".debufr.out
-      #       done
-      #     ' sh {} +
+  
