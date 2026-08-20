@@ -65,8 +65,6 @@ class BufrConfig(ConfigBase):
 
     @property
     def map_dir(self) -> str:
-
-        
         return os.path.join(ConfigDir, "bufr")
 
 
