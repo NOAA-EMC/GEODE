@@ -19,7 +19,8 @@ def container_to_xarray(
         print(
             "[*] MMMMMMMMMM "
             f"{named_temp.name} {type(encoder).__module__}."
-            f"{type(encoder).__qualname__}"
+            f"{type(encoder).__name__}",
+            flush=True,
         )
         encoder.encode(container, named_temp.name, False)
         print("[*] KKKKKKKKK")

@@ -30,9 +30,15 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install pytest pywis-pubsub requests "xarray>=2025.8.0" zarr icechunk sqlalchemy netcdf4
 
+      - name: Show container runtime
+        run: |
+          echo "Container image: ghcr.io/noaa-emc/geode:latest"
+          python --version
+          python -c "import bufr; print('BUFR module:', bufr.__file__)"
+
       - name: Run test using pytest
         run: |
-          python -m pytest test/test_wis2_listener.py -v -s
+          python -m pytest test/test_wis2_listener.py -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
 
       - name: Show downloaded files
         run: |
