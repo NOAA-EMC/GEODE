@@ -24,6 +24,8 @@ RUN apt-get update && \
       libopenmpi-dev \
       libomp-dev \
       pybind11-dev \
+      vim \
+      emacs \
       openmpi-bin && \
     rm -rf /var/lib/apt/lists/*
 
