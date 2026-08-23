@@ -18,8 +18,14 @@ class DataManager:
         raise NotImplementedError("This method should be implemented by subclasses.")
 
     def get(
-        self, data_type: str, start_time: datetime, end_time: datetime
+        self,
+        data_type: str, 
+        start_time: datetime, 
+        end_time: datetime,
+        vars : list[str] | None = None,
+        filter:dict | None = None,
     ) -> xr.DataTree:
+
         raise NotImplementedError("This method should be implemented by subclasses.")
 
 
@@ -61,6 +67,39 @@ class IceChunkDataManager(DataManager):
         else:
             with repo.transaction("main", message=f"Create {data_type}") as store:
                 data_tree.to_zarr(store, mode="w", zarr_format=3, consolidated=False)
+
+    def get(
+        self,
+        data_type: str, 
+        start_time: datetime, 
+        end_time: datetime,
+        vars : list[str] | None = None,
+        filter:dict | None = None,
+    ) -> xr.DataTree:
+
+        file_path = self.get_file_path(data_type)
+
+        print ("Getting data from file path:", file_path)
+
+        storage = ic.local_filesystem_storage(file_path)
+        repo = ic.Repository.open(storage)
+        session = repo.readonly_session("main")
+
+        datatree = xr.open_datatree(
+            session.store,
+            engine="zarr",
+            zarr_version=3,
+            consolidated=False,
+        )
+
+        if vars is not None:
+            datatree = datatree[vars]
+
+        # if filter is not None:
+        #     for key, value in filter.items():
+        #         datatree = datatree.where(datatree[key].isin(value), drop=True)
+
+        return datatree
 
 
 class ZarrDataManager(DataManager):
