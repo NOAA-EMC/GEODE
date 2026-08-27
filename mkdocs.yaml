@@ -1,0 +1,73 @@
+site_name: GEODE
+site_description: Geospatial Earth Observation Data Engine
+site_author: NOAA NWS OMD
+site_url: https://noaa-emc.github.io/geode/
+
+# Repository linking (adds edit buttons & stars counter in header)
+repo_url: https://github.com/noaa-emc/geode
+repo_name: noaa-emc/geode
+
+# Theme configuration
+theme:
+  name: material
+  language: en
+  palette:
+    # Automatic light/dark mode based on system preference
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs          # Top-level tab bar
+    - navigation.sections      # Group sub-pages
+    - navigation.top           # "Back to top" button
+    - search.suggest           # Search auto-complete
+    - search.highlight         # Highlight query terms in search results
+    - content.code.copy        # "Copy code" button on code blocks
+
+# Plugins
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [src]  # Directory where your python package lives (e.g., src/ or my_package/)
+          options:
+            docstring_style: google  # google, numpy, or sphinx
+            show_source: true
+            show_root_heading: true
+            show_category_heading: true
+
+# Markdown Extensions for code blocks, callouts, and formatting
+markdown_extensions:
+  - admonition               # Support for !!! note "Title" callout boxes
+  - pymdownx.details         # Collapsible admonitions
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences    # Allows nested code blocks and tabs
+
+# Site Navigation Structure (maps to files in docs/ directory)
+nav:
+  - Home: index.md
+  - Getting Started: getting-started.md
+  - API Reference:
+      - Overview: api/index.md
+      - Core API: api/core.md
+      - Configuration: api/configuration.md
+      - Data Access: api/data.md
+      - Ingest & Listeners: api/ingest.md
+      - Models: api/models.md
