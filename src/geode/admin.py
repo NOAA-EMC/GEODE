@@ -39,7 +39,5 @@ def main(arguments: list[str] | None = None) -> None:
             except ValueError as error:
                 parser.error(str(error))
             except KeyError:
-                parser.error(
-                    f"Unknown BUFR Table B descriptor: {parsed_arguments.fxy}"
-                )
+                parser.error(f"Unknown BUFR Table B descriptor: {parsed_arguments.fxy}")
         pprint.pprint(entry, sort_dicts=False)
