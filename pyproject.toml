@@ -7,6 +7,22 @@ name = "geode"
 version = "0.0.0"
 description = "Geospatial Earth Observation Data Engine"
 requires-python = ">=3.10"
+dependencies = [
+	"icechunk==2.1.2",
+	"netCDF4",
+	"pywis-pubsub==0.12.0",
+	"PyYAML",
+	"requests==2.34.2",
+	"SQLAlchemy",
+	"wxflow==0.4.2",
+	"xarray>=2025.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+	"pytest==9.1.1",
+	"ruff==0.16.3",
+]
 
 [project.scripts]
 geode = "geode.admin:main"
