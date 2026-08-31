@@ -38,29 +38,30 @@ def main(arguments: list[str] | None = None) -> None:
 
     parsed_arguments = parser.parse_args(arguments)
     if parsed_arguments.command == "info" and parsed_arguments.info_type == "bufr":
-        if parsed_arguments.code_figure is None:
-            with as_file(TABLE_B_RESOURCE) as table_b_path:
-                table = BufrTableB(table_b_path)
-                try:
-                    entry = table.entry(parsed_arguments.fxy)
-                except ValueError as error:
-                    parser.error(str(error))
-                except KeyError:
-                    parser.error(
-                        f"Unknown BUFR Table B descriptor: {parsed_arguments.fxy}"
-                    )
-        else:
+        with as_file(TABLE_B_RESOURCE) as table_b_path:
+            table_b = BufrTableB(table_b_path)
+            try:
+                table_b_entry = table_b.entry(parsed_arguments.fxy)
+            except ValueError as error:
+                parser.error(str(error))
+            except KeyError:
+                parser.error(f"Unknown BUFR Table B descriptor: {parsed_arguments.fxy}")
+
+        if parsed_arguments.code_figure is not None:
             with as_file(CODE_FLAG_RESOURCE) as code_flag_path:
-                table = BufrCodeFlag(code_flag_path)
+                code_flag = BufrCodeFlag(code_flag_path)
                 lookup = (
                     f"{parsed_arguments.fxy} code figure {parsed_arguments.code_figure}"
                 )
                 try:
-                    entry = table.entry(
+                    code_flag_entry = code_flag.entry(
                         parsed_arguments.fxy, parsed_arguments.code_figure
                     )
                 except ValueError as error:
                     parser.error(str(error))
                 except KeyError:
                     parser.error(f"Unknown BUFR CodeFlag entry: {lookup}")
-        pprint.pprint(entry, sort_dicts=False)
+
+        pprint.pprint(table_b_entry, sort_dicts=False)
+        if parsed_arguments.code_figure is not None:
+            pprint.pprint(code_flag_entry, sort_dicts=False)

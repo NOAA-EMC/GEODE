@@ -1,3 +1,4 @@
+import pprint
 from ast import literal_eval
 from pathlib import Path
 
@@ -80,9 +81,10 @@ def test_info_bufr_prints_table_b_entry(capsys: pytest.CaptureFixture[str]) -> N
 
 
 def test_info_bufr_prints_code_flag_entry(capsys: pytest.CaptureFixture[str]) -> None:
-    """Print the CodeFlag entry when a code figure is provided."""
+    """Print Table B and CodeFlag entries when a code figure is provided."""
     main(["info", "bufr", "001003", "1"])
 
-    assert literal_eval(capsys.readouterr().out) == BufrCodeFlag(CODE_FLAG_PATH).entry(
-        "001003", "1"
+    assert capsys.readouterr().out == (
+        f"{pprint.pformat(BufrTableB(TABLE_B_PATH).entry('001003'), sort_dicts=False)}\n"
+        f"{pprint.pformat(BufrCodeFlag(CODE_FLAG_PATH).entry('001003', '1'), sort_dicts=False)}\n"
     )
