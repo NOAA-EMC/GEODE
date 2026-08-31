@@ -1,8 +1,8 @@
 """Command-line interface for GEODE."""
 
 import argparse
-from importlib.resources import as_file, files
 import pprint
+from importlib.resources import as_file, files
 
 from geode.utils.bufr_table import BufrTableB
 
@@ -36,6 +36,10 @@ def main(arguments: list[str] | None = None) -> None:
             table = BufrTableB(table_b_path)
             try:
                 entry = table.entry(parsed_arguments.fxy)
-            except (KeyError, ValueError) as error:
+            except ValueError as error:
                 parser.error(str(error))
+            except KeyError:
+                parser.error(
+                    f"Unknown BUFR Table B descriptor: {parsed_arguments.fxy}"
+                )
         pprint.pprint(entry, sort_dicts=False)
