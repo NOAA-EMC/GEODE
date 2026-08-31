@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from geode.admin import main
-from geode.ingest.bufr_table import BufrTableB
+from geode.utils.bufr_table import BufrTableB
 
 TABLE_B_PATH = (
     Path(__file__).resolve().parents[1]

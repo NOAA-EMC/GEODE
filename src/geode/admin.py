@@ -4,7 +4,7 @@ import argparse
 import pprint
 from pathlib import Path
 
-from geode.ingest.bufr_table import BufrTableB
+from geode.utils.bufr_table import BufrTableB
 
 TABLE_B_PATH = (
 	Path(__file__).resolve().parents[2]
