@@ -34,3 +34,31 @@ value, data width, class, notes, and status.
 
 The FXY value must contain exactly six digits. An unknown or malformed value
 causes the command to exit with an error message.
+
+## Look Up a Code Figure
+
+For descriptors that use a WMO CodeFlag table, provide the code figure as a
+second positional argument:
+
+```bash
+geode info bufr 001003 1
+```
+
+The command first prints the complete Table B descriptor dictionary, then the
+matching CodeFlag dictionary. The CodeFlag result includes the FXY descriptor,
+code figure, entry name, notes, and status.
+
+```text
+{'ClassNo': '01',
+ 'FXY': '001003',
+ 'ElementName_en': 'WMO Region number/geographical area',
+ ...}
+{'FXY': '001003',
+ 'CodeFigure': '1',
+ 'EntryName_en': 'Region I',
+ ...}
+```
+
+The code figure must exactly match a `CodeFigure` value in the CodeFlag table.
+An unknown FXY and code-figure combination causes the command to exit with an
+error message.
