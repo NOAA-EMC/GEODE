@@ -44,8 +44,12 @@ class BufrTableB:
         with table_path.open(newline="", encoding="utf-8") as table_file:
             reader = csv.DictReader(table_file)
             required_columns = {"FXY", "ElementName_en"}
-            if reader.fieldnames is None or not required_columns <= set(reader.fieldnames):
-                raise ValueError("BUFR Table B must contain FXY and ElementName_en columns.")
+            if reader.fieldnames is None or not required_columns <= set(
+                reader.fieldnames
+            ):
+                raise ValueError(
+                    "BUFR Table B must contain FXY and ElementName_en columns."
+                )
 
             descriptors: dict[str, dict[str, str]] = {}
             for row in reader:
