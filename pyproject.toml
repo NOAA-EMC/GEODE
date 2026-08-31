@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geode"
+version = "0.0.0"
+description = "Geospatial Earth Observation Data Engine"
+requires-python = ">=3.10"
+
+[project.scripts]
+geode = "geode.admin:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
