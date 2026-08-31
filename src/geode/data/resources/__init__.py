@@ -1,0 +1,1 @@
+"""Bundled WMO BUFR resources."""

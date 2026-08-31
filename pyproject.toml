@@ -29,3 +29,6 @@ geode = "geode.admin:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+"geode.data.resources" = ["BUFRCREX_TableB_en.txt"]
