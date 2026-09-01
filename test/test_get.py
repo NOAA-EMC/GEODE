@@ -14,7 +14,17 @@ def test_get():
     end_time = datetime(2026, 8, 20, 0, 0, 0, tzinfo=timezone.utc)
     result = geode.get('synop', start_time, end_time)
 
-    print (result)
+    # print (result)
+
+    assert isinstance(result, xr.DataTree)
+
+
+    result = geode.get('synop', start_time, end_time, vars=['ObsValue/temperature'])
+
+    # print (result)
+
+    assert isinstance(result, xr.DataTree)
+    
 
     # result = geode.get('synop', start_time, end_time, {'variables': ['temperature'],
     #                                                    'latitude': [30, 40], 

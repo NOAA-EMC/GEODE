@@ -13,7 +13,7 @@ sys.path.append(
 )
 
 from geode.configs.geode_config import geode_config
-from geode.ingest.ingestors.ingestor_factory import get_ingestor
+from geode.ingest import ingestors
 
 
 class Wis2Listener:
@@ -147,7 +147,7 @@ class Wis2Listener:
             return
 
         # Process the downloaded file with the appropriate ingestor if available
-        ingestor_class = get_ingestor(wis_id)
+        ingestor_class = ingestors.make(f"wis2/{wis_id}")
 
         if ingestor_class:
             ingestor = ingestor_class()
