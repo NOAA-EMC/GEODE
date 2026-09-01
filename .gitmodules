@@ -1,3 +1,6 @@
 [submodule "src/spoc"]
 	path = src/spoc
 	url = https://github.com/noaa-emc/spoc
+[submodule "parm/wmo-bufr4"]
+	path = parm/wmo-bufr4
+	url = https://github.com/wmo-im/BUFR4

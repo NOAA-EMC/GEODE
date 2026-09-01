@@ -60,6 +60,8 @@ RUN git clone --branch "${BUFR_QUERY_REF}" --depth 1 \
 # Install Python dependencies used by this repository.
 RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir \
+      setuptools>=61 \
+      wheel \
       pytest==9.1.1 \
       ruff==0.16.3 \
       pywis-pubsub==0.12.0 \
