@@ -1,10 +1,6 @@
 
-root_dir: "~/geode"
+root_dir: ""
 run_for_num_sec: 180
-
-database:
-  type: sqlite
-  db_path: "geode.db"
 
 data_lake:
   type : "icechunk"
@@ -18,6 +14,6 @@ wis2:
   download_dir: "downloads"
 
 ncep_dump:
-  root_path: "/scratch4/NAGAPE/gpu-ai4wp/Ronald.McLaren/ocelot/data/raw/bufr_dump"
+  root_path: ""
 
 bufr: null

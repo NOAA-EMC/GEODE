@@ -17,7 +17,7 @@ def test_ncep_dump_reader():
     success = True
 
     reader = ncep_dump_reader.NcepDumpReader()
-    reader.ingest("atms", start_date=datetime(2024, 1, 1), end_date=datetime(2024, 1, 2))
+    reader.ingest("atms", start_date=datetime(2024, 1, 1), end_date=datetime(2024, 1, 1))
 
     # test_data_dir = os.path.join(geode_config.root_dir, "test")
     # geode_config.data_lake.base_dir = test_data_dir

@@ -4,10 +4,7 @@ from datetime import datetime
 
 import yaml
 
-ConfigDir = os.path.realpath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "..", "configs")
-)
-
+from geode.configs import GeodeConfigPath, PackageConfigDir
 from geode.configs.config_base import (
     BoolField,
     Choices,
@@ -67,7 +64,7 @@ class BufrConfig(ConfigBase):
 
     @property
     def map_dir(self) -> str:
-        return os.path.join(ConfigDir, "bufr")
+        return os.path.join(PackageConfigDir, "bufr")
 
 
 # Database Configuration
@@ -129,7 +126,7 @@ class NcepDumpConfig(ConfigBase):
 class GeodeConfig(ConfigBase):
     root_dir = ResolvedPathField()
     run_for_num_sec = Optional(IntField(), default=None)
-    database = Choices({"sqlite": SqliteConfig(root_dir=root_dir)})
+    # database = Choices({"sqlite": SqliteConfig(root_dir=root_dir)})  # Future
     data_lake = Choices(
         {
             "zarr": ZarrLakeConfig(root_dir=root_dir),
@@ -148,5 +145,5 @@ class GeodeConfig(ConfigBase):
 
 
 # create singleton instance of GeodeConfig on module load
-geode_config = GeodeConfig(os.path.join(ConfigDir, "geode.yaml"))
+geode_config = GeodeConfig(GeodeConfigPath)
 os.makedirs(geode_config.root_dir, exist_ok=True)

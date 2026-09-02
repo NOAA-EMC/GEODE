@@ -8,20 +8,17 @@ class AtmsIngestor(ObsBuilderIngestor):
         from spoc.dump.scripts.atmosphere.radiance_atms import BufrAtmsObsBuilder
         super().__init__("atms", BufrAtmsObsBuilder())
 
-@register("ncep_dump/cris-fsr")
+
+@register("ncep_dump/cris")
 class CrisFsrIngestor(ObsBuilderIngestor):
     def __init__(self):
-        from spoc.dump.scripts.atmosphere.radiance_cris import BufrCrisObsBuilder
+        from spoc.dump.scripts.atmosphere.radiance_crsfdp import BufrCrisObsBuilder
         super().__init__("cris", BufrCrisObsBuilder())
 
-# @register("ncep_dump/cris")
-# class AtmsIngestor(ObsBuilderIngestor):
-#     from spoc.dump.scripts.atmosphere.radiance_atms import BufrAtmsObsBuilder
-#     def __init__(self):
-#         super().__init__("atms", BufrAtmsObsBuilder())
 
+@register("ncep_dump/amsua")
+class AmsuaIngestor(ObsBuilderIngestor):
+    def __init__(self):
+        from spoc.dump.scripts.atmosphere.radiance_amsua import BufrAmsuaObsBuilder
+        super().__init__("amsua", BufrAmsuaObsBuilder())
 
-# @register("ncep_dump/temp")
-# class TempIngestor(SpocIngestor):
-#     def __init__(self):
-#         super().__init__("temp", "temp.yaml")

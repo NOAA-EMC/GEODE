@@ -16,7 +16,6 @@ def container_to_xarray(
     encoder = bufr.encoders.netcdf.Encoder(description)
 
     categories = container.all_sub_categories()
-    print ('##### categories:', categories)
     if len(categories) == 1 and len(categories[0]) == 0:
         with tempfile.NamedTemporaryFile(delete=True) as named_temp:
             encoder.encode(container, named_temp.name)

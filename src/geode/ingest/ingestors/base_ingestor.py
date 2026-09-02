@@ -12,7 +12,6 @@ class BaseIngestor:
     def process(self, file_path: str) -> None:
         data_tree = self._process(file_path)
         self._store(data_tree)
-        os.remove(file_path)  # Clean up the file after processing
 
     def _process(self, file_path: str) -> xr.DataTree | dict[xr.DataTree]:
         raise NotImplementedError("Subclasses should implement this method.")

@@ -3,7 +3,7 @@ import yaml
 
 from geode.configs.config_base import ConfigBase
 from geode.configs.config_base import StrField, IntField, ListField, Optional
-from geode.configs.geode_config import ConfigDir
+from geode.configs import  PackageConfigDir
 
 
 class DataTypeConfig(ConfigBase):
@@ -41,4 +41,4 @@ class DumpConfig(ConfigBase):
 
 
 # create singleton instance of DumpConfig on module load
-dump_config = DumpConfig(os.path.join(ConfigDir, "ncep_dump.yaml"))
+dump_config = DumpConfig(os.path.join(PackageConfigDir, "ncep_dump.yaml"))
