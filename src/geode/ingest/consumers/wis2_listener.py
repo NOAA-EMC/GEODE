@@ -152,6 +152,7 @@ class Wis2Listener:
         if ingestor_class:
             ingestor = ingestor_class()
             ingestor.process(downloaded_file_path)
+            os.remove(downloaded_file_path)
 
         if self.on_message_callback:
             self.on_message_callback()
