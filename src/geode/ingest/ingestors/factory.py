@@ -7,6 +7,7 @@ def register(id: str):
     def decorator(ingestor_class: type):
         RegisteredIngestors[id] = ingestor_class
         return ingestor_class
+
     return decorator
 
 

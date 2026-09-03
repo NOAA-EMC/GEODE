@@ -55,8 +55,8 @@ class DataManager:
         data_type: str,
         start_time: datetime,
         end_time: datetime,
-        vars : list[str] | None = None,
-        filter:dict | None = None,
+        vars: list[str] | None = None,
+        filter: dict | None = None,
     ) -> xr.DataTree:
         raise NotImplementedError("This method should be implemented by subclasses.")
 
@@ -73,7 +73,7 @@ class IceChunkDataManager(DataManager):
     ) -> str:
         return os.path.join(
             geode_config.data_lake.full_base_path,
-            f"{data_type}_{sub_type}.icechunk" if sub_type else f"{data_type}.icechunk"
+            f"{data_type}_{sub_type}.icechunk" if sub_type else f"{data_type}.icechunk",
         )
 
     def put(
@@ -113,8 +113,8 @@ class IceChunkDataManager(DataManager):
         data_type: str,
         start_time: datetime,
         end_time: datetime,
-        vars : list[str] | None = None,
-        filter:dict | None = None,
+        vars: list[str] | None = None,
+        filter: dict | None = None,
     ) -> xr.DataTree:
 
         file_path = self.get_file_path(data_type)

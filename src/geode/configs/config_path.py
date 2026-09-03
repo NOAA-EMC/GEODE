@@ -21,7 +21,9 @@ def _get_geode_config_dir() -> str:
             conf = yaml.safe_load(config_file)
 
         if conf["root_dir"] == "":
-            print(f"Configuration file {config_path} has an empty root_dir. Please set it correctly!")
+            print(
+                f"Configuration file {config_path} has an empty root_dir. Please set it correctly!"
+            )
             sys.exit(1)
 
     def _init_config_dir(config_dir: str) -> None:
@@ -36,6 +38,7 @@ def _get_geode_config_dir() -> str:
             target_config_file
         ):
             import shutil
+            
             shutil.copy(package_config_file, target_config_file)
 
             print(

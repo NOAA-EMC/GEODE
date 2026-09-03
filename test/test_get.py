@@ -1,7 +1,7 @@
 import os, sys
 from datetime import datetime, timezone
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
 import xarray as xr
 
@@ -18,7 +18,6 @@ def test_get():
     result = geode.get("synop", start_time, end_time, vars=["ObsValue/temperature"])
 
     assert isinstance(result, xr.DataTree)
-    
 
     # result = geode.get('synop', start_time, end_time, {'variables': ['temperature'],
     #                                                    'latitude': [30, 40],
