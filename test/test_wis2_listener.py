@@ -1,7 +1,8 @@
 import os
+from pathlib import Path
 import shutil
 import sys
-from pathlib import Path
+
 
 sys.path.append(
     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src")
@@ -9,7 +10,6 @@ sys.path.append(
 
 from geode.configs.geode_config import geode_config
 from geode.ingest.consumers import wis2_listener
-from geode.ingest import ingestors
 
 
 def test_wis2_listener():
@@ -49,3 +49,4 @@ def test_wis2_listener():
 
 if __name__ == "__main__":
     test_wis2_listener()
+    print("Test passed.")

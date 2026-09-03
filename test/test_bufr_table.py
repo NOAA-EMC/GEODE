@@ -1,8 +1,7 @@
+from ast import literal_eval
 import os
 import pprint
 import sys
-from ast import literal_eval
-from pathlib import Path
 
 import pytest
 
