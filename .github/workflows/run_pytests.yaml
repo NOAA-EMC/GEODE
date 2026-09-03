@@ -26,9 +26,9 @@ jobs:
         with:
           submodules: recursive
       
-      # - name: Install GEODE from source
-      #   run: |
-      #     pip install ./
+      - name: Install GEODE from source
+        run: |
+          pip install -e ./
 
       - name: Run tests
         run: |
