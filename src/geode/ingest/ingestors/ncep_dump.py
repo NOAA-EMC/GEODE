@@ -6,7 +6,7 @@ from geode.ingest.ingestors.obsbuilder_ingestor import ObsBuilderIngestor
 class AtmsIngestor(ObsBuilderIngestor):
     def __init__(self):
         from spoc.dump.scripts.atmosphere.radiance_atms import BufrAtmsObsBuilder
-        
+
         super().__init__("atms", BufrAtmsObsBuilder())
 
 
@@ -24,4 +24,3 @@ class AmsuaIngestor(ObsBuilderIngestor):
         from spoc.dump.scripts.atmosphere.radiance_amsua import BufrAmsuaObsBuilder
 
         super().__init__("amsua", BufrAmsuaObsBuilder())
-

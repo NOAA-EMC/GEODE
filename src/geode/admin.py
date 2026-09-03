@@ -12,7 +12,7 @@ def main():
 
     if args.list_ingestors:
         import pprint
-        
+
         pprint.pprint(ingestors.directory())
 
 

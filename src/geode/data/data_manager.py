@@ -38,7 +38,7 @@ class DataManager:
         self,
         data_type: str,
         sub_type: str | None = None,
-        timestamp: datetime | None = None
+        timestamp: datetime | None = None,
     ) -> str:
         raise NotImplementedError("This method should be implemented by subclasses.")
 
@@ -69,7 +69,7 @@ class IceChunkDataManager(DataManager):
         self,
         data_type: str,
         sub_type: str | None = None,
-        timestamp: datetime | None = None
+        timestamp: datetime | None = None,
     ) -> str:
         return os.path.join(
             geode_config.data_lake.full_base_path,
@@ -133,9 +133,9 @@ class IceChunkDataManager(DataManager):
         )
 
         # if vars is not None:
-            # vars.append("Location")
-            # vars.append("ObsValue/Dimensions")
-            # vars.append("MetaData/Dimensions")
+        #    vars.append("Location")
+        #    vars.append("ObsValue/Dimensions")
+        #    vars.append("MetaData/Dimensions")
 
         # if vars is not None:
         #     datatree = select_datatree_variables(datatree, vars)
@@ -182,7 +182,9 @@ class ZarrDataManager(DataManager):
     def put(
         self, data_type: str, data_tree: xr.DataTree, sub_type: str | None = None
     ) -> None:
-        file_path = self.get_file_path(f"{data_type}_{sub_type}" if sub_type else data_type)
+        file_path = self.get_file_path(
+            f"{data_type}_{sub_type}" if sub_type else data_type
+        )
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
         # create the zarr store if it doesn't exist, otherwise open it in append mode

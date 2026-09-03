@@ -20,7 +20,7 @@ def test_wis2_listener():
     test_data_dir = os.path.join(geode_config.root_dir, "test")
     geode_config.data_lake.base_dir = test_data_dir
 
-     # Clean up the test directory if it exists
+    # Clean up the test directory if it exists
     shutil.rmtree(test_data_dir, ignore_errors=True)
 
     # Set up a callback function to be called when a message is received

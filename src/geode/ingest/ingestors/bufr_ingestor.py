@@ -11,7 +11,6 @@ from geode.ingest.ingestors.base_ingestor import BaseIngestor
 def container_to_xarray(
     container: bufr.DataContainer, description: bufr.encoders.Description
 ) -> xr.DataTree | dict[xr.DataTree]:
-    
     # Use the NetCDF encoder as a bridge to XArray for now.
     encoder = bufr.encoders.netcdf.Encoder(description)
 

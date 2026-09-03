@@ -9,8 +9,8 @@ def get(
     data_type: str,
     start_time: datetime | str,
     end_time: datetime | str,
-    vars : list[str] | None = None,
-    filter:dict | None = None,
+    vars: list[str] | None = None,
+    filter: dict | None = None,
 ) -> xr.DataTree:
 
     if isinstance(start_time, str):

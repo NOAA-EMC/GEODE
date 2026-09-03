@@ -1,13 +1,12 @@
 import os, sys
 from datetime import datetime, timezone
 
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src'))
-)
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
 import xarray as xr
 
 import geode
+
 
 def test_get():
     start_time = datetime(2026, 8, 20, 0, 0, 0, tzinfo=timezone.utc)
