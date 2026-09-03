@@ -75,7 +75,9 @@ def test_info_bufr_prints_table_b_entry(capsys: pytest.CaptureFixture[str]) -> N
     """Print the requested complete Table B entry to standard output."""
     main(["info", "bufr", "001003"])
 
-    assert literal_eval(capsys.readouterr().out) == BufrTableB(TABLE_B_PATH).entry("001003")
+    assert literal_eval(capsys.readouterr().out) == BufrTableB(TABLE_B_PATH).entry(
+        "001003"
+    )
 
 
 def test_info_bufr_prints_code_flag_entry(capsys: pytest.CaptureFixture[str]) -> None:
