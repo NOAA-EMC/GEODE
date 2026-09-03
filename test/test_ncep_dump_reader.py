@@ -15,8 +15,8 @@ def test_ncep_dump_reader():
 
     reader = ncep_dump_reader.NcepDumpReader()
     reader.ingest(
-        "atms", 
-        start_date=datetime(2024, 1, 1, tzinfo=timezone.utc), 
+        "atms",
+        start_date=datetime(2024, 1, 1, tzinfo=timezone.utc),
         end_date=datetime(2024, 1, 1, tzinfo=timezone.utc),
     )
 
