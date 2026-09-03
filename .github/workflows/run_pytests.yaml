@@ -24,9 +24,9 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
       
-      - name: Install GEODE from source
-        run: |
-          pip install ./
+      # - name: Install GEODE from source
+      #   run: |
+      #     pip install ./
 
       - name: Run tests
         run: |
