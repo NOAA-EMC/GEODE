@@ -1,6 +1,5 @@
 """Utilities for looking up BUFR Table B descriptors."""
 
-
 import csv
 from pathlib import Path
 
@@ -174,4 +173,3 @@ class BufrCodeFlag:
             raise ValueError(f"FXY must be a six-digit numeric value, got {fxy!r}.")
 
         return self._entries[(fxy, code_figure)].copy()
-

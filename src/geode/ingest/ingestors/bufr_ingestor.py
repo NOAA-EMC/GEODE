@@ -24,13 +24,17 @@ def container_to_xarray(
         datatree = {}
         with tempfile.TemporaryDirectory() as temp_dir:
             file_template = "_".join(["{" + key + "}" for key in cat_map])
-            encoder.encode(container, os.path.join(temp_dir, f"data_{file_template}.nc"))
+            encoder.encode(
+                container, os.path.join(temp_dir, f"data_{file_template}.nc")
+            )
 
             # loop through the files in the temporary dir and add them to the datatree
             for file_name in os.listdir(temp_dir):
                 if file_name.endswith(".nc"):
                     sub_type = file_name.replace("data_", "").replace(".nc", "")
-                    datatree[sub_type] = xr.open_datatree(os.path.join(temp_dir, file_name))
+                    datatree[sub_type] = xr.open_datatree(
+                        os.path.join(temp_dir, file_name)
+                    )
 
     return datatree
 

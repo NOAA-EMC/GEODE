@@ -5,7 +5,9 @@ from importlib.resources import as_file, files
 from geode.utils.bufr_table import BufrCodeFlag, BufrTableB
 
 TABLE_B_RESOURCE = files("geode.utils.bufr_table").joinpath("BUFRCREX_TableB_en.txt")
-CODE_FLAG_RESOURCE = files("geode.utils.bufr_table").joinpath("BUFRCREX_CodeFlag_en.txt")
+CODE_FLAG_RESOURCE = files("geode.utils.bufr_table").joinpath(
+    "BUFRCREX_CodeFlag_en.txt"
+)
 
 
 def main(arguments: list[str] | None = None) -> None:
@@ -63,6 +65,7 @@ def main(arguments: list[str] | None = None) -> None:
         pprint.pprint(table_b_entry, sort_dicts=False)
         if parsed_arguments.code_figure is not None:
             pprint.pprint(code_flag_entry, sort_dicts=False)
+
 
 if __name__ == "__main__":
     main()

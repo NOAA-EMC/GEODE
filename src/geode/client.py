@@ -6,8 +6,8 @@ from geode.data.data_manager import data_manager
 
 
 def get(
-    data_type: str, 
-    start_time: datetime | str, 
+    data_type: str,
+    start_time: datetime | str,
     end_time: datetime | str,
     vars : list[str] | None = None,
     filter:dict | None = None,
@@ -18,6 +18,4 @@ def get(
     if isinstance(end_time, str):
         end_time = datetime.fromisoformat(end_time)
 
-    return data_manager.get(
-        data_type, start_time, end_time, vars=vars, filter=filter
-    )
+    return data_manager.get(data_type, start_time, end_time, vars=vars, filter=filter)

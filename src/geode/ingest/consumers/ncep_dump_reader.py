@@ -12,7 +12,9 @@ class NcepDumpReader:
     def __init__(self):
         bufr.mpi.App(sys.argv)
 
-    def _get_date_list(self, start_date: datetime, end_date: datetime) -> list[datetime]:
+    def _get_date_list(
+        self, start_date: datetime, end_date: datetime
+    ) -> list[datetime]:
         date_list = []
         current_date = start_date
         while current_date <= end_date:
@@ -44,5 +46,5 @@ if __name__ == "__main__":
 
     start_date = datetime.strptime(args.start_date, "%Y-%m-%d").astimezone(timezone.utc)
     end_date = datetime.strptime(args.end_date, "%Y-%m-%d").astimezone(timezone.utc)
-    
+
     NcepDumpReader().ingest(args.id, start_date, end_date)

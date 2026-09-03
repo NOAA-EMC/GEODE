@@ -63,8 +63,7 @@ def test_entry_returns_complete_code_flag_row() -> None:
 
 def test_info_bufr_prints_table_b_entry(capsys: pytest.CaptureFixture[str]) -> None:
     """Print the requested complete Table B entry to standard output."""
-    # main(["info", "bufr", "001003"])
-    runpy.run_module("geode.utils.bufr_table.__main__", run_name="__main__", alter_sys=True, argv=["geode", "info", "bufr", "001003"])
+    main(["info", "bufr", "001003"])
 
     assert literal_eval(capsys.readouterr().out) == BufrTableB(TABLE_B_RESOURCE).entry(
         "001003"

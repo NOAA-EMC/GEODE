@@ -112,16 +112,18 @@ class NetCDFLakeConfig(LakeConfig):
 
 # NCEP DUMP Configuration
 
+
 class NcepDumpConfig(ConfigBase):
     root_path = StrField()
 
     def get_file_paths(self, dump_id: str, day: datetime) -> list[str]:
         src_path = os.path.join(self.root_path, f"gdas.{day.strftime('%Y%m%d')}")
-        rel_paths =  dump_config.get_file_paths(dump_id)
+        rel_paths = dump_config.get_file_paths(dump_id)
         return [os.path.join(src_path, rel_path) for rel_path in rel_paths]
 
 
 # Main Configuration Class
+
 
 class GeodeConfig(ConfigBase):
     root_dir = ResolvedPathField()
