@@ -38,7 +38,7 @@ def _get_geode_config_dir() -> str:
             target_config_file
         ):
             import shutil
-            
+
             shutil.copy(package_config_file, target_config_file)
 
             print(
