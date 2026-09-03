@@ -28,7 +28,7 @@ jobs:
       
       - name: Install GEODE from source
         run: |
-          pip install ./
+          pip install -e ./
 
       - name: Run tests
         run: |
