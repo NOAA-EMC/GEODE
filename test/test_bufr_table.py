@@ -1,8 +1,13 @@
 import pprint
+import sys
 from ast import literal_eval
 from pathlib import Path
 
 import pytest
+
+sys.path.append(
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src")
+)  # Add src/ to sys.path
 
 from geode.admin import main
 from geode.utils.bufr_table import BufrCodeFlag, BufrTableB
