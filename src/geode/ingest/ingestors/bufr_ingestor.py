@@ -23,7 +23,7 @@ def container_to_xarray(
     else:
         datatree = {}
         with tempfile.TemporaryDirectory() as temp_dir:
-            file_template = "_".join(["{" + key + "}" for key in cat_map.keys()])
+            file_template = "_".join(["{" + key + "}" for key in cat_map])
             encoder.encode(container, os.path.join(temp_dir, f"data_{file_template}.nc"))
 
             # loop through the files in the temporary dir and add them to the datatree

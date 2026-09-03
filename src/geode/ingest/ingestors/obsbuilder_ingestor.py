@@ -1,11 +1,8 @@
-import os
-import tempfile
 
 import bufr
-from bufr.obs_builder import ObsBuilder
 import xarray as xr
+from bufr.obs_builder import ObsBuilder
 
-from geode.configs.ncep_dump_config import dump_config
 from geode.ingest.ingestors.base_ingestor import BaseIngestor
 from geode.ingest.ingestors.bufr_ingestor import container_to_xarray
 

@@ -1,6 +1,5 @@
-from geode.ingest.ingestors.factory import make, register, directory
+# ruff: noqa: I001
+from geode.ingest.ingestors.factory import directory, make, register
+from geode.ingest.ingestors import ncep_dump, wis2
 
-from geode.ingest.ingestors import wis2
-from geode.ingest.ingestors import ncep_dump
-
-__all__ = ["make", "register", "directory"]
+__all__ = ["directory", "make", "ncep_dump", "register", "wis2"]

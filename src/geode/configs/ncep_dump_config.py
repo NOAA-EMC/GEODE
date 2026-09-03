@@ -1,9 +1,15 @@
 import os
+
 import yaml
 
-from geode.configs.config_base import ConfigBase
-from geode.configs.config_base import StrField, IntField, ListField, Optional
-from geode.configs import  PackageConfigDir
+from geode.configs import PackageConfigDir
+from geode.configs.config_base import (
+    ConfigBase,
+    IntField,
+    ListField,
+    Optional,
+    StrField,
+)
 
 
 class DataTypeConfig(ConfigBase):

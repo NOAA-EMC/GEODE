@@ -1,4 +1,6 @@
 import os
+import sys
+
 import yaml
 
 AppName = "geode"
@@ -12,12 +14,14 @@ def _get_geode_config_dir() -> str:
     def _quick_config_check(config_path: str) -> None:
         if not os.path.exists(config_path):
             print(f"Configuration file {config_path} not found. Please create it!")
-            exit(1)
+            sys.exit(1)
         
-        conf = yaml.safe_load(open(config_path))
+        with open(config_path) as config_file:
+            conf = yaml.safe_load(config_file)
+            
         if conf["root_dir"] == "":
             print(f"Configuration file {config_path} has an empty root_dir. Please set it correctly!")
-            exit(1)
+            sys.exit(1)
 
     def _init_config_dir(config_dir: str) -> None:
         if os.path.exists(config_dir):
@@ -32,7 +36,7 @@ def _get_geode_config_dir() -> str:
             shutil.copy(package_config_file, target_config_file)
 
             print(f"Fresh {GeodeConfigName} copied to {target_config_file}. Customize it!")
-            exit(0)
+            sys.exit(0)
 
     xdg_config = os.environ.get("XDG_CONFIG_HOME")
     

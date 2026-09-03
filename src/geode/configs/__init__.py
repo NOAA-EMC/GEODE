@@ -1,3 +1,3 @@
-from .config_path import PackageConfigDir, GeodeConfigPath
+from .config_path import GeodeConfigPath, PackageConfigDir
 
-__all__ = ["PackageConfigDir", "GeodeConfigPath"]
+__all__ = ["GeodeConfigPath", "PackageConfigDir"]

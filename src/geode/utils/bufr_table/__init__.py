@@ -1,3 +1,3 @@
-from geode.utils.bufr_table.bufr_table import BufrTableB, BufrCodeFlag
+from geode.utils.bufr_table.bufr_table import BufrCodeFlag, BufrTableB
 
-__all__ = ["BufrTableB", "BufrCodeFlag"]
+__all__ = ["BufrCodeFlag", "BufrTableB"]
