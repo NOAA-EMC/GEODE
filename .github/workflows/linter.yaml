@@ -35,4 +35,4 @@ jobs:
         uses: astral-sh/ruff-action@v4.1.0
         with:
           src: "src/geode test"
-          args: "check --output-format=github"
+          args: "check"
