@@ -16,7 +16,7 @@ Next-Generation observation ingest, data store, and processing framework.
 ## Documentation
 See our online documentation page [here](https://noaa-emc.github.io/GEODE/)
 
-## Install (basic)
+## Install
 
 From the repository root:
 
@@ -30,12 +30,12 @@ To include optional development tools (for testing/linting):
 python -m pip install -e ".[dev]"
 ```
 
-## Dependencies (basic)
+## Dependencies
 
 - Required runtime dependencies are defined in `pyproject.toml` under `[project].dependencies`
 - Optional development dependencies are defined under `[project.optional-dependencies].dev`
 
-## Run tests (basic)
+## Run tests
 
 From the repository root:
 
