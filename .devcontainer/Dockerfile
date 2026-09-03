@@ -1,4 +1,4 @@
-FROM python:3.12-slim
+FROM python:3.12
 
 ARG USERNAME=developer
 ARG GSL_LITE_REF=v1.1.0
@@ -24,6 +24,8 @@ RUN apt-get update && \
       libopenmpi-dev \
       libomp-dev \
       pybind11-dev \
+      vim \
+      emacs \
       openmpi-bin && \
     rm -rf /var/lib/apt/lists/*
 
@@ -58,11 +60,13 @@ RUN git clone --branch "${BUFR_QUERY_REF}" --depth 1 \
 # Install Python dependencies used by this repository.
 RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir \
+      setuptools>=61 \
+      wheel \
       pytest==9.1.1 \
       ruff==0.16.3 \
       pywis-pubsub==0.12.0 \
       requests==2.34.2 \
-      n
+      netcdf4 \
       xarray>=2025.8.0 \
       icechunk==2.1.2 \
       pybind11==3.0.1 \

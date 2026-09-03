@@ -1,15 +1,14 @@
-name: Exercise Data Retrieval Test
+name: Run Pytests
 
 on:
-  push:
   pull_request:
   schedule:
-    # Run daily at 11:30 UTC to verify data downloads remain functional
+    # Run daily at 11:30 UTC to verify tests still work as expected
     - cron: '30 11 * * *'
 
 jobs:
   test-data:
-    name: Run WIS2 Data Retrieval Test
+    name: Run GEODE Pytests
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -24,8 +23,14 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      # - name: Install GEODE from source
+      #   run: |
+      #     pip install ./
 
-      - name: Run test
+      - name: Run tests
         run: |
-          python -m pytest test/test_wis2_listener.py -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
+          python -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
   

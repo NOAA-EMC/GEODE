@@ -1,0 +1,1 @@
+../../../../parm/wmo-bufr4/txt/BUFRCREX_TableB_en.txt
