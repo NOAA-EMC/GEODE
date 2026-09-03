@@ -1,16 +1,17 @@
-from ast import literal_eval
 import os
 import pprint
 import sys
+from ast import literal_eval
 
 import pytest
+
 
 sys.path.append(
     os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src")
 )  # Add src/ to sys.path
 
-from geode.utils.bufr_table.__main__ import main, TABLE_B_RESOURCE, CODE_FLAG_RESOURCE
 from geode.utils.bufr_table import BufrCodeFlag, BufrTableB
+from geode.utils.bufr_table.__main__ import main, TABLE_B_RESOURCE, CODE_FLAG_RESOURCE
 
 
 def test_entry_returns_complete_table_b_row() -> None:

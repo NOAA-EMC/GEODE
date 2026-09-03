@@ -1,12 +1,12 @@
-from datetime import datetime, timezone
 import os
 import sys
+from datetime import datetime, timezone
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 
-import xarray as xr
 
 import geode
+import xarray as xr
 
 
 def test_get():
