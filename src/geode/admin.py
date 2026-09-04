@@ -3,6 +3,11 @@ import argparse
 from geode.ingest import ingestors
 
 
+def _print_ingestors():
+    for ingestor in ingestors.directory():
+        print(ingestor)
+
+
 def main():
     parser = argparse.ArgumentParser(description="Admin interface for GEODE.")
     parser.add_argument(
@@ -11,9 +16,7 @@ def main():
     args = parser.parse_args()
 
     if args.list_ingestors:
-        import pprint
-
-        pprint.pprint(ingestors.directory())
+        _print_ingestors()
 
 
 if __name__ == "__main__":
