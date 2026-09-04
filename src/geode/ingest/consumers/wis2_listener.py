@@ -8,12 +8,8 @@ import time
 import requests
 from pywis_pubsub.mqtt import MQTTPubSubClient
 
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "../.."))
-)
-
 from geode.configs.geode_config import geode_config
-from geode.ingest.ingestors.ingestor_factory import get_ingestor
+from geode.ingest import ingestors
 
 
 class Wis2Listener:
@@ -147,11 +143,12 @@ class Wis2Listener:
             return
 
         # Process the downloaded file with the appropriate ingestor if available
-        ingestor_class = get_ingestor(wis_id)
+        ingestor_class = ingestors.make(f"wis2/{wis_id}")
 
         if ingestor_class:
             ingestor = ingestor_class()
             ingestor.process(downloaded_file_path)
+            os.remove(downloaded_file_path)
 
         if self.on_message_callback:
             self.on_message_callback()

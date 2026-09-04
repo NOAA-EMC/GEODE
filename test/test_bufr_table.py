@@ -1,32 +1,17 @@
+import os
 import pprint
+import sys
 from ast import literal_eval
-from pathlib import Path
 
 import pytest
 
-from geode.admin import main
 from geode.utils.bufr_table import BufrCodeFlag, BufrTableB
-
-TABLE_B_PATH = (
-    Path(__file__).resolve().parents[1]
-    / "parm"
-    / "wmo-bufr4"
-    / "txt"
-    / "BUFRCREX_TableB_en.txt"
-)
-CODE_FLAG_PATH = (
-    Path(__file__).resolve().parents[1]
-    / "src"
-    / "geode"
-    / "data"
-    / "resources"
-    / "BUFRCREX_CodeFlag_en.txt"
-)
+from geode.utils.bufr_table.__main__ import CODE_FLAG_RESOURCE, TABLE_B_RESOURCE, main
 
 
 def test_entry_returns_complete_table_b_row() -> None:
     """Return the original metadata for an FXY descriptor."""
-    table = BufrTableB(TABLE_B_PATH)
+    table = BufrTableB(TABLE_B_RESOURCE)
 
     assert table.entry("001003") == {
         "ClassNo": "01",
@@ -48,7 +33,7 @@ def test_entry_returns_complete_table_b_row() -> None:
 
 def test_entry_rejects_invalid_fxy() -> None:
     """Reject malformed descriptor identifiers before a lookup occurs."""
-    table = BufrTableB(TABLE_B_PATH)
+    table = BufrTableB(TABLE_B_RESOURCE)
 
     with pytest.raises(ValueError, match="six-digit"):
         table.entry("1003")
@@ -56,7 +41,7 @@ def test_entry_rejects_invalid_fxy() -> None:
 
 def test_entry_returns_complete_code_flag_row() -> None:
     """Return the original CodeFlag metadata for an FXY and code figure."""
-    table = BufrCodeFlag(CODE_FLAG_PATH)
+    table = BufrCodeFlag(CODE_FLAG_RESOURCE)
 
     assert table.entry("001003", "1") == {
         "FXY": "001003",
@@ -75,7 +60,7 @@ def test_info_bufr_prints_table_b_entry(capsys: pytest.CaptureFixture[str]) -> N
     """Print the requested complete Table B entry to standard output."""
     main(["info", "bufr", "001003"])
 
-    assert literal_eval(capsys.readouterr().out) == BufrTableB(TABLE_B_PATH).entry(
+    assert literal_eval(capsys.readouterr().out) == BufrTableB(TABLE_B_RESOURCE).entry(
         "001003"
     )
 
@@ -85,6 +70,6 @@ def test_info_bufr_prints_code_flag_entry(capsys: pytest.CaptureFixture[str]) ->
     main(["info", "bufr", "001003", "1"])
 
     assert capsys.readouterr().out == (
-        f"{pprint.pformat(BufrTableB(TABLE_B_PATH).entry('001003'), sort_dicts=False)}\n"
-        f"{pprint.pformat(BufrCodeFlag(CODE_FLAG_PATH).entry('001003', '1'), sort_dicts=False)}\n"
+        f"{pprint.pformat(BufrTableB(TABLE_B_RESOURCE).entry('001003'), sort_dicts=False)}\n"
+        f"{pprint.pformat(BufrCodeFlag(CODE_FLAG_RESOURCE).entry('001003', '1'), sort_dicts=False)}\n"
     )

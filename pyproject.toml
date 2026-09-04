@@ -6,15 +6,16 @@ build-backend = "setuptools.build_meta"
 name = "geode"
 version = "0.0.0"
 description = "Geospatial Earth Observation Data Engine"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
-	"icechunk==2.1.2",
+	"numpy<2,>=1.23.4,",
+	"icechunk>=1.1.21",
 	"netCDF4",
-	"pywis-pubsub==0.12.0",
+	"pywis-pubsub>=0.12.0",
 	"PyYAML",
-	"requests==2.34.2",
+	"requests>=2.32.3",
 	"SQLAlchemy",
-	"wxflow==0.4.2",
+	"wxflow>=0.2.0",
 	"xarray>=2025.8.0",
 ]
 
@@ -25,10 +26,11 @@ dev = [
 ]
 
 [project.scripts]
-geode = "geode.admin:main"
+geode_admin = "geode.admin:main"
+bufr_table = "geode.utils.bufr_table.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
 [tool.setuptools.package-data]
-"geode.data.resources" = ["BUFRCREX_TableB_en.txt", "BUFRCREX_CodeFlag_en.txt"]
+"geode.utils.bufr_table.resources" = ["BUFRCREX_TableB_en.txt", "BUFRCREX_CodeFlag_en.txt"]

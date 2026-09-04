@@ -1,8 +1,10 @@
 import os
 import shutil
+from datetime import datetime
 
 import yaml
 
+from geode.configs import GeodeConfigPath, PackageConfigDir
 from geode.configs.config_base import (
     BoolField,
     Choices,
@@ -12,10 +14,7 @@ from geode.configs.config_base import (
     ResolvedPathField,
     StrField,
 )
-
-ConfigDir = os.path.realpath(
-    os.path.join(os.path.dirname(__file__), "..", "..", "..", "configs")
-)
+from geode.configs.ncep_dump_config import dump_config
 
 # Ingestor Configuration
 
@@ -65,7 +64,7 @@ class BufrConfig(ConfigBase):
 
     @property
     def map_dir(self) -> str:
-        return os.path.join(ConfigDir, "bufr")
+        return os.path.join(PackageConfigDir, "bufr")
 
 
 # Database Configuration
@@ -111,13 +110,25 @@ class NetCDFLakeConfig(LakeConfig):
     split_by = Choices({"year", "month", "day"})
 
 
+# NCEP DUMP Configuration
+
+
+class NcepDumpConfig(ConfigBase):
+    root_path = StrField()
+
+    def get_file_paths(self, dump_id: str, day: datetime) -> list[str]:
+        src_path = os.path.join(self.root_path, f"gdas.{day.strftime('%Y%m%d')}")
+        rel_paths = dump_config.get_file_paths(dump_id)
+        return [os.path.join(src_path, rel_path) for rel_path in rel_paths]
+
+
 # Main Configuration Class
 
 
 class GeodeConfig(ConfigBase):
     root_dir = ResolvedPathField()
     run_for_num_sec = Optional(IntField(), default=None)
-    database = Choices({"sqlite": SqliteConfig(root_dir=root_dir)})
+    # database = Choices({"sqlite": SqliteConfig(root_dir=root_dir)})  # Future
     data_lake = Choices(
         {
             "zarr": ZarrLakeConfig(root_dir=root_dir),
@@ -126,6 +137,7 @@ class GeodeConfig(ConfigBase):
         }
     )
     wis2 = Wis2Config(root_dir=root_dir)
+    ncep_dump = NcepDumpConfig()
     bufr = BufrConfig()
 
     def __init__(self, config_path: str):
@@ -135,5 +147,5 @@ class GeodeConfig(ConfigBase):
 
 
 # create singleton instance of GeodeConfig on module load
-geode_config = GeodeConfig(os.path.join(ConfigDir, "geode_config.yaml"))
+geode_config = GeodeConfig(GeodeConfigPath)
 os.makedirs(geode_config.root_dir, exist_ok=True)

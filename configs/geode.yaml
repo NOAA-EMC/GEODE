@@ -1,10 +1,6 @@
 
-root_dir: "./geode"
+root_dir: ""
 run_for_num_sec: 180
-
-database:
-  type: sqlite
-  db_path: "geode.db"
 
 data_lake:
   type : "icechunk"
@@ -16,5 +12,8 @@ wis2:
   use_websockets: true
   topic: "origin/a/wis2/us-noaa-nws/data/core/weather/#"
   download_dir: "downloads"
+
+ncep_dump:
+  root_path: ""
 
 bufr: null

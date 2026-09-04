@@ -1,0 +1,77 @@
+hours:
+  - "00"
+  - "06"
+  - "12"
+  - "18"
+
+data_types:
+  - id: atms
+    path_template: "{hour}/atmos/gdas.t{hour}z.atms.tm00.bufr_d"
+    num_tasks: 24
+    batch_days: 15
+    
+
+  - id: surface_obs
+    path_template: "{hour}/atmos/gdas.t{hour}z.prepbufr"
+    num_tasks: 4
+    batch_days: 30
+    
+
+  - id: radiosonde
+    path_template: "{hour}/atmos/gdas.t{hour}z.prepbufr"
+    num_tasks: 4
+    batch_days: 30
+    
+
+  - id: ssmis
+    path_template: "{hour}/atmos/gdas.t{hour}z.ssmisu.tm00.bufr_d"
+    memory: 128G
+    num_tasks: 4
+    batch_days: 30
+    
+
+  - id: seviri_asr
+    path_template: "{hour}/atmos/gdas.t{hour}z.sevasr.tm00.bufr_d"
+    memory: 128G
+    num_tasks: 4
+    batch_days: 30
+    
+
+  - id: seviri_csr
+    path_template: "{hour}/atmos/gdas.t{hour}z.sevcsr.tm00.bufr_d"
+    memory: 256G
+    num_tasks: 2
+    batch_days: 15
+    
+
+  - id: amsua
+    path_template: "{hour}/atmos/gdas.t{hour}z.1bamua.tm00.bufr_d"
+    num_tasks: 4
+    batch_days: 30
+    
+
+  - id: ascat
+    path_template: "{hour}/atmos/gdas.t{hour}z.ascatt.tm00.bufr_d"
+    num_tasks: 16
+    batch_days: 30
+    
+
+  - id: viirs
+    path_template: "{hour}/atmos/gdas.t{hour}z.sstvcw.tm00.bufr_d"
+    num_tasks: 24
+    batch_days: 15
+    
+
+  - id: avhrr
+    path_template: "{hour}/atmos/gdas.t{hour}z.avcs{am_pm}.tm00.bufr_d"
+    num_tasks: 64
+    batch_days: 7
+    memory: 128G
+    
+
+  - id: aircraft
+    path_template: "{hour}/atmos/gdas.t{hour}z.prepbufr.acft_profiles"
+    memory: 48G
+    num_tasks: 1
+    batch_days: 15
+    
