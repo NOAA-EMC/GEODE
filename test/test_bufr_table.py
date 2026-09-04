@@ -5,10 +5,6 @@ from ast import literal_eval
 
 import pytest
 
-sys.path.append(
-    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "src")
-)  # Add src/ to sys.path
-
 from geode.utils.bufr_table import BufrCodeFlag, BufrTableB
 from geode.utils.bufr_table.__main__ import CODE_FLAG_RESOURCE, TABLE_B_RESOURCE, main
 

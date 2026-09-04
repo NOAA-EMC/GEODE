@@ -4,8 +4,8 @@ from importlib.resources import as_file, files
 
 from geode.utils.bufr_table import BufrCodeFlag, BufrTableB
 
-TABLE_B_RESOURCE = files("geode.utils.bufr_table").joinpath("BUFRCREX_TableB_en.txt")
-CODE_FLAG_RESOURCE = files("geode.utils.bufr_table").joinpath(
+TABLE_B_RESOURCE = files("geode.utils.bufr_table.resources").joinpath("BUFRCREX_TableB_en.txt")
+CODE_FLAG_RESOURCE = files("geode.utils.bufr_table.resources").joinpath(
     "BUFRCREX_CodeFlag_en.txt"
 )
 

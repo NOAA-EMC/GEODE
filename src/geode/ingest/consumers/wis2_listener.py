@@ -8,10 +8,6 @@ import time
 import requests
 from pywis_pubsub.mqtt import MQTTPubSubClient
 
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "../.."))
-)
-
 from geode.configs.geode_config import geode_config
 from geode.ingest import ingestors
 
