@@ -2,6 +2,9 @@ name: Run Pytests
 
 on:
   pull_request:
+  push:
+    branches:
+      - develop
   schedule:
     # Run daily at 11:30 UTC to verify tests still work as expected
     - cron: '30 11 * * *'
