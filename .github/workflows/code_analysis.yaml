@@ -84,7 +84,7 @@ jobs:
           pip install bandit[toml]
 
       - name: Run bandit
-        run: bandit -r . -x test
+        run: bandit -r . -ll -x test
 
   pip-audit:
     name: Dependency vulnerability scan (pip-audit)
