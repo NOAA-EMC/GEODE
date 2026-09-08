@@ -44,7 +44,11 @@ if __name__ == "__main__":
     parser.add_argument("end_date", type=str, help="End date in YYYY-MM-DD format")
     args = parser.parse_args()
 
-    start_date = datetime.datetime.strptime(args.start_date, "%Y-%m-%d").astimezone(datetime.UTC)
-    end_date = datetime.datetime.strptime(args.end_date, "%Y-%m-%d").astimezone(datetime.UTC)
+    start_date = datetime.datetime.strptime(args.start_date, "%Y-%m-%d").astimezone(
+        datetime.UTC
+    )
+    end_date = datetime.datetime.strptime(args.end_date, "%Y-%m-%d").astimezone(
+        datetime.UTC
+    )
 
     NcepDumpReader().ingest(args.id, start_date, end_date)
