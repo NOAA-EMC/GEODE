@@ -8,25 +8,17 @@ from glob import glob
 import pytest
 import requests
 
-from geode.configs import ncep_dump_config
 from geode.configs.geode_config import geode_config
 from geode.ingest.consumers import ncep_dump_reader
-
-DataDir = os.path.join(os.path.dirname(__file__), "data")
-DownloadDir = DataDir
-DumpDir = os.path.join(DataDir, "dump")
-LakeDir = os.path.join(DataDir, "lake")
-
-ConfigsDir = os.path.realpath(os.path.join(os.path.dirname(__file__), "configs"))
 
 
 @pytest.fixture(scope="module")
 def download_resources():
-    os.makedirs(DataDir, exist_ok=True)
-    os.makedirs(DownloadDir, exist_ok=True)
+    download_dir = os.path.join(geode_config.root_dir, "downloads")
+    os.makedirs(download_dir, exist_ok=True)
 
     zip_url = "https://ftp.emc.ncep.noaa.gov/static_files/public/bufr-query/bufr_query-0.0.2.tgz"
-    zip_path = os.path.join(DownloadDir, "bufr_query-0.0.2.tgz")
+    zip_path = os.path.join(download_dir, "bufr_query-0.0.2.tgz")
 
     if not os.path.exists(zip_path):
         response = requests.get(zip_url)
@@ -38,7 +30,7 @@ def download_resources():
                 tar_ref.extractall(tmp_dir)
 
             # read the extracted bufr files into a mock dump directory
-            os.makedirs(DumpDir, exist_ok=True)
+            os.makedirs(geode_config.ncep_dump.root_path, exist_ok=True)
 
             testdata_dir = os.path.join(tmp_dir, "remote_data", "testdata")
             if os.path.exists(testdata_dir):
@@ -46,7 +38,7 @@ def download_resources():
                     for dest_loc in ["gdas.20240101", "gdas.20240102"]:
                         for dest_hr in ["00", "06", "12", "18"]:
                             dest_path = os.path.join(
-                                DumpDir,
+                                geode_config.ncep_dump.root_path,
                                 dest_loc,
                                 dest_hr,
                                 "atmos",
@@ -54,19 +46,14 @@ def download_resources():
                             )
                             os.makedirs(os.path.dirname(dest_path), exist_ok=True)
                             shutil.copy(bufr_file, dest_path)
+    yield
+
+@pytest.fixture()
+def cleanup(download_resources):
+    shutil.rmtree(geode_config.data_lake.full_base_path, ignore_errors=True)
 
 
-@pytest.fixture(scope="module")
-def set_configs(download_resources):
-    geode_config.data_lake.base_dir = LakeDir
-    geode_config.ncep_dump.root_path = DumpDir
-    ncep_dump_config.dump_config = ncep_dump_config.DumpConfig(
-        os.path.join(ConfigsDir, "ncep_dump.yaml")
-    )
-
-
-def test_ncep_dump_reader(set_configs):
-
+def test_ncep_dump_reader(cleanup):
     success = True
 
     print("Starting test_ncep_dump_reader")

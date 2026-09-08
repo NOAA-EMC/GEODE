@@ -1,0 +1,19 @@
+
+root_dir: "/tmp/geode_test/"
+run_for_num_sec: 180
+
+data_lake:
+  type : "icechunk"
+  base_dir: "lake"
+
+wis2:
+  broker_address: "wis2node.globaldata.nws.noaa.gov"
+  broker_port: 443
+  use_websockets: true
+  topic: "origin/a/wis2/us-noaa-nws/data/core/weather/#"
+  download_dir: "wis2"
+
+ncep_dump:
+  root_path: "/tmp/geode_test/dump"
+
+bufr: null
