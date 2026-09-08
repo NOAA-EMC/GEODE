@@ -6,3 +6,7 @@ wis2-data-tmp
 *.egg-info/
 .venv
 .vscode
+
+# Test scratch dirs
+test/data
+test/test_lake
