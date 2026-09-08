@@ -48,8 +48,6 @@ class _ConfigPaths:
             if os.path.exists(package_config_file) and not os.path.exists(
                 target_config_file
             ):
-                import shutil
-
                 shutil.copy(package_config_file, target_config_file)
 
                 print(
