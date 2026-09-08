@@ -7,10 +7,10 @@ from glob import glob
 
 import pytest
 import requests
+
 from geode.configs import ncep_dump_config
 from geode.configs.geode_config import geode_config
 from geode.ingest.consumers import ncep_dump_reader
-
 
 DataDir = os.path.join(os.path.dirname(__file__), "data")
 DownloadDir = DataDir
