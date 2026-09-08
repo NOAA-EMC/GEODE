@@ -6,9 +6,9 @@ ARG BUFR_QUERY_REF=v0.0.5
 
 # Provide the configuration expected by the GitHub Actions container.
 COPY configs/geode.yaml /tmp/geode.yaml
-RUN mkdir -p /root/.config/geode && \
+RUN mkdir -p /github/home/.config/geode && \
     sed 's|^root_dir: ""$|root_dir: "/__w/geode/geode"|' \
-      /tmp/geode.yaml > /root/.config/geode/geode.yaml && \
+      /tmp/geode.yaml > /github/home/.config/geode/geode.yaml && \
     rm /tmp/geode.yaml
 
 # Install system dependencies required by BUFR tooling.
