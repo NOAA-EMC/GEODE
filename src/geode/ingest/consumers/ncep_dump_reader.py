@@ -1,6 +1,6 @@
 import argparse
 import sys
-from datetime import datetime, timedelta, timezone
+import datetime
 
 import bufr
 
@@ -19,7 +19,7 @@ class NcepDumpReader:
         current_date = start_date
         while current_date <= end_date:
             date_list.append(current_date)
-            current_date += timedelta(days=1)
+            current_date += datetime.timedelta(days=1)
         return date_list
 
     def ingest(self, dump_id: str, start_date: datetime, end_date: datetime) -> None:
@@ -44,7 +44,7 @@ if __name__ == "__main__":
     parser.add_argument("end_date", type=str, help="End date in YYYY-MM-DD format")
     args = parser.parse_args()
 
-    start_date = datetime.strptime(args.start_date, "%Y-%m-%d").astimezone(timezone.utc)
-    end_date = datetime.strptime(args.end_date, "%Y-%m-%d").astimezone(timezone.utc)
+    start_date = datetime.datetime.strptime(args.start_date, "%Y-%m-%d").astimezone(datetime.UTC)
+    end_date = datetime.datetime.strptime(args.end_date, "%Y-%m-%d").astimezone(datetime.UTC)
 
     NcepDumpReader().ingest(args.id, start_date, end_date)

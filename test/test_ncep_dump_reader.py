@@ -1,10 +1,9 @@
+import datetime
 import os
 import shutil
-import sys
 import tarfile
 import tempfile
 
-from datetime import datetime, timezone
 from glob import glob
 
 import pytest
@@ -77,8 +76,8 @@ def test_ncep_dump_reader(set_configs):
     reader = ncep_dump_reader.NcepDumpReader()
     reader.ingest(
         "mhs",
-        start_date=datetime(2024, 1, 1, tzinfo=timezone.utc),
-        end_date=datetime(2024, 1, 1, tzinfo=timezone.utc),
+        start_date=datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC),
+        end_date=datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC),
     )
 
     # test_data_dir = os.path.join(geode_config.root_dir, "test")

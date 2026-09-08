@@ -1,6 +1,4 @@
-import os
-import sys
-from datetime import datetime, timezone
+import datetime
 
 import xarray as xr
 
@@ -8,8 +6,8 @@ import geode
 
 
 def test_get():
-    start_time = datetime(2026, 8, 20, 0, 0, 0, tzinfo=timezone.utc)
-    end_time = datetime(2026, 8, 20, 0, 0, 0, tzinfo=timezone.utc)
+    start_time = datetime.datetime(2026, 8, 20, 0, 0, 0, tzinfo=datetime.UTC)
+    end_time = datetime.datetime(2026, 8, 20, 0, 0, 0, tzinfo=datetime.UTC)
     result = geode.get("synop", start_time, end_time)
 
     assert isinstance(result, xr.DataTree)
