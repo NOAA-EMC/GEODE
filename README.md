@@ -13,6 +13,9 @@ Next-Generation observation ingest, data store, and processing framework.
 [![Coding Norms](https://github.com/noaa-emc/geode/actions/workflows/linter.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/linter.yaml)
 [![Weekly Container Build](https://github.com/noaa-emc/geode/actions/workflows/build-container.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/build-container.yaml)
 
+<!-- Code Coverage -->
+[![codecov](https://codecov.io/gh/NOAA-EMC/GEODE/branch/develop/graph/badge.svg)](https://codecov.io/gh/NOAA-EMC/GEODE)
+
 ## Documentation
 See our online documentation page [here](https://noaa-emc.github.io/GEODE/)
 
