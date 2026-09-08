@@ -4,6 +4,13 @@ ARG GSL_LITE_REF=v1.1.0
 ARG NCEPLIBS_BUFR_REF=v12.3.0
 ARG BUFR_QUERY_REF=v0.0.5
 
+# Provide the configuration expected by the GitHub Actions container.
+COPY configs/geode.yaml /tmp/geode.yaml
+RUN mkdir -p /root/.config/geode && \
+    sed 's|^root_dir: ""$|root_dir: "/__w/geode/geode"|' \
+      /tmp/geode.yaml > /root/.config/geode/geode.yaml && \
+    rm /tmp/geode.yaml
+
 # Install system dependencies required by BUFR tooling.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
