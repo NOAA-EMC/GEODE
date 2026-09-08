@@ -13,6 +13,7 @@ class AtmsIngestor(ObsBuilderIngestor):
 
         super().__init__("atms", BufrAtmsObsBuilder())
 
+
 @register("ncep_dump/mhs")
 class MhsIngestor(ObsBuilderIngestor):
     def __init__(self):

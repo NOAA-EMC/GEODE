@@ -24,7 +24,6 @@ LakeDir = os.path.join(DataDir, "lake")
 ConfigsDir = os.path.realpath(os.path.join(os.path.dirname(__file__), "configs"))
 
 
-
 @pytest.fixture(scope="module")
 def download_resources():
     os.makedirs(DataDir, exist_ok=True)
@@ -51,7 +50,11 @@ def download_resources():
                     for dest_loc in ["gdas.20240101", "gdas.20240102"]:
                         for dest_hr in ["00", "06", "12", "18"]:
                             dest_path = os.path.join(
-                                DumpDir, dest_loc, dest_hr, "atmos", os.path.basename(bufr_file)
+                                DumpDir,
+                                dest_loc,
+                                dest_hr,
+                                "atmos",
+                                os.path.basename(bufr_file),
                             )
                             os.makedirs(os.path.dirname(dest_path), exist_ok=True)
                             shutil.copy(bufr_file, dest_path)
@@ -61,15 +64,16 @@ def download_resources():
 def set_configs(download_resources):
     geode_config.data_lake.base_dir = LakeDir
     geode_config.ncep_dump.root_path = DumpDir
-    ncep_dump_config.dump_config = \
-        ncep_dump_config.DumpConfig(os.path.join(ConfigsDir, "ncep_dump.yaml"))
+    ncep_dump_config.dump_config = ncep_dump_config.DumpConfig(
+        os.path.join(ConfigsDir, "ncep_dump.yaml")
+    )
 
 
 def test_ncep_dump_reader(set_configs):
 
     success = True
 
-    print ("Starting test_ncep_dump_reader")
+    print("Starting test_ncep_dump_reader")
 
     reader = ncep_dump_reader.NcepDumpReader()
     reader.ingest(
