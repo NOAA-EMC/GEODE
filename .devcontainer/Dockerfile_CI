@@ -4,13 +4,6 @@ ARG GSL_LITE_REF=v1.1.0
 ARG NCEPLIBS_BUFR_REF=v12.3.0
 ARG BUFR_QUERY_REF=v0.0.5
 
-# Provide the configuration expected by the GitHub Actions container.
-COPY configs/geode.yaml /tmp/geode.yaml
-RUN mkdir -p /github/home/.config/geode && \
-    sed 's|^root_dir: ""$|root_dir: "/__w/geode/geode"|' \
-      /tmp/geode.yaml > /github/home/.config/geode/geode.yaml && \
-    rm /tmp/geode.yaml
-
 # Install system dependencies required by BUFR tooling.
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -75,6 +68,15 @@ RUN python -m pip install --no-cache-dir --upgrade pip && \
       icechunk==2.1.2 \
       pybind11==3.0.1 \
       wxflow==0.4.2
+
+# Provide the default configuration expected by GitHub Actions container jobs.
+COPY configs/geode.yaml /tmp/geode.yaml
+RUN mkdir -p /github/home/.config/geode && \
+    if [ ! -f /github/home/.config/geode/geode.yaml ]; then \
+      sed 's|^root_dir: ""$|root_dir: "/__w/geode/geode"|' \
+        /tmp/geode.yaml > /github/home/.config/geode/geode.yaml; \
+    fi && \
+    rm -f /tmp/geode.yaml
 
 # Set default command
 CMD ["/bin/bash"]
