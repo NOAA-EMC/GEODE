@@ -48,6 +48,7 @@ def download_resources():
                             shutil.copy(bufr_file, dest_path)
     yield
 
+
 @pytest.fixture()
 def cleanup(download_resources):
     shutil.rmtree(geode_config.data_lake.full_base_path, ignore_errors=True)

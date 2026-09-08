@@ -41,7 +41,9 @@ class _ConfigPaths:
 
             os.makedirs(config_dir, exist_ok=True)
 
-            package_config_file = os.path.join(cls.get_package_config_dir(), GeodeConfigName)
+            package_config_file = os.path.join(
+                cls.get_package_config_dir(), GeodeConfigName
+            )
             target_config_file = os.path.join(config_dir, GeodeConfigName)
             if os.path.exists(package_config_file) and not os.path.exists(
                 target_config_file
@@ -60,7 +62,9 @@ class _ConfigPaths:
         if xdg_config:
             base_dir = os.path.realpath(xdg_config)
         else:
-            base_dir = os.path.realpath(os.path.join(os.path.expanduser("~"), ".config"))
+            base_dir = os.path.realpath(
+                os.path.join(os.path.expanduser("~"), ".config")
+            )
 
         config_dir = os.path.join(base_dir, AppName)
 
