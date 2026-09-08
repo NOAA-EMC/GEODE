@@ -57,20 +57,13 @@ RUN git clone --branch "${BUFR_QUERY_REF}" --depth 1 \
     make install && \
     rm -rf /tmp/bufr-query
 
-# Install Python dependencies used by this repository.
+# Install Python dependencies declared in pyproject.toml, plus pybind11 which
+# is required to build bufr-query bindings but is not a runtime dependency.
+COPY pyproject.toml /tmp/geode/pyproject.toml
+COPY src /tmp/geode/src
 RUN python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir \
-      setuptools>=61 \
-      wheel \
-      pytest==9.1.1 \
-      ruff==0.16.3 \
-      pywis-pubsub==0.12.0 \
-      requests==2.34.2 \
-      netcdf4 \
-      xarray>=2025.8.0 \
-      icechunk==2.1.2 \
-      pybind11==3.0.1 \
-      wxflow==0.4.2
+    python -m pip install --no-cache-dir "/tmp/geode[dev]" pybind11==3.0.1 && \
+    rm -rf /tmp/geode
 
 # Set working directory
 WORKDIR /home/${USERNAME}
