@@ -1,6 +1,6 @@
 import argparse
-import sys
 import datetime
+import sys
 
 import bufr
 
