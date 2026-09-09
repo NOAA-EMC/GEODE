@@ -74,7 +74,3 @@ data_types:
     memory: 48G
     num_tasks: 1
     batch_days: 15
-
-  - id: mhs
-    path_template: "{hour}/atmos/gdas.t18z.1bmhs.tm00.bufr_d"
-    

@@ -2,6 +2,5 @@ hours:
   - "00"
 
 data_types:
-  - id: mhs
-    path_template: "{hour}/atmos/gdas.t18z.1bmhs.tm00.bufr_d"
-
+  - id: atms
+    path_template: "{hour}/atmos/gdas.t00z.atms.tm00.bufr_d"

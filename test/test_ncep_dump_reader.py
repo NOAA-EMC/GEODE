@@ -55,19 +55,23 @@ def cleanup(download_resources):
 
 
 def test_ncep_dump_reader(cleanup):
-    success = True
+    success = False
 
     print("Starting test_ncep_dump_reader")
 
     reader = ncep_dump_reader.NcepDumpReader()
     reader.ingest(
-        "mhs",
+        "atms",
         start_date=datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC),
         end_date=datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC),
     )
 
-    # test_data_dir = os.path.join(geode_config.root_dir, "test")
-    # geode_config.data_lake.base_dir = test_data_dir
+    result_path = os.path.join(
+        geode_config.data_lake.full_base_path, "atms_n20.icechunk"
+    )
+
+    if os.path.exists(result_path):
+        success = True
 
     assert success, "Listener did not receive any messages"
 
