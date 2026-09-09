@@ -71,3 +71,7 @@ def test_info_bufr_prints_code_flag_entry(capsys: pytest.CaptureFixture[str]) ->
         f"{pprint.pformat(BufrTableB(TABLE_B_RESOURCE).entry('001003'), sort_dicts=False)}\n"
         f"{pprint.pformat(BufrCodeFlag(CODE_FLAG_RESOURCE).entry('001003', '1'), sort_dicts=False)}\n"
     )
+
+
+if __name__ == "__main__":
+    raise SystemExit(pytest.main([__file__, "-v"]))
