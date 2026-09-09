@@ -62,14 +62,5 @@ RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir "/tmp/geode[dev]" pybind11==3.0.1 && \
     rm -rf /tmp/geode
 
-# Provide the default configuration expected by GitHub Actions container jobs.
-COPY configs/geode.yaml /tmp/geode.yaml
-RUN mkdir -p /github/home/.config/geode && \
-    if [ ! -f /github/home/.config/geode/geode.yaml ]; then \
-      sed 's|^root_dir: ""$|root_dir: "/__w/geode/geode"|' \
-        /tmp/geode.yaml > /github/home/.config/geode/geode.yaml; \
-    fi && \
-    rm -f /tmp/geode.yaml
-
 # Set default command
 CMD ["/bin/bash"]
