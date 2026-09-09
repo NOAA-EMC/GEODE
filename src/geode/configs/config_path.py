@@ -23,17 +23,17 @@ class _ConfigPaths:
     def _get_geode_config_dir(cls) -> str:
         def _quick_config_check(config_path: str) -> None:
             if not os.path.exists(config_path):
-                print(f"Configuration file {config_path} not found. Please create it!")
-                sys.exit(1)
+                raise FileNotFoundError(
+                    f"Configuration file {config_path} not found. Please create it!"
+                )
 
             with open(config_path) as config_file:
                 conf = yaml.safe_load(config_file)
 
             if conf["root_dir"] == "":
-                print(
+                raise ValueError(
                     f"Configuration file {config_path} has an empty root_dir. Please set it correctly!"
                 )
-                sys.exit(1)
 
         def _init_config_dir(config_dir: str) -> None:
             if os.path.exists(config_dir):
