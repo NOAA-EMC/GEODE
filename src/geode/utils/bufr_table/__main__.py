@@ -25,7 +25,7 @@ def main(arguments: list[str] | None = None) -> None:
     --------
     >>> main(["info", "bufr", "001003"])
     """
-    parser = argparse.ArgumentParser(prog="geode")
+    parser = argparse.ArgumentParser(prog="bufr_table")
     command_parsers = parser.add_subparsers(dest="command", required=True)
 
     info_parser = command_parsers.add_parser("info", help="Show metadata.")
