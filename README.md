@@ -10,7 +10,7 @@ Next-Generation observation ingest, data store, and processing framework.
 
 <!-- GitHub Actions CI/CD -->
 [![Python Tests on GitHub CI](https://github.com/noaa-emc/geode/actions/workflows/run_pytests.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/run_pytests.yaml)
-[![Coding Norms](https://github.com/noaa-emc/geode/actions/workflows/linter.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/linter.yaml)
+[![Code Analysis](https://github.com/noaa-emc/geode/actions/workflows/code_analysis.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/code_analysis.yaml)
 [![Weekly Container Build](https://github.com/noaa-emc/geode/actions/workflows/build-container.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/build-container.yaml)
 
 <!-- Code Coverage -->
