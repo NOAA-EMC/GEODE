@@ -1,0 +1,6 @@
+hours:
+  - "00"
+
+data_types:
+  - id: atms
+    path_template: "{hour}/atmos/gdas.t00z.atms.tm00.bufr_d"

@@ -7,18 +7,56 @@ import xarray as xr
 from geode.configs.geode_config import geode_config
 
 
+def select_datatree_variables(
+    datatree: xr.DataTree,
+    variables: list[str],
+) -> xr.DataTree:
+    selected = xr.DataTree(name=datatree.name)
+
+    for path in variables:
+        source_node = datatree[path]
+        target_path = path.strip("/").split("/")
+
+        current = selected
+        for group in target_path[:-1]:
+            if group not in current.children:
+                current = current[group] = xr.DataTree(name=group)
+            else:
+                current = current[group]
+
+        variable = target_path[-1]
+        current.dataset = source_node.to_dataset()[[variable]]
+
+    return selected
+
+
 class DataManager:
     def __init__(self):
         self.config = geode_config.data_lake
 
-    def get_file_path(self, data_type: str, timestamp: datetime | None = None) -> str:
+    def get_file_path(
+        self,
+        data_type: str,
+        sub_type: str | None = None,
+        timestamp: datetime | None = None,
+    ) -> str:
         raise NotImplementedError("This method should be implemented by subclasses.")
 
-    def put(self, data_type: str, data_tree: xr.DataTree) -> None:
+    def put(
+        self,
+        data_type: str,
+        data_tree: xr.DataTree,
+        sub_type: str | None = None,
+    ) -> None:
         raise NotImplementedError("This method should be implemented by subclasses.")
 
     def get(
-        self, data_type: str, start_time: datetime, end_time: datetime
+        self,
+        data_type: str,
+        start_time: datetime,
+        end_time: datetime,
+        vars: list[str] | None = None,
+        filter: dict | None = None,
     ) -> xr.DataTree:
         raise NotImplementedError("This method should be implemented by subclasses.")
 
@@ -27,13 +65,21 @@ class IceChunkDataManager(DataManager):
     def __init__(self):
         super().__init__()
 
-    def get_file_path(self, data_type: str, timestamp: datetime | None = None) -> str:
+    def get_file_path(
+        self,
+        data_type: str,
+        sub_type: str | None = None,
+        timestamp: datetime | None = None,
+    ) -> str:
         return os.path.join(
-            geode_config.data_lake.full_base_path, f"{data_type}.icechunk"
+            geode_config.data_lake.full_base_path,
+            f"{data_type}_{sub_type}.icechunk" if sub_type else f"{data_type}.icechunk",
         )
 
-    def put(self, data_type: str, data_tree: xr.DataTree) -> None:
-        file_path = self.get_file_path(data_type)
+    def put(
+        self, data_type: str, data_tree: xr.DataTree, sub_type: str | None = None
+    ) -> None:
+        file_path = self.get_file_path(data_type, sub_type)
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
         storage = ic.local_filesystem_storage(file_path)
@@ -61,6 +107,44 @@ class IceChunkDataManager(DataManager):
         else:
             with repo.transaction("main", message=f"Create {data_type}") as store:
                 data_tree.to_zarr(store, mode="w", zarr_format=3, consolidated=False)
+
+    def get(
+        self,
+        data_type: str,
+        start_time: datetime,
+        end_time: datetime,
+        vars: list[str] | None = None,
+        filter: dict | None = None,
+    ) -> xr.DataTree:
+
+        file_path = self.get_file_path(data_type)
+
+        print("Getting data from file path:", file_path)
+
+        storage = ic.local_filesystem_storage(file_path)
+        repo = ic.Repository.open(storage)
+        session = repo.readonly_session("main")
+
+        datatree = xr.open_datatree(
+            session.store,
+            engine="zarr",
+            zarr_version=3,
+            consolidated=False,
+        )
+
+        # if vars is not None:
+        #    vars.append("Location")
+        #    vars.append("ObsValue/Dimensions")
+        #    vars.append("MetaData/Dimensions")
+
+        # if vars is not None:
+        #     datatree = select_datatree_variables(datatree, vars)
+
+        # if filter is not None:
+        #     for key, value in filter.items():
+        #         datatree = datatree.where(datatree[key].isin(value), drop=True)
+
+        return datatree
 
 
 class ZarrDataManager(DataManager):
@@ -95,8 +179,12 @@ class ZarrDataManager(DataManager):
                 f"{year}_{month:02d}_{day:02d}.zarr",
             )
 
-    def put(self, data_type: str, data_tree: xr.DataTree) -> None:
-        file_path = self.get_file_path(data_type)
+    def put(
+        self, data_type: str, data_tree: xr.DataTree, sub_type: str | None = None
+    ) -> None:
+        file_path = self.get_file_path(
+            f"{data_type}_{sub_type}" if sub_type else data_type
+        )
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
         # create the zarr store if it doesn't exist, otherwise open it in append mode
@@ -136,8 +224,16 @@ class NetCDFDataManager(DataManager):
                 f"{year}_{month:02d}_{day:02d}.nc",
             )
 
-    def put(self, data_type: str, data_tree: xr.DataTree, timestamp: datetime) -> None:
-        file_path = self.get_file_path(data_type, timestamp)
+    def put(
+        self,
+        data_type: str,
+        data_tree: xr.DataTree,
+        timestamp: datetime,
+        sub_type: str | None = None,
+    ) -> None:
+        file_path = self.get_file_path(
+            f"{data_type}_{sub_type}" if sub_type else data_type, timestamp
+        )
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
         # create the NetCDF file if it doesn't exist, otherwise open it in append mode
