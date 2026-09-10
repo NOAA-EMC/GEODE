@@ -1,0 +1,47 @@
+name: Run Pytests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - develop
+  schedule:
+    # Run daily at 11:30 UTC to verify tests still work as expected
+    - cron: '30 11 * * *'
+
+jobs:
+  test-data:
+    name: Run GEODE Pytests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    container:
+      image: ghcr.io/noaa-emc/geode:latest
+      credentials:
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+      options: --user 0
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - name: Install GEODE from source
+        run: |
+          pip install -e .[dev]
+
+      - name: Run tests with coverage
+        run: |
+          python -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning \
+            --cov=geode --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: false
+  

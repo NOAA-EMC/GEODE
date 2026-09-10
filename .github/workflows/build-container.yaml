@@ -3,7 +3,6 @@ name: Build and Push Container
 on:
   push:
     branches:
-      - develop
       - feature/container
   schedule:
     # Runs at 22:00 UTC every Saturday

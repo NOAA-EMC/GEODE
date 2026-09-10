@@ -1,3 +1,4 @@
-from geode.geode import get
+from geode.client import get
+
 
 __all__ = ["get"]

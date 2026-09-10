@@ -9,9 +9,42 @@ Next-Generation observation ingest, data store, and processing framework.
 [![GitHub last commit](https://img.shields.io/github/last-commit/noaa-emc/geode)](https://github.com/noaa-emc/geode/commits/develop)
 
 <!-- GitHub Actions CI/CD -->
-[![WIS2 Listener Tests on GitHub CI](https://github.com/noaa-emc/geode/actions/workflows/test_wis2data.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/test_wis2data.yaml)
+[![Python Tests on GitHub CI](https://github.com/noaa-emc/geode/actions/workflows/run_pytests.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/run_pytests.yaml)
 [![Coding Norms](https://github.com/noaa-emc/geode/actions/workflows/linter.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/linter.yaml)
 [![Weekly Container Build](https://github.com/noaa-emc/geode/actions/workflows/build-container.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/build-container.yaml)
+
+<!-- Code Coverage -->
+[![codecov](https://codecov.io/gh/NOAA-EMC/GEODE/branch/develop/graph/badge.svg)](https://codecov.io/gh/NOAA-EMC/GEODE)
+
+## Documentation
+See our online documentation page [here](https://noaa-emc.github.io/GEODE/)
+
+## Install
+
+From the repository root:
+
+```bash
+python -m pip install -e .
+```
+
+To include optional development tools (for testing/linting):
+
+```bash
+python -m pip install -e ".[dev]"
+```
+
+## Dependencies
+
+- Required runtime dependencies are defined in `pyproject.toml` under `[project].dependencies`
+- Optional development dependencies are defined under `[project.optional-dependencies].dev`
+
+## Run tests
+
+From the repository root:
+
+```bash
+python -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
+```
 
 ## License
 

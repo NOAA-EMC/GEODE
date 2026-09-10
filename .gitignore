@@ -3,3 +3,9 @@
 .DS_Store
 __pycache__
 wis2-data-tmp
+*.egg-info/
+.venv
+.vscode
+.coverage
+coverage.xml
+htmlcov/

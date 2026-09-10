@@ -25,24 +25,14 @@ jobs:
           fi
           echo "Repository root: $GITHUB_WORKSPACE"
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Check Ruff formatting
+        uses: astral-sh/ruff-action@v4.1.0
         with:
-          python-version: "3.12"
+          src: "src/geode test"
+          args: "format --check --diff"
 
-      - name: Install Python lint tooling
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install ruff
-
-      - name: Check Python coding norms
-        shell: bash
-        run: |
-          set -euo pipefail
-          mapfile -t python_files < <(find . -type f -name '*.py' | sort)
-          if [[ ${#python_files[@]} -eq 0 ]]; then
-            echo "WARNING: no Python files found"
-            exit 0
-          fi
-          python -m ruff format --check --diff "${python_files[@]}"
-          python -m ruff check --output-format=github "${python_files[@]}"
+      - name: Check Ruff lint rules
+        uses: astral-sh/ruff-action@v4.1.0
+        with:
+          src: "src/geode test"
+          args: "check"

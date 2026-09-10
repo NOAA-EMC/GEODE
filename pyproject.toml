@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "geode"
+version = "0.0.0"
+description = "Geospatial Earth Observation Data Engine"
+requires-python = ">=3.11"
+dependencies = [
+	"numpy<2,>=1.23.4,",
+	"icechunk>=1.1.21",
+	"netCDF4",
+	"pywis-pubsub>=0.12.0",
+	"PyYAML",
+	"requests>=2.32.3",
+	"SQLAlchemy",
+	"wxflow>=0.2.0",
+	"xarray>=2025.8.0",
+]
+
+[project.optional-dependencies]
+dev = [
+	"pytest==9.1.1",
+	"pytest-cov==7.0.0",
+	"ruff==0.16.3",
+]
+
+[project.scripts]
+geode_admin = "geode.admin:main"
+bufr_table = "geode.utils.bufr_table.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"geode.utils.bufr_table.resources" = ["BUFRCREX_TableB_en.txt", "BUFRCREX_CodeFlag_en.txt"]
+
+[tool.coverage.run]
+source = ["src/geode"]
+branch = true
+
+[tool.coverage.report]
+exclude_lines = [
+	"pragma: no cover",
+	"if __name__ == .__main__.:",
+]

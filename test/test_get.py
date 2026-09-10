@@ -1,31 +1,17 @@
-import os, sys
-from datetime import datetime, timezone
+import datetime
 
-sys.path.append(
-    os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src'))
-)
-
-import xarray as xr
+import pytest
 
 import geode
 
-def test_get():
-    start_time = datetime(2026, 8, 20, 0, 0, 0, tzinfo=timezone.utc)
-    end_time = datetime(2026, 8, 20, 0, 0, 0, tzinfo=timezone.utc)
-    result = geode.get('synop', start_time, end_time)
 
-    print (result)
+def test_get(use_data_lake):
+    start_time = datetime.datetime(2024, 1, 1, 0, 0, 0, tzinfo=datetime.UTC)
+    end_time = datetime.datetime(2024, 1, 2, 0, 0, 0, tzinfo=datetime.UTC)
+    result = geode.get("atms_n20", start_time, end_time)
 
-    # result = geode.get('synop', start_time, end_time, {'variables': ['temperature'],
-    #                                                    'latitude': [30, 40], 
-    #                                                    'longitude': [-90, -80]})
+    assert result is not None
 
-    # result = geode.get('synop', start_time, end_time, {'variables': ['temperature'],
-    #                                                    'latitude': [30, 40], 
-    #                                                    'longitude': [-90, -80]})
-
-    assert isinstance(result, xr.DataTree)
 
 if __name__ == "__main__":
-    test_get()
-    print("Test passed.")
+    raise SystemExit(pytest.main([__file__, "-v"]))

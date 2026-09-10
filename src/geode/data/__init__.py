@@ -1,0 +1,1 @@
+"""Bundled GEODE data resources."""

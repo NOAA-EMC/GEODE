@@ -1,0 +1,17 @@
+name: Validate Branch Name
+on: create
+
+jobs:
+  check-branch-name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify Branch Prefix
+        run: |
+          BRANCH="${GITHUB_REF#refs/heads/}"
+          PATTERN="^(main|develop|(feature|release|hotfix|bugfix|copilot)/.+)$"
+          
+          if [[ ! "$BRANCH" =~ $PATTERN ]]; then
+            # '::error::' creates a highlighted notice on GitHub's UI
+            echo "::error title=Invalid Branch Name::The branch '$BRANCH' breaks naming conventions. Please rename it locally to use feature/, release/, hotfix/, or bugfix/."
+            exit 1
+          fi
