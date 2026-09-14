@@ -14,8 +14,6 @@ class BaseIngestor:
     def _process(self, file_path: str) -> xr.DataTree | dict[xr.DataTree]:
         raise NotImplementedError("Subclasses should implement this method.")
 
-    # In src/geode/ingest/ingestors/base_ingestor.py
-
     def _store(self, data_tree: xr.DataTree | dict[xr.DataTree]) -> None:
         if not data_tree:
             return
