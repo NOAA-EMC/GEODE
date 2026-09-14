@@ -45,7 +45,7 @@ class IasiIngestor(ObsBuilderIngestor):
 @register("ncep_dump/cris")
 class CrisFsrIngestor(ObsBuilderIngestor):
     def __init__(self):
-        from spoc.dump.scripts.atmosphere.radiance_crsfdp import BufrCrisObsBuilder
+        from spoc.dump.scripts.atmosphere.radiance_crsfdb import BufrCrisObsBuilder
 
         super().__init__("cris", BufrCrisObsBuilder())
 

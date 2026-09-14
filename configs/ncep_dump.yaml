@@ -9,7 +9,19 @@ data_types:
     path_template: "{hour}/atmos/gdas.t{hour}z.atms.tm00.bufr_d"
     num_tasks: 24
     batch_days: 15
-    
+
+
+  - id: cris
+    path_template: "{hour}/atmos/gdas.t{hour}z.crisf4.tm00.bufr_d"
+    num_tasks: 24
+    batch_days: 15
+
+
+  - id: iasi
+    path_template: "{hour}/atmos/gdas.t{hour}z.mtiasi.tm00.bufr_d"
+    num_tasks: 24
+    batch_days: 15
+
 
   - id: surface_obs
     path_template: "{hour}/atmos/gdas.t{hour}z.prepbufr"
