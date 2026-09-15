@@ -27,25 +27,25 @@ class BaseIngestor:
             return
         
         for category, tree in trees.items():
-                # Check if any node in the subtree has fallback 'dim_' dimension names
-                has_missing_dims = any(
-                    str(dim).startswith("dim_")
-                    for node in tree.subtree
-                    for var in node.to_dataset(inherit=False).variables.values()
-                    for dim in var.dims
+            # Check if any node in the subtree has fallback 'dim_' dimension names
+            has_missing_dims = any(
+                str(dim).startswith("dim_")
+                for node in tree.subtree
+                for var in node.to_dataset(inherit=False).variables.values()
+                for dim in var.dims
+            )
+
+            if has_missing_dims:
+                cat_label = (
+                    category if category is not None else self.data_type
                 )
-
-                if has_missing_dims:
-                    cat_label = (
-                        category if category is not None else self.data_type
-                    )
-                    print(
-                        f"[SKIP] Skipping category '{cat_label}' - missing dimension data."
-                    )
-                    continue
-
-                target_key = (
-                    f"{self.data_type}_{category}" if category else self.data_type
+                print(
+                    f"[SKIP] Skipping category '{cat_label}' - missing dimension data."
                 )
+                continue
 
-                data_manager.put(target_key, tree)
+            target_key = (
+                f"{self.data_type}_{category}" if category else self.data_type
+            )
+
+            data_manager.put(target_key, tree)
