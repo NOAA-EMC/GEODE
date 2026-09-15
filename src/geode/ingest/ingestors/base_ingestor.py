@@ -26,7 +26,7 @@ class BaseIngestor:
         else:
             return
         
-        for category, tree in data_tree.items():
+        for category, tree in trees.items():
                 # Check if any node in the subtree has fallback 'dim_' dimension names
                 has_missing_dims = any(
                     str(dim).startswith("dim_")
@@ -36,9 +36,11 @@ class BaseIngestor:
                 )
 
                 if has_missing_dims:
-                    cat_label = category if category is not None else self.data_type
+                    cat_label = (
+                        category if category is not None else self.data_type
+                    )
                     print(
-                        f"[SKIP] Skipping category '{category}' - missing dimension data."
+                        f"[SKIP] Skipping category '{cat_label}' - missing dimension data."
                     )
                     continue
 
