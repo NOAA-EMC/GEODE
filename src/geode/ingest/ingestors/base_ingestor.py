@@ -24,13 +24,18 @@ class BaseIngestor:
             for category, tree in data_tree.items():
                 # Convert node to dataset to inspect dimensions
                 ds = tree.to_dataset() if hasattr(tree, "to_dataset") else tree
+
                 # Check if any variable has fallback 'dim_' names
                 has_missing_dims = any(
                     str(dim).startswith("dim_")
                     for var in ds.variables.values()
                     for dim in var.dims
                 )
+
                 if has_missing_dims:
-                    print(f"[SKIP] Skipping category '{category}' - missing dimension data.")
+                    print(
+                        f"[SKIP] Skipping category '{category}' - missing dimension data."
+                    )
                     continue
+
                 data_manager.put(f"{self.data_type}_{category}", tree)
