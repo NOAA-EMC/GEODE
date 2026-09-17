@@ -25,3 +25,10 @@ data_types:
     output_path: "scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/bufr2ioda/gdas.{date}"
     output_file: "gdas.t{hour}z_iasi_{splits/satId}.nc"
     path_mapping: "/scratch3/NCEPDEV/da/Hyundeok.Choi/bufr-query/test/testinput/bufrtest_mtiasi_mapping.yaml"
+
+      #  - id: iasi
+      #    bufr_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/bufr_tank/20260906/b021"
+      #    bufr_file: "xx241"
+      #    output_path: "scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/bufr2ioda/{date}"
+      #    output_file: "t{hour}z_iasi_{splits/satId}.nc"
+      #    path_mapping: "/scratch3/NCEPDEV/da/Hyundeok.Choi/bufr-query/test/testinput/bufrtest_mtiasi_mapping.yaml"      
