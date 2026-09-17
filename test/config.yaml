@@ -1,0 +1,27 @@
+hours:
+  - "00"
+  - "06"
+  - "12"
+  - "18"
+
+data_types:
+  - id: cris
+    bufr_path: "/scratch3/NCEPDEV/global/role.glopara/dump/gdas.{date}/{hour}/atmos"
+    bufr_file: "gdas.t{hour}z.crisf4.tm00.bufr_d"
+    output_path: "scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/bufr2ioda/gdas.{date}"
+    output_file: "gdas.t{hour}z_crisf4_{splits/satId}.nc"  
+    path_mapping: "/scratch3/NCEPDEV/da/Hyundeok.Choi/obsForge/sorc/spoc/dump/config/atmosphere/radiance_cris-fsr.yaml"
+
+  - id: atms
+    bufr_path: "/scratch3/NCEPDEV/global/role.glopara/dump/gdas.{date}/{hour}/atmos"
+    bufr_file: "gdas.t{hour}z.atms.tm00.bufr_d"
+    output_path: "scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/bufr2ioda/gdas.{date}"
+    output_file: "gdas.t{hour}z_atms_{splits/satId}.nc"  
+    mapping_file: "/scratch3/NCEPDEV/da/Hyundeok.Choi/bufr-query/test/testinput/bufrtest_atms_mapping.yaml"
+
+  - id: iasi
+    bufr_path: "/scratch3/NCEPDEV/global/role.glopara/dump/gdas.{date}/{hour}/atmos"
+    bufr_file: "gdas.t{hour}z.mtiasi.tm00.bufr_d"
+    output_path: "scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/bufr2ioda/gdas.{date}"
+    output_file: "gdas.t{hour}z_iasi_{splits/satId}.nc"
+    path_mapping: "/scratch3/NCEPDEV/da/Hyundeok.Choi/bufr-query/test/testinput/bufrtest_mtiasi_mapping.yaml"
