@@ -2,7 +2,11 @@
 set -euo pipefail
 
 using_active_python_env() {
-  python <<'PY'
+  local python_bin
+
+  python_bin="${1}"
+
+  "${python_bin}" <<'PY'
 import os
 import sys
 
@@ -16,6 +20,7 @@ PY
 
 main() {
   local active_python_env
+  local python_bin
   local script_dir
   local repo_root
   local -a pip_install_args
@@ -33,15 +38,21 @@ main() {
     exit 1
   fi
 
+  python_bin="${PYTHON:-$(command -v python || true)}"
+  if [[ -z "${python_bin}" ]]; then
+    echo "FATAL ERROR: Could not find a python interpreter" >&2
+    exit 1
+  fi
+
   cd "${repo_root}"
   pip_install_args=(--no-build-isolation -e ".[dev]")
-  active_python_env="$(using_active_python_env)"
+  active_python_env="$(using_active_python_env "${python_bin}")"
   if [[ "${active_python_env}" != "true" ]]; then
     pip_install_args=(--user "${pip_install_args[@]}")
   fi
 
-  python -m pip install "${pip_install_args[@]}"
-  python -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
+  "${python_bin}" -m pip install "${pip_install_args[@]}"
+  "${python_bin}" -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
 }
 
 main "$@"
