@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -8,11 +9,13 @@ def _create_fake_python(fake_python: Path) -> None:
         """#!/bin/bash
 set -euo pipefail
 if [[ "$#" -eq 0 ]]; then
-  cat >/dev/null
+  while IFS= read -r _line; do
+    :
+  done
   printf '%s\n' "${FAKE_PYTHON_ENV_ACTIVE:-false}"
   exit 0
 fi
-if [[ "${1:-}" == "-c" ]]; then
+if [[ "${1:-}" == "-c" || "${1:-}" == "-" ]]; then
   printf '%s\n' "${FAKE_PYTHON_ENV_ACTIVE:-false}"
   exit 0
 fi
@@ -117,3 +120,48 @@ def test_install_and_test_script_fails_for_invalid_python(tmp_path):
         "FATAL ERROR: PYTHON is set but does not resolve to an executable"
         in result.stderr
     )
+
+
+def test_install_and_test_script_falls_back_to_python3(tmp_path):
+    script_path = Path(__file__).resolve().parents[1] / "dev" / "ush" / "install_and_test.sh"
+    fake_bin = tmp_path / "bin"
+    fake_python3 = fake_bin / "python3"
+    log_path = tmp_path / "python_calls.log"
+    dirname_path = shutil.which("dirname")
+
+    assert dirname_path is not None
+
+    fake_bin.mkdir()
+    _create_fake_python(fake_python3)
+    (fake_bin / "dirname").symlink_to(dirname_path)
+
+    env = os.environ.copy()
+    env.pop("PYTHON", None)
+    env["FAKE_PYTHON_LOG"] = str(log_path)
+    env["FAKE_PYTHON_ENV_ACTIVE"] = "false"
+    env["PATH"] = str(fake_bin)
+
+    subprocess.run(
+        ["/bin/bash", str(script_path)],
+        check=True,
+        env=env,
+    )
+
+    assert log_path.read_text(encoding="utf-8").splitlines() == [
+        "CALL",
+        "-m",
+        "pip",
+        "install",
+        "--user",
+        "--no-build-isolation",
+        "-e",
+        ".[dev]",
+        "CALL",
+        "-m",
+        "pytest",
+        "test/",
+        "-v",
+        "-s",
+        "-W",
+        "error::pytest.PytestUnhandledThreadExceptionWarning",
+    ]

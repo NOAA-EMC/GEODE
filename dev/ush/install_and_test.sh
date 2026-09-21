@@ -6,13 +6,24 @@ using_active_python_env() {
 
   python_bin="${1}"
 
-  "${python_bin}" <<'PY'
+  "${python_bin}" - "${python_bin}" <<'PY'
+import os
+from pathlib import Path
 import sys
 
+python_bin = Path(sys.argv[1]).resolve()
 base_prefix = getattr(sys, "base_prefix", sys.prefix)
 has_virtualenv_prefix = hasattr(sys, "real_prefix") or sys.prefix != base_prefix
+env_roots = [
+    Path(env_path).resolve()
+    for env_path in (os.environ.get("CONDA_PREFIX"), os.environ.get("VIRTUAL_ENV"))
+    if env_path
+]
+matches_active_env = any(
+    env_root == python_bin or env_root in python_bin.parents for env_root in env_roots
+)
 
-print("true" if has_virtualenv_prefix else "false")
+print("true" if has_virtualenv_prefix or matches_active_env else "false")
 PY
 }
 
