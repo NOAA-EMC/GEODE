@@ -2,6 +2,7 @@
 set -euo pipefail
 
 main() {
+  local active_python_env
   local script_dir
   local repo_root
   local -a pip_install_args
@@ -21,7 +22,10 @@ main() {
 
   cd "${repo_root}"
   pip_install_args=(--no-build-isolation -e ".[dev]")
-  if [[ -z "${VIRTUAL_ENV:-}" && -z "${CONDA_PREFIX:-}" ]]; then
+  active_python_env="$(
+    python -c 'import os, sys; print("true" if (hasattr(sys, "real_prefix") or sys.prefix != getattr(sys, "base_prefix", sys.prefix) or os.environ.get("CONDA_PREFIX") or os.environ.get("VIRTUAL_ENV")) else "false")'
+  )"
+  if [[ "${active_python_env}" != "true" ]]; then
     pip_install_args=(--user "${pip_install_args[@]}")
   fi
 
