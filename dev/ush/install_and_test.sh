@@ -47,6 +47,9 @@ main() {
     fi
   else
     python_bin="$(command -v python || true)"
+    if [[ -z "${python_bin}" ]]; then
+      python_bin="$(command -v python3 || true)"
+    fi
   fi
 
   if [[ -z "${python_bin}" ]]; then
