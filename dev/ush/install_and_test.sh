@@ -6,12 +6,12 @@ using_active_python_env() {
 
   python_bin="${1}"
 
-  "${python_bin}" - "${python_bin}" <<'PY'
+  "${python_bin}" - active-env "${python_bin}" <<'PY'
 import os
 from pathlib import Path
 import sys
 
-python_bin = Path(sys.argv[1]).resolve()
+python_bin = Path(sys.argv[2]).resolve()
 base_prefix = getattr(sys, "base_prefix", sys.prefix)
 has_virtualenv_prefix = hasattr(sys, "real_prefix") or sys.prefix != base_prefix
 env_roots = [
@@ -27,14 +27,33 @@ print("true" if has_virtualenv_prefix or matches_active_env else "false")
 PY
 }
 
+supports_user_site_install() {
+  local python_bin
+
+  python_bin="${1}"
+
+  "${python_bin}" - user-site <<'PY'
+import site
+
+print("true" if site.ENABLE_USER_SITE else "false")
+PY
+}
+
 main() {
   local active_python_env
   local python_bin
+  local script_path
   local script_dir
   local repo_root
+  local user_site_supported
   local -a pip_install_args
 
-  script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  script_path="${BASH_SOURCE[0]}"
+  if [[ "${script_path}" == */* ]]; then
+    script_dir="$(cd "${script_path%/*}" && pwd)"
+  else
+    script_dir="$(pwd)"
+  fi
   repo_root="$(cd "${script_dir}/../.." && pwd)"
 
   if [[ ! -f "${repo_root}/pyproject.toml" ]]; then
@@ -72,6 +91,11 @@ main() {
   pip_install_args=(--no-build-isolation -e ".[dev]")
   active_python_env="$(using_active_python_env "${python_bin}")"
   if [[ "${active_python_env}" != "true" ]]; then
+    user_site_supported="$(supports_user_site_install "${python_bin}")"
+    if [[ "${user_site_supported}" != "true" ]]; then
+      echo "FATAL ERROR: --user installs are not supported by the selected python interpreter" >&2
+      exit 1
+    fi
     pip_install_args=(--user "${pip_install_args[@]}")
   fi
 
