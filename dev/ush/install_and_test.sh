@@ -38,7 +38,19 @@ main() {
     exit 1
   fi
 
-  python_bin="${PYTHON:-$(command -v python || true)}"
+  if [[ -n "${PYTHON:-}" ]]; then
+    if command -v "${PYTHON}" >/dev/null 2>&1; then
+      python_bin="$(command -v "${PYTHON}")"
+    elif [[ -x "${PYTHON}" ]]; then
+      python_bin="${PYTHON}"
+    else
+      echo "FATAL ERROR: PYTHON is set but does not resolve to an executable: ${PYTHON}" >&2
+      exit 1
+    fi
+  else
+    python_bin="$(command -v python || true)"
+  fi
+
   if [[ -z "${python_bin}" ]]; then
     echo "FATAL ERROR: Could not find a python interpreter" >&2
     exit 1

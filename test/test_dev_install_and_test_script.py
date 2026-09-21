@@ -97,3 +97,23 @@ def test_install_and_test_script_omits_user_flag_in_virtualenv(tmp_path):
         "-W",
         "error::pytest.PytestUnhandledThreadExceptionWarning",
     ]
+
+
+def test_install_and_test_script_fails_for_invalid_python(tmp_path):
+    script_path = Path(__file__).resolve().parents[1] / "dev" / "ush" / "install_and_test.sh"
+    env = os.environ.copy()
+    env["PYTHON"] = str(tmp_path / "missing-python")
+
+    result = subprocess.run(
+        ["bash", str(script_path)],
+        check=False,
+        capture_output=True,
+        text=True,
+        env=env,
+    )
+
+    assert result.returncode != 0
+    assert (
+        "FATAL ERROR: PYTHON is set but does not resolve to an executable"
+        in result.stderr
+    )
