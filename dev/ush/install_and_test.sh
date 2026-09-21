@@ -7,14 +7,12 @@ using_active_python_env() {
   python_bin="${1}"
 
   "${python_bin}" <<'PY'
-import os
 import sys
 
 base_prefix = getattr(sys, "base_prefix", sys.prefix)
 has_virtualenv_prefix = hasattr(sys, "real_prefix") or sys.prefix != base_prefix
-has_shell_env = bool(os.environ.get("CONDA_PREFIX") or os.environ.get("VIRTUAL_ENV"))
 
-print("true" if has_virtualenv_prefix or has_shell_env else "false")
+print("true" if has_virtualenv_prefix else "false")
 PY
 }
 
