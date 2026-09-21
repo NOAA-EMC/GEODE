@@ -26,6 +26,7 @@ main() {
 
   (
     cd "${repo_root}"
+    python -m pip install --user "setuptools>=61,!=79.0.1"
     python -m pip install --user --no-build-isolation -e ".[dev]"
     python -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
   )
