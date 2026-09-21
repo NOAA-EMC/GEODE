@@ -92,20 +92,22 @@ main() {
     exit 1
   fi
 
-  cd "${repo_root}"
-  pip_install_args=(--no-build-isolation -e ".[dev]")
-  active_python_env="$(using_active_python_env "${python_bin}")"
-  if [[ "${active_python_env}" != "true" ]]; then
-    user_site_supported="$(supports_user_site_install "${python_bin}")"
-    if [[ "${user_site_supported}" != "true" ]]; then
-      echo "FATAL ERROR: --user installs are not supported by the selected python interpreter" >&2
-      exit 1
+  (
+    cd "${repo_root}"
+    pip_install_args=(--no-build-isolation -e ".[dev]")
+    active_python_env="$(using_active_python_env "${python_bin}")"
+    if [[ "${active_python_env}" != "true" ]]; then
+      user_site_supported="$(supports_user_site_install "${python_bin}")"
+      if [[ "${user_site_supported}" != "true" ]]; then
+        echo "FATAL ERROR: --user installs are not supported by the selected python interpreter" >&2
+        exit 1
+      fi
+      pip_install_args=(--user "${pip_install_args[@]}")
     fi
-    pip_install_args=(--user "${pip_install_args[@]}")
-  fi
 
-  "${python_bin}" -m pip install "${pip_install_args[@]}"
-  "${python_bin}" -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
+    "${python_bin}" -m pip install "${pip_install_args[@]}"
+    "${python_bin}" -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
+  )
 }
 
 main "$@"
