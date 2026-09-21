@@ -7,6 +7,11 @@ def _create_fake_python(fake_python: Path) -> None:
     fake_python.write_text(
         """#!/bin/bash
 set -euo pipefail
+if [[ "$#" -eq 0 ]]; then
+  cat >/dev/null
+  printf '%s\n' "${FAKE_PYTHON_ENV_ACTIVE:-false}"
+  exit 0
+fi
 if [[ "${1:-}" == "-c" ]]; then
   printf '%s\n' "${FAKE_PYTHON_ENV_ACTIVE:-false}"
   exit 0
