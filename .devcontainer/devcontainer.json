@@ -20,7 +20,7 @@
       }
     }
   },
-  "postCreateCommand": "echo \"Container setup complete\"",
+  "postCreateCommand": "git submodule update --init --recursive && echo \"Container setup complete\"",
   "features": {
     "ghcr.io/devcontainers/features/git:1": {}
   },
