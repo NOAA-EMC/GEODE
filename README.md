@@ -46,6 +46,12 @@ From the repository root:
 python -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
 ```
 
+To install GEODE for local development and run the test suite in one step:
+
+```bash
+bash dev/ush/install_and_test.sh
+```
+
 ## License
 
 This project is part of NOAA-EMC Ecosystem. 
