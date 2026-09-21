@@ -58,11 +58,11 @@ RUN git clone --branch "${BUFR_QUERY_REF}" --depth 1 \
     rm -rf /tmp/bufr-query
 
 # Install Python dependencies declared in pyproject.toml, plus pybind11 which
-# is required to build bufr-query bindings but is not a runtime dependency.
+# is required to build bufr-query bindings, and cloud storage CLIs for S3/GCS.
 COPY pyproject.toml /tmp/geode/pyproject.toml
 COPY src /tmp/geode/src
 RUN python -m pip install --no-cache-dir --upgrade pip && \
-    python -m pip install --no-cache-dir "/tmp/geode[dev]" pybind11==3.0.1 && \
+    python -m pip install --no-cache-dir "/tmp/geode[dev]" pybind11==3.0.1 awscli gsutil && \
     rm -rf /tmp/geode
 
 # Set working directory
