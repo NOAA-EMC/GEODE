@@ -4,6 +4,7 @@ set -euo pipefail
 main() {
   local script_dir
   local repo_root
+  local -a pip_install_args
 
   script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   repo_root="$(cd "${script_dir}/../.." && pwd)"
@@ -19,7 +20,12 @@ main() {
   fi
 
   cd "${repo_root}"
-  python -m pip install --user --no-build-isolation -e ".[dev]"
+  pip_install_args=(--no-build-isolation -e ".[dev]")
+  if [[ -z "${VIRTUAL_ENV:-}" && -z "${CONDA_PREFIX:-}" ]]; then
+    pip_install_args=(--user "${pip_install_args[@]}")
+  fi
+
+  python -m pip install "${pip_install_args[@]}"
   python -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
 }
 
