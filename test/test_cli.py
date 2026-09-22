@@ -59,6 +59,36 @@ def test_geode_get_preserves_public_signature() -> None:
     ]
 
 
+def test_main_uses_sys_argv_for_ncep_dump_reader(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    observed: dict[str, object] = {}
+
+    class FakeReader:
+        def ingest(
+            self,
+            dump_id: str,
+            start_date: datetime.datetime,
+            end_date: datetime.datetime,
+        ) -> None:
+            observed["dump_id"] = dump_id
+            observed["start_date"] = start_date
+            observed["end_date"] = end_date
+
+    monkeypatch.setattr(cli, "_create_ncep_dump_reader", lambda: FakeReader())
+    monkeypatch.setattr(
+        "sys.argv",
+        ["geode", "ingest", "ncep_dump_reader", "atms", "2026-08-01", "2026-08-02"],
+    )
+
+    assert cli.main() == 0
+    assert observed == {
+        "dump_id": "atms",
+        "start_date": datetime.datetime(2026, 8, 1, tzinfo=datetime.UTC),
+        "end_date": datetime.datetime(2026, 8, 2, tzinfo=datetime.UTC),
+    }
+
+
 def test_main_uses_sys_argv_when_arguments_are_omitted(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
