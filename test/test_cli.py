@@ -137,9 +137,7 @@ def test_geode_cli_surfaces_lazy_import_failures(monkeypatch):
     monkeypatch.setattr(builtins, "__import__", fake_import)
 
     with pytest.raises(ModuleNotFoundError, match="bufr"):
-        cli.main(
-            ["ingest", "ncep_dump_reader", "atms", "2026-08-01", "2026-09-02"]
-        )
+        cli.main(["ingest", "ncep_dump_reader", "atms", "2026-08-01", "2026-09-02"])
 
 
 def test_geode_cli_module_entrypoint_dispatches_wis2_listener(monkeypatch):

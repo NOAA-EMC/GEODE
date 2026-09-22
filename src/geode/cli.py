@@ -13,13 +13,9 @@ def _parse_utc_date(value: str) -> datetime.datetime:
         ) from error
 
     if value != parsed.isoformat():
-        raise argparse.ArgumentTypeError(
-            f"invalid date '{value}': expected YYYY-MM-DD"
-        )
+        raise argparse.ArgumentTypeError(f"invalid date '{value}': expected YYYY-MM-DD")
 
-    return datetime.datetime.combine(
-        parsed, datetime.time.min, tzinfo=datetime.UTC
-    )
+    return datetime.datetime.combine(parsed, datetime.time.min, tzinfo=datetime.UTC)
 
 
 def _run_ncep_dump_reader(args: argparse.Namespace) -> int:
@@ -43,9 +39,7 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     command_parsers = parser.add_subparsers(dest="command", required=True)
 
-    ingest_parser = command_parsers.add_parser(
-        "ingest", help="Run an ingest consumer."
-    )
+    ingest_parser = command_parsers.add_parser("ingest", help="Run an ingest consumer.")
     ingest_parsers = ingest_parser.add_subparsers(dest="consumer", required=True)
 
     ncep_dump_parser = ingest_parsers.add_parser(
