@@ -1,7 +1,9 @@
 import datetime
+import inspect
 
 import pytest
 
+import geode
 from geode import cli
 
 
@@ -45,6 +47,16 @@ def test_main_dispatches_wis2_listener(monkeypatch: pytest.MonkeyPatch) -> None:
 
     assert cli.main(["ingest", "wis2_listener"]) == 0
     assert observed["listen_called"] is True
+
+
+def test_geode_get_preserves_public_signature() -> None:
+    assert list(inspect.signature(geode.get).parameters) == [
+        "data_type",
+        "start_time",
+        "end_time",
+        "vars",
+        "filter",
+    ]
 
 
 def test_main_uses_sys_argv_when_arguments_are_omitted(
