@@ -1,3 +1,4 @@
+import builtins
 import datetime
 import sys
 import types
@@ -122,3 +123,19 @@ def test_geode_cli_main_uses_process_argv(monkeypatch):
 
     assert cli.main() == 0
     assert call_count == 1
+
+
+def test_geode_cli_surfaces_lazy_import_failures(monkeypatch):
+    original_import = builtins.__import__
+
+    def fake_import(name, globals=None, locals=None, fromlist=(), level=0):
+        if name == "geode.ingest.consumers.ncep_dump_reader":
+            raise ModuleNotFoundError("No module named 'bufr'")
+        return original_import(name, globals, locals, fromlist, level)
+
+    monkeypatch.setattr(builtins, "__import__", fake_import)
+
+    with pytest.raises(ModuleNotFoundError, match="bufr"):
+        cli.main(
+            ["ingest", "ncep_dump_reader", "atms", "2026-08-01", "2026-09-02"]
+        )
