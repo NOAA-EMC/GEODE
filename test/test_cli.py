@@ -90,7 +90,14 @@ def test_geode_cli_returns_handler_exit_code(monkeypatch):
     class FakeParser:
         def parse_args(self, argv):
             assert argv == ["ingest", "wis2_listener"]
-            return types.SimpleNamespace(handler=lambda _: 7)
+            parsed_args = types.SimpleNamespace()
+
+            def handler(received_args):
+                assert received_args is parsed_args
+                return 7
+
+            parsed_args.handler = handler
+            return parsed_args
 
     monkeypatch.setattr(cli, "_build_parser", lambda: FakeParser())
 
