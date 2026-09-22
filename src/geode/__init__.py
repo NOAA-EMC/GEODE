@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import TYPE_CHECKING, Any
 
-import xarray as xr
+if TYPE_CHECKING:
+    from xarray import DataTree
+else:
+    DataTree = Any
 
 __all__ = ["get"]
 
@@ -13,7 +17,7 @@ def get(
     end_time: datetime | str,
     vars: list[str] | None = None,
     filter: dict | None = None,
-) -> xr.DataTree:
+) -> DataTree:
     from geode.client import get as _get
 
     return _get(

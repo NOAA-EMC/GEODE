@@ -1,5 +1,6 @@
 import datetime
 import inspect
+import typing
 
 import pytest
 
@@ -81,6 +82,10 @@ def test_geode_get_preserves_public_signature() -> None:
         "vars",
         "filter",
     ]
+
+
+def test_geode_get_type_hints_resolve_without_importing_xarray() -> None:
+    assert "return" in typing.get_type_hints(geode.get)
 
 
 def test_main_uses_sys_argv_for_ncep_dump_reader(
