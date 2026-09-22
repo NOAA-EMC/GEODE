@@ -47,6 +47,22 @@ def test_main_dispatches_wis2_listener(monkeypatch: pytest.MonkeyPatch) -> None:
     assert observed["listen_called"] is True
 
 
+def test_main_uses_sys_argv_when_arguments_are_omitted(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    observed = {"listen_called": False}
+
+    class FakeListener:
+        def listen(self) -> None:
+            observed["listen_called"] = True
+
+    monkeypatch.setattr(cli, "_create_wis2_listener", lambda: FakeListener())
+    monkeypatch.setattr("sys.argv", ["geode", "ingest", "wis2_listener"])
+
+    assert cli.main() == 0
+    assert observed["listen_called"] is True
+
+
 def test_main_rejects_invalid_date(capsys: pytest.CaptureFixture[str]) -> None:
     with pytest.raises(SystemExit) as exc_info:
         cli.main(["ingest", "ncep_dump_reader", "atms", "2026-8-01", "2026-08-02"])
