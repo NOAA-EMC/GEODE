@@ -1,5 +1,6 @@
 import builtins
 import datetime
+import runpy
 import sys
 import types
 
@@ -139,3 +140,27 @@ def test_geode_cli_surfaces_lazy_import_failures(monkeypatch):
         cli.main(
             ["ingest", "ncep_dump_reader", "atms", "2026-08-01", "2026-09-02"]
         )
+
+
+def test_geode_cli_module_entrypoint_dispatches_wis2_listener(monkeypatch):
+    call_count = 0
+
+    class FakeListener:
+        def listen(self):
+            nonlocal call_count
+            call_count += 1
+
+    _install_fake_consumer_module(
+        monkeypatch,
+        "geode.ingest.consumers.wis2_listener",
+        "Wis2Listener",
+        FakeListener,
+    )
+    monkeypatch.delitem(sys.modules, "geode.cli", raising=False)
+    monkeypatch.setattr(sys, "argv", ["geode", "ingest", "wis2_listener"])
+
+    with pytest.raises(SystemExit) as error:
+        runpy.run_module("geode.cli", run_name="__main__")
+
+    assert error.value.code == 0
+    assert call_count == 1
