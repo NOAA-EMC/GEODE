@@ -85,7 +85,7 @@ def _build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Sequence[str] | None = None) -> int:
     parser = _build_parser()
-    normalized_argv = sys.argv[1:] if argv is None else argv
+    normalized_argv = sys.argv[1:] if argv is None else list(argv)
     args = parser.parse_args(normalized_argv)
     return args.handler(args)
 
