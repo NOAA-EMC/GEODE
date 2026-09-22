@@ -102,3 +102,13 @@ def test_geode_cli_returns_handler_exit_code(monkeypatch):
     monkeypatch.setattr(cli, "_build_parser", lambda: FakeParser())
 
     assert cli.main(["ingest", "wis2_listener"]) == 7
+
+
+def test_geode_cli_main_ignores_host_process_args(monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["pytest", "--maxfail=1"])
+
+    with pytest.raises(SystemExit) as error:
+        cli.main()
+
+    assert error.value.code == 2
+    assert "the following arguments are required: command" in capsys.readouterr().err
