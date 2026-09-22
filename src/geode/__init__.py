@@ -1,19 +1,14 @@
-from datetime import datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    import xarray as xr
+    from geode.client import get as get
 
 
-def get(
-    data_type: str,
-    start_time: datetime | str,
-    end_time: datetime | str,
-    vars: list[str] | None = None,
-    filter: dict | None = None,
-) -> "xr.DataTree":
-    from geode.client import get as _get
+def __getattr__(name: str) -> Any:
+    if name == "get":
+        from geode.client import get
 
-    return _get(data_type, start_time, end_time, vars=vars, filter=filter)
+        return get
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 __all__ = ["get"]
