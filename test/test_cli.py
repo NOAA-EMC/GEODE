@@ -49,6 +49,30 @@ def test_main_dispatches_wis2_listener(monkeypatch: pytest.MonkeyPatch) -> None:
     assert observed["listen_called"] is True
 
 
+@pytest.mark.parametrize(
+    ("attribute", "arguments"),
+    [
+        (
+            "_create_ncep_dump_reader",
+            ["ingest", "ncep_dump_reader", "atms", "2026-08-01", "2026-08-02"],
+        ),
+        ("_create_wis2_listener", ["ingest", "wis2_listener"]),
+    ],
+)
+def test_main_surfaces_lazy_import_failures(
+    monkeypatch: pytest.MonkeyPatch,
+    attribute: str,
+    arguments: list[str],
+) -> None:
+    def raise_import_error():
+        raise RuntimeError("load failure")
+
+    monkeypatch.setattr(cli, attribute, raise_import_error)
+
+    with pytest.raises(RuntimeError, match="load failure"):
+        cli.main(arguments)
+
+
 def test_geode_get_preserves_public_signature() -> None:
     assert list(inspect.signature(geode.get).parameters) == [
         "data_type",
