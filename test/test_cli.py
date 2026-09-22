@@ -104,11 +104,21 @@ def test_geode_cli_returns_handler_exit_code(monkeypatch):
     assert cli.main(["ingest", "wis2_listener"]) == 7
 
 
-def test_geode_cli_main_ignores_host_process_args(monkeypatch, capsys):
-    monkeypatch.setattr(sys, "argv", ["pytest", "--maxfail=1"])
+def test_geode_cli_main_uses_process_argv(monkeypatch):
+    call_count = 0
 
-    with pytest.raises(SystemExit) as error:
-        cli.main()
+    class FakeListener:
+        def listen(self):
+            nonlocal call_count
+            call_count += 1
 
-    assert error.value.code == 2
-    assert "the following arguments are required: command" in capsys.readouterr().err
+    _install_fake_consumer_module(
+        monkeypatch,
+        "geode.ingest.consumers.wis2_listener",
+        "Wis2Listener",
+        FakeListener,
+    )
+    monkeypatch.setattr(sys, "argv", ["geode", "ingest", "wis2_listener"])
+
+    assert cli.main() == 0
+    assert call_count == 1

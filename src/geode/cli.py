@@ -1,8 +1,6 @@
 import argparse
 import datetime
-import sys
 from collections.abc import Sequence
-from pathlib import Path
 
 
 def _parse_utc_date(value: str) -> datetime.datetime:
@@ -70,16 +68,9 @@ def _build_parser() -> argparse.ArgumentParser:
     return parser
 
 
-def _default_argv() -> list[str]:
-    program_name = Path(sys.argv[0]).name
-    if program_name in {"geode", "cli.py"}:
-        return sys.argv[1:]
-    return []
-
-
 def main(argv: Sequence[str] | None = None) -> int:
     parser = _build_parser()
-    args = parser.parse_args(_default_argv() if argv is None else argv)
+    args = parser.parse_args(argv)
     return args.handler(args)
 
 
