@@ -1,10 +1,8 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING
 
-if TYPE_CHECKING:
-    import xarray as xr
+import xarray as xr
 
 __all__ = ["get"]
 
