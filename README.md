@@ -33,6 +33,13 @@ To include optional development tools (for testing/linting):
 python -m pip install -e ".[dev]"
 ```
 
+After installation, run ingest consumers through the unified `geode` command:
+
+```bash
+geode ingest ncep_dump_reader atms 2026-08-01 2026-08-02
+geode ingest wis2_listener
+```
+
 ## Dependencies
 
 - Required runtime dependencies are defined in `pyproject.toml` under `[project].dependencies`
