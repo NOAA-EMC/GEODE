@@ -84,3 +84,14 @@ def test_geode_cli_rejects_unknown_consumer(capsys):
 
     assert error.value.code == 2
     assert "invalid choice" in capsys.readouterr().err
+
+
+def test_geode_cli_returns_handler_exit_code(monkeypatch):
+    class FakeParser:
+        def parse_args(self, argv):
+            assert argv == ["ingest", "wis2_listener"]
+            return types.SimpleNamespace(handler=lambda _: 7)
+
+    monkeypatch.setattr(cli, "_build_parser", lambda: FakeParser())
+
+    assert cli.main(["ingest", "wis2_listener"]) == 7
