@@ -35,12 +35,17 @@ python -m pip install -e ".[dev]"
 
 ## Command-line interface
 
-After installation, use the unified `geode` command to run ingest consumers:
+After installation, use the unified `geode` command to run ingest consumers and
+admin tasks:
 
 ```bash
 geode ingest ncep_dump_reader atms 2026-08-01 2026-09-02
 geode ingest wis2_listener
+geode admin --list-ingestors
 ```
+
+The `admin` subcommand exposes GEODE administrative utilities. For example,
+`geode admin --list-ingestors` prints the currently available ingestors.
 
 ## Dependencies
 
