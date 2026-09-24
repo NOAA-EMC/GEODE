@@ -28,13 +28,11 @@ dev = [
 
 [project.scripts]
 geode_admin = "geode.admin:main"
-bufr_table = "geode.utils.bufr_table.__main__:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.setuptools.package-data]
-"geode.utils.bufr_table.resources" = ["BUFRCREX_TableB_en.txt", "BUFRCREX_CodeFlag_en.txt"]
+#[tool.setuptools.package-data]
 
 [tool.coverage.run]
 source = ["src/geode"]
