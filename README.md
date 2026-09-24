@@ -10,7 +10,7 @@ Next-Generation observation ingest, data store, and processing framework.
 
 <!-- GitHub Actions CI/CD -->
 [![Python Tests on GitHub CI](https://github.com/noaa-emc/geode/actions/workflows/run_pytests.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/run_pytests.yaml)
-[![Coding Norms](https://github.com/noaa-emc/geode/actions/workflows/linter.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/linter.yaml)
+[![Code Analysis](https://github.com/noaa-emc/geode/actions/workflows/code_analysis.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/code_analysis.yaml)
 [![Weekly Container Build](https://github.com/noaa-emc/geode/actions/workflows/build-container.yaml/badge.svg)](https://github.com/noaa-emc/geode/actions/workflows/build-container.yaml)
 
 <!-- Code Coverage -->
@@ -44,6 +44,12 @@ From the repository root:
 
 ```bash
 python -m pytest test/ -v -s -W error::pytest.PytestUnhandledThreadExceptionWarning
+```
+
+To install GEODE for local development and run the test suite in one step:
+
+```bash
+bash dev/ush/install_and_test.sh
 ```
 
 ## License
