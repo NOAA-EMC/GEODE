@@ -27,7 +27,7 @@ dev = [
 ]
 
 [project.scripts]
-geode_admin = "geode.admin:main"
+geode = "geode.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
