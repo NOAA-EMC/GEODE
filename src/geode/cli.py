@@ -32,10 +32,19 @@ def _run_wis2_listener(_: argparse.Namespace) -> int:
     return 0
 
 
+def _run_admin(args: argparse.Namespace) -> int:
+    if args.list_ingestors:
+        from geode.ingest import ingestors
+
+        for ingestor in ingestors.directory():
+            print(ingestor)
+    return 0
+
+
 def _build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="geode",
-        description="Unified command-line interface for GEODE consumers.",
+        description="Unified command-line interface for GEODE.",
     )
     command_parsers = parser.add_subparsers(dest="command", required=True)
 
@@ -59,6 +68,12 @@ def _build_parser() -> argparse.ArgumentParser:
         "wis2_listener", help="Start the WIS2 notification listener."
     )
     wis2_parser.set_defaults(handler=_run_wis2_listener)
+
+    admin_parser = command_parsers.add_parser("admin", help="Run GEODE admin tasks.")
+    admin_parser.add_argument(
+        "--list-ingestors", action="store_true", help="List all available ingestors."
+    )
+    admin_parser.set_defaults(handler=_run_admin)
 
     return parser
 

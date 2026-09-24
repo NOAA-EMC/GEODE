@@ -7,6 +7,7 @@ import types
 import pytest
 
 from geode import cli
+from geode.ingest import ingestors
 
 
 def _install_fake_consumer_module(monkeypatch, module_name, class_name, consumer_class):
@@ -62,6 +63,13 @@ def test_geode_cli_dispatches_wis2_listener(monkeypatch):
 
     assert exit_code == 0
     assert call_count == 1
+
+
+def test_geode_cli_lists_ingestors(capsys, monkeypatch):
+    monkeypatch.setattr(ingestors, "directory", lambda: ["bufr", "netcdf"])
+
+    assert cli.main(["admin", "--list-ingestors"]) == 0
+    assert capsys.readouterr().out == "bufr\nnetcdf\n"
 
 
 def test_geode_cli_rejects_invalid_dates(capsys):
