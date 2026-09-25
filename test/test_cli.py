@@ -77,7 +77,9 @@ def test_geode_cli_lists_data_types(capsys, monkeypatch):
     fake_data_manager_module.data_manager = types.SimpleNamespace(
         list_data_types=lambda: ["atms_n20", "amsua_n19"]
     )
-    monkeypatch.setitem(sys.modules, "geode.data.data_manager", fake_data_manager_module)
+    monkeypatch.setitem(
+        sys.modules, "geode.data.data_manager", fake_data_manager_module
+    )
 
     assert cli.main(["admin", "--list-data-types"]) == 0
     assert capsys.readouterr().out == "atms_n20\namsua_n19\n"
