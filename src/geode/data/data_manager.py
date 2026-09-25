@@ -34,6 +34,9 @@ class DataManager:
     def __init__(self):
         self.config = geode_config.data_lake
 
+    def list_data_types(self) -> list[str]:
+        raise NotImplementedError("This method should be implemented by subclasses.")
+
     def get_file_path(
         self,
         data_type: str,
@@ -64,6 +67,18 @@ class DataManager:
 class IceChunkDataManager(DataManager):
     def __init__(self):
         super().__init__()
+
+    def list_data_types(self) -> list[str]:
+        base_path = geode_config.data_lake.full_base_path
+        if not os.path.isdir(base_path):
+            return []
+
+        return sorted(
+            entry.removesuffix(".icechunk")
+            for entry in os.listdir(base_path)
+            if entry.endswith(".icechunk")
+            and os.path.isdir(os.path.join(base_path, entry))
+        )
 
     def get_file_path(
         self,
@@ -151,6 +166,30 @@ class ZarrDataManager(DataManager):
     def __init__(self):
         super().__init__()
 
+    def list_data_types(self) -> list[str]:
+        base_path = geode_config.data_lake.full_base_path
+        if not os.path.isdir(base_path):
+            return []
+
+        if self.config.split_by == "none":
+            return sorted(
+                entry.removesuffix(".zarr")
+                for entry in os.listdir(base_path)
+                if entry.endswith(".zarr")
+                and os.path.isdir(os.path.join(base_path, entry))
+            )
+
+        return sorted(
+            entry
+            for entry in os.listdir(base_path)
+            if os.path.isdir(os.path.join(base_path, entry))
+            and any(
+                child.endswith(".zarr")
+                and os.path.isdir(os.path.join(base_path, entry, child))
+                for child in os.listdir(os.path.join(base_path, entry))
+            )
+        )
+
     def get_file_path(self, data_type: str, timestamp: datetime | None = None) -> str:
         if self.config.split_by == "none":
             return os.path.join(
@@ -199,6 +238,22 @@ class ZarrDataManager(DataManager):
 class NetCDFDataManager(DataManager):
     def __init__(self):
         super().__init__()
+
+    def list_data_types(self) -> list[str]:
+        base_path = geode_config.data_lake.full_base_path
+        if not os.path.isdir(base_path):
+            return []
+
+        return sorted(
+            entry
+            for entry in os.listdir(base_path)
+            if os.path.isdir(os.path.join(base_path, entry))
+            and any(
+                child.endswith(".nc")
+                and os.path.isfile(os.path.join(base_path, entry, child))
+                for child in os.listdir(os.path.join(base_path, entry))
+            )
+        )
 
     def get_file_path(self, data_type: str, timestamp: datetime | None = None) -> str:
         assert timestamp is not None, "Timestamp must be provided for split_by option."
