@@ -38,6 +38,11 @@ def _run_admin(args: argparse.Namespace) -> int:
 
         for ingestor in ingestors.directory():
             print(ingestor)
+    if args.list_data_types:
+        from geode.data.data_manager import data_manager
+
+        for data_type in data_manager.list_data_types():
+            print(data_type)
     return 0
 
 
@@ -72,6 +77,11 @@ def _build_parser() -> argparse.ArgumentParser:
     admin_parser = command_parsers.add_parser("admin", help="Run GEODE admin tasks.")
     admin_parser.add_argument(
         "--list-ingestors", action="store_true", help="List all available ingestors."
+    )
+    admin_parser.add_argument(
+        "--list-data-types",
+        action="store_true",
+        help="List data types available to the get command.",
     )
     admin_parser.set_defaults(handler=_run_admin)
 
