@@ -1,0 +1,6 @@
+target/
+data/
+build/
+src/icechunk-src
+src/icechunk-ffi/target/
+.venv
