@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 import icechunk as ic
 import xarray as xr
@@ -131,6 +131,20 @@ class IceChunkDataManager(DataManager):
             zarr_version=3,
             consolidated=False,
         )
+
+        # MetaData/dateTime is stored as an integer offset; its "units"
+        # attribute (e.g. "seconds since 1970-01-01T00:00:00Z") gives the origin.
+        date_time = datatree["MetaData/dateTime"]
+        origin_str = date_time.attrs["units"].split("since")[-1].strip()
+        origin = datetime.fromisoformat(origin_str.replace("Z", "+00:00"))
+        if origin.tzinfo is None:
+            origin = origin.replace(tzinfo=timezone.utc)
+
+        start_offset = (start_time - origin).total_seconds()
+        end_offset = (end_time - origin).total_seconds()
+
+        time_mask = (date_time >= start_offset) & (date_time < end_offset)
+        datatree = datatree.where(time_mask, drop=True)
 
         # if vars is not None:
         #    vars.append("Location")
