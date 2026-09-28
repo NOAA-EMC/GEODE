@@ -6,6 +6,13 @@ Minimal proof-of-concept for reading native Icechunk data through IODA.
 Icechunk → Rust → C ABI → C++ → IODA
 ```
 
+## Clone
+
+```bash
+git clone -b poc/ice2ioda https://github.com/NOAA-EMC/GEODE.git
+cd GEODE/ice2ioda
+```
+
 ## Dependencies
 
 The prototype currently depends on:
@@ -21,76 +28,6 @@ The prototype currently depends on:
 
 The prototype currently uses the NOAA `obsforge/ursa.intel` module environment. Dependency packaging and installation will be addressed separately.
 
-## Build Dependencies
-
-### 1. Build obsForge
-
-Clone obsForge with its submodules:
-
-```bash
-git clone --recursive --jobs 2 https://github.com/NOAA-EMC/obsForge.git
-cd obsForge
-./build.sh
-```
-
-The obsForge build provides the environment and dependencies needed by the prototype.
-
-### 2. Build OOPS
-
-The current IODA branch requires OOPS 1.13.0.
-
-Use the OOPS source provided by obsForge and build it separately. For example, if obsForge was installed as `<OBSFORGE_DIR>`:
-
-```bash
-mkdir -p <BUILD_ROOT>/oops-build
-cd <BUILD_ROOT>/oops-build
-
-ecbuild \
-  --build=Release \
-  -DCMAKE_INSTALL_PREFIX=<BUILD_ROOT>/oops-install \
-  <OBSFORGE_DIR>/bundle/oops
-
-cmake --build . --parallel
-cmake --install .
-```
-
-Here:
-
-* `<OBSFORGE_DIR>` is the location of the obsForge checkout.
-* `<BUILD_ROOT>` is a directory used for external builds and installations.
-
-### 3. Build IODA
-
-Clone the IODA `icechunk-poc` branch:
-
-```bash
-cd <BUILD_ROOT>
-
-git clone -b icechunk-poc https://github.com/JCSDA/ioda.git
-```
-
-Build IODA against the OOPS installation:
-
-```bash
-mkdir ioda-build
-cd ioda-build
-
-ecbuild \
-  --build=Release \
-  -DCMAKE_PREFIX_PATH=<BUILD_ROOT>/oops-install \
-  ../ioda
-
-cmake --build . --parallel
-```
-
-
-## Clone
-
-```bash
-git clone -b poc/ice2ioda https://github.com/NOAA-EMC/GEODE.git
-cd GEODE/ice2ioda
-```
-
 ## Environment
 
 The prototype uses the `obsforge/ursa.intel` module environment.
@@ -101,6 +38,67 @@ Then:
 ```bash
 source scripts/setup_env.sh
 ```
+
+## Build Dependencies
+
+### 1. Build OOPS
+
+The current IODA branch requires OOPS 1.13.0.
+
+Clone OOPS directly from GitHub and build it separately:
+
+```bash
+cd <BUILD_ROOT>
+
+git clone --branch 1.13.0 --depth 1 \
+  https://github.com/JCSDA/oops.git oops
+
+mkdir oops-build
+cd oops-build
+
+ecbuild \
+  --build=Release \
+  -DCMAKE_INSTALL_PREFIX=<BUILD_ROOT>/oops-install \
+  ../oops
+
+cmake --build . --parallel
+cmake --install .
+```
+
+### 2. Build IODA
+
+Clone the IODA `icechunk-poc` branch:
+
+```bash
+cd <BUILD_ROOT>
+
+git clone -b icechunk-poc https://github.com/JCSDA/ioda.git
+```
+
+Configure IODA against the OOPS installation:
+
+```bash
+mkdir ioda-build
+cd ioda-build
+
+ecbuild \
+  --build=Release \
+  -DCMAKE_PREFIX_PATH=<BUILD_ROOT>/oops-install \
+  ../ioda
+```
+
+Build ioda:
+
+```bash
+cmake --build . --parallel
+```
+
+Or build only ioda engines:
+
+```bash
+cmake --build . --target ioda_engines --parallel 8
+```
+
 
 ### 4. Build the Icechunk → IODA prototype
 

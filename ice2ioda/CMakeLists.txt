@@ -79,35 +79,4 @@ set_target_properties(icechunk_ffi PROPERTIES
 
 add_dependencies(icechunk_ffi build_icechunk_ffi)
 
-
-# ----------------------------------------------------------------------
-# C++ test
-# ----------------------------------------------------------------------
-
-add_executable(ice_ioda_test
-  src/ice_ioda_test.cpp
-)
-
-target_include_directories(ice_ioda_test PRIVATE
-  "${IODA_SOURCE_DIR}/src/engines/ioda/include"
-  "${IODA_SOURCE_DIR}/src/engines/ioda/src"
-  "${IODA_BUILD_DIR}/include"
-)
-
-target_link_directories(ice_ioda_test PRIVATE
-  "${IODA_BUILD_DIR}/lib"
-  "${CMAKE_SOURCE_DIR}/src/icechunk-ffi/target/release"
-)
-
-target_link_libraries(ice_ioda_test PRIVATE
-  ioda_engines
-  icechunk_ffi
-  ${ECKIT_LIBRARY}
-)
-
-add_dependencies(ice_ioda_test icechunk_ffi)
-
-set_target_properties(ice_ioda_test PROPERTIES
-  BUILD_RPATH
-    "${IODA_BUILD_DIR}/lib;${CMAKE_SOURCE_DIR}/src/icechunk-ffi/target/release"
-)
+add_subdirectory(tests)

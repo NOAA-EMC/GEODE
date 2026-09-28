@@ -5,6 +5,7 @@ import sys
 import xarray as xr
 import icechunk
 import zarr
+import netCDF4
 
 
 GROUPS = [
@@ -41,8 +42,16 @@ def main():
 
     root_ds.close()
 
+    nc = netCDF4.Dataset(input_file)
+    available_groups = set(nc.groups)
+    nc.close()
+
     # Copy each IODA group.
     for group_name in GROUPS:
+        if group_name not in available_groups:
+            print(f"Skipping {group_name}: not present")
+            continue
+
         print(f"Reading {group_name}")
 
         ds = xr.open_dataset(input_file, group=group_name)

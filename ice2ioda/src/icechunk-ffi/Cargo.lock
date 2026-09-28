@@ -1669,6 +1669,8 @@ dependencies = [
  "futures-util",
  "icechunk",
  "libc",
+ "serde",
+ "serde_json",
  "tokio",
  "zstd",
 ]

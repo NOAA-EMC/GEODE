@@ -643,6 +643,146 @@ pub unsafe extern "C" fn icechunk_read_array_f32(
     0
 }
 
+async fn list_nodes(
+    store_path: &str,
+) -> Result<String, i32> {
+    let storage = icechunk::new_local_filesystem_storage(
+        StdPath::new(store_path)
+    )
+    .await
+    .map_err(|_| -10)?;
+
+    let repo = Repository::open(
+        None,
+        Arc::clone(&storage),
+        Default::default(),
+    )
+    .await
+    .map_err(|_| -11)?;
+
+    let session = repo
+        .readonly_session(
+            &VersionInfo::BranchTipRef("main".to_string())
+        )
+        .await
+        .map_err(|_| -12)?;
+
+    let nodes = session
+        .list_nodes(&Path::root())
+        .await
+        .map_err(|_| -13)?;
+
+    let mut output = String::new();
+
+    for node_result in nodes {
+        let node = node_result.map_err(|_| -14)?;
+
+        match &node.node_data {
+            icechunk::format::snapshot::NodeData::Group => {
+                output.push_str(&format!(
+                    "G|{}\n",
+                    node.path
+                ));
+            }
+
+            icechunk::format::snapshot::NodeData::Array {
+                shape,
+                ..
+            } => {
+                #[derive(serde::Deserialize)]
+                struct ArrayDataType {
+                    data_type: serde_json::Value,
+                }
+
+                // #[derive(serde::Deserialize)]
+                // struct ArrayDataType {
+                    // data_type: String,
+                // }
+
+                let meta: ArrayDataType =
+                    serde_json::from_slice(&node.user_data)
+                        .map_err(|_| -15)?;
+
+                let dtype = match &meta.data_type {
+                    serde_json::Value::String(s) => s.clone(),
+                    other => other.to_string(),
+                };
+
+                // output.push_str(&format!(
+                    // "META|{}\n",
+                    // String::from_utf8_lossy(&node.user_data)
+                // ));
+
+                // output.push_str(&format!(
+                    // "  dtype={}\n",
+                    // meta.data_type
+                // ));
+
+                output.push_str(&format!(
+                    "A|{}|{}",
+                    node.path,
+                    dtype
+                ));
+
+                for dim in shape.iter() {
+                    output.push_str(&format!(
+                        "|{}",
+                        dim.array_length()
+                    ));
+                }
+
+                output.push('\n');
+            }
+        }
+    }
+
+    Ok(output)
+}
+
+
+#[unsafe(no_mangle)]
+pub unsafe extern "C" fn icechunk_list_nodes(
+    store_path: *const c_char,
+    data: *mut *mut u8,
+    len: *mut usize,
+) -> i32 {
+    if store_path.is_null()
+        || data.is_null()
+        || len.is_null()
+    {
+        return -1;
+    }
+
+    let store_path =
+        match unsafe { CStr::from_ptr(store_path) }.to_str() {
+            Ok(s) => s,
+            Err(_) => return -2,
+        };
+
+    let rt = match tokio::runtime::Builder::new_current_thread()
+        .enable_all()
+        .build()
+    {
+        Ok(rt) => rt,
+        Err(_) => return -3,
+    };
+
+    let result = rt.block_on(
+        list_nodes(store_path)
+    );
+
+    let output = match result {
+        Ok(output) => output,
+        Err(rc) => return rc,
+    };
+
+    copy_to_c_buffer(
+        output.into_bytes(),
+        data,
+        len,
+    )
+}
+
 
 /// Copy a byte vector into a C-owned buffer.
 fn copy_to_c_buffer(
