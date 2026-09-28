@@ -8,10 +8,6 @@ IODA_BUILD_DIR="${I2I_ROOT}/ioda-build"
 # Ensure output build directory exists
 mkdir -p build
 
-# if [ ! -e src/icechunk-src ]; then
-	# ln -s "${I2I_ROOT}/icechunk-src" src/icechunk-src
-# fi
-
 # Configure CMake
 cmake -S . -B build \
   -DCMAKE_BUILD_TYPE=Release \
