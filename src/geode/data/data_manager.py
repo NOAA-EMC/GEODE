@@ -1,5 +1,5 @@
 import os
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import icechunk as ic
 import numpy as np
@@ -149,8 +149,8 @@ class IceChunkDataManager(DataManager):
         )
 
         date_time = datatree["MetaData/dateTime"]
-        start = np.datetime64(start_time.astimezone(timezone.utc).replace(tzinfo=None))
-        end = np.datetime64(end_time.astimezone(timezone.utc).replace(tzinfo=None))
+        start = np.datetime64(start_time.astimezone(UTC).replace(tzinfo=None))
+        end = np.datetime64(end_time.astimezone(UTC).replace(tzinfo=None))
 
         time_mask = (date_time >= start) & (date_time < end)
         print(time_mask)
