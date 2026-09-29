@@ -234,10 +234,227 @@ pub unsafe extern "C" fn icechunk_read_chunk_f32(
 }
 
 
+async fn read_array_f32(
+    store_path: &str,
+    array_path: &str,
+) -> Result<Vec<f32>, i32> {
+    use futures_util::StreamExt;
+    use icechunk::format::snapshot::NodeData;
+
+    let storage = icechunk::new_local_filesystem_storage(
+        StdPath::new(store_path)
+    )
+    .await
+    .map_err(|_| -10)?;
+
+    let repo = Repository::open(
+        None,
+        Arc::clone(&storage),
+        Default::default(),
+    )
+    .await
+    .map_err(|_| -11)?;
+
+    let session = repo
+        .readonly_session(
+            &VersionInfo::BranchTipRef("main".to_string())
+        )
+        .await
+        .map_err(|_| -12)?;
+
+    let path = Path::new(array_path)
+        .map_err(|_| -13)?;
+
+    let node = session
+        .get_array(&path)
+        .await
+        .map_err(|_| -14)?;
+
+    let shape: Vec<usize> = match node.node_data {
+        NodeData::Array { shape, .. } => {
+            shape
+                .iter()
+                .map(|d| d.array_length() as usize)
+                .collect()
+        }
+        _ => return Err(-15),
+    };
+
+    if shape.is_empty() {
+        return Err(-16);
+    }
+
+    /*
+     * Get the Zarr chunk shape from the array metadata.
+     *
+     * Icechunk stores this in the node user data.
+     */
+    let metadata: serde_json::Value =
+        serde_json::from_slice(&node.user_data)
+            .map_err(|_| -17)?;
+
+    let chunk_shape = metadata
+        .get("chunk_grid")
+        .and_then(|v| v.get("configuration"))
+        .and_then(|v| v.get("chunk_shape"))
+        .and_then(|v| v.as_array())
+        .ok_or(-18)?;
+
+    let chunk_shape: Vec<usize> = chunk_shape
+        .iter()
+        .map(|v| v.as_u64().ok_or(-19).map(|n| n as usize))
+        .collect::<Result<_, _>>()?;
+
+    if chunk_shape.len() != shape.len() {
+        return Err(-20);
+    }
+
+    /*
+     * Compute the total number of logical elements.
+     */
+    let total_elements = shape.iter().try_fold(
+        1usize,
+        |a, &b| a.checked_mul(b).ok_or(-21),
+    )?;
+
+    let mut output = vec![0.0f32; total_elements];
+
+    /*
+     * Row-major strides for the logical array.
+     *
+     * For shape [N, M]:
+     *
+     *   strides = [M, 1]
+     */
+    let mut strides = vec![1usize; shape.len()];
+
+    for i in (0..shape.len() - 1).rev() {
+        strides[i] = strides[i + 1]
+            .checked_mul(shape[i + 1])
+            .ok_or(-22)?;
+    }
+
+    let chunks = session.array_chunk_iterator(&path).await;
+
+    futures_util::pin_mut!(chunks);
+
+    while let Some(chunk_result) = chunks.next().await {
+        let chunk = chunk_result.map_err(|_| -23)?;
+
+        let coord = &chunk.coord.0;
+
+        if coord.len() != shape.len() {
+            return Err(-24);
+        }
+
+        /*
+         * Starting logical index of this chunk.
+         */
+        let mut start = Vec::with_capacity(shape.len());
+
+        for d in 0..shape.len() {
+            start.push(
+                (coord[d] as usize)
+                    .checked_mul(chunk_shape[d])
+                    .ok_or(-25)?
+            );
+        }
+
+        let reader = session
+            .get_chunk_reader(
+                &path,
+                &chunk.coord,
+                &ByteRange::from_offset(0),
+            )
+            .await
+            .map_err(|_| -26)?;
+
+        let reader = match reader {
+            Some(reader) => reader,
+            None => continue,
+        };
+
+        let compressed = reader.await.map_err(|_| -27)?;
+
+        let decoded = zstd::decode_all(compressed.as_ref())
+            .map_err(|_| -28)?;
+
+        if decoded.len() % std::mem::size_of::<f32>() != 0 {
+            return Err(-29);
+        }
+
+        let chunk_elements =
+            decoded.len() / std::mem::size_of::<f32>();
+
+        /*
+         * Determine the actual extent of this chunk.
+         *
+         * Normally this is chunk_shape, except at an
+         * array boundary.
+         */
+        let mut actual_shape = Vec::with_capacity(shape.len());
+
+        for d in 0..shape.len() {
+            if start[d] >= shape[d] {
+                return Err(-30);
+            }
+
+            actual_shape.push(
+                chunk_shape[d].min(shape[d] - start[d])
+            );
+        }
+
+        let expected_elements =
+            actual_shape.iter().try_fold(
+                1usize,
+                |a, &b| a.checked_mul(b).ok_or(-31),
+            )?;
+
+        if chunk_elements < expected_elements {
+            return Err(-32);
+        }
+
+        /*
+         * Copy the chunk into the logical output array.
+         *
+         * Iterate over every element of the chunk using
+         * row-major coordinates.
+         */
+        for linear in 0..expected_elements {
+            let mut remainder = linear;
+            let mut output_index = 0usize;
+
+            for d in (0..shape.len()).rev() {
+                let local = remainder % actual_shape[d];
+                remainder /= actual_shape[d];
+
+                let global = start[d] + local;
+
+                output_index +=
+                    global * strides[d];
+            }
+
+            let byte_offset =
+                linear * std::mem::size_of::<f32>();
+
+            let value = f32::from_le_bytes([
+                decoded[byte_offset],
+                decoded[byte_offset + 1],
+                decoded[byte_offset + 2],
+                decoded[byte_offset + 3],
+            ]);
+
+            output[output_index] = value;
+        }
+    }
+
+    Ok(output)
+}
+
 #[unsafe(no_mangle)]
-pub extern "C" fn icechunk_read_array_1d_f32(
-    store_path: *const libc::c_char,
-    array_path: *const libc::c_char,
+pub extern "C" fn icechunk_read_array_f32(
+    store_path: *const c_char,
+    array_path: *const c_char,
     data: *mut *mut f32,
     count: *mut usize,
 ) -> i32 {
@@ -249,15 +466,17 @@ pub extern "C" fn icechunk_read_array_1d_f32(
         return -1;
     }
 
-    let store_path = match unsafe { std::ffi::CStr::from_ptr(store_path) }.to_str() {
-        Ok(s) => s,
-        Err(_) => return -2,
-    };
+    let store_path =
+        match unsafe { CStr::from_ptr(store_path) }.to_str() {
+            Ok(s) => s,
+            Err(_) => return -2,
+        };
 
-    let array_path = match unsafe { std::ffi::CStr::from_ptr(array_path) }.to_str() {
-        Ok(s) => s,
-        Err(_) => return -3,
-    };
+    let array_path =
+        match unsafe { CStr::from_ptr(array_path) }.to_str() {
+            Ok(s) => s,
+            Err(_) => return -3,
+        };
 
     let result = std::panic::catch_unwind(|| {
         let rt = match tokio::runtime::Runtime::new() {
@@ -265,37 +484,49 @@ pub extern "C" fn icechunk_read_array_1d_f32(
             Err(_) => return Err(-4),
         };
 
-        rt.block_on(read_array_1d_f32(store_path, array_path))
+        rt.block_on(
+            read_array_f32(
+                store_path,
+                array_path,
+            )
+        )
     });
 
-    match result {
-        Ok(Ok(values)) => {
-            let n = values.len();
+    let values = match result {
+        Ok(Ok(values)) => values,
+        Ok(Err(rc)) => return rc,
+        Err(_) => return -5,
+    };
 
-            let bytes = n
-                .checked_mul(std::mem::size_of::<f32>())
-                .ok_or(())
-                .unwrap_or(0);
+    let n = values.len();
 
-            let ptr = unsafe { libc::malloc(bytes) } as *mut f32;
+    let bytes = match n.checked_mul(
+        std::mem::size_of::<f32>()
+    ) {
+        Some(bytes) => bytes,
+        None => return -6,
+    };
 
-            if ptr.is_null() && n != 0 {
-                return -5;
-            }
+    let ptr_out = unsafe {
+        libc::malloc(bytes) as *mut f32
+    };
 
-            unsafe {
-                std::ptr::copy_nonoverlapping(values.as_ptr(), ptr, n);
-                *data = ptr;
-                *count = n;
-            }
-
-            0
-        }
-
-        Ok(Err(rc)) => rc,
-
-        Err(_) => -6,
+    if ptr_out.is_null() && n != 0 {
+        return -7;
     }
+
+    unsafe {
+        ptr::copy_nonoverlapping(
+            values.as_ptr(),
+            ptr_out,
+            n,
+        );
+
+        *data = ptr_out;
+        *count = n;
+    }
+
+    0
 }
 
 
@@ -519,129 +750,6 @@ async fn read_array_1d_f32(
 }
 
 
-
-/// The function below is first draft, incorrect:
-/// Read an entire float32 array by reading and decoding each chunk.
-///
-/// `num_chunks` is currently supplied by the caller.
-/// The returned buffer contains all array values in logical order.
-#[unsafe(no_mangle)]
-pub unsafe extern "C" fn icechunk_read_array_f32(
-    store_path: *const c_char,
-    array_path: *const c_char,
-    num_chunks: u32,
-    data: *mut *mut f32,
-    count: *mut usize,
-) -> i32 {
-    if store_path.is_null()
-        || array_path.is_null()
-        || data.is_null()
-        || count.is_null()
-    {
-        return -1;
-    }
-
-    let store_path = match unsafe {
-        CStr::from_ptr(store_path)
-    }.to_str() {
-        Ok(s) => s,
-        Err(_) => return -2,
-    };
-
-    let array_path = match unsafe {
-        CStr::from_ptr(array_path)
-    }.to_str() {
-        Ok(s) => s,
-        Err(_) => return -3,
-    };
-
-    let runtime = match tokio::runtime::Builder::new_current_thread()
-        .enable_all()
-        .build()
-    {
-        Ok(rt) => rt,
-        Err(_) => return -4,
-    };
-
-    let values = match runtime.block_on(async {
-        let mut all_values: Vec<f32> = Vec::new();
-
-        for chunk_index in 0..num_chunks {
-            eprintln!("reading chunk {}", chunk_index);
-
-            let compressed = read_stored_chunk(
-                store_path,
-                array_path,
-                chunk_index,
-            )
-            .await?;
-
-            let decoded = zstd::decode_all(compressed.as_slice())
-                .map_err(|e| {
-                    eprintln!(
-                        "ERROR: Zstd decompression for chunk {}: {:?}",
-                        chunk_index, e
-                    );
-                })?;
-
-            if decoded.len() % 4 != 0 {
-                eprintln!(
-                    "ERROR: decoded chunk {} has {} bytes, \
-                     not divisible by 4",
-                    chunk_index,
-                    decoded.len()
-                );
-                return Err(());
-            }
-
-            let chunk_values: Vec<f32> = decoded
-                .chunks_exact(4)
-                .map(|b| {
-                    f32::from_le_bytes([
-                        b[0], b[1], b[2], b[3]
-                    ])
-                })
-                .collect();
-
-            eprintln!(
-                "chunk {}: {} values",
-                chunk_index,
-                chunk_values.len()
-            );
-
-            all_values.extend_from_slice(&chunk_values);
-        }
-
-        Ok::<Vec<f32>, ()>(all_values)
-    }) {
-        Ok(values) => values,
-        Err(_) => return -5,
-    };
-
-    let n = values.len();
-
-    let ptr_out = unsafe {
-        libc::malloc(n * std::mem::size_of::<f32>())
-            as *mut f32
-    };
-
-    if ptr_out.is_null() && n != 0 {
-        return -6;
-    }
-
-    unsafe {
-        ptr::copy_nonoverlapping(
-            values.as_ptr(),
-            ptr_out,
-            n,
-        );
-
-        *data = ptr_out;
-        *count = n;
-    }
-
-    0
-}
 
 async fn list_nodes(
     store_path: &str,

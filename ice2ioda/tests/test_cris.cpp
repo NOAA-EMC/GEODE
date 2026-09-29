@@ -106,5 +106,41 @@ int main(int argc, char** argv)
     return 1;
   }
 
+  std::vector<float> radiance;
+  
+  spectralRadiance.read(radiance);
+  
+  std::cout
+      << "spectralRadiance read = "
+      << radiance.size()
+      << "\n";
+  
+  if (radiance.size() != radiance_dims.numElements) {
+    std::cerr
+        << "Read size does not match dimensions\n";
+    return 1;
+  }
+  
+  for (std::size_t i = 0; i < 10; ++i) {
+    std::cout
+        << "spectralRadiance[" << i << "] = "
+        << radiance[i]
+        << "\n";
+  }
+
+  std::cout
+      << "spectralRadiance[last] = "
+      << radiance.back()
+      << "\n";
+  
+  const std::size_t n = radiance.size();
+  
+  for (std::size_t i = n - 5; i < n; ++i) {
+    std::cout
+        << "spectralRadiance[" << i << "] = "
+        << radiance[i]
+        << "\n";
+  }
+
   return 0;
 }
