@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timezone
 
 import icechunk as ic
+import numpy as np
 import xarray as xr
 
 from geode.configs.geode_config import geode_config
@@ -147,19 +148,16 @@ class IceChunkDataManager(DataManager):
             consolidated=False,
         )
 
-        # MetaData/dateTime is stored as an integer offset; its "units"
-        # attribute (e.g. "seconds since 1970-01-01T00:00:00Z") gives the origin.
         date_time = datatree["MetaData/dateTime"]
-        origin_str = date_time.attrs["units"].split("since")[-1].strip()
-        origin = datetime.fromisoformat(origin_str.replace("Z", "+00:00"))
-        if origin.tzinfo is None:
-            origin = origin.replace(tzinfo=timezone.utc)
+        start = np.datetime64(start_time.astimezone(timezone.utc).replace(tzinfo=None))
+        end = np.datetime64(end_time.astimezone(timezone.utc).replace(tzinfo=None))
 
-        start_offset = (start_time - origin).total_seconds()
-        end_offset = (end_time - origin).total_seconds()
-
-        time_mask = (date_time >= start_offset) & (date_time < end_offset)
-        datatree = datatree.where(time_mask, drop=True)
+        time_mask = (date_time >= start) & (date_time < end)
+        print(time_mask)
+        datatree = xr.map_over_datasets(
+            lambda ds: ds.where(time_mask, drop=True) if "Location" in ds.dims else ds,
+            datatree,
+        )
 
         # if vars is not None:
         #    vars.append("Location")
