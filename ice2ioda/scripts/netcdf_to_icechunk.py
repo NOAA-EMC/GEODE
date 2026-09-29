@@ -6,6 +6,7 @@ import xarray as xr
 import icechunk
 import zarr
 import netCDF4
+import numpy as np
 
 
 GROUPS = [
@@ -44,7 +45,6 @@ def main():
 
     nc = netCDF4.Dataset(input_file)
     available_groups = set(nc.groups)
-    nc.close()
 
     # Copy each IODA group.
     for group_name in GROUPS:
@@ -55,16 +55,50 @@ def main():
         print(f"Reading {group_name}")
 
         ds = xr.open_dataset(input_file, group=group_name)
+        nc_group = netCDF4.Dataset(input_file, "r").groups[group_name]
 
         group = root.create_group(group_name)
 
         for name, variable in ds.data_vars.items():
-            print(f"  {name}: {variable.dtype} {variable.shape}")
+            nc_variable = nc_group.variables[name]
+
+            # data = nc_variable[:]
+
+            # if isinstance(data, np.ma.MaskedArray):
+                # fill_value = nc_variable.getncattr("_FillValue")
+                # print(f"WARNING: {name} has masked values; filling with {fill_value}")
+                # data = data.filled(fill_value)
+
+            fill_value = None
+
+            if "_FillValue" in nc_variable.ncattrs():
+                fill_value = nc_variable.getncattr("_FillValue")
+
+            data = nc_variable[:]
+
+            if isinstance(data, np.ma.MaskedArray):
+                if fill_value is None:
+                    raise RuntimeError(
+                        f"{group_name}/{name}: masked data but no _FillValue"
+                    )
+
+                print(
+                    f"WARNING: {group_name}/{name} has masked values; "
+                    f"filling with {fill_value}"
+                )
+                data = data.filled(fill_value)
+
+            print(
+                f"  {name}: "
+                f"{nc_variable.dtype} {nc_variable.shape}"
+            )
 
             group.create_array(
                 name,
-                data=variable.values,
-                chunks=variable.encoding.get("chunksizes"),
+                data=data,
+                chunks=nc_variable.chunking()
+                if nc_variable.chunking() != "contiguous"
+                else None,
             )
 
             # Copy JSON-compatible attributes.
@@ -74,8 +108,10 @@ def main():
                 except Exception:
                     print(f"    skipping attribute {key}")
 
+        nc_group = None
         ds.close()
 
+    nc.close()
     session.commit("import IODA NetCDF dataset")
 
     print(f"\nWritten: {output_store}")

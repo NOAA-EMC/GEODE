@@ -36,4 +36,10 @@ endfunction()
 
 add_icechunk_test(test_discovery test_discovery.cpp)
 add_icechunk_test(test_argo test_argo.cpp)
-add_icechunk_test(test_cris test_cris.cpp)
+
+add_icechunk_test(test_cris_open test_cris_open.cpp)
+add_icechunk_test(test_read_f32 test_read_f32.cpp)
+add_icechunk_test(test_read_f64 test_read_f64.cpp)
+# add_icechunk_test(test_read_i32 test_read_i32.cpp)
+
+add_icechunk_test(test_ioda_read test_ioda_read.cpp)

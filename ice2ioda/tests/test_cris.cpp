@@ -5,6 +5,16 @@
 #include "ioda/Engines/Icechunk.h"
 #include "ioda/Group.h"
 
+
+extern "C" {
+int32_t icechunk_read_array_f64(
+    const char* store_path,
+    const char* array_path,
+    double** data,
+    size_t* count);
+}
+
+
 int main(int argc, char** argv)
 {
   if (argc != 2) {
@@ -141,6 +151,43 @@ int main(int argc, char** argv)
         << radiance[i]
         << "\n";
   }
+
+
+  double* channel_data = nullptr;
+  size_t channel_count = 0;
+  
+  const int32_t rc = icechunk_read_array_f64(
+      store.c_str(),
+      "/MetaData/sensorChannelNumber",
+      &channel_data,
+      &channel_count);
+  
+  if (rc != 0) {
+    throw std::runtime_error(
+        "icechunk_read_array_f64 failed: " +
+        std::to_string(rc));
+  }
+  
+  std::cout
+      << "sensorChannelNumber read = "
+      << channel_count
+      << "\n";
+  
+  for (std::size_t i = 0; i < 10; ++i) {
+    std::cout
+        << "sensorChannelNumber[" << i << "] = "
+        << channel_data[i]
+        << "\n";
+  }
+  
+  for (std::size_t i = channel_count - 5; i < channel_count; ++i) {
+    std::cout
+        << "sensorChannelNumber[" << i << "] = "
+        << channel_data[i]
+        << "\n";
+  }
+  
+  std::free(channel_data);
 
   return 0;
 }
