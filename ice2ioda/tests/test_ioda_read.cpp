@@ -6,60 +6,94 @@
 #include <vector>
 
 int main() {
-    const std::string store = "data/cris_fsr_n20.icechunk";
+    const std::string store =
+        "data/cris_fsr_n20.icechunk";
 
-    auto root = ioda::Engines::Icechunk::openFile(store);
+    auto root =
+        ioda::Engines::Icechunk::openFile(store);
 
-    auto obsValue = root.open("ObsValue");
+    auto obsValue =
+        root.open("ObsValue");
 
-	{
-		std::cout << "spectralRadiance";
-		std::cout << "\n";
+    // ------------------------------------------------------------
+    // 2-D float32 read
+    // ------------------------------------------------------------
 
-		// read 2d float32
-		auto radiance = obsValue.vars.open("spectralRadiance");
-		const auto dims = radiance.getDimensions();
+    {
+        std::cout << "spectralRadiance\n";
 
-		std::cout << "shape:";
-		for (const auto dim : dims.dimsCur) {
-			std::cout << " " << dim;
-		}
-		std::cout << "\n";
+        auto radiance =
+            obsValue.vars.open("spectralRadiance");
 
-		std::vector<float> data;
+        const auto dims =
+            radiance.getDimensions();
 
-		radiance.read(data);
+        std::cout << "shape:";
+        for (const auto dim : dims.dimsCur) {
+            std::cout << " " << dim;
+        }
+        std::cout << "\n";
 
-		std::cout << "elements: " << data.size() << "\n";
-		std::cout << "first: " << data.front() << "\n";
-		std::cout << "last: " << data.back() << "\n";
-	}
+        std::vector<float> data;
 
-	std::cout << "\n";
+        radiance.read(data);
 
-	{
-		std::cout << "cloudCoverTotal";
-		std::cout << "\n";
+        std::cout
+            << "elements: "
+            << data.size()
+            << "\n";
 
-		// read 1d float32
-		auto cloudCoverTotal = obsValue.vars.open("cloudCoverTotal");
+        std::cout
+            << "first: "
+            << data.front()
+            << "\n";
 
-		const auto dims = cloudCoverTotal.getDimensions();
+        std::cout
+            << "last: "
+            << data.back()
+            << "\n";
+    }
 
-		std::cout << "shape:";
-		for (const auto dim : dims.dimsCur) {
-			std::cout << " " << dim;
-		}
-		std::cout << "\n";
+    std::cout << "\n";
 
-		std::vector<float> data;
+    // ------------------------------------------------------------
+    // 1-D float32 read
+    // ------------------------------------------------------------
 
-		cloudCoverTotal.read(data);
+    {
+        std::cout << "cloudCoverTotal\n";
 
-		std::cout << "elements: " << data.size() << "\n";
-		std::cout << "first: " << data.front() << "\n";
-		std::cout << "last: " << data.back() << "\n";
-	}
+        auto cloudCoverTotal =
+            obsValue.vars.open("cloudCoverTotal");
+
+        const auto dims =
+            cloudCoverTotal.getDimensions();
+
+        std::cout << "shape:";
+        for (const auto dim : dims.dimsCur) {
+            std::cout << " " << dim;
+        }
+        std::cout << "\n";
+
+        std::vector<float> data;
+
+        cloudCoverTotal.read(data);
+
+        std::cout
+            << "elements: "
+            << data.size()
+            << "\n";
+
+        std::cout
+            << "first: "
+            << data.front()
+            << "\n";
+
+        std::cout
+            << "last: "
+            << data.back()
+            << "\n";
+    }
 
     return 0;
 }

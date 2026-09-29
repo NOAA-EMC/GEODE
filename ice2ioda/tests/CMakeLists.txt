@@ -43,3 +43,4 @@ add_icechunk_test(test_read_f64 test_read_f64.cpp)
 # add_icechunk_test(test_read_i32 test_read_i32.cpp)
 
 add_icechunk_test(test_ioda_read test_ioda_read.cpp)
+add_icechunk_test(test_ioda_selection test_ioda_selection.cpp)
