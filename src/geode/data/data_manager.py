@@ -1,7 +1,8 @@
 import os
-from datetime import datetime
+from datetime import UTC, datetime
 
 import icechunk as ic
+import numpy as np
 import xarray as xr
 
 from geode.configs.geode_config import geode_config
@@ -145,6 +146,17 @@ class IceChunkDataManager(DataManager):
             engine="zarr",
             zarr_version=3,
             consolidated=False,
+        )
+
+        date_time = datatree["MetaData/dateTime"]
+        start = np.datetime64(start_time.astimezone(UTC).replace(tzinfo=None))
+        end = np.datetime64(end_time.astimezone(UTC).replace(tzinfo=None))
+
+        time_mask = (date_time >= start) & (date_time < end)
+        print(time_mask)
+        datatree = xr.map_over_datasets(
+            lambda ds: ds.where(time_mask, drop=True) if "Location" in ds.dims else ds,
+            datatree,
         )
 
         # if vars is not None:
