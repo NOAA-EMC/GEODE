@@ -8,6 +8,13 @@ from sysconfig import get_path
 import numpy as np
 import xarray as xr
 
+from geode.utils.conversion_units import (
+    ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
+    CELSIUS_TO_KELVIN,
+    EARTH_RADIUS_METERS,
+    KNOTS_TO_METERS_PER_SECOND,
+)
+
 _SECTION_MARKER = re.compile(r"\b(TTAA|TTBB|TTCC|TTDD)\b", re.IGNORECASE)
 _SOURCE_STATION_TABLE_PATH = (
     Path(__file__).resolve().parents[4] / "parm" / "sonde.land.tbl"
@@ -41,12 +48,6 @@ _MANDATORY_HEIGHT_OFFSETS = {
     "15": 15000,
     "10": 20000,
 }
-_KNOTS_TO_METERS_PER_SECOND = 0.514444
-_CELSIUS_TO_KELVIN = 273.15
-_ASSUMED_ASCENT_RATE_METERS_PER_SECOND = 5.0
-_EARTH_RADIUS_METERS = 6_371_000.0
-
-
 @lru_cache(maxsize=1)
 def _load_station_coordinates() -> dict[str, tuple[float, float, float]]:
     """Load WMO station coordinates from the local GEMPAK station table.
@@ -281,7 +282,7 @@ def _estimate_drift_positions(
                 (integration_eastward_winds[:-1] + integration_eastward_winds[1:])
                 * 0.5
                 * height_increments
-                / _ASSUMED_ASCENT_RATE_METERS_PER_SECOND
+                / ASSUMED_ASCENT_RATE_METERS_PER_SECOND
             ),
         )
     )
@@ -292,7 +293,7 @@ def _estimate_drift_positions(
                 (integration_northward_winds[:-1] + integration_northward_winds[1:])
                 * 0.5
                 * height_increments
-                / _ASSUMED_ASCENT_RATE_METERS_PER_SECOND
+                / ASSUMED_ASCENT_RATE_METERS_PER_SECOND
             ),
         )
     )
@@ -302,7 +303,7 @@ def _estimate_drift_positions(
         node_index = np.searchsorted(integration_heights, height)
         eastward = eastward_displacement[node_index]
         northward = northward_displacement[node_index]
-        angular_distance = np.hypot(eastward, northward) / _EARTH_RADIUS_METERS
+        angular_distance = np.hypot(eastward, northward) / EARTH_RADIUS_METERS
         bearing = np.arctan2(eastward, northward)
         latitude_radians = np.arcsin(
             np.sin(launch_latitude_radians) * np.cos(angular_distance)
@@ -429,7 +430,7 @@ class TempParser:
                     "observation_count": combined.sizes["Location"],
                     "reference_datetime": reference_datetime.isoformat(),
                     "history": "Decoded from raw WMO TEMP TAC groups by GEODE.",
-                    "assumed_ascent_rate_m_s": _ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
+                    "assumed_ascent_rate_m_s": ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
                     "position_estimation_method": "Trapezoidal integration of layer winds.",
                 }
             ),
@@ -982,7 +983,7 @@ class TempParser:
             temperature_celsius = -(temperature_code - 500) / 10.0
         else:
             temperature_celsius = temperature_code / 10.0
-        temperature_kelvin = temperature_celsius + _CELSIUS_TO_KELVIN
+        temperature_kelvin = temperature_celsius + CELSIUS_TO_KELVIN
 
         depression_code = group[3:]
         if depression_code == "//":
@@ -1051,7 +1052,7 @@ class TempParser:
         if unit_indicator == "0":
             wind_speed = float(speed_code)
         elif unit_indicator == "1":
-            wind_speed = speed_code * _KNOTS_TO_METERS_PER_SECOND
+            wind_speed = speed_code * KNOTS_TO_METERS_PER_SECOND
         else:
             raise ValueError(
                 f"Unsupported TEMP wind-speed unit indicator: {unit_indicator}"
