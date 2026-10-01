@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from geode.ingest.consumers import tac_gts_reader
 from geode.ingest.ingestors.tac_gts import TempIngestor
 from geode.ingest.ingestors.tac_ingestor import TacIngestor
@@ -76,13 +78,69 @@ def test_temp_parser_extracts_sections_from_bulletin():
     assert data_tree.attrs["section_count"] == 2
     first_section = data_tree["section_000001"].dataset
     second_section = data_tree["section_000002"].dataset
-    assert first_section.attrs == {
-        "section_code": "TTAA",
-        "time_group": "80181",
-        "station_id": "72365",
-    }
+    assert first_section.attrs["section_code"] == "TTAA"
+    assert first_section.attrs["time_group"] == "80181"
+    assert first_section.attrs["station_id"] == "72365"
+    assert first_section.attrs["decoded_level_count"] == 12
     assert first_section["code_group"].isel(group=0).item() == "99834"
+    assert first_section["pressure"].sel(level=983.4).item() == pytest.approx(983.4)
+    assert first_section["dewPointTemperature"].sel(
+        level=983.4
+    ).item() == pytest.approx(284.35)
+    assert first_section["pressure"].sel(level=700.0).item() == pytest.approx(700.0)
+    assert first_section["temperature"].sel(level=700.0).item() == pytest.approx(276.75)
+    assert first_section["dewPointTemperature"].sel(
+        level=700.0
+    ).item() == pytest.approx(273.35)
+    assert first_section["windDirection"].sel(level=700.0).item() == pytest.approx(
+        230.0
+    )
+    assert first_section["windSpeed"].sel(level=700.0).item() == pytest.approx(
+        13 * 0.514444
+    )
     assert second_section.attrs["station_id"] == "72451"
+
+
+def test_temp_parser_decodes_negative_temperature_and_large_depression():
+    """Verify sign and high-depression coding for TEMP temperature groups.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    temperature, dew_point = TempParser._decode_temperature_group("56256")
+
+    assert temperature == pytest.approx(266.95)
+    assert dew_point == pytest.approx(260.95)
+
+
+def test_temp_parser_represents_calm_wind_direction_as_missing():
+    """Verify a calm TEMP wind group has zero speed and undefined direction.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    direction, speed = TempParser._decode_wind_group("00000", "80180")
+
+    assert direction is None
+    assert speed == 0.0
 
 
 def test_temp_ingestor_reads_and_parses_file(tmp_path):
@@ -105,5 +163,6 @@ def test_temp_ingestor_reads_and_parses_file(tmp_path):
     report_path.write_text(TEMP_REPORT, encoding="ascii")
 
     data_tree = TempIngestor()._process(str(report_path))
+    print(data_tree)
 
     assert data_tree["section_000001"].dataset.attrs["station_id"] == "72365"
