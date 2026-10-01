@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import xarray as xr
 
 from geode.ingest.ingestors import register
@@ -9,11 +11,17 @@ from geode.ingest.ingestors.temp_parser import TempParser
 class TempIngestor(TacIngestor):
     """Ingest WMO TEMP reports from ASCII TAC files."""
 
-    def __init__(self):
+    def __init__(
+        self,
+        reference_datetime: datetime | None = None,
+        include_raw_code: bool = False,
+    ):
         super().__init__("temp")
+        self.reference_datetime = reference_datetime
+        self.include_raw_code = include_raw_code
 
     def _parse(self, report_text: str) -> xr.DataTree:
-        """Parse the TEMP section structure from a TAC bulletin.
+        """Decode TEMP observations using the configured time reference.
 
         Parameters
         ----------
@@ -23,10 +31,12 @@ class TempIngestor(TacIngestor):
         Returns
         -------
         xarray.DataTree
-            Data tree containing one child dataset per TEMP section.
+            Data tree with flat ``MetaData`` and ``ObsValue`` groups.
 
         Examples
         --------
-        The returned child datasets retain the section's coded groups.
+        The reference timestamp is supplied when constructing the ingestor.
         """
-        return TempParser().parse(report_text)
+        return TempParser().parse(
+            report_text, self.reference_datetime, self.include_raw_code
+        )

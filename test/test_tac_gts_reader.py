@@ -1,5 +1,7 @@
+from datetime import UTC, datetime
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 from geode.ingest.consumers import tac_gts_reader
@@ -20,6 +22,7 @@ TTAA 80181 72451 99915 19400 13013 00012 ///// ///// 92696 /////
 15425 61769 24568 10671 69365 22013 88999 77152 24569 41416 31313
 44108 81703=
 """
+REFERENCE_DATETIME = datetime(2026, 9, 30, 18, tzinfo=UTC)
 
 
 def test_tac_gts_reader_dispatches_file(tmp_path, monkeypatch):
@@ -47,19 +50,23 @@ def test_tac_gts_reader_dispatches_file(tmp_path, monkeypatch):
 
     def capture_process(ingestor: TacIngestor, file_path: str) -> None:
         processed_reports.append(
-            (ingestor.data_type, Path(file_path).read_text(encoding="ascii"))
+            (
+                ingestor.data_type,
+                Path(file_path).read_text(encoding="ascii"),
+                ingestor.include_raw_code,
+            )
         )
 
     monkeypatch.setattr(TacIngestor, "process", capture_process)
 
     reader = tac_gts_reader.TacGTSReader()
-    reader.ingest("temp", [str(report_path)])
+    reader.ingest("temp", [str(report_path)], REFERENCE_DATETIME, include_raw_code=True)
 
-    assert processed_reports == [("temp", report_text)]
+    assert processed_reports == [("temp", report_text, True)]
 
 
-def test_temp_parser_extracts_sections_from_bulletin():
-    """Verify TEMP section headers and coded groups are retained in xarray.
+def test_temp_parser_decodes_flat_bufr_style_groups():
+    """Verify flat BUFR-style metadata and observation groups are produced.
 
     Parameters
     ----------
@@ -73,32 +80,112 @@ def test_temp_parser_extracts_sections_from_bulletin():
     --------
     Run with ``pytest test/test_tac_gts_reader.py``.
     """
-    data_tree = TempParser().parse(TEMP_REPORT)
+    data_tree = TempParser().parse(TEMP_REPORT, REFERENCE_DATETIME)
 
     assert data_tree.attrs["section_count"] == 2
-    first_section = data_tree["section_000001"].dataset
-    second_section = data_tree["section_000002"].dataset
-    assert first_section.attrs["section_code"] == "TTAA"
-    assert first_section.attrs["time_group"] == "80181"
-    assert first_section.attrs["station_id"] == "72365"
-    assert first_section.attrs["decoded_level_count"] == 12
-    assert first_section["code_group"].isel(group=0).item() == "99834"
-    assert first_section["pressure"].sel(level=983.4).item() == pytest.approx(983.4)
-    assert first_section["dewPointTemperature"].sel(
-        level=983.4
-    ).item() == pytest.approx(284.35)
-    assert first_section["pressure"].sel(level=700.0).item() == pytest.approx(700.0)
-    assert first_section["temperature"].sel(level=700.0).item() == pytest.approx(276.75)
-    assert first_section["dewPointTemperature"].sel(
-        level=700.0
-    ).item() == pytest.approx(273.35)
-    assert first_section["windDirection"].sel(level=700.0).item() == pytest.approx(
-        230.0
+    metadata = data_tree["MetaData"].dataset
+    observations = data_tree["ObsValue"].dataset
+    assert data_tree.attrs["observation_count"] == 26
+    assert metadata.sizes["Location"] == 26
+    assert observations.sizes["Location"] == 26
+    assert set(metadata.data_vars) == {
+        "dateTime",
+        "stationIdentification",
+        "pressure",
+        "height",
+        "reportType",
+    }
+    assert all(
+        variable.dims == ("Location",) for variable in metadata.data_vars.values()
     )
-    assert first_section["windSpeed"].sel(level=700.0).item() == pytest.approx(
+    assert all(
+        variable.dims == ("Location",) for variable in observations.data_vars.values()
+    )
+    assert metadata["dateTime"].isel(Location=0).values == np.datetime64(
+        "2026-09-30T18:00:00", "ns"
+    )
+    assert metadata["stationIdentification"].isel(Location=0).item() == "72365"
+    assert metadata["pressure"].isel(Location=0).item() == pytest.approx(983.4)
+    assert np.isnan(metadata["height"].isel(Location=0).item())
+    assert metadata["height"].isel(Location=4).item() == pytest.approx(3068.0)
+    assert observations["temperature"].isel(Location=4).item() == pytest.approx(276.75)
+    assert observations["dewPointTemperature"].isel(Location=4).item() == pytest.approx(
+        273.35
+    )
+    assert observations["windDirection"].isel(Location=4).item() == pytest.approx(230.0)
+    assert observations["windSpeed"].isel(Location=4).item() == pytest.approx(
         13 * 0.514444
     )
-    assert second_section.attrs["station_id"] == "72451"
+    assert metadata["pressure"].isel(Location=12).item() == pytest.approx(233.0)
+    assert np.isnan(metadata["height"].isel(Location=12).item())
+    assert np.isnan(observations["temperature"].isel(Location=12).item())
+    assert observations["windSpeed"].isel(Location=12).item() == pytest.approx(
+        72 * 0.514444
+    )
+
+
+def test_temp_parser_decodes_valid_tropopause_as_an_observation():
+    """Verify valid tropopause data uses the normal observation variables.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    report_text = "TTAA 30181 72365 88950 12558 19513 77233 21572 31313="
+
+    data_tree = TempParser().parse(report_text, REFERENCE_DATETIME)
+    metadata = data_tree["MetaData"].dataset
+    observations = data_tree["ObsValue"].dataset
+
+    assert data_tree.attrs["observation_count"] == 2
+    assert metadata["pressure"].values.tolist() == pytest.approx([950.0, 233.0])
+    assert np.isnan(metadata["height"].values).all()
+    assert observations["temperature"].isel(Location=0).item() == pytest.approx(285.65)
+    assert observations["dewPointTemperature"].isel(Location=0).item() == pytest.approx(
+        277.65
+    )
+    assert observations["windSpeed"].isel(Location=0).item() == pytest.approx(
+        13 * 0.514444
+    )
+    assert np.isnan(observations["temperature"].isel(Location=1).item())
+    assert observations["windSpeed"].isel(Location=1).item() == pytest.approx(
+        72 * 0.514444
+    )
+
+
+def test_temp_parser_includes_combined_raw_code_on_request():
+    """Verify raw code groups are optional and combined per observation.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    data_tree = TempParser().parse(
+        TEMP_REPORT, REFERENCE_DATETIME, include_raw_code=True
+    )
+    metadata = data_tree["MetaData"].dataset
+
+    assert "rawCode" in metadata
+    assert metadata["rawCode"].dims == ("Location",)
+    assert metadata["rawCode"].isel(Location=0).item() == "99834 17256 22507"
+    assert metadata["rawCode"].isel(Location=4).item() == "70068 03634 23013"
+    assert metadata["rawCode"].isel(Location=12).item() == "77233 21572"
 
 
 def test_temp_parser_decodes_negative_temperature_and_large_depression():
@@ -137,10 +224,79 @@ def test_temp_parser_represents_calm_wind_direction_as_missing():
     --------
     Run with ``pytest test/test_tac_gts_reader.py``.
     """
-    direction, speed = TempParser._decode_wind_group("00000", "80180")
+    direction, speed = TempParser._decode_wind_group("00000", "08180")
 
     assert direction is None
     assert speed == 0.0
+
+
+def test_temp_parser_resolves_datetime_across_year_boundary():
+    """Verify day/hour resolves against a reference month and year.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    reference_datetime = datetime(2025, 1, 1, 12, tzinfo=UTC)
+
+    observation_datetime = TempParser._resolve_datetime("81180", reference_datetime)
+
+    assert observation_datetime == datetime(2024, 12, 31, 18, tzinfo=UTC)
+
+
+def test_temp_parser_rejects_invalid_datetime_inputs():
+    """Verify TEMP date resolution requires a valid UTC reference and day.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    with pytest.raises(ValueError, match="reference_datetime is required"):
+        TempParser().parse(TEMP_REPORT)
+
+    with pytest.raises(ValueError, match="timezone-aware"):
+        naive_datetime = REFERENCE_DATETIME.replace(tzinfo=None)
+        TempParser().parse(TEMP_REPORT, naive_datetime)
+
+    with pytest.raises(ValueError, match="Invalid TEMP day/hour"):
+        TempParser._resolve_datetime("82181", REFERENCE_DATETIME)
+
+
+def test_temp_day_plus_fifty_marks_knots():
+    """Verify the TEMP day +50 convention also selects knots.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    direction, speed = TempParser._decode_wind_group("23013", "80180")
+
+    assert direction == 230.0
+    assert speed == pytest.approx(13 * 0.514444)
 
 
 def test_temp_ingestor_reads_and_parses_file(tmp_path):
@@ -162,7 +318,12 @@ def test_temp_ingestor_reads_and_parses_file(tmp_path):
     report_path = tmp_path / "temp.tac"
     report_path.write_text(TEMP_REPORT, encoding="ascii")
 
-    data_tree = TempIngestor()._process(str(report_path))
-    print(data_tree)
+    data_tree = TempIngestor(REFERENCE_DATETIME, include_raw_code=True)._process(
+        str(report_path)
+    )
 
-    assert data_tree["section_000001"].dataset.attrs["station_id"] == "72365"
+    assert (
+        data_tree["MetaData"].dataset["stationIdentification"].isel(Location=0).item()
+        == "72365"
+    )
+    assert "rawCode" in data_tree["MetaData"].dataset
