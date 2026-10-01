@@ -1,11 +1,3 @@
-"""Program Name: temp_parser.py
-Author: GEODE contributors
-Abstract: Decode WMO TEMP levels into flat xarray observation groups.
-History Log: Initial implementation.
-Usage: Called by TempIngestor for ASCII TEMP bulletins.
-Input/Output files: ASCII TEMP input / in-memory xarray DataTree.
-"""
-
 import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
