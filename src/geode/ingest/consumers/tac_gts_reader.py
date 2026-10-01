@@ -1,8 +1,8 @@
 from geode.ingest import ingestors
 
 
-class TacReader:
-    """Placeholder consumer for ingesting TAC (ASCII text) reports."""
+class TacGTSReader:
+    """Placeholder consumer for ingesting TAC GTS (ASCII text) reports."""
 
     def ingest(self, data_type: str, file_paths: list[str]) -> None:
         # TODO: gather TAC report file paths for the requested data_type/date range
