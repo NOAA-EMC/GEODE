@@ -1,7 +1,7 @@
 # From the NOAA OMD Ocelot project
 import os
 from copy import deepcopy
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Any
 
 _MISSING = object()
@@ -216,7 +216,7 @@ class DatetimeField(ConfigField):
             self.value = value
         elif isinstance(value, date):
             self.value = datetime(
-                value.year, value.month, value.day, tzinfo=datetime.timezone.utc
+                value.year, value.month, value.day, tzinfo=timezone.utc
             )
         else:
             raise TypeError(
