@@ -6,9 +6,3 @@ from geode.ingest.ingestors.tac_ingestor import TacIngestor
 class TempIngestor(TacIngestor):
     def __init__(self):
         super().__init__("temp")
-
-
-@register("tac/synop")
-class SynopIngestor(TacIngestor):
-    def __init__(self):
-        super().__init__("synop")
