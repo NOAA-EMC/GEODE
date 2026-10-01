@@ -110,6 +110,12 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert all(
         variable.dims == ("Location",) for variable in observations.data_vars.values()
     )
+    assert set(observations.data_vars) == {
+        "temperature",
+        "dewPointTemperature",
+        "windEastward",
+        "windNorthward",
+    }
     assert metadata["dateTime"].isel(Location=0).values == np.datetime64(
         "2026-09-30T18:00:00", "ns"
     )
@@ -136,15 +142,22 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert observations["dewPointTemperature"].isel(Location=4).item() == pytest.approx(
         273.35
     )
-    assert observations["windDirection"].isel(Location=4).item() == pytest.approx(230.0)
-    assert observations["windSpeed"].isel(Location=4).item() == pytest.approx(
-        13 * 0.514444
+    assert observations["windEastward"].attrs["units"] == "m s-1"
+    assert observations["windNorthward"].attrs["units"] == "m s-1"
+    assert observations["windEastward"].isel(Location=4).item() == pytest.approx(
+        -(13 * 0.514444) * np.sin(np.deg2rad(230.0))
+    )
+    assert observations["windNorthward"].isel(Location=4).item() == pytest.approx(
+        -(13 * 0.514444) * np.cos(np.deg2rad(230.0))
     )
     assert metadata["pressure"].isel(Location=12).item() == pytest.approx(23300.0)
     assert np.isnan(metadata["height"].isel(Location=12).item())
     assert np.isnan(observations["temperature"].isel(Location=12).item())
-    assert observations["windSpeed"].isel(Location=12).item() == pytest.approx(
-        72 * 0.514444
+    assert observations["windEastward"].isel(Location=12).item() == pytest.approx(
+        -(72 * 0.514444) * np.sin(np.deg2rad(215.0))
+    )
+    assert observations["windNorthward"].isel(Location=12).item() == pytest.approx(
+        -(72 * 0.514444) * np.cos(np.deg2rad(215.0))
     )
 
 
@@ -233,12 +246,18 @@ def test_temp_parser_decodes_valid_tropopause_as_an_observation():
     assert observations["dewPointTemperature"].isel(Location=0).item() == pytest.approx(
         277.65
     )
-    assert observations["windSpeed"].isel(Location=0).item() == pytest.approx(
-        13 * 0.514444
+    assert observations["windEastward"].isel(Location=0).item() == pytest.approx(
+        -(13 * 0.514444) * np.sin(np.deg2rad(195.0))
+    )
+    assert observations["windNorthward"].isel(Location=0).item() == pytest.approx(
+        -(13 * 0.514444) * np.cos(np.deg2rad(195.0))
     )
     assert np.isnan(observations["temperature"].isel(Location=1).item())
-    assert observations["windSpeed"].isel(Location=1).item() == pytest.approx(
-        72 * 0.514444
+    assert observations["windEastward"].isel(Location=1).item() == pytest.approx(
+        -(72 * 0.514444) * np.sin(np.deg2rad(215.0))
+    )
+    assert observations["windNorthward"].isel(Location=1).item() == pytest.approx(
+        -(72 * 0.514444) * np.cos(np.deg2rad(215.0))
     )
 
 
@@ -402,7 +421,7 @@ def test_temp_ingestor_reads_and_parses_file(tmp_path):
     data_tree = TempIngestor(REFERENCE_DATETIME, include_raw_code=True)._process(
         str(report_path)
     )
-    print(data_tree)
+
     assert (
         data_tree["MetaData"].dataset["stationIdentification"].isel(Location=0).item()
         == "72365"

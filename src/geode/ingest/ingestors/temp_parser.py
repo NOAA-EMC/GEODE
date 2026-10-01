@@ -149,6 +149,40 @@ class _Observation:
     raw_code: str
 
 
+def _wind_components(
+    wind_direction: float | None, wind_speed: float | None
+) -> tuple[float | None, float | None]:
+    """Convert meteorological wind direction and speed to east/north components.
+
+    Parameters
+    ----------
+    wind_direction : float | None
+        Direction the wind comes from, in degrees clockwise from north.
+    wind_speed : float | None
+        Wind speed in metres per second.
+
+    Returns
+    -------
+    tuple[float | None, float | None]
+        Eastward U and northward V components in metres per second.
+
+    Examples
+    --------
+    A 10 m/s wind from west returns ``(10.0, 0.0)``.
+    """
+    if wind_speed is None:
+        return None, None
+    if wind_direction is None:
+        if wind_speed == 0.0:
+            return 0.0, 0.0
+        return None, None
+
+    direction_radians = np.deg2rad(wind_direction)
+    eastward_wind = -wind_speed * np.sin(direction_radians)
+    northward_wind = -wind_speed * np.cos(direction_radians)
+    return float(eastward_wind), float(northward_wind)
+
+
 def _estimate_drift_positions(
     observations: list[_Observation],
     launch_latitude: float,
@@ -200,17 +234,11 @@ def _estimate_drift_positions(
             continue
 
         target_heights[index] = height_above_launch
-        if observation.wind_speed is None:
+        eastward_wind, northward_wind = _wind_components(
+            observation.wind_direction, observation.wind_speed
+        )
+        if eastward_wind is None or northward_wind is None:
             continue
-        if observation.wind_direction is None:
-            if observation.wind_speed != 0.0:
-                continue
-            eastward_wind = 0.0
-            northward_wind = 0.0
-        else:
-            direction_radians = np.deg2rad(observation.wind_direction)
-            eastward_wind = -observation.wind_speed * np.sin(direction_radians)
-            northward_wind = -observation.wind_speed * np.cos(direction_radians)
 
         wind_levels.append((height_above_launch, eastward_wind, northward_wind))
 
@@ -390,8 +418,8 @@ class TempParser:
         observation_variables = [
             "temperature",
             "dewPointTemperature",
-            "windDirection",
-            "windSpeed",
+            "windEastward",
+            "windNorthward",
         ]
         tree = xr.DataTree(
             dataset=xr.Dataset(
@@ -487,6 +515,10 @@ class TempParser:
         )
         timestamp = np.datetime64(observation_datetime.replace(tzinfo=None), "ns")
         receipt_timestamp = np.datetime64(receipt_datetime.replace(tzinfo=None), "ns")
+        wind_components = [
+            _wind_components(observation.wind_direction, observation.wind_speed)
+            for observation in observations
+        ]
         data_vars = {
             "dateTime": (
                 "Location",
@@ -567,18 +599,15 @@ class TempParser:
                 ],
                 {"units": "K", "standard_name": "dew_point_temperature"},
             ),
-            "windDirection": (
+            "windEastward": (
                 "Location",
-                [
-                    cls._as_float(observation.wind_direction)
-                    for observation in observations
-                ],
-                {"units": "degree", "standard_name": "wind_from_direction"},
+                [cls._as_float(components[0]) for components in wind_components],
+                {"units": "m s-1", "standard_name": "eastward_wind"},
             ),
-            "windSpeed": (
+            "windNorthward": (
                 "Location",
-                [cls._as_float(observation.wind_speed) for observation in observations],
-                {"units": "m s-1", "standard_name": "wind_speed"},
+                [cls._as_float(components[1]) for components in wind_components],
+                {"units": "m s-1", "standard_name": "northward_wind"},
             ),
         }
         if include_raw_code:
