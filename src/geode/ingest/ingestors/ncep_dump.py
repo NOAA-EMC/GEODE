@@ -41,7 +41,6 @@ class IasiIngestor(ObsBuilderIngestor):
 
         super().__init__("iasi", BufrIasiObsBuilder())
 
-
 @register("ncep_dump/cris")
 class CrisFsrIngestor(ObsBuilderIngestor):
     def __init__(self):
@@ -49,6 +48,12 @@ class CrisFsrIngestor(ObsBuilderIngestor):
 
         super().__init__("cris", BufrCrisObsBuilder())
 
+@register("ncep_dump/radiosonde")
+class RadiosondeIngestor(ObsBuilderIngestor):
+    def __init__(self):
+        from spoc.dump.scripts.atmosphere.prepbufr_adpupa import AdpupaPrepbufrObsBuilder
+
+        super().__init__("radiosonde", AdpupaPrepbufrObsBuilder())
 
 @register("ncep_dump/amsua")
 class AmsuaIngestor(ObsBuilderIngestor):

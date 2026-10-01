@@ -38,5 +38,7 @@ class BaseIngestor:
                     print(f"[SKIP] Skipping category '{category}' - missing dimension data.")
                     continue
 
+                target_key = f"{self.data_type}_{category}" if category else self.data_type
+
                 data_manager.put(f"{self.data_type}_{category}", tree)
 

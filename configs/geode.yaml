@@ -1,5 +1,5 @@
 
-root_dir: ""
+root_dir: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp"
 run_for_num_sec: 180
 
 data_lake:
@@ -14,6 +14,6 @@ wis2:
   download_dir: "downloads"
 
 ncep_dump:
-  root_path: ""
+  root_path: "/scratch3/NCEPDEV/global/role.glopara/dump"
 
 bufr: null

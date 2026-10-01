@@ -1,0 +1,72 @@
+# Active dataset to plot (must match one of the keys defined below)
+#active_dataset: "atms" # Options: "atms", "prepbufr"
+
+datasets:
+  atms_n20:
+   #dir_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/obsforge/20260918"
+    dir_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/icechunk2ioda/20260918"
+    obs_pattern: "radiance_atms_n20"
+    variable_name: "brightnessTemperature"
+    variable_label: "ATMS N20 Brightness Temp"
+    channel_index: 0
+    units: "K"
+    cmap: "coolwarm"
+    obs_group: "ObsValue"
+    meta_group: "MetaData"
+
+  prepbufr:
+    #dir_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/obsforge/20260915"
+    dir_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/icechunk2ioda/20260915"
+    obs_pattern: "prepbufr_adpupa"
+    variable_name: "airTemperature"
+    variable_label: "PrepBufr Air Temp"
+    units: "K"
+    cmap: "viridis"
+    obs_group: "ObsValue"
+    meta_group: "MetaData"
+  
+  cris_n20:
+    #dir_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/obsforge/20260915"
+    dir_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/obsforge/20260915"
+    obs_pattern: "radiance_cris_fsr_n20"
+    variable_name: "spectralRadiance"
+    variable_label: "CrIS FSR N20 Spectral Radiance"
+    channel_index: 0
+    units: "W m-2 sr-1 m-1"
+    cmap: "coolwarm"
+    obs_group: "ObsValue"
+    meta_group: "MetaData" 
+
+  iasi_metop-b:
+    #dir_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/obsforge/20260915"
+    dir_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/icechunk2ioda/20260915"
+    obs_pattern: "radiance_iasi_metop-b"
+    variable_name: "spectralRadiance"
+    variable_label: "IASI METOP-B Spectral Radiance"
+    channel_index: 0
+    units: "W m-2 sr-1 m-1"
+    cmap: "coolwarm"
+    obs_group: "ObsValue"
+    meta_group: "MetaData"
+
+
+      #file_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/icechunk2ioda/20260919"
+   #    file_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/obsforge/20260919"
+   # obs_group: "ObsValue"
+   # meta_group: "MetaData"
+   # variable_name: "airTemperature"
+   # variable_label: "Air Temperature"
+   # target_pressure_hpa: 500 # Will filter radiosonde profile to 500 hPa
+   # units: "K"
+   # channel_index: null
+   #cmap: "coolwarm"
+
+    #file_path: "/scratch3/NCEPDEV/da/Hyundeok.Choi/geode_tmp/icechunk2ioda/20260913"
+    #obs_group: "MetaData"               # Changed from "ObsValue" to "MetaData"
+    #meta_group: "MetaData"
+    #variable_name: "stationElevation"  # Target variable
+    #variable_label: "Station Elevation"# Plot title/legend label
+    #target_pressure_hpa: null           # Set to null (station elevation is surface metadata, not a profile)
+    #units: "m"                          # Elevation in meters
+    #channel_index: null
+    #cmap: "terrain"                     # Topographical colormap (or "viridis", "gist_earth")
