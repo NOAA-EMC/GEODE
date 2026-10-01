@@ -1,23 +1,32 @@
 import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from functools import lru_cache
+from pathlib import Path
+from sysconfig import get_path
 
 import numpy as np
 import xarray as xr
 
 _SECTION_MARKER = re.compile(r"\b(TTAA|TTBB|TTCC|TTDD)\b", re.IGNORECASE)
+_SOURCE_STATION_TABLE_PATH = (
+    Path(__file__).resolve().parents[4] / "parm" / "sonde.land.tbl"
+)
+_INSTALLED_STATION_TABLE_PATH = (
+    Path(get_path("data")) / "share" / "geode" / "parm" / "sonde.land.tbl"
+)
 _MANDATORY_PRESSURES = {
-    "00": 1000.0,
-    "92": 925.0,
-    "85": 850.0,
-    "70": 700.0,
-    "50": 500.0,
-    "40": 400.0,
-    "30": 300.0,
-    "25": 250.0,
-    "20": 200.0,
-    "15": 150.0,
-    "10": 100.0,
+    "00": 100000.0,
+    "92": 92500.0,
+    "85": 85000.0,
+    "70": 70000.0,
+    "50": 50000.0,
+    "40": 40000.0,
+    "30": 30000.0,
+    "25": 25000.0,
+    "20": 20000.0,
+    "15": 15000.0,
+    "10": 10000.0,
 }
 _MANDATORY_HEIGHT_OFFSETS = {
     "00": 0,
@@ -34,6 +43,91 @@ _MANDATORY_HEIGHT_OFFSETS = {
 }
 _KNOTS_TO_METERS_PER_SECOND = 0.514444
 _CELSIUS_TO_KELVIN = 273.15
+_ASSUMED_ASCENT_RATE_METERS_PER_SECOND = 5.0
+_EARTH_RADIUS_METERS = 6_371_000.0
+
+
+@lru_cache(maxsize=1)
+def _load_station_coordinates() -> dict[str, tuple[float, float, float]]:
+    """Load WMO station coordinates from the local GEMPAK station table.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    dict[str, tuple[float, float, float]]
+        Mapping from WMO station ID to latitude, longitude, and elevation in
+        decimal degrees and metres above mean sea level.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the station table is not present in the source tree or installed data path.
+    ValueError
+        If a station row is malformed, has invalid coordinates, or repeats an ID.
+
+    Examples
+    --------
+    ``_load_station_coordinates()["72365"]`` returns
+    ``(35.04, -106.62, 1619.0)``.
+    """
+    station_table_path = next(
+        (
+            path
+            for path in (
+                _SOURCE_STATION_TABLE_PATH,
+                _INSTALLED_STATION_TABLE_PATH,
+            )
+            if path.is_file()
+        ),
+        None,
+    )
+    if station_table_path is None:
+        raise FileNotFoundError(
+            "FATAL ERROR: sonde.land.tbl was not found in the source tree or "
+            f"installed data path {_INSTALLED_STATION_TABLE_PATH}."
+        )
+
+    station_coordinates = {}
+    with station_table_path.open(encoding="ascii") as station_table:
+        for line_number, line in enumerate(station_table, start=1):
+            if not line.strip() or line.lstrip().startswith("!"):
+                continue
+            if len(line.rstrip("\r\n")) < 67:
+                raise ValueError(
+                    f"Malformed station table row {line_number}: expected coordinate fields."
+                )
+
+            station_id = line[10:15].strip()
+            try:
+                latitude = int(line[55:60]) / 100.0
+                longitude = int(line[61:67]) / 100.0
+                elevation = float(int(line[68:73]))
+            except ValueError as error:
+                raise ValueError(
+                    f"Invalid station position on table row {line_number}."
+                ) from error
+
+            if len(station_id) != 5 or not station_id.isdigit():
+                raise ValueError(
+                    f"Invalid WMO station ID on table row {line_number}: {station_id!r}."
+                )
+            if not -90 <= latitude <= 90 or not -180 <= longitude <= 180:
+                raise ValueError(
+                    f"Out-of-range station coordinates on table row {line_number}."
+                )
+            if not -500 <= elevation <= 9000:
+                raise ValueError(
+                    f"Out-of-range station elevation on table row {line_number}."
+                )
+            if station_id in station_coordinates:
+                raise ValueError(f"Duplicate WMO station ID in table: {station_id}.")
+
+            station_coordinates[station_id] = (latitude, longitude, elevation)
+
+    return station_coordinates
 
 
 @dataclass(frozen=True)
@@ -53,6 +147,154 @@ class _Observation:
     wind_direction: float | None
     wind_speed: float | None
     raw_code: str
+
+
+def _estimate_drift_positions(
+    observations: list[_Observation],
+    launch_latitude: float,
+    launch_longitude: float,
+    launch_elevation: float,
+) -> tuple[np.ndarray, np.ndarray]:
+    """Estimate observation positions from winds and a fixed ascent rate.
+
+    Parameters
+    ----------
+    observations : list[_Observation]
+        TEMP observations in report order.
+    launch_latitude : float
+        Launch latitude in decimal degrees.
+    launch_longitude : float
+        Launch longitude in decimal degrees.
+    launch_elevation : float
+        Launch elevation in metres above mean sea level.
+
+    Returns
+    -------
+    tuple[numpy.ndarray, numpy.ndarray]
+        Estimated latitude and longitude arrays in decimal degrees. Positions
+        for levels without usable heights remain NaN.
+
+    Examples
+    --------
+    Wind components are linearly interpolated between levels and held at the
+    nearest level outside the profile. Integration uses
+    ``delta_time = delta_height / 5 m s-1``.
+    """
+    estimated_latitudes = np.full(len(observations), np.nan)
+    estimated_longitudes = np.full(len(observations), np.nan)
+    if not np.isfinite([launch_latitude, launch_longitude, launch_elevation]).all():
+        return estimated_latitudes, estimated_longitudes
+
+    target_heights = {}
+    wind_levels = []
+    for index, observation in enumerate(observations):
+        is_surface_observation = observation.raw_code.startswith("99")
+        if is_surface_observation:
+            height_above_launch = 0.0
+        elif observation.height is not None:
+            height_above_launch = observation.height - launch_elevation
+            if height_above_launch < 0.0:
+                target_heights[index] = 0.0
+                continue
+        else:
+            continue
+
+        target_heights[index] = height_above_launch
+        if observation.wind_speed is None:
+            continue
+        if observation.wind_direction is None:
+            if observation.wind_speed != 0.0:
+                continue
+            eastward_wind = 0.0
+            northward_wind = 0.0
+        else:
+            direction_radians = np.deg2rad(observation.wind_direction)
+            eastward_wind = -observation.wind_speed * np.sin(direction_radians)
+            northward_wind = -observation.wind_speed * np.cos(direction_radians)
+
+        wind_levels.append((height_above_launch, eastward_wind, northward_wind))
+
+    if not wind_levels:
+        for index, height in target_heights.items():
+            if height == 0.0:
+                estimated_latitudes[index] = launch_latitude
+                estimated_longitudes[index] = launch_longitude
+        return estimated_latitudes, estimated_longitudes
+
+    wind_levels.sort(key=lambda level: level[0])
+    wind_heights = np.asarray([level[0] for level in wind_levels])
+    unique_heights, inverse_indices = np.unique(wind_heights, return_inverse=True)
+    eastward_winds = np.asarray([level[1] for level in wind_levels])
+    northward_winds = np.asarray([level[2] for level in wind_levels])
+    level_counts = np.bincount(inverse_indices)
+    mean_eastward_winds = (
+        np.bincount(inverse_indices, weights=eastward_winds) / level_counts
+    )
+    mean_northward_winds = (
+        np.bincount(inverse_indices, weights=northward_winds) / level_counts
+    )
+
+    integration_heights = np.unique(
+        np.concatenate(
+            ([0.0], unique_heights, np.asarray(list(target_heights.values())))
+        )
+    )
+    integration_eastward_winds = np.interp(
+        integration_heights, unique_heights, mean_eastward_winds
+    )
+    integration_northward_winds = np.interp(
+        integration_heights, unique_heights, mean_northward_winds
+    )
+    height_increments = np.diff(integration_heights)
+    eastward_displacement = np.concatenate(
+        (
+            [0.0],
+            np.cumsum(
+                (integration_eastward_winds[:-1] + integration_eastward_winds[1:])
+                * 0.5
+                * height_increments
+                / _ASSUMED_ASCENT_RATE_METERS_PER_SECOND
+            ),
+        )
+    )
+    northward_displacement = np.concatenate(
+        (
+            [0.0],
+            np.cumsum(
+                (integration_northward_winds[:-1] + integration_northward_winds[1:])
+                * 0.5
+                * height_increments
+                / _ASSUMED_ASCENT_RATE_METERS_PER_SECOND
+            ),
+        )
+    )
+
+    launch_latitude_radians = np.deg2rad(launch_latitude)
+    for index, height in target_heights.items():
+        node_index = np.searchsorted(integration_heights, height)
+        eastward = eastward_displacement[node_index]
+        northward = northward_displacement[node_index]
+        angular_distance = np.hypot(eastward, northward) / _EARTH_RADIUS_METERS
+        bearing = np.arctan2(eastward, northward)
+        latitude_radians = np.arcsin(
+            np.sin(launch_latitude_radians) * np.cos(angular_distance)
+            + np.cos(launch_latitude_radians)
+            * np.sin(angular_distance)
+            * np.cos(bearing)
+        )
+        longitude_radians = np.deg2rad(launch_longitude) + np.arctan2(
+            np.sin(bearing)
+            * np.sin(angular_distance)
+            * np.cos(launch_latitude_radians),
+            np.cos(angular_distance)
+            - np.sin(launch_latitude_radians) * np.sin(latitude_radians),
+        )
+        estimated_latitudes[index] = np.rad2deg(latitude_radians)
+        estimated_longitudes[index] = (
+            np.rad2deg(longitude_radians) + 180.0
+        ) % 360.0 - 180.0
+
+    return estimated_latitudes, estimated_longitudes
 
 
 class TempParser:
@@ -81,7 +323,9 @@ class TempParser:
         -------
         xarray.DataTree
             A tree with ``MetaData`` and ``ObsValue`` child datasets. Every
-            variable uses the flat ``Location`` dimension.
+            variable uses the flat ``Location`` dimension. Station coordinates
+            are looked up from ``parm/sonde.land.tbl``; unmatched IDs have NaN
+            coordinates.
 
         Raises
         ------
@@ -102,6 +346,7 @@ class TempParser:
         if reference_datetime.tzinfo is None or reference_datetime.utcoffset() is None:
             raise ValueError("reference_datetime must be timezone-aware.")
         reference_datetime = reference_datetime.astimezone(UTC)
+        receipt_datetime = datetime.now(UTC)
 
         sections = self._extract_sections(report_text)
         if not sections:
@@ -111,7 +356,11 @@ class TempParser:
         location_start = 0
         for section in sections:
             section_dataset = self._decode_section(
-                section, reference_datetime, location_start, include_raw_code
+                section,
+                reference_datetime,
+                receipt_datetime,
+                location_start,
+                include_raw_code,
             )
             section_datasets.append(section_dataset)
             location_start += section_dataset.sizes["Location"]
@@ -122,11 +371,16 @@ class TempParser:
             data_vars="all",
             coords="minimal",
             compat="override",
-            combine_attrs="drop",
+            combine_attrs="override",
         )
         metadata_variables = [
             "dateTime",
+            "receiptTime",
             "stationIdentification",
+            "latitude",
+            "longitude",
+            "estimatedLatitude",
+            "estimatedLongitude",
             "pressure",
             "height",
             "reportType",
@@ -147,6 +401,8 @@ class TempParser:
                     "observation_count": combined.sizes["Location"],
                     "reference_datetime": reference_datetime.isoformat(),
                     "history": "Decoded from raw WMO TEMP TAC groups by GEODE.",
+                    "assumed_ascent_rate_m_s": _ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
+                    "position_estimation_method": "Trapezoidal integration of layer winds.",
                 }
             ),
             name="temp",
@@ -165,6 +421,7 @@ class TempParser:
         cls,
         section: _TempSection,
         reference_datetime: datetime,
+        receipt_datetime: datetime,
         location_start: int,
         include_raw_code: bool,
     ) -> xr.Dataset:
@@ -176,6 +433,8 @@ class TempParser:
             Parsed TEMP header and coded groups.
         reference_datetime : datetime
             Timezone-aware UTC reference timestamp.
+        receipt_datetime : datetime
+            UTC timestamp captured when parsing began.
         location_start : int
             First ``Location`` index assigned to this section.
         include_raw_code : bool
@@ -217,10 +476,17 @@ class TempParser:
             )
 
         observation_count = len(observations)
+        latitude, longitude, station_elevation = _load_station_coordinates().get(
+            section.station_id, (np.nan, np.nan, np.nan)
+        )
+        estimated_latitudes, estimated_longitudes = _estimate_drift_positions(
+            observations, latitude, longitude, station_elevation
+        )
         observation_datetime = cls._resolve_datetime(
             section.time_group, reference_datetime
         )
         timestamp = np.datetime64(observation_datetime.replace(tzinfo=None), "ns")
+        receipt_timestamp = np.datetime64(receipt_datetime.replace(tzinfo=None), "ns")
         data_vars = {
             "dateTime": (
                 "Location",
@@ -231,14 +497,53 @@ class TempParser:
                     "units": "seconds since 1970-01-01T00:00:00Z",
                 },
             ),
+            "receiptTime": (
+                "Location",
+                np.full(observation_count, receipt_timestamp, dtype="datetime64[ns]"),
+                {
+                    "standard_name": "time",
+                    "timezone": "UTC",
+                    "units": "seconds since 1970-01-01T00:00:00Z",
+                },
+            ),
             "stationIdentification": (
                 "Location",
                 [section.station_id] * observation_count,
             ),
+            "latitude": (
+                "Location",
+                np.full(observation_count, latitude),
+                {"units": "degrees_north", "standard_name": "latitude"},
+            ),
+            "longitude": (
+                "Location",
+                np.full(observation_count, longitude),
+                {"units": "degrees_east", "standard_name": "longitude"},
+            ),
+            "estimatedLatitude": (
+                "Location",
+                estimated_latitudes,
+                {
+                    "units": "degrees_north",
+                    "standard_name": "latitude",
+                    "long_name": "Estimated balloon latitude",
+                    "comment": "Wind-profile estimate assuming 5 m s-1 ascent.",
+                },
+            ),
+            "estimatedLongitude": (
+                "Location",
+                estimated_longitudes,
+                {
+                    "units": "degrees_east",
+                    "standard_name": "longitude",
+                    "long_name": "Estimated balloon longitude",
+                    "comment": "Wind-profile estimate assuming 5 m s-1 ascent.",
+                },
+            ),
             "pressure": (
                 "Location",
                 [observation.pressure for observation in observations],
-                {"units": "hPa", "standard_name": "air_pressure"},
+                {"units": "Pa", "standard_name": "air_pressure"},
             ),
             "height": (
                 "Location",
@@ -405,7 +710,7 @@ class TempParser:
 
         Examples
         --------
-        A ``70068 03634 23013`` sequence yields the 700 hPa level with
+        A ``70068 03634 23013`` sequence yields the 70,000 Pa level with
         temperature, dew-point depression, and wind values. Valid 88PPP and
         77PPP groups append tropopause and maximum-wind observations.
         """
@@ -420,8 +725,8 @@ class TempParser:
                     f"Malformed TEMP surface pressure group: {surface_group}"
                 )
             pressure_code = int(surface_group[2:])
-            pressure = (1000.0 if pressure_code < 500 else 900.0) + (
-                pressure_code / 10.0
+            pressure = (100000.0 if pressure_code < 500 else 90000.0) + (
+                pressure_code * 10.0
             )
             temperature_group = groups[1] if len(groups) > 1 else "/////"
             wind_group = groups[2] if len(groups) > 2 else "/////"
@@ -592,7 +897,7 @@ class TempParser:
         Returns
         -------
         float | None
-            Pressure in hPa, or ``None`` when PPP is the missing marker 999.
+            Pressure in Pa, or ``None`` when PPP is the missing marker 999.
 
         Raises
         ------
@@ -601,7 +906,7 @@ class TempParser:
 
         Examples
         --------
-        ``77233`` decodes to 233 hPa, while ``88999`` is missing.
+        ``77233`` decodes to 23,300 Pa, while ``88999`` is missing.
         """
         if len(group) != 5 or not group.isdigit() or not group.startswith(("77", "88")):
             raise ValueError(f"Malformed TEMP tropopause/maximum-wind group: {group}")
@@ -611,7 +916,7 @@ class TempParser:
             return None
         if not 1 <= pressure_code <= 1100:
             raise ValueError(f"Invalid pressure in TEMP layer group: {group}")
-        return float(pressure_code)
+        return float(pressure_code * 100)
 
     @staticmethod
     def _decode_temperature_group(

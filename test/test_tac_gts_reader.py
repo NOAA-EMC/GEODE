@@ -7,7 +7,11 @@ import pytest
 from geode.ingest.consumers import tac_gts_reader
 from geode.ingest.ingestors.tac_gts import TempIngestor
 from geode.ingest.ingestors.tac_ingestor import TacIngestor
-from geode.ingest.ingestors.temp_parser import TempParser
+from geode.ingest.ingestors.temp_parser import (
+    TempParser,
+    _estimate_drift_positions,
+    _Observation,
+)
 
 TEMP_REPORT = """583
 USUS04 KWBC 301800
@@ -90,7 +94,12 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert observations.sizes["Location"] == 26
     assert set(metadata.data_vars) == {
         "dateTime",
+        "receiptTime",
         "stationIdentification",
+        "latitude",
+        "longitude",
+        "estimatedLatitude",
+        "estimatedLongitude",
         "pressure",
         "height",
         "reportType",
@@ -105,7 +114,22 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         "2026-09-30T18:00:00", "ns"
     )
     assert metadata["stationIdentification"].isel(Location=0).item() == "72365"
-    assert metadata["pressure"].isel(Location=0).item() == pytest.approx(983.4)
+    assert metadata["latitude"].attrs["units"] == "degrees_north"
+    assert metadata["longitude"].attrs["units"] == "degrees_east"
+    assert metadata["latitude"].isel(Location=0).item() == pytest.approx(35.04)
+    assert metadata["longitude"].isel(Location=0).item() == pytest.approx(-106.62)
+    assert metadata["latitude"].isel(Location=13).item() == pytest.approx(37.76)
+    assert metadata["longitude"].isel(Location=13).item() == pytest.approx(-99.97)
+    assert metadata["estimatedLatitude"].isel(Location=0).item() == pytest.approx(35.04)
+    assert metadata["estimatedLongitude"].isel(Location=0).item() == pytest.approx(
+        -106.62
+    )
+    assert metadata["estimatedLatitude"].isel(Location=4).item() > 35.04
+    assert metadata["estimatedLongitude"].isel(Location=4).item() > -106.62
+    assert np.isnan(metadata["estimatedLatitude"].isel(Location=12).item())
+    assert np.isnan(metadata["estimatedLongitude"].isel(Location=12).item())
+    assert metadata["pressure"].attrs["units"] == "Pa"
+    assert metadata["pressure"].isel(Location=0).item() == pytest.approx(98340.0)
     assert np.isnan(metadata["height"].isel(Location=0).item())
     assert metadata["height"].isel(Location=4).item() == pytest.approx(3068.0)
     assert observations["temperature"].isel(Location=4).item() == pytest.approx(276.75)
@@ -116,12 +140,69 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert observations["windSpeed"].isel(Location=4).item() == pytest.approx(
         13 * 0.514444
     )
-    assert metadata["pressure"].isel(Location=12).item() == pytest.approx(233.0)
+    assert metadata["pressure"].isel(Location=12).item() == pytest.approx(23300.0)
     assert np.isnan(metadata["height"].isel(Location=12).item())
     assert np.isnan(observations["temperature"].isel(Location=12).item())
     assert observations["windSpeed"].isel(Location=12).item() == pytest.approx(
         72 * 0.514444
     )
+
+
+def test_temp_drift_estimate_uses_five_meter_per_second_ascent():
+    """Verify layer wind drift uses the configured vertical ascent rate.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    observation = _Observation(
+        pressure=100000.0,
+        height=110.0,
+        temperature=None,
+        dew_point_temperature=None,
+        wind_direction=270.0,
+        wind_speed=10.0,
+        raw_code="70000",
+    )
+
+    estimated_latitudes, estimated_longitudes = _estimate_drift_positions(
+        [observation], 0.0, 0.0, 100.0
+    )
+
+    assert estimated_latitudes[0] == pytest.approx(0.0)
+    assert estimated_longitudes[0] == pytest.approx(np.rad2deg(20.0 / 6_371_000.0))
+
+
+def test_temp_parser_leaves_unlisted_station_coordinates_missing():
+    """Verify stations absent from the location table have missing coordinates.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    report_text = "TTAA 30181 99999 99900 12558 19513 31313="
+
+    data_tree = TempParser().parse(report_text, REFERENCE_DATETIME)
+    metadata = data_tree["MetaData"].dataset
+
+    assert np.isnan(metadata["latitude"].values).all()
+    assert np.isnan(metadata["longitude"].values).all()
 
 
 def test_temp_parser_decodes_valid_tropopause_as_an_observation():
@@ -146,7 +227,7 @@ def test_temp_parser_decodes_valid_tropopause_as_an_observation():
     observations = data_tree["ObsValue"].dataset
 
     assert data_tree.attrs["observation_count"] == 2
-    assert metadata["pressure"].values.tolist() == pytest.approx([950.0, 233.0])
+    assert metadata["pressure"].values.tolist() == pytest.approx([95000.0, 23300.0])
     assert np.isnan(metadata["height"].values).all()
     assert observations["temperature"].isel(Location=0).item() == pytest.approx(285.65)
     assert observations["dewPointTemperature"].isel(Location=0).item() == pytest.approx(
@@ -321,7 +402,7 @@ def test_temp_ingestor_reads_and_parses_file(tmp_path):
     data_tree = TempIngestor(REFERENCE_DATETIME, include_raw_code=True)._process(
         str(report_path)
     )
-
+    print(data_tree)
     assert (
         data_tree["MetaData"].dataset["stationIdentification"].isel(Location=0).item()
         == "72365"
