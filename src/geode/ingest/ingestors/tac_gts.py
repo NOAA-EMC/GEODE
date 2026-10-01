@@ -20,7 +20,7 @@ class TempIngestor(TacIngestor):
         self.reference_datetime = reference_datetime
         self.include_raw_code = include_raw_code
 
-    def _parse(self, report_text: str) -> xr.DataTree:
+    def _parse(self, report_text: str) -> dict[str, xr.DataTree]:
         """Decode TEMP observations using the configured time reference.
 
         Parameters
@@ -30,8 +30,9 @@ class TempIngestor(TacIngestor):
 
         Returns
         -------
-        xarray.DataTree
-            Data tree with flat ``MetaData`` and ``ObsValue`` groups.
+        dict[str, xarray.DataTree]
+            Trees keyed by ``surface`` and/or ``upper_air``, each with flat
+            ``MetaData`` and ``ObsValue`` groups.
 
         Examples
         --------

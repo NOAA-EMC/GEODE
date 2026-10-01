@@ -84,14 +84,21 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     --------
     Run with ``pytest test/test_tac_gts_reader.py``.
     """
-    data_tree = TempParser().parse(TEMP_REPORT, REFERENCE_DATETIME)
+    data_trees = TempParser().parse(TEMP_REPORT, REFERENCE_DATETIME)
 
-    assert data_tree.attrs["section_count"] == 2
-    metadata = data_tree["MetaData"].dataset
-    observations = data_tree["ObsValue"].dataset
-    assert data_tree.attrs["observation_count"] == 26
-    assert metadata.sizes["Location"] == 26
-    assert observations.sizes["Location"] == 26
+    assert set(data_trees) == {"surface", "upper_air"}
+    surface_tree = data_trees["surface"]
+    upper_air_tree = data_trees["upper_air"]
+    surface_metadata = surface_tree["MetaData"].dataset
+    surface_observations = surface_tree["ObsValue"].dataset
+    metadata = upper_air_tree["MetaData"].dataset
+    observations = upper_air_tree["ObsValue"].dataset
+    assert surface_tree.attrs["observation_count"] == 2
+    assert upper_air_tree.attrs["observation_count"] == 24
+    assert surface_metadata.sizes["Location"] == 2
+    assert surface_observations.sizes["Location"] == 2
+    assert metadata.sizes["Location"] == 24
+    assert observations.sizes["Location"] == 24
     assert set(metadata.data_vars) == {
         "dateTime",
         "receiptTime",
@@ -116,47 +123,54 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         "windEastward",
         "windNorthward",
     }
-    assert metadata["dateTime"].isel(Location=0).values == np.datetime64(
+    assert surface_metadata["dateTime"].isel(Location=0).values == np.datetime64(
         "2026-09-30T18:00:00", "ns"
     )
-    assert metadata["stationIdentification"].isel(Location=0).item() == "72365"
+    assert surface_metadata["stationIdentification"].isel(Location=0).item() == "72365"
+    assert surface_metadata["pressure"].isel(Location=0).item() == pytest.approx(
+        98340.0
+    )
+    assert surface_metadata["stationIdentification"].isel(Location=1).item() == "72451"
+    assert surface_metadata["pressure"].isel(Location=1).item() == pytest.approx(
+        99150.0
+    )
     assert metadata["latitude"].attrs["units"] == "degrees_north"
     assert metadata["longitude"].attrs["units"] == "degrees_east"
     assert metadata["latitude"].isel(Location=0).item() == pytest.approx(35.04)
     assert metadata["longitude"].isel(Location=0).item() == pytest.approx(-106.62)
-    assert metadata["latitude"].isel(Location=13).item() == pytest.approx(37.76)
-    assert metadata["longitude"].isel(Location=13).item() == pytest.approx(-99.97)
-    assert metadata["estimatedLatitude"].isel(Location=0).item() == pytest.approx(35.04)
-    assert metadata["estimatedLongitude"].isel(Location=0).item() == pytest.approx(
-        -106.62
-    )
-    assert metadata["estimatedLatitude"].isel(Location=4).item() > 35.04
-    assert metadata["estimatedLongitude"].isel(Location=4).item() > -106.62
-    assert np.isnan(metadata["estimatedLatitude"].isel(Location=12).item())
-    assert np.isnan(metadata["estimatedLongitude"].isel(Location=12).item())
+    assert metadata["latitude"].isel(Location=12).item() == pytest.approx(37.76)
+    assert metadata["longitude"].isel(Location=12).item() == pytest.approx(-99.97)
+    assert surface_metadata["estimatedLatitude"].isel(
+        Location=0
+    ).item() == pytest.approx(35.04)
+    assert surface_metadata["estimatedLongitude"].isel(
+        Location=0
+    ).item() == pytest.approx(-106.62)
+    assert metadata["estimatedLatitude"].isel(Location=3).item() > 35.04
+    assert metadata["estimatedLongitude"].isel(Location=3).item() > -106.62
+    assert np.isnan(metadata["estimatedLatitude"].isel(Location=11).item())
+    assert np.isnan(metadata["estimatedLongitude"].isel(Location=11).item())
     assert metadata["pressure"].attrs["units"] == "Pa"
-    assert metadata["pressure"].isel(Location=0).item() == pytest.approx(98340.0)
-    assert np.isnan(metadata["height"].isel(Location=0).item())
-    assert metadata["height"].isel(Location=4).item() == pytest.approx(3068.0)
-    assert observations["temperature"].isel(Location=4).item() == pytest.approx(276.75)
-    assert observations["dewPointTemperature"].isel(Location=4).item() == pytest.approx(
+    assert metadata["height"].isel(Location=3).item() == pytest.approx(3068.0)
+    assert observations["temperature"].isel(Location=3).item() == pytest.approx(276.75)
+    assert observations["dewPointTemperature"].isel(Location=3).item() == pytest.approx(
         273.35
     )
     assert observations["windEastward"].attrs["units"] == "m s-1"
     assert observations["windNorthward"].attrs["units"] == "m s-1"
-    assert observations["windEastward"].isel(Location=4).item() == pytest.approx(
+    assert observations["windEastward"].isel(Location=3).item() == pytest.approx(
         -(13 * 0.514444) * np.sin(np.deg2rad(230.0))
     )
-    assert observations["windNorthward"].isel(Location=4).item() == pytest.approx(
+    assert observations["windNorthward"].isel(Location=3).item() == pytest.approx(
         -(13 * 0.514444) * np.cos(np.deg2rad(230.0))
     )
-    assert metadata["pressure"].isel(Location=12).item() == pytest.approx(23300.0)
-    assert np.isnan(metadata["height"].isel(Location=12).item())
-    assert np.isnan(observations["temperature"].isel(Location=12).item())
-    assert observations["windEastward"].isel(Location=12).item() == pytest.approx(
+    assert metadata["pressure"].isel(Location=11).item() == pytest.approx(23300.0)
+    assert np.isnan(metadata["height"].isel(Location=11).item())
+    assert np.isnan(observations["temperature"].isel(Location=11).item())
+    assert observations["windEastward"].isel(Location=11).item() == pytest.approx(
         -(72 * 0.514444) * np.sin(np.deg2rad(215.0))
     )
-    assert observations["windNorthward"].isel(Location=12).item() == pytest.approx(
+    assert observations["windNorthward"].isel(Location=11).item() == pytest.approx(
         -(72 * 0.514444) * np.cos(np.deg2rad(215.0))
     )
 
@@ -211,8 +225,8 @@ def test_temp_parser_leaves_unlisted_station_coordinates_missing():
     """
     report_text = "TTAA 30181 99999 99900 12558 19513 31313="
 
-    data_tree = TempParser().parse(report_text, REFERENCE_DATETIME)
-    metadata = data_tree["MetaData"].dataset
+    data_trees = TempParser().parse(report_text, REFERENCE_DATETIME)
+    metadata = data_trees["surface"]["MetaData"].dataset
 
     assert np.isnan(metadata["latitude"].values).all()
     assert np.isnan(metadata["longitude"].values).all()
@@ -235,11 +249,12 @@ def test_temp_parser_decodes_valid_tropopause_as_an_observation():
     """
     report_text = "TTAA 30181 72365 88950 12558 19513 77233 21572 31313="
 
-    data_tree = TempParser().parse(report_text, REFERENCE_DATETIME)
-    metadata = data_tree["MetaData"].dataset
-    observations = data_tree["ObsValue"].dataset
+    data_trees = TempParser().parse(report_text, REFERENCE_DATETIME)
+    assert set(data_trees) == {"upper_air"}
+    metadata = data_trees["upper_air"]["MetaData"].dataset
+    observations = data_trees["upper_air"]["ObsValue"].dataset
 
-    assert data_tree.attrs["observation_count"] == 2
+    assert data_trees["upper_air"].attrs["observation_count"] == 2
     assert metadata["pressure"].values.tolist() == pytest.approx([95000.0, 23300.0])
     assert np.isnan(metadata["height"].values).all()
     assert observations["temperature"].isel(Location=0).item() == pytest.approx(285.65)
@@ -276,16 +291,17 @@ def test_temp_parser_includes_combined_raw_code_on_request():
     --------
     Run with ``pytest test/test_tac_gts_reader.py``.
     """
-    data_tree = TempParser().parse(
+    data_trees = TempParser().parse(
         TEMP_REPORT, REFERENCE_DATETIME, include_raw_code=True
     )
-    metadata = data_tree["MetaData"].dataset
+    surface_metadata = data_trees["surface"]["MetaData"].dataset
+    metadata = data_trees["upper_air"]["MetaData"].dataset
 
     assert "rawCode" in metadata
     assert metadata["rawCode"].dims == ("Location",)
-    assert metadata["rawCode"].isel(Location=0).item() == "99834 17256 22507"
-    assert metadata["rawCode"].isel(Location=4).item() == "70068 03634 23013"
-    assert metadata["rawCode"].isel(Location=12).item() == "77233 21572"
+    assert surface_metadata["rawCode"].isel(Location=0).item() == "99834 17256 22507"
+    assert metadata["rawCode"].isel(Location=3).item() == "70068 03634 23013"
+    assert metadata["rawCode"].isel(Location=11).item() == "77233 21572"
 
 
 def test_temp_parser_decodes_negative_temperature_and_large_depression():
@@ -418,12 +434,15 @@ def test_temp_ingestor_reads_and_parses_file(tmp_path):
     report_path = tmp_path / "temp.tac"
     report_path.write_text(TEMP_REPORT, encoding="ascii")
 
-    data_tree = TempIngestor(REFERENCE_DATETIME, include_raw_code=True)._process(
+    data_trees = TempIngestor(REFERENCE_DATETIME, include_raw_code=True)._process(
         str(report_path)
     )
-
+    upper_air_tree = data_trees["upper_air"]
     assert (
-        data_tree["MetaData"].dataset["stationIdentification"].isel(Location=0).item()
+        upper_air_tree["MetaData"]
+        .dataset["stationIdentification"]
+        .isel(Location=0)
+        .item()
         == "72365"
     )
-    assert "rawCode" in data_tree["MetaData"].dataset
+    assert "rawCode" in upper_air_tree["MetaData"].dataset

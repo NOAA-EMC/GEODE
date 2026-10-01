@@ -48,6 +48,8 @@ _MANDATORY_HEIGHT_OFFSETS = {
     "15": 15000,
     "10": 20000,
 }
+
+
 @lru_cache(maxsize=1)
 def _load_station_coordinates() -> dict[str, tuple[float, float, float]]:
     """Load WMO station coordinates from the local GEMPAK station table.
@@ -334,8 +336,8 @@ class TempParser:
         report_text: str,
         reference_datetime: datetime | None = None,
         include_raw_code: bool = False,
-    ) -> xr.DataTree:
-        """Decode TEMP observations into flat BUFR-style xarray groups.
+    ) -> dict[str, xr.DataTree]:
+        """Decode TEMP observations into separate surface and upper-air trees.
 
         Parameters
         ----------
@@ -350,9 +352,9 @@ class TempParser:
 
         Returns
         -------
-        xarray.DataTree
-            A tree with ``MetaData`` and ``ObsValue`` child datasets. Every
-            variable uses the flat ``Location`` dimension. Station coordinates
+        dict[str, xarray.DataTree]
+            Trees keyed by ``surface`` and/or ``upper_air``, each containing
+            ``MetaData`` and ``ObsValue`` child datasets. Station coordinates
             are looked up from ``parm/sonde.land.tbl``; unmatched IDs have NaN
             coordinates.
 
@@ -381,27 +383,22 @@ class TempParser:
         if not sections:
             raise ValueError("No WMO TEMP sections found in TAC input.")
 
-        section_datasets = []
+        section_datasets = {"surface": [], "upper_air": []}
         location_start = 0
         for section in sections:
-            section_dataset = self._decode_section(
+            category_datasets = self._decode_section(
                 section,
                 reference_datetime,
                 receipt_datetime,
                 location_start,
                 include_raw_code,
             )
-            section_datasets.append(section_dataset)
-            location_start += section_dataset.sizes["Location"]
+            for category, dataset in category_datasets.items():
+                section_datasets[category].append(dataset)
+            location_start += sum(
+                dataset.sizes["Location"] for dataset in category_datasets.values()
+            )
 
-        combined = xr.concat(
-            section_datasets,
-            dim="Location",
-            data_vars="all",
-            coords="minimal",
-            compat="override",
-            combine_attrs="override",
-        )
         metadata_variables = [
             "dateTime",
             "receiptTime",
@@ -422,28 +419,45 @@ class TempParser:
             "windEastward",
             "windNorthward",
         ]
-        tree = xr.DataTree(
-            dataset=xr.Dataset(
-                attrs={
-                    "format": "WMO TEMP",
-                    "section_count": len(sections),
-                    "observation_count": combined.sizes["Location"],
-                    "reference_datetime": reference_datetime.isoformat(),
-                    "history": "Decoded from raw WMO TEMP TAC groups by GEODE.",
-                    "assumed_ascent_rate_m_s": ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
-                    "position_estimation_method": "Trapezoidal integration of layer winds.",
-                }
-            ),
-            name="temp",
-        )
-        tree["MetaData"] = xr.DataTree(
-            dataset=combined[metadata_variables], name="MetaData"
-        )
-        tree["ObsValue"] = xr.DataTree(
-            dataset=combined[observation_variables], name="ObsValue"
-        )
+        category_trees = {}
+        for category, datasets in section_datasets.items():
+            if not datasets:
+                continue
 
-        return tree
+            combined = xr.concat(
+                datasets,
+                dim="Location",
+                data_vars="all",
+                coords="minimal",
+                compat="override",
+                combine_attrs="override",
+            ).assign_coords(
+                Location=np.arange(sum(ds.sizes["Location"] for ds in datasets))
+            )
+            tree = xr.DataTree(
+                dataset=xr.Dataset(
+                    attrs={
+                        "format": "WMO TEMP",
+                        "category": category,
+                        "section_count": len(datasets),
+                        "observation_count": combined.sizes["Location"],
+                        "reference_datetime": reference_datetime.isoformat(),
+                        "history": "Decoded from raw WMO TEMP TAC groups by GEODE.",
+                        "assumed_ascent_rate_m_s": ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
+                        "position_estimation_method": "Trapezoidal integration of layer winds.",
+                    }
+                ),
+                name=category,
+            )
+            tree["MetaData"] = xr.DataTree(
+                dataset=combined[metadata_variables], name="MetaData"
+            )
+            tree["ObsValue"] = xr.DataTree(
+                dataset=combined[observation_variables], name="ObsValue"
+            )
+            category_trees[category] = tree
+
+        return category_trees
 
     @classmethod
     def _decode_section(
@@ -453,7 +467,7 @@ class TempParser:
         receipt_datetime: datetime,
         location_start: int,
         include_raw_code: bool,
-    ) -> xr.Dataset:
+    ) -> dict[str, xr.Dataset]:
         """Decode a TEMP section into an xarray dataset.
 
         Parameters
@@ -471,9 +485,8 @@ class TempParser:
 
         Returns
         -------
-        xarray.Dataset
-            One-dimensional dataset with station metadata, raw code groups,
-            and decoded meteorological observations.
+        dict[str, xarray.Dataset]
+            Datasets keyed by ``surface`` and/or ``upper_air``.
 
         Raises
         ------
@@ -617,12 +630,26 @@ class TempParser:
                 [observation.raw_code for observation in observations],
             )
 
-        return xr.Dataset(
+        section_dataset = xr.Dataset(
             data_vars=data_vars,
             coords={
                 "Location": range(location_start, location_start + observation_count)
             },
         )
+        surface_mask = np.asarray(
+            [observation.raw_code.startswith("99") for observation in observations]
+        )
+        category_datasets = {}
+        for category, mask in (
+            ("surface", surface_mask),
+            ("upper_air", ~surface_mask),
+        ):
+            if mask.any():
+                category_datasets[category] = section_dataset.isel(
+                    Location=np.flatnonzero(mask)
+                )
+
+        return category_datasets
 
     @staticmethod
     def _resolve_datetime(time_group: str, reference_datetime: datetime) -> datetime:
