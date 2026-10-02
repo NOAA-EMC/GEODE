@@ -7,7 +7,7 @@ import pytest
 from geode.ingest.consumers import tac_gts_reader
 from geode.ingest.ingestors.tac_gts import TempIngestor
 from geode.ingest.ingestors.tac_ingestor import TacIngestor
-from geode.ingest.ingestors.temp_parser import (
+from geode.utils.tac.temp_parser import (
     TempParser,
     _estimate_drift_positions,
     _Observation,
