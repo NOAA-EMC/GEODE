@@ -4,7 +4,7 @@ import xarray as xr
 
 from geode.ingest.ingestors import register
 from geode.ingest.ingestors.tac_ingestor import TacIngestor
-from geode.ingest.ingestors.temp_parser import TempParser
+from geode.utils.tac.temp_parser import TempParser
 
 
 @register("tac/temp")
