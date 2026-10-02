@@ -144,7 +144,7 @@ class IceChunkDataManager(DataManager):
         datatree = xr.open_datatree(
             session.store,
             engine="zarr",
-            zarr_version=3,
+            zarr_format=3,
             consolidated=False,
         )
 

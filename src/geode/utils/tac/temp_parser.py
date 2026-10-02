@@ -540,7 +540,6 @@ class TempParser:
                 {
                     "standard_name": "time",
                     "timezone": "UTC",
-                    "units": "seconds since 1970-01-01T00:00:00Z",
                 },
             ),
             "receiptTime": (
@@ -549,7 +548,6 @@ class TempParser:
                 {
                     "standard_name": "time",
                     "timezone": "UTC",
-                    "units": "seconds since 1970-01-01T00:00:00Z",
                 },
             ),
             "stationIdentification": (

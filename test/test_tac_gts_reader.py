@@ -4,6 +4,7 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+from geode.data.data_manager import data_manager
 from geode.ingest.consumers import tac_gts_reader
 from geode.ingest.ingestors.tac_gts import TempIngestor
 from geode.ingest.ingestors.tac_ingestor import TacIngestor
@@ -172,6 +173,51 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     )
     assert observations["windNorthward"].isel(Location=11).item() == pytest.approx(
         -(72 * 0.514444) * np.cos(np.deg2rad(215.0))
+    )
+
+
+def test_temp_ingestor_stores_and_reads_icechunk(tmp_path, use_empty_data_lake):
+    """Verify TEMP reports are persisted to Icechunk and can be read back.
+
+    Parameters
+    ----------
+    tmp_path : pathlib.Path
+        Temporary directory for the TAC report fixture.
+    use_empty_data_lake : None
+        Fixture that prepares and cleans the configured data lake.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    report_path = tmp_path / "temp.tac"
+    report_path.write_text(TEMP_REPORT, encoding="ascii")
+
+    TempIngestor(reference_datetime=REFERENCE_DATETIME).process(str(report_path))
+
+    surface_path = data_manager.get_file_path("temp_surface")
+    upper_air_path = data_manager.get_file_path("temp_upper_air")
+    assert Path(surface_path).is_dir()
+    assert Path(upper_air_path).is_dir()
+
+    end_datetime = datetime(2026, 10, 1, tzinfo=UTC)
+    surface_tree = data_manager.get("temp_surface", REFERENCE_DATETIME, end_datetime)
+    upper_air_tree = data_manager.get("temp_upper_air", REFERENCE_DATETIME, end_datetime)
+
+    assert surface_tree["MetaData"].dataset.sizes["Location"] == 2
+    assert upper_air_tree["MetaData"].dataset.sizes["Location"] == 24
+    assert (
+        surface_tree["MetaData"].dataset["stationIdentification"]
+        .isel(Location=0)
+        .item()
+        == "72365"
+    )
+    assert upper_air_tree["ObsValue"].dataset["temperature"].isel(Location=3).item() == (
+        pytest.approx(276.75)
     )
 
 
