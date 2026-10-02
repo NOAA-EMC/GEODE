@@ -9,11 +9,8 @@ import numpy as np
 import xarray as xr
 
 from geode.utils.conversion_units import (
-    ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
-    CELSIUS_TO_KELVIN,
-    EARTH_RADIUS_METERS,
-    KNOTS_TO_METERS_PER_SECOND,
-)
+    ASSUMED_ASCENT_RATE_METERS_PER_SECOND, CELSIUS_TO_KELVIN,
+    EARTH_RADIUS_METERS, KNOTS_TO_METERS_PER_SECOND)
 
 _SECTION_MARKER = re.compile(r"\b(TTAA|TTBB|TTCC|TTDD)\b", re.IGNORECASE)
 _SOURCE_STATION_TABLE_PATH = (
@@ -405,8 +402,6 @@ class TempParser:
             "stationIdentification",
             "latitude",
             "longitude",
-            "estimatedLatitude",
-            "estimatedLongitude",
             "pressure",
             "height",
             "reportType",
@@ -443,8 +438,6 @@ class TempParser:
                         "observation_count": combined.sizes["Location"],
                         "reference_datetime": reference_datetime.isoformat(),
                         "history": "Decoded from raw WMO TEMP TAC groups by GEODE.",
-                        "assumed_ascent_rate_m_s": ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
-                        "position_estimation_method": "Trapezoidal integration of layer winds.",
                     }
                 ),
                 name=category,
@@ -454,6 +447,9 @@ class TempParser:
             )
             tree["ObsValue"] = xr.DataTree(
                 dataset=combined[observation_variables], name="ObsValue"
+            )
+            tree["Remarks"] = xr.DataTree(
+                dataset=combined[["position", "source"]], name="Remarks"
             )
             category_trees[category] = tree
 
@@ -556,33 +552,23 @@ class TempParser:
             ),
             "latitude": (
                 "Location",
-                np.full(observation_count, latitude),
+                estimated_latitudes,
                 {"units": "degrees_north", "standard_name": "latitude"},
             ),
             "longitude": (
                 "Location",
-                np.full(observation_count, longitude),
+                estimated_longitudes,
                 {"units": "degrees_east", "standard_name": "longitude"},
             ),
-            "estimatedLatitude": (
+            "position": (
                 "Location",
-                estimated_latitudes,
-                {
-                    "units": "degrees_north",
-                    "standard_name": "latitude",
-                    "long_name": "Estimated balloon latitude",
-                    "comment": "Wind-profile estimate assuming 5 m s-1 ascent.",
-                },
+                ["Estimated through trapezoidal integration of layer winds, "
+                 "assuming 5m/s ascent rate."] * observation_count,
             ),
-            "estimatedLongitude": (
+            "source": (
                 "Location",
-                estimated_longitudes,
-                {
-                    "units": "degrees_east",
-                    "standard_name": "longitude",
-                    "long_name": "Estimated balloon longitude",
-                    "comment": "Wind-profile estimate assuming 5 m s-1 ascent.",
-                },
+                ["Decoded from raw WMO TEMP TAC groups by GEODE."]
+                * observation_count,
             ),
             "pressure": (
                 "Location",

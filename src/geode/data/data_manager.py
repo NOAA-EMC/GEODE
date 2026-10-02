@@ -153,7 +153,7 @@ class IceChunkDataManager(DataManager):
         end = np.datetime64(end_time.astimezone(UTC).replace(tzinfo=None))
 
         time_mask = (date_time >= start) & (date_time < end)
-        print(time_mask)
+
         datatree = xr.map_over_datasets(
             lambda ds: ds.where(time_mask, drop=True) if "Location" in ds.dims else ds,
             datatree,

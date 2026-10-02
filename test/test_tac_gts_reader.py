@@ -8,11 +8,8 @@ from geode.data.data_manager import data_manager
 from geode.ingest.consumers import tac_gts_reader
 from geode.ingest.ingestors.tac_gts import TempIngestor
 from geode.ingest.ingestors.tac_ingestor import TacIngestor
-from geode.utils.tac.temp_parser import (
-    TempParser,
-    _estimate_drift_positions,
-    _Observation,
-)
+from geode.utils.tac.temp_parser import (TempParser, _estimate_drift_positions,
+                                         _Observation)
 
 TEMP_REPORT = """583
 USUS04 KWBC 301800
@@ -92,22 +89,28 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     upper_air_tree = data_trees["upper_air"]
     surface_metadata = surface_tree["MetaData"].dataset
     surface_observations = surface_tree["ObsValue"].dataset
+    surface_remarks = surface_tree["Remarks"].dataset
     metadata = upper_air_tree["MetaData"].dataset
     observations = upper_air_tree["ObsValue"].dataset
+    remarks = upper_air_tree["Remarks"].dataset
     assert surface_tree.attrs["observation_count"] == 2
     assert upper_air_tree.attrs["observation_count"] == 24
+    assert "assumed_ascent_rate_m_s" not in surface_tree.attrs
+    assert "assumed_ascent_rate_m_s" not in upper_air_tree.attrs
+    assert "position_estimation_method" not in surface_tree.attrs
+    assert "position_estimation_method" not in upper_air_tree.attrs
     assert surface_metadata.sizes["Location"] == 2
     assert surface_observations.sizes["Location"] == 2
+    assert surface_remarks.sizes["Location"] == 2
     assert metadata.sizes["Location"] == 24
     assert observations.sizes["Location"] == 24
+    assert remarks.sizes["Location"] == 24
     assert set(metadata.data_vars) == {
         "dateTime",
         "receiptTime",
         "stationIdentification",
         "latitude",
         "longitude",
-        "estimatedLatitude",
-        "estimatedLongitude",
         "pressure",
         "height",
         "reportType",
@@ -137,20 +140,37 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     )
     assert metadata["latitude"].attrs["units"] == "degrees_north"
     assert metadata["longitude"].attrs["units"] == "degrees_east"
-    assert metadata["latitude"].isel(Location=0).item() == pytest.approx(35.04)
-    assert metadata["longitude"].isel(Location=0).item() == pytest.approx(-106.62)
-    assert metadata["latitude"].isel(Location=12).item() == pytest.approx(37.76)
-    assert metadata["longitude"].isel(Location=12).item() == pytest.approx(-99.97)
-    assert surface_metadata["estimatedLatitude"].isel(
-        Location=0
-    ).item() == pytest.approx(35.04)
-    assert surface_metadata["estimatedLongitude"].isel(
-        Location=0
-    ).item() == pytest.approx(-106.62)
-    assert metadata["estimatedLatitude"].isel(Location=3).item() > 35.04
-    assert metadata["estimatedLongitude"].isel(Location=3).item() > -106.62
-    assert np.isnan(metadata["estimatedLatitude"].isel(Location=11).item())
-    assert np.isnan(metadata["estimatedLongitude"].isel(Location=11).item())
+    assert "comment" not in metadata["latitude"].attrs
+    assert "comment" not in metadata["longitude"].attrs
+    assert set(surface_remarks.data_vars) == {"position", "source"}
+    assert set(remarks.data_vars) == {"position", "source"}
+    assert surface_remarks["position"].dims == ("Location",)
+    assert remarks["position"].dims == ("Location",)
+    assert surface_remarks["source"].dims == ("Location",)
+    assert remarks["source"].dims == ("Location",)
+    position_remark = (
+        "Estimated through trapezoidal integration of layer winds, "
+        "assuming 5m/s ascent rate."
+    )
+    source_remark = "Decoded from raw WMO TEMP TAC groups by GEODE."
+    np.testing.assert_array_equal(
+        surface_remarks["position"].values, [position_remark] * 2
+    )
+    np.testing.assert_array_equal(remarks["position"].values, [position_remark] * 24)
+    np.testing.assert_array_equal(
+        surface_remarks["source"].values, [source_remark] * 2
+    )
+    np.testing.assert_array_equal(remarks["source"].values, [source_remark] * 24)
+    assert surface_metadata["latitude"].isel(Location=0).item() == pytest.approx(
+        35.04
+    )
+    assert surface_metadata["longitude"].isel(Location=0).item() == pytest.approx(
+        -106.62
+    )
+    assert metadata["latitude"].isel(Location=3).item() > 35.04
+    assert metadata["longitude"].isel(Location=3).item() > -106.62
+    assert np.isnan(metadata["latitude"].isel(Location=11).item())
+    assert np.isnan(metadata["longitude"].isel(Location=11).item())
     assert metadata["pressure"].attrs["units"] == "Pa"
     assert metadata["height"].isel(Location=3).item() == pytest.approx(3068.0)
     assert observations["temperature"].isel(Location=3).item() == pytest.approx(276.75)
@@ -207,6 +227,8 @@ def test_temp_ingestor_stores_and_reads_icechunk(tmp_path, use_empty_data_lake):
     end_datetime = datetime(2026, 10, 1, tzinfo=UTC)
     surface_tree = data_manager.get("temp_surface", REFERENCE_DATETIME, end_datetime)
     upper_air_tree = data_manager.get("temp_upper_air", REFERENCE_DATETIME, end_datetime)
+    print(surface_tree)
+    print(upper_air_tree)
 
     assert surface_tree["MetaData"].dataset.sizes["Location"] == 2
     assert upper_air_tree["MetaData"].dataset.sizes["Location"] == 24
