@@ -1,4 +1,3 @@
-import argparse
 import datetime
 import sys
 
@@ -35,20 +34,3 @@ class NcepDumpReader:
             for file_path in file_paths:
                 ingestor = ingestor_class()
                 ingestor.process(file_path)
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Read NCEP dump file")
-    parser.add_argument("id", type=str, help="ID for the data type")
-    parser.add_argument("start_date", type=str, help="Start date in YYYY-MM-DD format")
-    parser.add_argument("end_date", type=str, help="End date in YYYY-MM-DD format")
-    args = parser.parse_args()
-
-    start_date = datetime.datetime.strptime(args.start_date, "%Y-%m-%d").astimezone(
-        datetime.UTC
-    )
-    end_date = datetime.datetime.strptime(args.end_date, "%Y-%m-%d").astimezone(
-        datetime.UTC
-    )
-
-    NcepDumpReader().ingest(args.id, start_date, end_date)

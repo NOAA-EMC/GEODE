@@ -1,4 +1,3 @@
-import argparse
 import json
 import os
 import threading
@@ -183,11 +182,3 @@ class Wis2Listener:
         except OSError as e:
             print(f"[-] Error saving file: {e}")
             return ""
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="MQTT Listener for WIS2 Notifications")
-    args = parser.parse_args()
-
-    listener = Wis2Listener()
-    listener.listen()

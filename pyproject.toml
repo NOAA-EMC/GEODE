@@ -8,8 +8,8 @@ version = "0.0.0"
 description = "Geospatial Earth Observation Data Engine"
 requires-python = ">=3.11"
 dependencies = [
-	"numpy<2,>=1.23.4,",
-	"icechunk>=1.1.21",
+	"numpy>=1.23.4,",
+	"icechunk>=2",
 	"netCDF4",
 	"pywis-pubsub>=0.12.0",
 	"PyYAML",
@@ -27,14 +27,12 @@ dev = [
 ]
 
 [project.scripts]
-geode_admin = "geode.admin:main"
-bufr_table = "geode.utils.bufr_table.__main__:main"
+geode = "geode.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
 
-[tool.setuptools.package-data]
-"geode.utils.bufr_table.resources" = ["BUFRCREX_TableB_en.txt", "BUFRCREX_CodeFlag_en.txt"]
+#[tool.setuptools.package-data]
 
 [tool.coverage.run]
 source = ["src/geode"]
