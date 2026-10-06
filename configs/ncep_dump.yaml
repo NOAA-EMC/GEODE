@@ -9,6 +9,8 @@ data_types:
     path_template: "{hour}/atmos/gdas.t{hour}z.atms.tm00.bufr_d"
     num_tasks: 24
     batch_days: 15
+    aux_file:
+      - "atms_beamwidth.txt"
     
 
   - id: surface_obs
