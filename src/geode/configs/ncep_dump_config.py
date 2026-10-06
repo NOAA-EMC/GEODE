@@ -53,5 +53,6 @@ class DumpConfig(ConfigBase):
                 return data_type.aux_file
         return []
 
+
 # create singleton instance of DumpConfig on module load
 dump_config = DumpConfig(os.path.join(PackageConfigDir, "ncep_dump.yaml"))
