@@ -1,24 +1,22 @@
 import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
-from functools import lru_cache
-from pathlib import Path
-from sysconfig import get_path
 
 import numpy as np
 import xarray as xr
 
 from geode.utils.conversion_units import (
-    ASSUMED_ASCENT_RATE_METERS_PER_SECOND, CELSIUS_TO_KELVIN,
-    EARTH_RADIUS_METERS, KNOTS_TO_METERS_PER_SECOND)
+    ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
+    CELSIUS_TO_KELVIN,
+    EARTH_RADIUS_METERS,
+    KNOTS_TO_METERS_PER_SECOND,
+)
+from geode.utils.station_data import (
+    load_station_coordinates as _load_station_coordinates,
+)
+from geode.utils.wind import wind_components as _wind_components
 
 _SECTION_MARKER = re.compile(r"\b(TTAA|TTBB|TTCC|TTDD)\b", re.IGNORECASE)
-_SOURCE_STATION_TABLE_PATH = (
-    Path(__file__).resolve().parents[4] / "parm" / "sonde.land.tbl"
-)
-_INSTALLED_STATION_TABLE_PATH = (
-    Path(get_path("data")) / "share" / "geode" / "parm" / "sonde.land.tbl"
-)
 _MANDATORY_PRESSURES = {
     "00": 100000.0,
     "92": 92500.0,
@@ -47,89 +45,6 @@ _MANDATORY_HEIGHT_OFFSETS = {
 }
 
 
-@lru_cache(maxsize=1)
-def _load_station_coordinates() -> dict[str, tuple[float, float, float]]:
-    """Load WMO station coordinates from the local GEMPAK station table.
-
-    Parameters
-    ----------
-    None
-
-    Returns
-    -------
-    dict[str, tuple[float, float, float]]
-        Mapping from WMO station ID to latitude, longitude, and elevation in
-        decimal degrees and metres above mean sea level.
-
-    Raises
-    ------
-    FileNotFoundError
-        If the station table is not present in the source tree or installed data path.
-    ValueError
-        If a station row is malformed, has invalid coordinates, or repeats an ID.
-
-    Examples
-    --------
-    ``_load_station_coordinates()["72365"]`` returns
-    ``(35.04, -106.62, 1619.0)``.
-    """
-    station_table_path = next(
-        (
-            path
-            for path in (
-                _SOURCE_STATION_TABLE_PATH,
-                _INSTALLED_STATION_TABLE_PATH,
-            )
-            if path.is_file()
-        ),
-        None,
-    )
-    if station_table_path is None:
-        raise FileNotFoundError(
-            "FATAL ERROR: sonde.land.tbl was not found in the source tree or "
-            f"installed data path {_INSTALLED_STATION_TABLE_PATH}."
-        )
-
-    station_coordinates = {}
-    with station_table_path.open(encoding="ascii") as station_table:
-        for line_number, line in enumerate(station_table, start=1):
-            if not line.strip() or line.lstrip().startswith("!"):
-                continue
-            if len(line.rstrip("\r\n")) < 67:
-                raise ValueError(
-                    f"Malformed station table row {line_number}: expected coordinate fields."
-                )
-
-            station_id = line[10:15].strip()
-            try:
-                latitude = int(line[55:60]) / 100.0
-                longitude = int(line[61:67]) / 100.0
-                elevation = float(int(line[68:73]))
-            except ValueError as error:
-                raise ValueError(
-                    f"Invalid station position on table row {line_number}."
-                ) from error
-
-            if len(station_id) != 5 or not station_id.isdigit():
-                raise ValueError(
-                    f"Invalid WMO station ID on table row {line_number}: {station_id!r}."
-                )
-            if not -90 <= latitude <= 90 or not -180 <= longitude <= 180:
-                raise ValueError(
-                    f"Out-of-range station coordinates on table row {line_number}."
-                )
-            if not -500 <= elevation <= 9000:
-                raise ValueError(
-                    f"Out-of-range station elevation on table row {line_number}."
-                )
-            if station_id in station_coordinates:
-                raise ValueError(f"Duplicate WMO station ID in table: {station_id}.")
-
-            station_coordinates[station_id] = (latitude, longitude, elevation)
-
-    return station_coordinates
-
-
 @dataclass(frozen=True)
 class _TempSection:
     code: str
@@ -147,40 +62,6 @@ class _Observation:
     wind_direction: float | None
     wind_speed: float | None
     raw_code: str
-
-
-def _wind_components(
-    wind_direction: float | None, wind_speed: float | None
-) -> tuple[float | None, float | None]:
-    """Convert meteorological wind direction and speed to east/north components.
-
-    Parameters
-    ----------
-    wind_direction : float | None
-        Direction the wind comes from, in degrees clockwise from north.
-    wind_speed : float | None
-        Wind speed in metres per second.
-
-    Returns
-    -------
-    tuple[float | None, float | None]
-        Eastward U and northward V components in metres per second.
-
-    Examples
-    --------
-    A 10 m/s wind from west returns ``(10.0, 0.0)``.
-    """
-    if wind_speed is None:
-        return None, None
-    if wind_direction is None:
-        if wind_speed == 0.0:
-            return 0.0, 0.0
-        return None, None
-
-    direction_radians = np.deg2rad(wind_direction)
-    eastward_wind = -wind_speed * np.sin(direction_radians)
-    northward_wind = -wind_speed * np.cos(direction_radians)
-    return float(eastward_wind), float(northward_wind)
 
 
 def _estimate_drift_positions(
@@ -562,13 +443,17 @@ class TempParser:
             ),
             "position": (
                 "Location",
-                ["Estimated through trapezoidal integration of layer winds, "
-                 "assuming 5m/s ascent rate."] * observation_count,
+                [
+                    (
+                        "Estimated through trapezoidal integration of layer winds, "
+                        "assuming 5m/s ascent rate."
+                    )
+                ]
+                * observation_count,
             ),
             "source": (
                 "Location",
-                ["Decoded from raw WMO TEMP TAC groups by GEODE."]
-                * observation_count,
+                ["Decoded from raw WMO TEMP TAC groups by GEODE."] * observation_count,
             ),
             "pressure": (
                 "Location",
