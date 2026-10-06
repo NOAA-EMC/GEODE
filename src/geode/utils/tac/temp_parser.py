@@ -43,6 +43,20 @@ _MANDATORY_HEIGHT_OFFSETS = {
     "15": 15000,
     "10": 20000,
 }
+_TTCC_MANDATORY_PRESSURES = {
+    "70": 7000.0,
+    "50": 5000.0,
+    "30": 3000.0,
+    "20": 2000.0,
+    "10": 1000.0,
+}
+_TTCC_MANDATORY_HEIGHT_OFFSETS = {
+    "70": 18000,
+    "50": 20000,
+    "30": 23000,
+    "20": 26000,
+    "10": 30000,
+}
 
 
 @dataclass(frozen=True)
@@ -207,7 +221,7 @@ def _estimate_drift_positions(
 
 
 class TempParser:
-    """Decode supported TTAA levels in WMO TEMP reports."""
+    """Decode TTAA, TTBB, TTCC, and TTDD levels in WMO TEMP reports."""
 
     def parse(
         self,
@@ -367,28 +381,29 @@ class TempParser:
 
         Raises
         ------
-        NotImplementedError
-            If the section uses a TEMP form not yet decoded here.
         ValueError
-            If a supported section contains malformed mandatory-level groups.
+            If the section header or a recognized level group is malformed.
 
         Examples
         --------
-        TTAA sections are decoded through their surface and standard pressure
-        levels. TTCC and significant-level sections are not decoded yet.
+        TTAA and TTCC sections are decoded through mandatory and special
+        levels. TTBB and TTDD significant temperature and wind levels are
+        combined by pressure.
         """
-        if section.code != "TTAA":
-            raise NotImplementedError(
-                f"Decoding {section.code} sections is not yet supported; only TTAA is decoded."
-            )
-        if len(section.time_group) != 5 or not section.time_group.isdigit():
+        if len(section.time_group) != 5 or not section.time_group[:4].isdigit():
             raise ValueError(f"Malformed TEMP YYGGi time group: {section.time_group}")
-        if section.time_group[-1] not in {"0", "1"}:
+        if int(section.time_group[:2]) <= 50 and section.time_group[-1] not in {
+            "0",
+            "1",
+        }:
             raise ValueError(
                 f"Unsupported TEMP wind-speed unit indicator: {section.time_group[-1]}"
             )
 
-        observations = cls._decode_ttaa_levels(section)
+        if section.code in {"TTAA", "TTCC"}:
+            observations = cls._decode_ttaa_levels(section)
+        else:
+            observations = cls._decode_significant_levels(section)
         if not observations:
             raise ValueError(
                 f"TEMP section {section.code} has no decodable mandatory levels."
@@ -506,7 +521,10 @@ class TempParser:
             },
         )
         surface_mask = np.asarray(
-            [observation.raw_code.startswith("99") for observation in observations]
+            [
+                section.code == "TTAA" and observation.raw_code.startswith("99")
+                for observation in observations
+            ]
         )
         category_datasets = {}
         for category, mask in (
@@ -547,7 +565,15 @@ class TempParser:
         An ``80181`` group represents day 30 at 18 UTC. A day 31 observation
         anchored near 1 March resolves to the closest valid adjacent-month date.
         """
-        if len(time_group) != 5 or not time_group.isdigit():
+        if (
+            len(time_group) != 5
+            or not time_group[:4].isdigit()
+            or (int(time_group[:2]) <= 50 and time_group[-1] not in {"0", "1"})
+            or (
+                int(time_group[:2]) > 50
+                and not (time_group[-1].isdigit() or time_group[-1] == "/")
+            )
+        ):
             raise ValueError(f"Malformed TEMP YYGGi time group: {time_group}")
         encoded_day = int(time_group[:2])
         day = encoded_day - 50 if encoded_day > 50 else encoded_day
@@ -604,14 +630,14 @@ class TempParser:
         --------
         A day code of ``80`` signals day 30 and wind speed in knots.
         """
-        if len(time_group) != 5 or not time_group.isdigit():
+        if len(time_group) != 5 or not time_group[:4].isdigit():
             raise ValueError(f"Malformed TEMP YYGGi time group: {time_group}")
+        if int(time_group[:2]) > 50:
+            return "1"
         if time_group[-1] not in {"0", "1"}:
             raise ValueError(
                 f"Unsupported TEMP wind-speed unit indicator: {time_group[-1]}"
             )
-        if int(time_group[:2]) > 50:
-            return "1"
         return time_group[-1]
 
     @classmethod
@@ -621,7 +647,7 @@ class TempParser:
         Parameters
         ----------
         section : _TempSection
-            TTAA TEMP section.
+            TTAA or TTCC TEMP section.
 
         Returns
         -------
@@ -740,11 +766,16 @@ class TempParser:
                 group_index += 2
                 continue
 
-            pressure = _MANDATORY_PRESSURES.get(level_code[:2])
+            mandatory_pressures = (
+                _TTCC_MANDATORY_PRESSURES
+                if section.code == "TTCC"
+                else _MANDATORY_PRESSURES
+            )
+            pressure = mandatory_pressures.get(level_code[:2])
             if pressure is None:
                 group_index += 1
                 continue
-            if len(level_code) != 5 or not level_code.isdigit():
+            if len(level_code) != 5 or not level_code[:2].isdigit():
                 raise ValueError(f"Malformed TEMP mandatory-level group: {level_code}")
             if group_index + 2 >= len(groups):
                 raise ValueError(
@@ -757,10 +788,20 @@ class TempParser:
             wind_direction, wind_speed = cls._decode_wind_group(
                 groups[group_index + 2], section.time_group
             )
+            height = cls._decode_mandatory_level_height(level_code, section.code)
+            if (
+                height is None
+                and temperature is None
+                and dew_point_temperature is None
+                and wind_direction is None
+                and wind_speed is None
+            ):
+                group_index += 3
+                continue
             observations.append(
                 _Observation(
                     pressure=pressure,
-                    height=cls._decode_mandatory_level_height(level_code),
+                    height=height,
                     temperature=temperature,
                     dew_point_temperature=dew_point_temperature,
                     wind_direction=wind_direction,
@@ -775,14 +816,157 @@ class TempParser:
 
         return observations
 
+    @classmethod
+    def _decode_significant_levels(cls, section: _TempSection) -> list[_Observation]:
+        """Decode significant temperature and wind groups in TTBB or TTDD.
+
+        Parameters
+        ----------
+        section : _TempSection
+            TTBB or TTDD TEMP section.
+
+        Returns
+        -------
+        list[_Observation]
+            Temperature and wind levels in report order.
+
+        Raises
+        ------
+        ValueError
+            If a recognized pressure, temperature, or wind group is malformed.
+
+        Examples
+        --------
+        Significant temperature and wind groups at the same pressure are
+        combined into one observation.
+        """
+        groups = section.code_groups
+        wind_start = groups.index("21212") if "21212" in groups else len(groups)
+        temperature_end = wind_start
+        for marker in ("31313", "51515", "61616", "41414"):
+            marker_index = groups.index(marker) if marker in groups else len(groups)
+            temperature_end = min(temperature_end, marker_index)
+
+        observations = []
+        pressure_indices = {}
+        for group_index in range(0, temperature_end, 2):
+            if group_index + 1 >= temperature_end:
+                break
+            pressure_group = groups[group_index]
+            temperature_group = groups[group_index + 1]
+            pressure = cls._decode_significant_pressure(pressure_group)
+            if pressure is None:
+                continue
+            temperature, dew_point_temperature = cls._decode_temperature_group(
+                temperature_group
+            )
+            pressure_indices.setdefault(pressure, len(observations))
+            observations.append(
+                _Observation(
+                    pressure=pressure,
+                    height=None,
+                    temperature=temperature,
+                    dew_point_temperature=dew_point_temperature,
+                    wind_direction=None,
+                    wind_speed=None,
+                    raw_code=f"{pressure_group} {temperature_group}",
+                )
+            )
+
+        wind_end = len(groups)
+        if wind_start < len(groups):
+            for marker in ("31313", "51515", "61616", "41414"):
+                marker_index = (
+                    groups.index(marker, wind_start + 1)
+                    if marker in groups[wind_start + 1 :]
+                    else len(groups)
+                )
+                wind_end = min(wind_end, marker_index)
+
+            for group_index in range(wind_start + 1, wind_end, 2):
+                if group_index + 1 >= wind_end:
+                    break
+                pressure_group = groups[group_index]
+                wind_group = groups[group_index + 1]
+                pressure = cls._decode_significant_pressure(pressure_group)
+                if pressure is None:
+                    continue
+                wind_direction, wind_speed = cls._decode_wind_group(
+                    wind_group, section.time_group
+                )
+                observation_index = pressure_indices.get(pressure)
+                if observation_index is None:
+                    pressure_indices[pressure] = len(observations)
+                    observations.append(
+                        _Observation(
+                            pressure=pressure,
+                            height=None,
+                            temperature=None,
+                            dew_point_temperature=None,
+                            wind_direction=wind_direction,
+                            wind_speed=wind_speed,
+                            raw_code=f"{pressure_group} {wind_group}",
+                        )
+                    )
+                else:
+                    observation = observations[observation_index]
+                    observations[observation_index] = _Observation(
+                        pressure=observation.pressure,
+                        height=observation.height,
+                        temperature=observation.temperature,
+                        dew_point_temperature=observation.dew_point_temperature,
+                        wind_direction=wind_direction,
+                        wind_speed=wind_speed,
+                        raw_code=f"{observation.raw_code} {pressure_group} {wind_group}",
+                    )
+
+        return observations
+
     @staticmethod
-    def _decode_mandatory_level_height(group: str) -> float | None:
+    def _decode_significant_pressure(group: str) -> float | None:
+        """Decode the pressure in a significant-level pressure group.
+
+        Parameters
+        ----------
+        group : str
+            Five-digit significant-level pressure group.
+
+        Returns
+        -------
+        float | None
+            Pressure in pascals, or ``None`` for a missing pressure marker.
+
+        Raises
+        ------
+        ValueError
+            If the pressure group is malformed.
+
+        Examples
+        --------
+        ``11985`` represents 985 hPa and ``00008`` represents 1008 hPa.
+        """
+        if group == "/////":
+            return None
+        if len(group) != 5 or not group.isdigit():
+            raise ValueError(f"Malformed TEMP significant pressure group: {group}")
+
+        pressure_code = int(group[-3:])
+        pressure_hpa = pressure_code + 1000 if pressure_code < 100 else pressure_code
+        return float(pressure_hpa * 100)
+
+    @staticmethod
+    def _decode_mandatory_level_height(
+        group: str,
+        section_code: str = "TTAA",
+    ) -> float | None:
         """Decode geopotential height from a mandatory pressure-level group.
 
         Parameters
         ----------
         group : str
             Five-digit mandatory-level group, such as ``70068``.
+        section_code : str, default="TTAA"
+            TEMP section code, which determines the height offset.
 
         Returns
         -------
@@ -799,11 +983,21 @@ class TempParser:
         --------
         ``70068`` decodes to 3068 m.
         """
-        if len(group) != 5 or not group.isdigit():
+
+        if len(group) != 5 or not group[:2].isdigit():
+            raise ValueError(f"Malformed TEMP mandatory-level group: {group}")
+        if group[2:] == "///":
+            return None
+        if not group[2:].isdigit():
             raise ValueError(f"Malformed TEMP mandatory-level group: {group}")
 
         pressure_code = group[:2]
-        height_offset = _MANDATORY_HEIGHT_OFFSETS.get(pressure_code)
+        height_offsets = (
+            _TTCC_MANDATORY_HEIGHT_OFFSETS
+            if section_code == "TTCC"
+            else _MANDATORY_HEIGHT_OFFSETS
+        )
+        height_offset = height_offsets.get(pressure_code)
         if height_offset is None:
             return None
         encoded_height = int(group[2:])
