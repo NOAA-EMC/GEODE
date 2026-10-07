@@ -18,6 +18,7 @@ class DataTypeConfig(ConfigBase):
     num_tasks = Optional(IntField(), default=1)
     batch_days = Optional(IntField(), default=1)
     memory = Optional(StrField(), default=None)
+    aux_file = Optional(ListField(StrField()), default=[])
 
     def __init__(self, hours):
         self.hours = hours
@@ -44,6 +45,13 @@ class DumpConfig(ConfigBase):
             raise ValueError(f"No path template found for BUFR dump ID: {dump_id}")
 
         return [data_type.path_template.format(hour=hour) for hour in self.hours]
+
+    def get_aux_files(self, dump_id: str) -> list[str]:
+        """Helper method to retrieve auxiliary files for a specific dump ID."""
+        for data_type in self.data_types:
+            if data_type.id == dump_id:
+                return data_type.aux_file
+        return []
 
 
 # create singleton instance of DumpConfig on module load
