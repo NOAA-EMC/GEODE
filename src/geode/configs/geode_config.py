@@ -60,7 +60,12 @@ def _find_table_path() -> str:
 
 
 class BufrConfig(ConfigBase):
-    table_path = Optional(ResolvedPathField(), default=_find_table_path())
+    table_path = Optional(ResolvedPathField(), default=None)
+
+    def resolve_table_path(self) -> str:
+        if self.table_path is None:
+            return _find_table_path()
+        return self.table_path
 
     @property
     def map_dir(self) -> str:
