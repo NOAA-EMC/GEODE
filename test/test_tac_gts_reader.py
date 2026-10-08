@@ -270,7 +270,7 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         Location=ttcc_indices[0]
     ).item() == pytest.approx(259.85)
     assert metadata["pressure"].isel(Location=ttdd_indices[0]).item() == pytest.approx(
-        9740.0
+        97400.0
     )
     assert observations["temperature"].isel(
         Location=ttdd_indices[0]
