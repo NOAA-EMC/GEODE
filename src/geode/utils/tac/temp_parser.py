@@ -707,9 +707,7 @@ class TempParser:
                 break
 
             if level_code.startswith("88"):
-                pressure = cls._decode_extra_layer_pressure(
-                    level_code, section.code
-                )
+                pressure = cls._decode_extra_layer_pressure(level_code, section.code)
                 if pressure is None:
                     group_index += 1
                     continue
@@ -741,9 +739,7 @@ class TempParser:
                 continue
 
             if level_code.startswith("77"):
-                pressure = cls._decode_extra_layer_pressure(
-                    level_code, section.code
-                )
+                pressure = cls._decode_extra_layer_pressure(level_code, section.code)
                 if pressure is None:
                     group_index += 1
                     continue
@@ -858,9 +854,7 @@ class TempParser:
                 break
             pressure_group = groups[group_index]
             temperature_group = groups[group_index + 1]
-            pressure = cls._decode_significant_pressure(
-                pressure_group, section.code
-            )
+            pressure = cls._decode_significant_pressure(pressure_group, section.code)
             if pressure is None:
                 continue
             temperature, dew_point_temperature = cls._decode_temperature_group(
@@ -895,8 +889,8 @@ class TempParser:
                 pressure_group = groups[group_index]
                 wind_group = groups[group_index + 1]
                 pressure = cls._decode_significant_pressure(
-                pressure_group, section.code
-            )
+                    pressure_group, section.code
+                )
                 if pressure is None:
                     continue
                 wind_direction, wind_speed = cls._decode_wind_group(
