@@ -502,8 +502,17 @@ def test_temp_parser_decodes_negative_temperature_and_large_depression():
     assert dew_point == pytest.approx(260.95)
 
 
-def test_temp_parser_represents_calm_wind_direction_as_missing():
-    """Verify a calm TEMP wind group has zero speed and undefined direction.
+@pytest.mark.parametrize(
+    ("direction_group", "speed_group", "expected_direction", "expected_speed"),
+    [
+        pytest.param("00000", "08180", None, 0.0, id="calm-wind"),
+        pytest.param("23013", "80180", 230.0, 13 * 0.514444, id="knots"),
+    ],
+)
+def test_temp_parser_decodes_wind_groups(
+    direction_group, speed_group, expected_direction, expected_speed
+):
+    """Verify TEMP wind groups decode calm and knots-coded winds.
 
     Parameters
     ----------
@@ -517,10 +526,10 @@ def test_temp_parser_represents_calm_wind_direction_as_missing():
     --------
     Run with ``pytest test/test_tac_gts_reader.py``.
     """
-    direction, speed = TempParser._decode_wind_group("00000", "08180")
+    direction, speed = TempParser._decode_wind_group(direction_group, speed_group)
 
-    assert direction is None
-    assert speed == 0.0
+    assert direction == expected_direction
+    assert speed == pytest.approx(expected_speed)
 
 
 def test_temp_parser_resolves_datetime_across_year_boundary():
@@ -569,27 +578,6 @@ def test_temp_parser_rejects_invalid_datetime_inputs():
 
     with pytest.raises(ValueError, match="Invalid TEMP day/hour"):
         TempParser._resolve_datetime("82181", REFERENCE_DATETIME)
-
-
-def test_temp_day_plus_fifty_marks_knots():
-    """Verify the TEMP day +50 convention also selects knots.
-
-    Parameters
-    ----------
-    None
-
-    Returns
-    -------
-    None
-
-    Examples
-    --------
-    Run with ``pytest test/test_tac_gts_reader.py``.
-    """
-    direction, speed = TempParser._decode_wind_group("23013", "80180")
-
-    assert direction == 230.0
-    assert speed == pytest.approx(13 * 0.514444)
 
 
 def test_temp_ingestor_reads_and_parses_file(tmp_path):
