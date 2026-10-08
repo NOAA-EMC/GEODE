@@ -973,10 +973,10 @@ class TempParser:
             raise ValueError(f"Malformed TEMP temperature group: {group}")
 
         temperature_code = int(group[:3])
-        if temperature_code >= 500:
-            temperature_celsius = -(temperature_code - 500) / 10.0
-        else:
-            temperature_celsius = temperature_code / 10.0
+        temperature_celsius = temperature_code / 10.0
+        # An odd tenths digit means a negative temperature.
+        if temperature_code % 2 == 1:
+            temperature_celsius = -temperature_celsius
         temperature_kelvin = temperature_celsius + CELSIUS_TO_KELVIN
 
         depression_code = group[3:]

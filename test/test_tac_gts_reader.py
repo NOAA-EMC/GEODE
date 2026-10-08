@@ -292,13 +292,13 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     )
     assert observations["temperature"].isel(
         Location=ttcc_indices[0]
-    ).item() == pytest.approx(259.85)
+    ).item() == pytest.approx(209.85)
     assert metadata["pressure"].isel(Location=ttdd_indices[0]).item() == pytest.approx(
         9740.0
     )
     assert observations["temperature"].isel(
         Location=ttdd_indices[0]
-    ).item() == pytest.approx(255.25)
+    ).item() == pytest.approx(205.25)
     assert np.isfinite(observations["windEastward"].values[ttdd_indices]).any()
 
 
@@ -423,9 +423,9 @@ def test_temp_parser_decodes_valid_tropopause_as_an_observation():
     assert data_trees["upper_air"].attrs["observation_count"] == 2
     assert metadata["pressure"].values.tolist() == pytest.approx([95000.0, 23300.0])
     assert np.isnan(metadata["height"].values).all()
-    assert observations["temperature"].isel(Location=0).item() == pytest.approx(285.65)
+    assert observations["temperature"].isel(Location=0).item() == pytest.approx(260.65)
     assert observations["dewPointTemperature"].isel(Location=0).item() == pytest.approx(
-        277.65
+        252.65
     )
     assert observations["windEastward"].isel(Location=0).item() == pytest.approx(
         -(13 * 0.514444) * np.sin(np.deg2rad(195.0))
@@ -486,10 +486,10 @@ def test_temp_parser_decodes_negative_temperature_and_large_depression():
     --------
     Run with ``pytest test/test_tac_gts_reader.py``.
     """
-    temperature, dew_point = TempParser._decode_temperature_group("56256")
+    temperature, dew_point = TempParser._decode_temperature_group("12156")
 
-    assert temperature == pytest.approx(266.95)
-    assert dew_point == pytest.approx(260.95)
+    assert temperature == pytest.approx(261.05)
+    assert dew_point == pytest.approx(255.05)
 
 
 @pytest.mark.parametrize(
