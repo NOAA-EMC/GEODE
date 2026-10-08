@@ -238,9 +238,7 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert remarks["position"].dims == ("Location",)
     assert surface_remarks["source"].dims == ("Location",)
     assert remarks["source"].dims == ("Location",)
-    position_remark = (
-        "Position is launch only; coordinates are fixed at the station."
-    )
+    position_remark = "Position is launch only; coordinates are fixed at the station."
     source_remark = "Decoded from raw WMO TEMP TAC groups by GEODE."
     np.testing.assert_array_equal(
         surface_remarks["position"].values, [position_remark] * 2
