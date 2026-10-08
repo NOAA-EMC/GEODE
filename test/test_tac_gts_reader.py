@@ -229,10 +229,9 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         "2026-10-06T12:00:00", "ns"
     )
     assert surface_metadata["stationIdentification"].isel(Location=0).item() == "72403"
-    assert (
-        surface_observations["stationPressure"].isel(Location=0).item()
-        == pytest.approx(101300.0)
-    )
+    assert surface_observations["stationPressure"].isel(
+        Location=0
+    ).item() == pytest.approx(101300.0)
     assert surface_metadata["stationIdentification"].isel(Location=1).item() == "72440"
     assert metadata["latitude"].attrs["units"] == "degrees_north"
     assert metadata["longitude"].attrs["units"] == "degrees_east"
