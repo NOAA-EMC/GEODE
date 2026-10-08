@@ -57,11 +57,19 @@ class RadiosondeIngestor(ObsBuilderIngestor):
         from pathlib import Path
 
         # Tell Python where prepbufr_obs_builder.py lives
-        spoc_atm_dir = Path(__file__).resolve().parents[3] / "spoc" / "dump" / "scripts" / "atmosphere"
+        spoc_atm_dir = (
+            Path(__file__).resolve().parents[3]
+            / "spoc"
+            / "dump"
+            / "scripts"
+            / "atmosphere"
+        )
         if str(spoc_atm_dir) not in sys.path:
             sys.path.insert(0, str(spoc_atm_dir))
 
-        from spoc.dump.scripts.atmosphere.prepbufr_adpupa import AdpupaPrepbufrObsBuilder
+        from spoc.dump.scripts.atmosphere.prepbufr_adpupa import (
+            AdpupaPrepbufrObsBuilder,
+        )
 
         super().__init__("radiosonde", AdpupaPrepbufrObsBuilder())
 
