@@ -214,7 +214,7 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     )
     assert surface_metadata["stationIdentification"].isel(Location=0).item() == "72403"
     assert surface_metadata["pressure"].isel(Location=0).item() == pytest.approx(
-        100130.0
+        101300.0
     )
     assert surface_metadata["stationIdentification"].isel(Location=1).item() == "72440"
     assert metadata["latitude"].attrs["units"] == "degrees_north"
@@ -270,7 +270,7 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         Location=ttcc_indices[0]
     ).item() == pytest.approx(259.85)
     assert metadata["pressure"].isel(Location=ttdd_indices[0]).item() == pytest.approx(
-        97400.0
+        9740.0
     )
     assert observations["temperature"].isel(
         Location=ttdd_indices[0]

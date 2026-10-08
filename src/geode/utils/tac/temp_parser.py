@@ -677,8 +677,8 @@ class TempParser:
                     f"Malformed TEMP surface pressure group: {surface_group}"
                 )
             pressure_code = int(surface_group[2:])
-            pressure = (100000.0 if pressure_code < 500 else 90000.0) + (
-                pressure_code * 10.0
+            pressure = float(
+                (pressure_code + 1000 if pressure_code < 100 else pressure_code) * 100
             )
             temperature_group = groups[1] if len(groups) > 1 else "/////"
             wind_group = groups[2] if len(groups) > 2 else "/////"
@@ -707,7 +707,9 @@ class TempParser:
                 break
 
             if level_code.startswith("88"):
-                pressure = cls._decode_extra_layer_pressure(level_code)
+                pressure = cls._decode_extra_layer_pressure(
+                    level_code, section.code
+                )
                 if pressure is None:
                     group_index += 1
                     continue
@@ -739,7 +741,9 @@ class TempParser:
                 continue
 
             if level_code.startswith("77"):
-                pressure = cls._decode_extra_layer_pressure(level_code)
+                pressure = cls._decode_extra_layer_pressure(
+                    level_code, section.code
+                )
                 if pressure is None:
                     group_index += 1
                     continue
@@ -854,7 +858,9 @@ class TempParser:
                 break
             pressure_group = groups[group_index]
             temperature_group = groups[group_index + 1]
-            pressure = cls._decode_significant_pressure(pressure_group)
+            pressure = cls._decode_significant_pressure(
+                pressure_group, section.code
+            )
             if pressure is None:
                 continue
             temperature, dew_point_temperature = cls._decode_temperature_group(
@@ -888,7 +894,9 @@ class TempParser:
                     break
                 pressure_group = groups[group_index]
                 wind_group = groups[group_index + 1]
-                pressure = cls._decode_significant_pressure(pressure_group)
+                pressure = cls._decode_significant_pressure(
+                pressure_group, section.code
+            )
                 if pressure is None:
                     continue
                 wind_direction, wind_speed = cls._decode_wind_group(
@@ -923,13 +931,17 @@ class TempParser:
         return observations
 
     @staticmethod
-    def _decode_significant_pressure(group: str) -> float | None:
+    def _decode_significant_pressure(
+        group: str, section_code: str = "TTBB"
+    ) -> float | None:
         """Decode the pressure in a significant-level pressure group.
 
         Parameters
         ----------
         group : str
             Five-digit significant-level pressure group.
+        section_code : str, default="TTBB"
+            TEMP section code. TTDD pressures are in tenths of hPa.
 
         Returns
         -------
@@ -943,7 +955,8 @@ class TempParser:
 
         Examples
         --------
-        ``11985`` represents 985 hPa and ``00008`` represents 1008 hPa.
+        In TTBB, ``11985`` represents 985 hPa and ``00008`` represents
+        1008 hPa. In TTDD, ``11985`` represents 98.5 hPa.
         """
         if group == "/////":
             return None
@@ -951,6 +964,10 @@ class TempParser:
             raise ValueError(f"Malformed TEMP significant pressure group: {group}")
 
         pressure_code = int(group[-3:])
+        if section_code == "TTDD":
+            if pressure_code == 0:
+                raise ValueError(f"Invalid TEMP significant pressure group: {group}")
+            return pressure_code * 10.0
         pressure_hpa = pressure_code + 1000 if pressure_code < 100 else pressure_code
         return float(pressure_hpa * 100)
 
@@ -1006,13 +1023,17 @@ class TempParser:
         return float(height_offset + encoded_height)
 
     @staticmethod
-    def _decode_extra_layer_pressure(group: str) -> float | None:
+    def _decode_extra_layer_pressure(
+        group: str, section_code: str = "TTAA"
+    ) -> float | None:
         """Decode the pressure in a tropopause or maximum-wind group.
 
         Parameters
         ----------
         group : str
             Five-digit 88PPP or 77PPP group.
+        section_code : str, default="TTAA"
+            TEMP section code. TTCC pressures are in tenths of hPa.
 
         Returns
         -------
@@ -1026,7 +1047,8 @@ class TempParser:
 
         Examples
         --------
-        ``77233`` decodes to 23,300 Pa, while ``88999`` is missing.
+        In TTAA, ``77233`` decodes to 23,300 Pa; in TTCC it decodes to
+        2,330 Pa. ``88999`` is missing in either section.
         """
         if len(group) != 5 or not group.isdigit() or not group.startswith(("77", "88")):
             raise ValueError(f"Malformed TEMP tropopause/maximum-wind group: {group}")
@@ -1034,6 +1056,10 @@ class TempParser:
         pressure_code = int(group[2:])
         if pressure_code == 999:
             return None
+        if section_code == "TTCC":
+            if not 1 <= pressure_code <= 998:
+                raise ValueError(f"Invalid pressure in TEMP layer group: {group}")
+            return float(pressure_code * 10)
         if not 1 <= pressure_code <= 1100:
             raise ValueError(f"Invalid pressure in TEMP layer group: {group}")
         return float(pressure_code * 100)
