@@ -199,7 +199,7 @@ class TempParser:
                 category_metadata_variables = [
                     variable
                     for variable in metadata_variables
-                    if variable != "pressure"
+                    if variable not in {"pressure", "height"}
                 ]
                 category_observation_variables = [
                     *observation_variables,

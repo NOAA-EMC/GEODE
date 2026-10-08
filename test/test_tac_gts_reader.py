@@ -191,7 +191,6 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         "latitude",
         "longitude",
         "stationElevation",
-        "height",
         "reportType",
     }
     assert all(
@@ -278,6 +277,11 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert metadata["height"].isel(Location=ttaa_700_hpa).item() == pytest.approx(
         3125.0
     )
+    assert metadata["height"].isel(Location=ttcc_indices[0]).item() == pytest.approx(
+        18864.0
+    )
+    assert np.isnan(metadata["height"].values[ttbb_indices]).all()
+    assert np.isnan(metadata["height"].values[ttdd_indices]).all()
     assert observations["temperature"].isel(
         Location=ttaa_700_hpa
     ).item() == pytest.approx(277.15)
