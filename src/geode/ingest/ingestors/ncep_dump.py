@@ -45,9 +45,33 @@ class IasiIngestor(ObsBuilderIngestor):
 @register("ncep_dump/cris")
 class CrisFsrIngestor(ObsBuilderIngestor):
     def __init__(self):
-        from spoc.dump.scripts.atmosphere.radiance_crsfdp import BufrCrisObsBuilder
+        from spoc.dump.scripts.atmosphere.radiance_crsfdb import BufrCrisObsBuilder
 
         super().__init__("cris", BufrCrisObsBuilder())
+
+
+@register("ncep_dump/radiosonde")
+class RadiosondeIngestor(ObsBuilderIngestor):
+    def __init__(self):
+        import sys
+        from pathlib import Path
+
+        # Tell Python where prepbufr_obs_builder.py lives
+        spoc_atm_dir = (
+            Path(__file__).resolve().parents[3]
+            / "spoc"
+            / "dump"
+            / "scripts"
+            / "atmosphere"
+        )
+        if str(spoc_atm_dir) not in sys.path:
+            sys.path.insert(0, str(spoc_atm_dir))
+
+        from spoc.dump.scripts.atmosphere.prepbufr_adpupa import (
+            AdpupaPrepbufrObsBuilder,
+        )
+
+        super().__init__("radiosonde", AdpupaPrepbufrObsBuilder())
 
 
 @register("ncep_dump/amsua")
