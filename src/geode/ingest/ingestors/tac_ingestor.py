@@ -28,7 +28,7 @@ class TacIngestor(BaseIngestor):
         --------
         Format-specific ingestors implement ``_parse`` for their TAC grammar.
         """
-        report_text = Path(file_path).read_text(encoding="ascii")
+        report_text = Path(file_path).read_text(encoding="ascii", errors="replace")
         return self._parse(report_text)
 
     def _parse(self, report_text: str) -> xr.DataTree | dict[str, xr.DataTree]:

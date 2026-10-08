@@ -1,3 +1,4 @@
+import logging
 import re
 from dataclasses import dataclass
 from datetime import UTC, datetime
@@ -15,6 +16,8 @@ from geode.utils.station_data import (
     load_station_coordinates as _load_station_coordinates,
 )
 from geode.utils.wind import wind_components as _wind_components
+
+logger = logging.getLogger(__name__)
 
 _SECTION_MARKER = re.compile(r"\b(TTAA|TTBB|TTCC|TTDD)\b", re.IGNORECASE)
 _MANDATORY_PRESSURES = {
@@ -278,13 +281,22 @@ class TempParser:
         section_datasets = {"surface": [], "upper_air": []}
         location_start = 0
         for section in sections:
-            category_datasets = self._decode_section(
-                section,
-                reference_datetime,
-                receipt_datetime,
-                location_start,
-                include_raw_code,
-            )
+            try:
+                category_datasets = self._decode_section(
+                    section,
+                    reference_datetime,
+                    receipt_datetime,
+                    location_start,
+                    include_raw_code,
+                )
+            except ValueError as error:
+                logger.warning(
+                    "Skipping malformed TEMP section %s %s: %s",
+                    section.code,
+                    section.station_id,
+                    error,
+                )
+                continue
             for category, dataset in category_datasets.items():
                 section_datasets[category].append(dataset)
             location_start += sum(
@@ -395,6 +407,7 @@ class TempParser:
         if int(section.time_group[:2]) <= 50 and section.time_group[-1] not in {
             "0",
             "1",
+            "/",
         }:
             raise ValueError(
                 f"Unsupported TEMP wind-speed unit indicator: {section.time_group[-1]}"
@@ -405,9 +418,7 @@ class TempParser:
         else:
             observations = cls._decode_significant_levels(section)
         if not observations:
-            raise ValueError(
-                f"TEMP section {section.code} has no decodable mandatory levels."
-            )
+            return {}
 
         observation_count = len(observations)
         latitude, longitude, station_elevation = _load_station_coordinates().get(
@@ -634,7 +645,7 @@ class TempParser:
             raise ValueError(f"Malformed TEMP YYGGi time group: {time_group}")
         if int(time_group[:2]) > 50:
             return "1"
-        if time_group[-1] not in {"0", "1"}:
+        if time_group[-1] not in {"0", "1", "/"}:
             raise ValueError(
                 f"Unsupported TEMP wind-speed unit indicator: {time_group[-1]}"
             )
@@ -1159,6 +1170,8 @@ class TempParser:
             return None, 0.0
 
         unit_indicator = TempParser._wind_speed_unit_indicator(time_group)
+        if unit_indicator == "/":
+            return None, None
         if unit_indicator == "0":
             wind_speed = float(speed_code)
         elif unit_indicator == "1":
