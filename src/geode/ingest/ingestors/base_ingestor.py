@@ -1,6 +1,6 @@
 import xarray as xr
 
-from geode.data.data_manager import data_manager
+from geode.data.manager import data_manager
 
 
 class BaseIngestor:

@@ -2,15 +2,15 @@ from datetime import datetime
 
 import xarray as xr
 
-from geode.data.data_manager import data_manager
+from geode.data.manager import data_manager
 
 
 def get(
     data_type: str,
     start_time: datetime | str,
     end_time: datetime | str,
-    vars: list[str] | None = None,
-    filter: dict | None = None,
+    variables: list[str] | None = None,
+    filters: dict | None = None,
 ) -> xr.DataTree:
 
     if isinstance(start_time, str):
@@ -18,4 +18,10 @@ def get(
     if isinstance(end_time, str):
         end_time = datetime.fromisoformat(end_time)
 
-    return data_manager.get(data_type, start_time, end_time, vars=vars, filter=filter)
+    return data_manager.get(
+        data_type, 
+        start_time, 
+        end_time, 
+        variables=variables, 
+        filters=filters,
+    )
