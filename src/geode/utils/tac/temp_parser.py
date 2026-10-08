@@ -1033,9 +1033,10 @@ class TempParser:
 
         direction_code = int(group[:3])
         speed_code = int(group[3:])
-        if direction_code >= 500:
-            direction_code -= 500
-            speed_code += 100
+        # Direction is rounded to 5 degrees; the remainder carries speed hundreds.
+        speed_hundreds = direction_code % 5
+        direction_code -= speed_hundreds
+        speed_code += 100 * speed_hundreds
         if direction_code > 360:
             raise ValueError(f"TEMP wind direction is out of range: {group}")
 
