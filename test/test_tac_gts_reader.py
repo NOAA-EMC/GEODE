@@ -8,11 +8,7 @@ from geode.data.data_manager import data_manager
 from geode.ingest.consumers import tac_gts_reader
 from geode.ingest.ingestors.tac_gts import TempIngestor
 from geode.ingest.ingestors.tac_ingestor import TacIngestor
-from geode.utils.tac.temp_parser import (
-    TempParser,
-    _estimate_drift_positions,
-    _Observation,
-)
+from geode.utils.tac.temp_parser import TempParser
 
 TEMP_REPORT = """375
 USUS01 KWBC 061200 RRB
@@ -171,10 +167,6 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     remarks = upper_air_tree["Remarks"].dataset
     assert surface_tree.attrs["observation_count"] == 2
     assert upper_air_tree.attrs["observation_count"] == 326
-    assert "assumed_ascent_rate_m_s" not in surface_tree.attrs
-    assert "assumed_ascent_rate_m_s" not in upper_air_tree.attrs
-    assert "position_estimation_method" not in surface_tree.attrs
-    assert "position_estimation_method" not in upper_air_tree.attrs
     assert surface_metadata.sizes["Location"] == 2
     assert surface_observations.sizes["Location"] == 2
     assert surface_remarks.sizes["Location"] == 2
@@ -187,6 +179,7 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         "stationIdentification",
         "latitude",
         "longitude",
+        "stationElevation",
         "pressure",
         "height",
         "reportType",
@@ -197,6 +190,7 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         "stationIdentification",
         "latitude",
         "longitude",
+        "stationElevation",
         "height",
         "reportType",
     }
@@ -235,6 +229,8 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert surface_metadata["stationIdentification"].isel(Location=1).item() == "72440"
     assert metadata["latitude"].attrs["units"] == "degrees_north"
     assert metadata["longitude"].attrs["units"] == "degrees_east"
+    assert metadata["stationElevation"].attrs["units"] == "m"
+    assert metadata["stationElevation"].attrs["standard_name"] == "surface_altitude"
     assert "comment" not in metadata["latitude"].attrs
     assert "comment" not in metadata["longitude"].attrs
     assert set(surface_remarks.data_vars) == {"position", "source"}
@@ -244,8 +240,7 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert surface_remarks["source"].dims == ("Location",)
     assert remarks["source"].dims == ("Location",)
     position_remark = (
-        "Estimated through trapezoidal integration of layer winds, "
-        "assuming 5m/s ascent rate."
+        "Position is launch only; coordinates are fixed at the station."
     )
     source_remark = "Decoded from raw WMO TEMP TAC groups by GEODE."
     np.testing.assert_array_equal(
@@ -257,6 +252,18 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert surface_metadata["latitude"].isel(Location=0).item() == pytest.approx(38.98)
     assert surface_metadata["longitude"].isel(Location=0).item() == pytest.approx(
         -77.49
+    )
+    assert surface_metadata["stationElevation"].isel(Location=0).item() == 88
+    station_72403 = metadata["stationIdentification"].values == "72403"
+    np.testing.assert_array_equal(
+        metadata["latitude"].values[station_72403], [38.98] * station_72403.sum()
+    )
+    np.testing.assert_array_equal(
+        metadata["longitude"].values[station_72403], [-77.49] * station_72403.sum()
+    )
+    np.testing.assert_array_equal(
+        metadata["stationElevation"].values[station_72403],
+        [88.0] * station_72403.sum(),
     )
     assert metadata["pressure"].attrs["units"] == "Pa"
     assert surface_observations["stationPressure"].attrs["units"] == "Pa"
@@ -366,39 +373,6 @@ def test_temp_ingestor_stores_and_reads_icechunk(tmp_path, use_empty_data_lake):
     )
 
 
-def test_temp_drift_estimate_uses_five_meter_per_second_ascent():
-    """Verify layer wind drift uses the configured vertical ascent rate.
-
-    Parameters
-    ----------
-    None
-
-    Returns
-    -------
-    None
-
-    Examples
-    --------
-    Run with ``pytest test/test_tac_gts_reader.py``.
-    """
-    observation = _Observation(
-        pressure=100000.0,
-        height=110.0,
-        temperature=None,
-        dew_point_temperature=None,
-        wind_direction=270.0,
-        wind_speed=10.0,
-        raw_code="70000",
-    )
-
-    estimated_latitudes, estimated_longitudes = _estimate_drift_positions(
-        [observation], 0.0, 0.0, 100.0
-    )
-
-    assert estimated_latitudes[0] == pytest.approx(0.0)
-    assert estimated_longitudes[0] == pytest.approx(np.rad2deg(20.0 / 6_371_000.0))
-
-
 def test_temp_parser_leaves_unlisted_station_coordinates_missing():
     """Verify stations absent from the location table have missing coordinates.
 
@@ -421,6 +395,7 @@ def test_temp_parser_leaves_unlisted_station_coordinates_missing():
 
     assert np.isnan(metadata["latitude"].values).all()
     assert np.isnan(metadata["longitude"].values).all()
+    assert np.isnan(metadata["stationElevation"].values).all()
 
 
 def test_temp_parser_decodes_valid_tropopause_as_an_observation():

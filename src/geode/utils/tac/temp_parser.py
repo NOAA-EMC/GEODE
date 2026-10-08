@@ -7,9 +7,7 @@ import numpy as np
 import xarray as xr
 
 from geode.utils.conversion_units import (
-    ASSUMED_ASCENT_RATE_METERS_PER_SECOND,
     CELSIUS_TO_KELVIN,
-    EARTH_RADIUS_METERS,
     KNOTS_TO_METERS_PER_SECOND,
 )
 from geode.utils.station_data import (
@@ -79,148 +77,6 @@ class _Observation:
     wind_direction: float | None
     wind_speed: float | None
     raw_code: str
-
-
-def _estimate_drift_positions(
-    observations: list[_Observation],
-    launch_latitude: float,
-    launch_longitude: float,
-    launch_elevation: float,
-) -> tuple[np.ndarray, np.ndarray]:
-    """Estimate observation positions from winds and a fixed ascent rate.
-
-    Parameters
-    ----------
-    observations : list[_Observation]
-        TEMP observations in report order.
-    launch_latitude : float
-        Launch latitude in decimal degrees.
-    launch_longitude : float
-        Launch longitude in decimal degrees.
-    launch_elevation : float
-        Launch elevation in metres above mean sea level.
-
-    Returns
-    -------
-    tuple[numpy.ndarray, numpy.ndarray]
-        Estimated latitude and longitude arrays in decimal degrees. Positions
-        for levels without usable heights remain NaN.
-
-    Examples
-    --------
-    Wind components are linearly interpolated between levels and held at the
-    nearest level outside the profile. Integration uses
-    ``delta_time = delta_height / 5 m s-1``.
-    """
-    estimated_latitudes = np.full(len(observations), np.nan)
-    estimated_longitudes = np.full(len(observations), np.nan)
-    if not np.isfinite([launch_latitude, launch_longitude, launch_elevation]).all():
-        return estimated_latitudes, estimated_longitudes
-
-    target_heights = {}
-    wind_levels = []
-    for index, observation in enumerate(observations):
-        is_surface_observation = observation.raw_code.startswith("99")
-        if is_surface_observation:
-            height_above_launch = 0.0
-        elif observation.height is not None:
-            height_above_launch = observation.height - launch_elevation
-            if height_above_launch < 0.0:
-                target_heights[index] = 0.0
-                continue
-        else:
-            continue
-
-        target_heights[index] = height_above_launch
-        eastward_wind, northward_wind = _wind_components(
-            observation.wind_direction, observation.wind_speed
-        )
-        if eastward_wind is None or northward_wind is None:
-            continue
-
-        wind_levels.append((height_above_launch, eastward_wind, northward_wind))
-
-    if not wind_levels:
-        for index, height in target_heights.items():
-            if height == 0.0:
-                estimated_latitudes[index] = launch_latitude
-                estimated_longitudes[index] = launch_longitude
-        return estimated_latitudes, estimated_longitudes
-
-    wind_levels.sort(key=lambda level: level[0])
-    wind_heights = np.asarray([level[0] for level in wind_levels])
-    unique_heights, inverse_indices = np.unique(wind_heights, return_inverse=True)
-    eastward_winds = np.asarray([level[1] for level in wind_levels])
-    northward_winds = np.asarray([level[2] for level in wind_levels])
-    level_counts = np.bincount(inverse_indices)
-    mean_eastward_winds = (
-        np.bincount(inverse_indices, weights=eastward_winds) / level_counts
-    )
-    mean_northward_winds = (
-        np.bincount(inverse_indices, weights=northward_winds) / level_counts
-    )
-
-    integration_heights = np.unique(
-        np.concatenate(
-            ([0.0], unique_heights, np.asarray(list(target_heights.values())))
-        )
-    )
-    integration_eastward_winds = np.interp(
-        integration_heights, unique_heights, mean_eastward_winds
-    )
-    integration_northward_winds = np.interp(
-        integration_heights, unique_heights, mean_northward_winds
-    )
-    height_increments = np.diff(integration_heights)
-    eastward_displacement = np.concatenate(
-        (
-            [0.0],
-            np.cumsum(
-                (integration_eastward_winds[:-1] + integration_eastward_winds[1:])
-                * 0.5
-                * height_increments
-                / ASSUMED_ASCENT_RATE_METERS_PER_SECOND
-            ),
-        )
-    )
-    northward_displacement = np.concatenate(
-        (
-            [0.0],
-            np.cumsum(
-                (integration_northward_winds[:-1] + integration_northward_winds[1:])
-                * 0.5
-                * height_increments
-                / ASSUMED_ASCENT_RATE_METERS_PER_SECOND
-            ),
-        )
-    )
-
-    launch_latitude_radians = np.deg2rad(launch_latitude)
-    for index, height in target_heights.items():
-        node_index = np.searchsorted(integration_heights, height)
-        eastward = eastward_displacement[node_index]
-        northward = northward_displacement[node_index]
-        angular_distance = np.hypot(eastward, northward) / EARTH_RADIUS_METERS
-        bearing = np.arctan2(eastward, northward)
-        latitude_radians = np.arcsin(
-            np.sin(launch_latitude_radians) * np.cos(angular_distance)
-            + np.cos(launch_latitude_radians)
-            * np.sin(angular_distance)
-            * np.cos(bearing)
-        )
-        longitude_radians = np.deg2rad(launch_longitude) + np.arctan2(
-            np.sin(bearing)
-            * np.sin(angular_distance)
-            * np.cos(launch_latitude_radians),
-            np.cos(angular_distance)
-            - np.sin(launch_latitude_radians) * np.sin(latitude_radians),
-        )
-        estimated_latitudes[index] = np.rad2deg(latitude_radians)
-        estimated_longitudes[index] = (
-            np.rad2deg(longitude_radians) + 180.0
-        ) % 360.0 - 180.0
-
-    return estimated_latitudes, estimated_longitudes
 
 
 class TempParser:
@@ -309,6 +165,7 @@ class TempParser:
             "stationIdentification",
             "latitude",
             "longitude",
+            "stationElevation",
             "pressure",
             "height",
             "reportType",
@@ -443,9 +300,6 @@ class TempParser:
         latitude, longitude, station_elevation = _load_station_coordinates().get(
             section.station_id, (np.nan, np.nan, np.nan)
         )
-        estimated_latitudes, estimated_longitudes = _estimate_drift_positions(
-            observations, latitude, longitude, station_elevation
-        )
         observation_datetime = cls._resolve_datetime(
             section.time_group, reference_datetime
         )
@@ -478,22 +332,22 @@ class TempParser:
             ),
             "latitude": (
                 "Location",
-                estimated_latitudes,
+                np.full(observation_count, latitude),
                 {"units": "degrees_north", "standard_name": "latitude"},
             ),
             "longitude": (
                 "Location",
-                estimated_longitudes,
+                np.full(observation_count, longitude),
                 {"units": "degrees_east", "standard_name": "longitude"},
+            ),
+            "stationElevation": (
+                "Location",
+                np.full(observation_count, station_elevation),
+                {"units": "m", "standard_name": "surface_altitude"},
             ),
             "position": (
                 "Location",
-                [
-                    (
-                        "Estimated through trapezoidal integration of layer winds, "
-                        "assuming 5m/s ascent rate."
-                    )
-                ]
+                ["Position is launch only; coordinates are fixed at the station."]
                 * observation_count,
             ),
             "source": (
