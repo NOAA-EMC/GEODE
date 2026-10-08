@@ -336,6 +336,19 @@ class TempParser:
             ).assign_coords(
                 Location=np.arange(sum(ds.sizes["Location"] for ds in datasets))
             )
+            category_metadata_variables = metadata_variables
+            category_observation_variables = observation_variables
+            if category == "surface":
+                category_metadata_variables = [
+                    variable
+                    for variable in metadata_variables
+                    if variable != "pressure"
+                ]
+                category_observation_variables = [
+                    *observation_variables,
+                    "pressure",
+                ]
+                combined = combined.rename({"pressure": "stationPressure"})
             tree = xr.DataTree(
                 dataset=xr.Dataset(
                     attrs={
@@ -350,10 +363,16 @@ class TempParser:
                 name=category,
             )
             tree["MetaData"] = xr.DataTree(
-                dataset=combined[metadata_variables], name="MetaData"
+                dataset=combined[category_metadata_variables], name="MetaData"
             )
             tree["ObsValue"] = xr.DataTree(
-                dataset=combined[observation_variables], name="ObsValue"
+                dataset=combined[
+                    [
+                        "stationPressure" if variable == "pressure" else variable
+                        for variable in category_observation_variables
+                    ]
+                ],
+                name="ObsValue",
             )
             tree["Remarks"] = xr.DataTree(
                 dataset=combined[["position", "source"]], name="Remarks"

@@ -191,12 +191,28 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         "height",
         "reportType",
     }
+    assert set(surface_metadata.data_vars) == {
+        "dateTime",
+        "receiptTime",
+        "stationIdentification",
+        "latitude",
+        "longitude",
+        "height",
+        "reportType",
+    }
     assert all(
         variable.dims == ("Location",) for variable in metadata.data_vars.values()
     )
     assert all(
         variable.dims == ("Location",) for variable in observations.data_vars.values()
     )
+    assert set(surface_observations.data_vars) == {
+        "stationPressure",
+        "temperature",
+        "dewPointTemperature",
+        "windEastward",
+        "windNorthward",
+    }
     assert set(observations.data_vars) == {
         "temperature",
         "dewPointTemperature",
@@ -213,8 +229,9 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         "2026-10-06T12:00:00", "ns"
     )
     assert surface_metadata["stationIdentification"].isel(Location=0).item() == "72403"
-    assert surface_metadata["pressure"].isel(Location=0).item() == pytest.approx(
-        101300.0
+    assert (
+        surface_observations["stationPressure"].isel(Location=0).item()
+        == pytest.approx(101300.0)
     )
     assert surface_metadata["stationIdentification"].isel(Location=1).item() == "72440"
     assert metadata["latitude"].attrs["units"] == "degrees_north"
@@ -243,6 +260,7 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         -77.49
     )
     assert metadata["pressure"].attrs["units"] == "Pa"
+    assert surface_observations["stationPressure"].attrs["units"] == "Pa"
     assert observations["windEastward"].attrs["units"] == "m s-1"
     assert observations["windNorthward"].attrs["units"] == "m s-1"
 
