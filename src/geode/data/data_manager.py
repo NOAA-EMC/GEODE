@@ -110,6 +110,11 @@ class IceChunkDataManager(DataManager):
                     if "Location" not in dataset.dims:
                         continue
 
+                    # Normalize dtype for stationIdentification
+                    if "stationIdentification" in dataset:
+                        sid = dataset["stationIdentification"]
+                        dataset["stationIdentification"] = sid.astype("U7")
+
                     group = node.path.lstrip("/") or None
 
                     dataset.to_zarr(
