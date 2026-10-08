@@ -32,6 +32,9 @@ geode = "geode.cli:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.data-files]
+"share/geode/parm" = ["parm/sonde.land.tbl"]
+
 #[tool.setuptools.package-data]
 
 [tool.coverage.run]
