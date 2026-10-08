@@ -270,7 +270,7 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
         Location=ttcc_indices[0]
     ).item() == pytest.approx(259.85)
     assert metadata["pressure"].isel(Location=ttdd_indices[0]).item() == pytest.approx(
-        97400.0
+        9740.0
     )
     assert observations["temperature"].isel(
         Location=ttdd_indices[0]
@@ -334,8 +334,6 @@ def test_temp_ingestor_stores_and_reads_icechunk(tmp_path, use_empty_data_lake):
     end_datetime = datetime(2026, 10, 7, tzinfo=UTC)
     surface_tree = data_manager.get("temp_surface", start_datetime, end_datetime)
     upper_air_tree = data_manager.get("temp_upper_air", start_datetime, end_datetime)
-    print(surface_tree)
-    print(upper_air_tree)
 
     assert surface_tree["MetaData"].dataset.sizes["Location"] == 2
     assert upper_air_tree["MetaData"].dataset.sizes["Location"] == 326

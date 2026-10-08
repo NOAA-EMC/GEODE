@@ -38,11 +38,12 @@ class TacGTSReader:
         """
         # TODO: gather TAC report file paths for the requested data_type/date range
         ingestor_class = ingestors.make(f"tac/{data_type}")
+        if ingestor_class is None:
+            raise ValueError(f"Unsupported TAC report type: {data_type}")
 
-        if ingestor_class:
-            for file_path in file_paths:
-                ingestor = ingestor_class(
-                    reference_datetime=reference_datetime,
-                    include_raw_code=include_raw_code,
-                )
-                ingestor.process(file_path)
+        for file_path in file_paths:
+            ingestor = ingestor_class(
+                reference_datetime=reference_datetime,
+                include_raw_code=include_raw_code,
+            )
+            ingestor.process(file_path)
