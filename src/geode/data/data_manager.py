@@ -103,12 +103,19 @@ class IceChunkDataManager(DataManager):
         repo = ic.Repository.open_or_create(storage)
 
         if repository_exists:
+            # Append mode - variable schemas already exist in store
             with repo.transaction("main", message=f"Append to {data_type}") as store:
                 for node in data_tree.subtree:
                     dataset = node.to_dataset(inherit=False)
 
                     if "Location" not in dataset.dims:
                         continue
+
+                    # Cast string/character variables to object
+                    for var_name in list(dataset.variables.keys()):
+                        var = dataset.variables[var_name]
+                        if var.dtype.kind in ("U", "S", "O"):
+                            dataset[var_name] = var.astype(object)
 
                     group = node.path.lstrip("/") or None
 
@@ -121,8 +128,31 @@ class IceChunkDataManager(DataManager):
                         consolidated=False,
                     )
         else:
+            # Initial write - set variable-level encoding directly on DataArray.encoding
             with repo.transaction("main", message=f"Create {data_type}") as store:
-                data_tree.to_zarr(store, mode="w", zarr_format=3, consolidated=False)
+                for node in data_tree.subtree:
+                    dataset = node.to_dataset(inherit=False)
+
+                    if "Location" not in dataset.dims:
+                        continue
+
+                    for var_name in list(dataset.variables.keys()):
+                        var = dataset.variables[var_name]
+                        if var.dtype.kind in ("U", "S", "O"):
+                            # Cast variable to object
+                            dataset[var_name] = var.astype(object)
+                            # Set dtype object on DataArray encoding so xarray uses vlen string handling natively
+                            dataset[var_name].encoding["dtype"] = "object"
+
+                    group = node.path.lstrip("/") or None
+
+                    dataset.to_zarr(
+                        store,
+                        mode="w",
+                        zarr_format=3,
+                        group=group,
+                        consolidated=False,
+                    )
 
     def get(
         self,
