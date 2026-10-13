@@ -91,8 +91,7 @@ class IceChunkDataManager(DataManager):
             geode_config.data_lake.full_base_path,
             f"{data_type}_{sub_type}.icechunk" if sub_type else f"{data_type}.icechunk",
         )
-     
-    
+
     def put(
         self, data_type: str, data_tree: xr.DataTree, sub_type: str | None = None
     ) -> None:
