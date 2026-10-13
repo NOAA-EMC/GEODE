@@ -267,6 +267,16 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     assert observations["windEastward"].attrs["units"] == "m s-1"
     assert observations["windNorthward"].attrs["units"] == "m s-1"
 
+    for variable_name in ("dateTime", "receiptTime"):
+        assert (
+            surface_metadata[variable_name].encoding["units"]
+            == "seconds since 1970-01-01T00:00:00Z"
+        )
+        assert (
+            metadata[variable_name].encoding["units"]
+            == "seconds since 1970-01-01T00:00:00Z"
+        )
+
     ttaa_indices = np.flatnonzero(metadata["reportType"].values == "TTAA")
     ttbb_indices = np.flatnonzero(metadata["reportType"].values == "TTBB")
     ttcc_indices = np.flatnonzero(metadata["reportType"].values == "TTCC")

@@ -18,6 +18,7 @@ from geode.utils.wind import wind_components as _wind_components
 logger = logging.getLogger(__name__)
 
 _SECTION_MARKER = re.compile(r"\b(TTAA|TTBB|TTCC|TTDD)\b", re.IGNORECASE)
+_TIME_UNITS = "seconds since 1970-01-01T00:00:00Z"
 _MANDATORY_PRESSURES = {
     "00": 100000.0,
     "92": 92500.0,
@@ -206,21 +207,26 @@ class TempParser:
                     "pressure",
                 ]
                 combined = combined.rename({"pressure": "stationPressure"})
+            metadata = combined[category_metadata_variables]
+            for variable in ("dateTime", "receiptTime"):
+                metadata[variable].encoding.update(
+                    {
+                        "units": _TIME_UNITS,
+                        "calendar": "proleptic_gregorian",
+                    }
+                )
             tree = xr.DataTree(
                 dataset=xr.Dataset(
                     attrs={
                         "format": "WMO TEMP",
                         "category": category,
-                        "section_count": len(datasets),
-                        "observation_count": combined.sizes["Location"],
-                        "reference_datetime": reference_datetime.isoformat(),
                         "history": "Decoded from raw WMO TEMP TAC groups by GEODE.",
                     }
                 ),
                 name=category,
             )
             tree["MetaData"] = xr.DataTree(
-                dataset=combined[category_metadata_variables], name="MetaData"
+                dataset=metadata, name="MetaData"
             )
             tree["ObsValue"] = xr.DataTree(
                 dataset=combined[
