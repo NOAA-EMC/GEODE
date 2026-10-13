@@ -185,7 +185,7 @@ class IceChunkDataManager(DataManager):
         time_mask = (date_time >= start) & (date_time < end)
 
         datatree = xr.map_over_datasets(
-            lambda ds: ds.where(time_mask, drop=True) if "Location" in ds.dims else ds,
+            lambda ds: ds.isel(Location=time_mask) if "Location" in ds.dims else ds,
             datatree,
         )
 
