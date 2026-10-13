@@ -11,15 +11,27 @@ data_types:
     batch_days: 15
     aux_file:
       - "atms_beamwidth.txt"
-    
 
-  - id: surface_obs
+
+  - id: cris
+    path_template: "{hour}/atmos/gdas.t{hour}z.crisf4.tm00.bufr_d"
+    num_tasks: 24
+    batch_days: 15
+
+
+  - id: iasi
+    path_template: "{hour}/atmos/gdas.t{hour}z.mtiasi.tm00.bufr_d"
+    num_tasks: 24
+    batch_days: 15
+
+
+  - id: radiosonde
     path_template: "{hour}/atmos/gdas.t{hour}z.prepbufr"
     num_tasks: 4
     batch_days: 30
-    
 
-  - id: radiosonde
+
+  - id: surface_obs
     path_template: "{hour}/atmos/gdas.t{hour}z.prepbufr"
     num_tasks: 4
     batch_days: 30
