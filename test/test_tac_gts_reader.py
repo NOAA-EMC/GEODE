@@ -501,6 +501,29 @@ def test_temp_parser_decodes_negative_temperature_and_large_depression():
     assert dew_point == pytest.approx(255.05)
 
 
+@pytest.mark.parametrize("group", ["03651", "036A1"])
+def test_temp_parser_retains_temperature_with_invalid_dew_point_depression(group):
+    """Verify an invalid dew-point depression does not discard temperature.
+
+    Parameters
+    ----------
+    group : str
+        TEMP temperature group with a reserved or malformed depression code.
+
+    Returns
+    -------
+    None
+
+    Examples
+    --------
+    Run with ``pytest test/test_tac_gts_reader.py``.
+    """
+    temperature, dew_point = TempParser._decode_temperature_group(group)
+
+    assert temperature == pytest.approx(276.75)
+    assert dew_point is None
+
+
 @pytest.mark.parametrize(
     ("direction_group", "speed_group", "expected_direction", "expected_speed"),
     [

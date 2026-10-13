@@ -965,7 +965,7 @@ class TempParser:
         Raises
         ------
         ValueError
-            If the group is neither a valid coded value nor a missing marker.
+            If the temperature portion is malformed.
 
         Examples
         --------
@@ -993,12 +993,14 @@ class TempParser:
             elif depression_value >= 56:
                 depression_celsius = float(depression_value - 50)
             else:
-                raise ValueError(
-                    f"Reserved TEMP dew-point-depression code: {depression_code}"
-                )
-            dew_point_kelvin = temperature_kelvin - depression_celsius
+                depression_celsius = None
+            dew_point_kelvin = (
+                temperature_kelvin - depression_celsius
+                if depression_celsius is not None
+                else None
+            )
         else:
-            raise ValueError(f"Malformed TEMP dew-point-depression group: {group}")
+            dew_point_kelvin = None
 
         return temperature_kelvin, dew_point_kelvin
 
