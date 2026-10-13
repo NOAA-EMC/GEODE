@@ -225,9 +225,7 @@ class TempParser:
                 ),
                 name=category,
             )
-            tree["MetaData"] = xr.DataTree(
-                dataset=metadata, name="MetaData"
-            )
+            tree["MetaData"] = xr.DataTree(dataset=metadata, name="MetaData")
             tree["ObsValue"] = xr.DataTree(
                 dataset=combined[
                     [

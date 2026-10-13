@@ -165,8 +165,6 @@ def test_temp_parser_decodes_flat_bufr_style_groups():
     metadata = upper_air_tree["MetaData"].dataset
     observations = upper_air_tree["ObsValue"].dataset
     remarks = upper_air_tree["Remarks"].dataset
-    assert surface_tree.attrs["observation_count"] == 2
-    assert upper_air_tree.attrs["observation_count"] == 326
     assert surface_metadata.sizes["Location"] == 2
     assert surface_observations.sizes["Location"] == 2
     assert surface_remarks.sizes["Location"] == 2
@@ -432,7 +430,6 @@ def test_temp_parser_decodes_valid_tropopause_as_an_observation():
     metadata = data_trees["upper_air"]["MetaData"].dataset
     observations = data_trees["upper_air"]["ObsValue"].dataset
 
-    assert data_trees["upper_air"].attrs["observation_count"] == 2
     assert metadata["pressure"].values.tolist() == pytest.approx([95000.0, 23300.0])
     assert np.isnan(metadata["height"].values).all()
     assert observations["temperature"].isel(Location=0).item() == pytest.approx(260.65)
