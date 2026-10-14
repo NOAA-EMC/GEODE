@@ -12,13 +12,14 @@ import zarr
 import icechunk
 
 import warnings
+
 warnings.filterwarnings(
     "ignore",
     message="Setting the shape on a NumPy array has been deprecated",
     category=DeprecationWarning,
 )
 
-'''
+"""
 usage
 python icechunk2ioda.py cris 2026-09-13 2026-09-19
 
@@ -27,7 +28,7 @@ iasi [metop-a, metop-b, metop-c]
 cris [npp, n20, n21]
 atms [npp, n20, n21]
 radiosonde
-'''
+"""
 
 # Define UTC timezone for Python versions < 3.11 compatibility
 UTC = timezone.utc
@@ -65,7 +66,9 @@ class IcechunkToIODAnetCDF:
         """
         zgroup = zarr.open_group(store, mode="r")
 
-        subgroups = [name for name, obj in zgroup.members() if isinstance(obj, zarr.Group)]
+        subgroups = [
+            name for name, obj in zgroup.members() if isinstance(obj, zarr.Group)
+        ]
         arrays = [name for name, obj in zgroup.members() if isinstance(obj, zarr.Array)]
 
         self._log_debug(f"Root Zarr Groups found: {subgroups}")
@@ -92,12 +95,16 @@ class IcechunkToIODAnetCDF:
                         if var_name in ds_sub:
                             group_dict[full_path] = ds_sub[var_name]
                     except Exception as e:
-                        self._log_debug(f"Failed to load variable '{full_path}' into Xarray: {e}")
+                        self._log_debug(
+                            f"Failed to load variable '{full_path}' into Xarray: {e}"
+                        )
 
         walk_zarr_group(zgroup)
 
         if not group_dict:
-            self._log_debug("No nested arrays found during traversal, opening root group...")
+            self._log_debug(
+                "No nested arrays found during traversal, opening root group..."
+            )
             ds = xr.open_zarr(store, zarr_format=3)
         else:
             ds = xr.Dataset(group_dict)
@@ -125,7 +132,7 @@ class IcechunkToIODAnetCDF:
                 return ds[key]
 
         return None
-    
+
     def write_dataset_to_ioda_nc(self, ds: xr.Dataset, output_file: str):
         """
         Writes a flat Xarray dataset with group-path keys (e.g. 'MetaData/dateTime')
@@ -150,7 +157,7 @@ class IcechunkToIODAnetCDF:
 
                 fill_val = var.encoding.get("_FillValue", None)
                 kwargs = {"fill_value": fill_val} if fill_val is not None else {}
-                
+
                 data = var.values
                 if np.issubdtype(data.dtype, np.datetime64):
                     data = data.astype("datetime64[s]").astype(np.int64)
@@ -159,9 +166,7 @@ class IcechunkToIODAnetCDF:
                     # Enforce native byte order to eliminate netCDF4 endian warnings
                     dtype = data.dtype.newbyteorder("=")
 
-                nc_var = grp.createVariable(
-                    var_name, dtype, var.dims, **kwargs
-                )
+                nc_var = grp.createVariable(var_name, dtype, var.dims, **kwargs)
 
                 for attr_name, attr_val in var.attrs.items():
                     if attr_name != "_FillValue":
@@ -173,7 +178,9 @@ class IcechunkToIODAnetCDF:
         print(f"  --> Opening Icechunk repo: {self.repo_path}")
 
         if not os.path.exists(self.repo_path):
-            print(f"  [WARNING] Repository path does not exist: {self.repo_path}. Skipping.")
+            print(
+                f"  [WARNING] Repository path does not exist: {self.repo_path}. Skipping."
+            )
             return False
 
         try:
@@ -194,7 +201,9 @@ class IcechunkToIODAnetCDF:
                 session = repo.readonly_session(branch=self.branch)
 
             # 3. Load full hierarchy into Xarray
-            print("      Loading Xarray dataset and Zarr hierarchy from Icechunk store...")
+            print(
+                "      Loading Xarray dataset and Zarr hierarchy from Icechunk store..."
+            )
             ds, zgroup = self.load_dataset_recursively(session.store)
 
             self._log_debug(f"Loaded Xarray Dataset Summary:\n{ds}")
@@ -210,21 +219,36 @@ class IcechunkToIODAnetCDF:
                     if len(dt_values) > 0:
                         min_dt = dt_values.min()
                         max_dt = dt_values.max()
-                        self._log_debug(f"Icechunk Store Min Date: {min_dt} | Max Date: {max_dt}")
+                        self._log_debug(
+                            f"Icechunk Store Min Date: {min_dt} | Max Date: {max_dt}"
+                        )
 
                     # 1. Handle String or Byte timestamps
-                    if np.issubdtype(dt_values.dtype, np.character) or isinstance(dt_values.flat[0], (str, bytes)):
-                        str_vals = [v.decode("utf-8") if isinstance(v, bytes) else str(v) for v in dt_values.flat]
+                    if np.issubdtype(dt_values.dtype, np.character) or isinstance(
+                        dt_values.flat[0], (str, bytes)
+                    ):
+                        str_vals = [
+                            v.decode("utf-8") if isinstance(v, bytes) else str(v)
+                            for v in dt_values.flat
+                        ]
                         dt_series = np.array(str_vals, dtype="datetime64[s]")
-                        start_target = np.datetime64(self.start_window.replace(tzinfo=None), "s")
-                        end_target = np.datetime64(self.end_window.replace(tzinfo=None), "s")
+                        start_target = np.datetime64(
+                            self.start_window.replace(tzinfo=None), "s"
+                        )
+                        end_target = np.datetime64(
+                            self.end_window.replace(tzinfo=None), "s"
+                        )
                         mask = (dt_series >= start_target) & (dt_series < end_target)
 
                     # 2. Handle datetime64 objects (normalize resolution to seconds)
                     elif np.issubdtype(dt_values.dtype, np.datetime64):
                         dt_series = dt_values.astype("datetime64[s]")
-                        start_target = np.datetime64(self.start_window.replace(tzinfo=None), "s")
-                        end_target = np.datetime64(self.end_window.replace(tzinfo=None), "s")
+                        start_target = np.datetime64(
+                            self.start_window.replace(tzinfo=None), "s"
+                        )
+                        end_target = np.datetime64(
+                            self.end_window.replace(tzinfo=None), "s"
+                        )
                         mask = (dt_series >= start_target) & (dt_series < end_target)
 
                     # 3. Handle Integer timestamps (Unix epoch seconds)
@@ -237,14 +261,17 @@ class IcechunkToIODAnetCDF:
                     retained_count = len(retained_indices)
                     total_count = len(dt_values)
 
-                    print(f"      Filtering: Retaining {retained_count} / {total_count} observations...")
+                    print(
+                        f"      Filtering: Retaining {retained_count} / {total_count} observations..."
+                    )
 
                     # Explicitly slice along Location dimension using index positions
                     if "Location" in ds.dims:
                         ds = ds.isel(Location=retained_indices)
                 else:
-                    print("  [WARNING] dateTime variable not found in dataset. Skipping time window filtering.")
-
+                    print(
+                        "  [WARNING] dateTime variable not found in dataset. Skipping time window filtering."
+                    )
 
             # 5. Output directory preparation and NetCDF export
             print(f"      Encoding Data to IODA NetCDF: {self.output_file}")
@@ -255,11 +282,14 @@ class IcechunkToIODAnetCDF:
             print(f"  [ERROR] Failed during Icechunk conversion: {e}", file=sys.stderr)
             if self.debug:
                 import traceback
+
                 traceback.print_exc()
             return False
 
 
-def get_assimilation_window(cycle_date_str: str, cycle_hour: int) -> tuple[datetime, datetime]:
+def get_assimilation_window(
+    cycle_date_str: str, cycle_hour: int
+) -> tuple[datetime, datetime]:
     base_dt = datetime.strptime(cycle_date_str, "%Y-%m-%d").replace(tzinfo=UTC)
 
     if cycle_hour == 0:
@@ -298,28 +328,45 @@ def print_netcdf_time_summary(output_pattern: str, debug: bool = False) -> None:
                     print(f"  [DEBUG] NetCDF Root Groups: {list(ds.groups.keys())}")
 
                 dt_var = None
-                if "MetaData" in ds.groups and "dateTime" in ds.groups["MetaData"].variables:
+                if (
+                    "MetaData" in ds.groups
+                    and "dateTime" in ds.groups["MetaData"].variables
+                ):
                     dt_var = ds.groups["MetaData"]["dateTime"][:]
                 elif "dateTime" in ds.variables:
                     dt_var = ds.variables["dateTime"][:]
 
                 if dt_var is not None:
                     if np.issubdtype(dt_var.dtype, np.datetime64):
-                        timestamps = [datetime.fromtimestamp(ts.astype('datetime64[s]').astype(int), tz=UTC) for ts in dt_var]
+                        timestamps = [
+                            datetime.fromtimestamp(
+                                ts.astype("datetime64[s]").astype(int), tz=UTC
+                            )
+                            for ts in dt_var
+                        ]
                     else:
                         epoch = datetime(1970, 1, 1, tzinfo=UTC)
-                        timestamps = [epoch + timedelta(seconds=int(ts)) for ts in dt_var]
+                        timestamps = [
+                            epoch + timedelta(seconds=int(ts)) for ts in dt_var
+                        ]
 
                     if len(timestamps) > 0:
-                        print(f"    Min Obs Time : {min(timestamps).strftime('%Y-%m-%d %H:%M:%S UTC')}")
-                        print(f"    Max Obs Time : {max(timestamps).strftime('%Y-%m-%d %H:%M:%S UTC')}")
+                        print(
+                            f"    Min Obs Time : {min(timestamps).strftime('%Y-%m-%d %H:%M:%S UTC')}"
+                        )
+                        print(
+                            f"    Max Obs Time : {max(timestamps).strftime('%Y-%m-%d %H:%M:%S UTC')}"
+                        )
                         print(f"    Total Obs    : {len(timestamps)}")
                     else:
-                        print("    Total Obs    : 0 (File contains no observations inside time window)")
+                        print(
+                            "    Total Obs    : 0 (File contains no observations inside time window)"
+                        )
                 else:
                     print("    MetaData/dateTime variable not found in NetCDF file.")
         except Exception as e:
             print(f"    Could not read NetCDF file: {e}")
+
 
 def run_batch_conversion(
     data_type_id: str,
@@ -383,13 +430,19 @@ def run_batch_conversion(
                 cycle_hour = int(hr)
                 print(f"\n=== Processing Date/Cycle: {date_str} {hr}Z [{sub_id}] ===")
 
-                eval_out_dir = output_path.replace("{hour}", hr).replace("{date}", date_str)
+                eval_out_dir = output_path.replace("{hour}", hr).replace(
+                    "{date}", date_str
+                )
                 if not os.path.exists(eval_out_dir):
                     print(f"  [INFO] Creating output directory: {eval_out_dir}")
                     os.makedirs(eval_out_dir, exist_ok=True)
 
-                eval_icechunk_dir = icechunk_path.replace("{hour}", hr).replace("{date}", date_str)
-                eval_icechunk_repo = icechunk_repo.replace("{hour}", hr).replace("{date}", date_str)
+                eval_icechunk_dir = icechunk_path.replace("{hour}", hr).replace(
+                    "{date}", date_str
+                )
+                eval_icechunk_repo = icechunk_repo.replace("{hour}", hr).replace(
+                    "{date}", date_str
+                )
                 repo_full_path = os.path.join(eval_icechunk_dir, eval_icechunk_repo)
 
                 # Format output filename using group template
@@ -401,7 +454,9 @@ def run_batch_conversion(
 
                 output_file = os.path.join(eval_out_dir, eval_out_file)
 
-                start_window, end_window = get_assimilation_window(formatted_date, cycle_hour)
+                start_window, end_window = get_assimilation_window(
+                    formatted_date, cycle_hour
+                )
                 print(f"  [TIME WINDOW] Target range: {start_window} to {end_window}")
 
                 converter = IcechunkToIODAnetCDF(
@@ -421,23 +476,43 @@ def run_batch_conversion(
 
             current_date += timedelta(days=1)
 
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="Convert Icechunk repositories to IODA NetCDF format over a date range."
     )
-    parser.add_argument("data_type", type=str, help="Data type ID defined in config (e.g., cris_n20_icechunk)")
+    parser.add_argument(
+        "data_type",
+        type=str,
+        help="Data type ID defined in config (e.g., cris_n20_icechunk)",
+    )
     parser.add_argument("start_date", type=str, help="Start date in YYYY-MM-DD format")
     parser.add_argument("end_date", type=str, help="End date in YYYY-MM-DD format")
-    parser.add_argument("--config", type=str, default="configs/icechunk2ioda.yaml", help="Path to YAML configuration file")
-    parser.add_argument("--debug", action="store_true", help="Enable verbose debug logging and stack traces")
+    parser.add_argument(
+        "--config",
+        type=str,
+        default="configs/icechunk2ioda.yaml",
+        help="Path to YAML configuration file",
+    )
+    parser.add_argument(
+        "--debug",
+        action="store_true",
+        help="Enable verbose debug logging and stack traces",
+    )
 
     args = parser.parse_args()
 
-    print(f"Starting conversion for data_type={args.data_type} from {args.start_date} to {args.end_date}")
+    print(
+        f"Starting conversion for data_type={args.data_type} from {args.start_date} to {args.end_date}"
+    )
     if args.debug:
         print("[DEBUG] Debug logging enabled.")
 
     run_batch_conversion(
-        args.data_type, args.start_date, args.end_date, config_path=args.config, debug=args.debug
+        args.data_type,
+        args.start_date,
+        args.end_date,
+        config_path=args.config,
+        debug=args.debug,
     )
     print("\nBatch conversion process complete!")
