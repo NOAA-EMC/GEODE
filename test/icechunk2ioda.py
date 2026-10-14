@@ -1,17 +1,17 @@
-import sys
-import os
-import glob
 import argparse
-from datetime import datetime, timedelta, timezone
-from pathlib import Path
-import yaml
-import numpy as np
-import netCDF4 as nc
-import xarray as xr
-import zarr
-import icechunk
-
+import glob
+import os
+import sys
 import warnings
+from datetime import UTC, datetime, timedelta
+from pathlib import Path
+
+import icechunk
+import netCDF4 as nc
+import numpy as np
+import xarray as xr
+import yaml
+import zarr
 
 warnings.filterwarnings(
     "ignore",
@@ -31,7 +31,7 @@ radiosonde
 """
 
 # Define UTC timezone for Python versions < 3.11 compatibility
-UTC = timezone.utc
+# UTC = timezone.utc
 
 
 class IcechunkToIODAnetCDF:
@@ -40,10 +40,10 @@ class IcechunkToIODAnetCDF:
         repo_path: str,
         output_file: str,
         branch: str = "main",
-        snapshot_id: str = None,
-        tag: str = None,
-        start_window: datetime = None,
-        end_window: datetime = None,
+        snapshot_id: str | None = None,
+        tag: str | None = None,
+        start_window: datetime | None = None,
+        end_window: datetime | None = None,
         debug: bool = False,
     ):
         self.repo_path = repo_path
@@ -94,7 +94,13 @@ class IcechunkToIODAnetCDF:
                         )
                         if var_name in ds_sub:
                             group_dict[full_path] = ds_sub[var_name]
-                    except Exception as e:
+                    except (
+                        KeyError,
+                        ValueError,
+                        AttributeError,
+                        RuntimeError,
+                        OSError,
+                    ) as e:
                         self._log_debug(
                             f"Failed to load variable '{full_path}' into Xarray: {e}"
                         )
@@ -127,7 +133,7 @@ class IcechunkToIODAnetCDF:
                 return ds[key]
 
         for key in ds.variables:
-            if key.endswith("dateTime") or key.endswith("datetime"):
+            if key.endswith("dateTime", "datetime"):
                 self._log_debug(f"Found dateTime variable in dataset: '{key}'")
                 return ds[key]
 
@@ -204,7 +210,7 @@ class IcechunkToIODAnetCDF:
             print(
                 "      Loading Xarray dataset and Zarr hierarchy from Icechunk store..."
             )
-            ds, zgroup = self.load_dataset_recursively(session.store)
+            ds, _zgroup = self.load_dataset_recursively(session.store)
 
             self._log_debug(f"Loaded Xarray Dataset Summary:\n{ds}")
 
@@ -278,7 +284,7 @@ class IcechunkToIODAnetCDF:
             self.write_dataset_to_ioda_nc(ds, self.output_file)
             return True
 
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             print(f"  [ERROR] Failed during Icechunk conversion: {e}", file=sys.stderr)
             if self.debug:
                 import traceback
@@ -364,7 +370,7 @@ def print_netcdf_time_summary(output_pattern: str, debug: bool = False) -> None:
                         )
                 else:
                     print("    MetaData/dateTime variable not found in NetCDF file.")
-        except Exception as e:
+        except (OSError, RuntimeError, KeyError, ValueError) as e:
             print(f"    Could not read NetCDF file: {e}")
 
 
@@ -393,14 +399,14 @@ def run_batch_conversion(
     group_output_file = group_cfg.get("output_file", "gdas.t{hour}z.{id}.nc")
     target_items = group_cfg.get("items", [])
 
-    start_date = datetime.strptime(start_date_str, "%Y-%m-%d")
-    end_date = datetime.strptime(end_date_str, "%Y-%m-%d")
+    start_date = datetime.strptime(start_date_str, "%Y-%m-%d").replace(tzinfo=UTC)
+    end_date = datetime.strptime(end_date_str, "%Y-%m-%d").replace(tzinfo=UTC)
 
     for dt_config in target_items:
         sub_id = dt_config.get("id", data_type_id)
-        print(f"\n==================================================")
+        print("\n==================================================")
         print(f"   Processing Data Sub-type: {sub_id}")
-        print(f"==================================================")
+        print("==================================================")
 
         # Retrieve paths (item-level overrides common)
         icechunk_path = dt_config.get("icechunk_path", common.get("icechunk_path", ""))
