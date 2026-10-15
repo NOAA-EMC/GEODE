@@ -56,3 +56,8 @@ changes reliable for repeatable production runs and large observation volumes.
 - Follow the repository-wide guidance in
   [.github/copilot-instructions.md](.github/copilot-instructions.md) and the
   applicable language guidance in `.github/instructions/`.
+
+## 🛑 Boundaries & Constraints
+*   **Never** commit raw data files (`.nc`, `.bin`, `.bufr`) to the repository.
+*   **Do not** bypass Icechunk's transactional API by modifying raw Zarr metadata components directly on object storage.
+*   **Do not** append data to the `main` storage branch without going through a validated ingestion pipeline transaction.
