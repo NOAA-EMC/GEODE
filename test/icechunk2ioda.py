@@ -6,7 +6,6 @@ import warnings
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
-import icechunk as ic
 import netCDF4 as nc
 import numpy as np
 import xarray as xr
@@ -22,6 +21,7 @@ warnings.filterwarnings(
 
 """
 usage:
+python icechunk2ioda.py radiosonde 2026-09-15 2026-09-15
 python icechunk2ioda.py iasi 2026-09-16 2026-09-16
 """
 
@@ -47,8 +47,8 @@ class IcechunkToIODAnetCDF:
 
     def write_datatree_to_netcdf(self, data_tree: xr.DataTree, output_file: str):
         """
-        Writes an xarray DataTree to a NetCDF4 file by opening the file once
-        and writing all groups directly, avoiding repeated open/close/lock cycles.
+        Writes an xarray DataTree to a NetCDF4 file in a single write session,
+        enabling zlib compression to match original IODA file sizes.
         """
         out_path = Path(output_file)
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -64,7 +64,7 @@ class IcechunkToIODAnetCDF:
                 if len(dataset.data_vars) == 0:
                     continue
 
-                # Navigate/create the group hierarchy
+                # Navigate/create group hierarchy
                 if group_path:
                     grp = root
                     for part in group_path.split("/"):
@@ -75,7 +75,7 @@ class IcechunkToIODAnetCDF:
                 else:
                     grp = root
 
-                # Create dimensions using dataset.sizes (fixes Xarray deprecation warning)
+                # Create dimensions
                 for dim_name, dim_size in dataset.sizes.items():
                     if dim_name not in grp.dimensions:
                         grp.createDimension(dim_name, dim_size)
@@ -88,10 +88,11 @@ class IcechunkToIODAnetCDF:
                     if np.issubdtype(data.dtype, np.datetime64):
                         data = data.astype("datetime64[s]").astype(np.int64)
                         dtype = np.int64
-                    elif (data.dtype.kind in ("U", "S", "O") or
-                        "str" in str(data.dtype).lower() or
-                        "string" in str(data.dtype).lower()):
-                        # Convert via object to handle NumPy 2.0 StringDType
+                    elif (
+                        data.dtype.kind in ("U", "S", "O")
+                        or "str" in str(data.dtype).lower()
+                        or "string" in str(data.dtype).lower()
+                    ):
                         data = data.astype(object).astype(str)
                         dtype = str
                     else:
@@ -99,41 +100,16 @@ class IcechunkToIODAnetCDF:
                             dtype = data.dtype.newbyteorder("=")
                             data = np.ascontiguousarray(data, dtype=dtype)
                         except TypeError:
-                            # Fallback for new-style NumPy dtypes that don't support newbyteorder
                             dtype = data.dtype
                             data = np.ascontiguousarray(data)
 
                     fill_val = var.encoding.get("_FillValue", None)
                     kwargs = {"fill_value": fill_val} if fill_val is not None else {}
 
-                    nc_var = grp.createVariable(
-                        var_name, dtype, var.dims, **kwargs
-                    )
-
-                    for attr_name, attr_val in var.attrs.items():
-                        if attr_name != "_FillValue":
-                            nc_var.setncattr(attr_name, attr_val)
-
-                    nc_var[...] = data
-
-
-                '''
-                for var_name, var in dataset.variables.items():
-                    data = np.asarray(var.values)
-
-                    # Handle datetime64 -> int64 epoch seconds
-                    if np.issubdtype(data.dtype, np.datetime64):
-                        data = data.astype("datetime64[s]").astype(np.int64)
-                        dtype = np.int64
-                    elif data.dtype.kind == "U" or data.dtype == object:
-                        # Variable-length strings
-                        dtype = str
-                    else:
-                        dtype = data.dtype.newbyteorder("=")
-                        data = np.ascontiguousarray(data, dtype=dtype)
-
-                    fill_val = var.encoding.get("_FillValue", None)
-                    kwargs = {"fill_value": fill_val} if fill_val is not None else {}
+                    # Apply DEFLATE compression on multidimensional numeric variables
+                    if dtype != str and len(var.dims) > 0:
+                        kwargs["zlib"] = True
+                        kwargs["complevel"] = 4
 
                     nc_var = grp.createVariable(
                         var_name, dtype, var.dims, **kwargs
@@ -144,91 +120,37 @@ class IcechunkToIODAnetCDF:
                             nc_var.setncattr(attr_name, attr_val)
 
                     nc_var[...] = data
-                '''
 
     def convert(self) -> bool:
         print(f"  --> Fetching data via GEODE DataManager for type: {self.data_type}")
 
         try:
-            # 1. Initialize GEODE DataManager to get the repository path
+            # 1. Official GEODE DataManager API call
             dm = IceChunkDataManager()
-            file_path = dm.get_file_path(self.data_type)
-
-            print(f"      Opening Icechunk store from: {file_path}")
-            storage = ic.local_filesystem_storage(file_path)
-            repo = ic.Repository.open(storage)
-            session = repo.readonly_session("main")
-
-            datatree = xr.open_datatree(
-                session.store,
-                engine="zarr",
-                consolidated=False,
+            datatree = dm.get(
+                data_type=self.data_type,
+                start_time=self.start_window,
+                end_time=self.end_window,
             )
-            # Temporary: inspect the actual structure
-            print(f"      [DEBUG] DataTree nodes: {[node.path for node in datatree.subtree]}")
-            print(f"      [DEBUG] DataTree keys: {list(datatree.keys())}")
-            if "MetaData" in datatree:
-                print(f"      [DEBUG] MetaData variables: {list(datatree['MetaData'].ds.data_vars)}")
 
+            # 2. Check observation count
+            num_obs = 0
+            if "MetaData" in datatree and "Location" in datatree["MetaData"].sizes:
+                num_obs = datatree["MetaData"].sizes["Location"]
+            elif "Location" in datatree.sizes:
+                num_obs = datatree.sizes["Location"]
 
+            print(f"      Filtering: Retained {num_obs} observations.")
 
-            # 2. Filter observations matching the cycle time window
-            if "MetaData/dateTime" in datatree and "dateTime" in datatree["MetaData"].ds:
-#                dt_node = datatree["MetaData/dateTime"].ds["dateTime"]
+            if num_obs == 0:
+                print(
+                    f"  [WARNING] 0 observations matched target time window ({self.start_window} to {self.end_window})."
+                )
+                return False
 
-                print(f"\n      [DEBUG] Raw MetaData/dateTime object type: {type(dt_node)}")
-                print(f"      [DEBUG] Raw MetaData/dateTime dtype: {dt_node.dtype}")
+            self._log_debug(f"Loaded DataTree Summary:\n{datatree}")
 
-                # Force concrete evaluation into a 1D NumPy array
-                dt_data = datatree["MetaData"].ds["dateTime"].data
-                if hasattr(dt_data, "compute"):
-                    date_time = np.array(dt_data.compute(), dtype=np.int64)
-                else:
-                    date_time = np.array(dt_data, dtype=np.int64)
-
-#                print(f"      [DEBUG] Evaluated date_time array type: {type(date_time)}")
-#                print(f"      [DEBUG] date_time shape: {date_time.shape}, dtype: {date_time.dtype}")
-                if date_time.size > 0:
-                    print(f"      [DEBUG] Raw Min Epoch Sec : {date_time.min()} ({datetime.fromtimestamp(date_time.min(), tz=UTC)})")
-                    print(f"      [DEBUG] Raw Max Epoch Sec : {date_time.max()} ({datetime.fromtimestamp(date_time.max(), tz=UTC)})")
-
-                # Target window converted to integer Unix epoch seconds
-                start_ts = int(self.start_window.timestamp())
-                end_ts = int(self.end_window.timestamp())
-
-#                print(f"      [DEBUG] Target Window Start Epoch : {start_ts} ({self.start_window})")
-#                print(f"      [DEBUG] Target Window End Epoch   : {end_ts} ({self.end_window})")
-
-                # Evaluate time window boolean mask
-                time_mask = (date_time >= start_ts) & (date_time < end_ts)
-                retained_indices = np.where(time_mask)[0]
-
-#                print(f"      [DEBUG] time_mask sum (True count) : {np.sum(time_mask)}")
-#                print(f"      [DEBUG] retained_indices length   : {len(retained_indices)}")
-#                if len(retained_indices) > 0:
-#                    print(f"      [DEBUG] retained_indices first 5  : {retained_indices[:5]}")
-#                    print(f"      [DEBUG] retained_indices last 5   : {retained_indices[-5:]}")
-
-                if len(retained_indices) == 0:
-                    print("  [WARNING] 0 observations matched target time window.")
-                    return False
-
-                # 3. Explicitly slice each node using concrete integer indices
-                filtered_nodes = {}
-                for path, node in datatree.subtree_with_keys:
-                    ds = node.to_dataset(inherit=False)
-                    if "Location" in ds.dims:
-#                        sliced = ds.isel(Location=retained_indices)
-#                        print(f"      [DEBUG] Sliced node '{path}' Location dim size: {sliced.sizes.get('Location')}")
-                        filtered_nodes[path] = ds.isel(Location=retained_indices)
-                    else:
-                        filtered_nodes[path] = ds
-
-                # Overwrite datatree with the filtered DataTree structure
-                datatree = xr.DataTree.from_dict(filtered_nodes)
-
-
-            # 4. Export filtered DataTree directly to NetCDF
+            # 3. Export to NetCDF
             print(f"      Writing DataTree to IODA NetCDF: {self.output_file}")
             self.write_datatree_to_netcdf(datatree, self.output_file)
             return True
@@ -294,43 +216,35 @@ def print_netcdf_time_summary(output_pattern: str, debug: bool = False) -> None:
                 elif "dateTime" in ds.variables:
                     dt_var = ds.variables["dateTime"][:]
 
-                if dt_var is not None:
-                    if np.issubdtype(dt_var.dtype, np.datetime64):
-                        timestamps = [
-                            datetime.fromtimestamp(
-                                ts.astype("datetime64[s]").astype(int), tz=UTC
-                            )
-                            for ts in dt_var
-                        ]
-                    else:
-                        # int64 epoch seconds - use fromtimestamp directly, avoid timedelta overflow
+                if dt_var is not None and len(dt_var) > 0:
+                    dt_vals = np.asarray(dt_var).ravel()
+
+                    # Strip negative fill values (-9999) or extreme timestamps
+                    valid_mask = (dt_vals > 0) & (dt_vals < 4102444800)
+                    valid_ts = dt_vals[valid_mask]
+
+                    if len(valid_ts) > 0:
                         timestamps = [
                             datetime.fromtimestamp(int(ts), tz=UTC)
-                            for ts in dt_var
-                            if -2**31 <= int(ts) <= 2**31 - 1 or True  # guard removed, fromtimestamp handles int64
+                            for ts in valid_ts
                         ]
 
-
-#                        epoch = datetime(1970, 1, 1, tzinfo=UTC)
-#                        timestamps = [
-#                            epoch + timedelta(seconds=int(ts)) for ts in dt_var
-#                        ]
-
-                    if len(timestamps) > 0:
                         print(
                             f"    Min Obs Time : {min(timestamps).strftime('%Y-%m-%d %H:%M:%S UTC')}"
                         )
                         print(
                             f"    Max Obs Time : {max(timestamps).strftime('%Y-%m-%d %H:%M:%S UTC')}"
                         )
-                        print(f"    Total Obs    : {len(timestamps)}")
+                        print(f"    Total Obs    : {len(valid_ts)}")
                     else:
                         print(
-                            "    Total Obs    : 0 (File contains no observations inside time window)"
+                            "    Total Obs    : 0 (File contains no valid observations inside time window)"
                         )
                 else:
-                    print("    MetaData/dateTime variable not found in NetCDF file.")
-        except (OSError, RuntimeError, KeyError, ValueError) as e:
+                    print(
+                        "    MetaData/dateTime variable not found or empty in NetCDF file."
+                    )
+        except Exception as e:
             print(f"    Could not read NetCDF file: {e}")
 
 
@@ -412,10 +326,12 @@ def run_batch_conversion(
                 )
                 success = converter.convert()
 
+                # Gracefully skip if 0 observations matched the cycle window
                 if not success:
-                    raise RuntimeError(
-                        f"Conversion failed for {sub_id} at {date_str} {hr}Z"
+                    print(
+                        f"  [INFO] Skipping cycle {date_str} {hr}Z [{sub_id}] - no observations to output."
                     )
+                    continue
 
                 print_netcdf_time_summary(output_file, debug=debug)
 

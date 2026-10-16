@@ -177,15 +177,23 @@ class IceChunkDataManager(DataManager):
             #            zarr_version=3,
             consolidated=False,
         )
+        
+        # Extract and normalize timestamps to integer epoch seconds (handles int64, datetime64, ns)
+        dt_var = datatree["MetaData"]["dateTime"] if "MetaData" in datatree else datatree["MetaData/dateTime"]
+        dt_raw = np.asarray(dt_var.values)
+        if np.issubdtype(dt_raw.dtype, np.datetime64) or dt_raw.dtype.kind in ("U", "S", "O"):
+            dt_secs = dt_raw.astype("datetime64[s]").astype(np.int64)
+        else:
+            dt_secs = dt_raw.astype(np.int64)
+            if len(dt_secs) > 0 and dt_secs[0] > 1e16:
+                dt_secs = dt_secs // 1_000_000_000
 
-        date_time = datatree["MetaData/dateTime"].values
-        start = np.datetime64(start_time.astimezone(UTC).replace(tzinfo=None))
-        end = np.datetime64(end_time.astimezone(UTC).replace(tzinfo=None))
+        start_sec = int(start_time.astimezone(UTC).timestamp())
+        end_sec = int(end_time.astimezone(UTC).timestamp())
 
-        time_mask = (date_time >= start) & (date_time < end)
-        print(time_mask)
+        retained_indices = np.where((dt_secs >= start_sec) & (dt_secs < end_sec))[0]
         datatree = xr.map_over_datasets(
-            lambda ds: ds.where(time_mask, drop=True) if "Location" in ds.dims else ds,
+            lambda ds: ds.isel(Location=retained_indices).compute() if "Location" in ds.dims else ds.compute(),
             datatree,
         )
 
