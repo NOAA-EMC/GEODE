@@ -178,7 +178,7 @@ class IceChunkDataManager(DataManager):
             consolidated=False,
         )
 
-        date_time = datatree["MetaData/dateTime"]
+        date_time = datatree["MetaData/dateTime"].values
         start = np.datetime64(start_time.astimezone(UTC).replace(tzinfo=None))
         end = np.datetime64(end_time.astimezone(UTC).replace(tzinfo=None))
 

@@ -6,12 +6,13 @@ import warnings
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
-import icechunk
+import icechunk as ic
 import netCDF4 as nc
 import numpy as np
 import xarray as xr
 import yaml
-import zarr
+
+from geode.data.data_manager import IceChunkDataManager
 
 warnings.filterwarnings(
     "ignore",
@@ -20,37 +21,22 @@ warnings.filterwarnings(
 )
 
 """
-usage
-python icechunk2ioda.py cris 2026-09-13 2026-09-19
-
-As of Set 28, 2026 available data types are
-iasi [metop-a, metop-b, metop-c]
-cris [npp, n20, n21]
-atms [npp, n20, n21]
-radiosonde
+usage:
+python icechunk2ioda.py iasi 2026-09-16 2026-09-16
 """
-
-# Define UTC timezone for Python versions < 3.11 compatibility
-# UTC = timezone.utc
 
 
 class IcechunkToIODAnetCDF:
     def __init__(
         self,
-        repo_path: str,
+        data_type: str,
         output_file: str,
-        branch: str = "main",
-        snapshot_id: str | None = None,
-        tag: str | None = None,
-        start_window: datetime | None = None,
-        end_window: datetime | None = None,
+        start_window: datetime,
+        end_window: datetime,
         debug: bool = False,
     ):
-        self.repo_path = repo_path
+        self.data_type = data_type
         self.output_file = output_file
-        self.branch = branch
-        self.snapshot_id = snapshot_id
-        self.tag = tag
         self.start_window = start_window
         self.end_window = end_window
         self.debug = debug
@@ -59,233 +45,199 @@ class IcechunkToIODAnetCDF:
         if self.debug:
             print(f"  [DEBUG] {msg}")
 
-    def load_dataset_recursively(self, store) -> tuple[xr.Dataset, zarr.Group]:
+    def write_datatree_to_netcdf(self, data_tree: xr.DataTree, output_file: str):
         """
-        Recursively opens Zarr v3 groups and merges them into a single Xarray dataset,
-        preserving IODA variable paths (e.g., 'MetaData/dateTime', 'ObsValue/spectralRadiance').
-        """
-        zgroup = zarr.open_group(store, mode="r")
-
-        subgroups = [
-            name for name, obj in zgroup.members() if isinstance(obj, zarr.Group)
-        ]
-        arrays = [name for name, obj in zgroup.members() if isinstance(obj, zarr.Array)]
-
-        self._log_debug(f"Root Zarr Groups found: {subgroups}")
-        self._log_debug(f"Root Zarr Arrays found: {arrays}")
-
-        group_dict = {}
-
-        def walk_zarr_group(group: zarr.Group, current_path: str = ""):
-            for name, child in group.members():
-                full_path = f"{current_path}/{name}".lstrip("/")
-
-                if isinstance(child, zarr.Group):
-                    walk_zarr_group(child, full_path)
-                elif isinstance(child, zarr.Array):
-                    parent_group = os.path.dirname(full_path)
-                    var_name = os.path.basename(full_path)
-
-                    try:
-                        ds_sub = xr.open_zarr(
-                            store,
-                            group=parent_group if parent_group else None,
-                            zarr_format=3,
-                        )
-                        if var_name in ds_sub:
-                            group_dict[full_path] = ds_sub[var_name]
-                    except (
-                        KeyError,
-                        ValueError,
-                        AttributeError,
-                        RuntimeError,
-                        OSError,
-                    ) as e:
-                        self._log_debug(
-                            f"Failed to load variable '{full_path}' into Xarray: {e}"
-                        )
-
-        walk_zarr_group(zgroup)
-
-        if not group_dict:
-            self._log_debug(
-                "No nested arrays found during traversal, opening root group..."
-            )
-            ds = xr.open_zarr(store, zarr_format=3)
-        else:
-            ds = xr.Dataset(group_dict)
-
-        return ds, zgroup
-
-    def find_datetime_variable(self, ds: xr.Dataset):
-        """Locates the dateTime variable in the Xarray dataset."""
-        candidates = [
-            "MetaData/dateTime",
-            "MetaData/datetime",
-            "dateTime",
-            "datetime",
-            "time",
-        ]
-
-        for key in candidates:
-            if key in ds:
-                self._log_debug(f"Found dateTime variable in dataset: '{key}'")
-                return ds[key]
-
-        for key in ds.variables:
-            if key.endswith("dateTime", "datetime"):
-                self._log_debug(f"Found dateTime variable in dataset: '{key}'")
-                return ds[key]
-
-        return None
-
-    def write_dataset_to_ioda_nc(self, ds: xr.Dataset, output_file: str):
-        """
-        Writes a flat Xarray dataset with group-path keys (e.g. 'MetaData/dateTime')
-        into a proper IODA NetCDF4 file containing actual NetCDF groups.
+        Writes an xarray DataTree to a NetCDF4 file by opening the file once
+        and writing all groups directly, avoiding repeated open/close/lock cycles.
         """
         out_path = Path(output_file)
         out_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with nc.Dataset(output_file, "w", format="NETCDF4") as dst:
-            # 1. Use ds.sizes to avoid Xarray FutureWarning
-            for dim_name, dim_size in ds.sizes.items():
-                dst.createDimension(dim_name, dim_size)
+        if out_path.exists():
+            out_path.unlink()
 
-            # 2. Iterate and place variables into NetCDF groups
-            for key, var in ds.variables.items():
-                if "/" in key:
-                    group_name, var_name = key.split("/", 1)
-                    grp = dst.groups.get(group_name) or dst.createGroup(group_name)
+        with nc.Dataset(output_file, "w", format="NETCDF4") as root:
+            for node in data_tree.subtree:
+                group_path = node.path.lstrip("/")
+                dataset = node.to_dataset(inherit=False)
+
+                if len(dataset.data_vars) == 0:
+                    continue
+
+                # Navigate/create the group hierarchy
+                if group_path:
+                    grp = root
+                    for part in group_path.split("/"):
+                        if part not in grp.groups:
+                            grp = grp.createGroup(part)
+                        else:
+                            grp = grp.groups[part]
                 else:
-                    grp = dst
-                    var_name = key
+                    grp = root
 
-                fill_val = var.encoding.get("_FillValue", None)
-                kwargs = {"fill_value": fill_val} if fill_val is not None else {}
+                # Create dimensions using dataset.sizes (fixes Xarray deprecation warning)
+                for dim_name, dim_size in dataset.sizes.items():
+                    if dim_name not in grp.dimensions:
+                        grp.createDimension(dim_name, dim_size)
 
-                data = var.values
-                if np.issubdtype(data.dtype, np.datetime64):
-                    data = data.astype("datetime64[s]").astype(np.int64)
-                    dtype = np.int64
-                else:
-                    # Enforce native byte order to eliminate netCDF4 endian warnings
-                    dtype = data.dtype.newbyteorder("=")
+                # Write variables
+                for var_name, var in dataset.variables.items():
+                    data = np.asarray(var.values)
 
-                nc_var = grp.createVariable(var_name, dtype, var.dims, **kwargs)
+                    # Handle datetime64 -> int64 epoch seconds
+                    if np.issubdtype(data.dtype, np.datetime64):
+                        data = data.astype("datetime64[s]").astype(np.int64)
+                        dtype = np.int64
+                    elif (data.dtype.kind in ("U", "S", "O") or
+                        "str" in str(data.dtype).lower() or
+                        "string" in str(data.dtype).lower()):
+                        # Convert via object to handle NumPy 2.0 StringDType
+                        data = data.astype(object).astype(str)
+                        dtype = str
+                    else:
+                        try:
+                            dtype = data.dtype.newbyteorder("=")
+                            data = np.ascontiguousarray(data, dtype=dtype)
+                        except TypeError:
+                            # Fallback for new-style NumPy dtypes that don't support newbyteorder
+                            dtype = data.dtype
+                            data = np.ascontiguousarray(data)
 
-                for attr_name, attr_val in var.attrs.items():
-                    if attr_name != "_FillValue":
-                        nc_var.setncattr(attr_name, attr_val)
+                    fill_val = var.encoding.get("_FillValue", None)
+                    kwargs = {"fill_value": fill_val} if fill_val is not None else {}
 
-                nc_var[:] = data
+                    nc_var = grp.createVariable(
+                        var_name, dtype, var.dims, **kwargs
+                    )
+
+                    for attr_name, attr_val in var.attrs.items():
+                        if attr_name != "_FillValue":
+                            nc_var.setncattr(attr_name, attr_val)
+
+                    nc_var[...] = data
+
+
+                '''
+                for var_name, var in dataset.variables.items():
+                    data = np.asarray(var.values)
+
+                    # Handle datetime64 -> int64 epoch seconds
+                    if np.issubdtype(data.dtype, np.datetime64):
+                        data = data.astype("datetime64[s]").astype(np.int64)
+                        dtype = np.int64
+                    elif data.dtype.kind == "U" or data.dtype == object:
+                        # Variable-length strings
+                        dtype = str
+                    else:
+                        dtype = data.dtype.newbyteorder("=")
+                        data = np.ascontiguousarray(data, dtype=dtype)
+
+                    fill_val = var.encoding.get("_FillValue", None)
+                    kwargs = {"fill_value": fill_val} if fill_val is not None else {}
+
+                    nc_var = grp.createVariable(
+                        var_name, dtype, var.dims, **kwargs
+                    )
+
+                    for attr_name, attr_val in var.attrs.items():
+                        if attr_name != "_FillValue":
+                            nc_var.setncattr(attr_name, attr_val)
+
+                    nc_var[...] = data
+                '''
 
     def convert(self) -> bool:
-        print(f"  --> Opening Icechunk repo: {self.repo_path}")
-
-        if not os.path.exists(self.repo_path):
-            print(
-                f"  [WARNING] Repository path does not exist: {self.repo_path}. Skipping."
-            )
-            return False
+        print(f"  --> Fetching data via GEODE DataManager for type: {self.data_type}")
 
         try:
-            # 1. Open Repository
-            repo = icechunk.Repository.open(
-                storage=icechunk.local_filesystem_storage(self.repo_path)
+            # 1. Initialize GEODE DataManager to get the repository path
+            dm = IceChunkDataManager()
+            file_path = dm.get_file_path(self.data_type)
+
+            print(f"      Opening Icechunk store from: {file_path}")
+            storage = ic.local_filesystem_storage(file_path)
+            repo = ic.Repository.open(storage)
+            session = repo.readonly_session("main")
+
+            datatree = xr.open_datatree(
+                session.store,
+                engine="zarr",
+                consolidated=False,
             )
+            # Temporary: inspect the actual structure
+            print(f"      [DEBUG] DataTree nodes: {[node.path for node in datatree.subtree]}")
+            print(f"      [DEBUG] DataTree keys: {list(datatree.keys())}")
+            if "MetaData" in datatree:
+                print(f"      [DEBUG] MetaData variables: {list(datatree['MetaData'].ds.data_vars)}")
 
-            # 2. Open Read-Only Session
-            if self.snapshot_id:
-                print(f"      Reading Session Snapshot: {self.snapshot_id}")
-                session = repo.readonly_session(snapshot_id=self.snapshot_id)
-            elif self.tag:
-                print(f"      Reading Session Tag: {self.tag}")
-                session = repo.readonly_session(tag=self.tag)
-            else:
-                print(f"      Reading Session Branch: {self.branch}")
-                session = repo.readonly_session(branch=self.branch)
 
-            # 3. Load full hierarchy into Xarray
-            print(
-                "      Loading Xarray dataset and Zarr hierarchy from Icechunk store..."
-            )
-            ds, _zgroup = self.load_dataset_recursively(session.store)
 
-            self._log_debug(f"Loaded Xarray Dataset Summary:\n{ds}")
+            # 2. Filter observations matching the cycle time window
+            if "MetaData/dateTime" in datatree and "dateTime" in datatree["MetaData"].ds:
+#                dt_node = datatree["MetaData/dateTime"].ds["dateTime"]
 
-            # 4. Filter by Time Window
-            if self.start_window and self.end_window:
-                dt_var = self.find_datetime_variable(ds)
+                print(f"\n      [DEBUG] Raw MetaData/dateTime object type: {type(dt_node)}")
+                print(f"      [DEBUG] Raw MetaData/dateTime dtype: {dt_node.dtype}")
 
-                if dt_var is not None:
-                    # Force immediate loading of dateTime array values into NumPy
-                    dt_values = np.asarray(dt_var.values)
-
-                    if len(dt_values) > 0:
-                        min_dt = dt_values.min()
-                        max_dt = dt_values.max()
-                        self._log_debug(
-                            f"Icechunk Store Min Date: {min_dt} | Max Date: {max_dt}"
-                        )
-
-                    # 1. Handle String or Byte timestamps
-                    if np.issubdtype(dt_values.dtype, np.character) or isinstance(
-                        dt_values.flat[0], (str, bytes)
-                    ):
-                        str_vals = [
-                            v.decode("utf-8") if isinstance(v, bytes) else str(v)
-                            for v in dt_values.flat
-                        ]
-                        dt_series = np.array(str_vals, dtype="datetime64[s]")
-                        start_target = np.datetime64(
-                            self.start_window.replace(tzinfo=None), "s"
-                        )
-                        end_target = np.datetime64(
-                            self.end_window.replace(tzinfo=None), "s"
-                        )
-                        mask = (dt_series >= start_target) & (dt_series < end_target)
-
-                    # 2. Handle datetime64 objects (normalize resolution to seconds)
-                    elif np.issubdtype(dt_values.dtype, np.datetime64):
-                        dt_series = dt_values.astype("datetime64[s]")
-                        start_target = np.datetime64(
-                            self.start_window.replace(tzinfo=None), "s"
-                        )
-                        end_target = np.datetime64(
-                            self.end_window.replace(tzinfo=None), "s"
-                        )
-                        mask = (dt_series >= start_target) & (dt_series < end_target)
-
-                    # 3. Handle Integer timestamps (Unix epoch seconds)
-                    else:
-                        start_target = int(self.start_window.timestamp())
-                        end_target = int(self.end_window.timestamp())
-                        mask = (dt_values >= start_target) & (dt_values < end_target)
-
-                    retained_indices = np.where(mask)[0]
-                    retained_count = len(retained_indices)
-                    total_count = len(dt_values)
-
-                    print(
-                        f"      Filtering: Retaining {retained_count} / {total_count} observations..."
-                    )
-
-                    # Explicitly slice along Location dimension using index positions
-                    if "Location" in ds.dims:
-                        ds = ds.isel(Location=retained_indices)
+                # Force concrete evaluation into a 1D NumPy array
+                dt_data = datatree["MetaData"].ds["dateTime"].data
+                if hasattr(dt_data, "compute"):
+                    date_time = np.array(dt_data.compute(), dtype=np.int64)
                 else:
-                    print(
-                        "  [WARNING] dateTime variable not found in dataset. Skipping time window filtering."
-                    )
+                    date_time = np.array(dt_data, dtype=np.int64)
 
-            # 5. Output directory preparation and NetCDF export
-            print(f"      Encoding Data to IODA NetCDF: {self.output_file}")
-            self.write_dataset_to_ioda_nc(ds, self.output_file)
+#                print(f"      [DEBUG] Evaluated date_time array type: {type(date_time)}")
+#                print(f"      [DEBUG] date_time shape: {date_time.shape}, dtype: {date_time.dtype}")
+                if date_time.size > 0:
+                    print(f"      [DEBUG] Raw Min Epoch Sec : {date_time.min()} ({datetime.fromtimestamp(date_time.min(), tz=UTC)})")
+                    print(f"      [DEBUG] Raw Max Epoch Sec : {date_time.max()} ({datetime.fromtimestamp(date_time.max(), tz=UTC)})")
+
+                # Target window converted to integer Unix epoch seconds
+                start_ts = int(self.start_window.timestamp())
+                end_ts = int(self.end_window.timestamp())
+
+#                print(f"      [DEBUG] Target Window Start Epoch : {start_ts} ({self.start_window})")
+#                print(f"      [DEBUG] Target Window End Epoch   : {end_ts} ({self.end_window})")
+
+                # Evaluate time window boolean mask
+                time_mask = (date_time >= start_ts) & (date_time < end_ts)
+                retained_indices = np.where(time_mask)[0]
+
+#                print(f"      [DEBUG] time_mask sum (True count) : {np.sum(time_mask)}")
+#                print(f"      [DEBUG] retained_indices length   : {len(retained_indices)}")
+#                if len(retained_indices) > 0:
+#                    print(f"      [DEBUG] retained_indices first 5  : {retained_indices[:5]}")
+#                    print(f"      [DEBUG] retained_indices last 5   : {retained_indices[-5:]}")
+
+                if len(retained_indices) == 0:
+                    print("  [WARNING] 0 observations matched target time window.")
+                    return False
+
+                # 3. Explicitly slice each node using concrete integer indices
+                filtered_nodes = {}
+                for path, node in datatree.subtree_with_keys:
+                    ds = node.to_dataset(inherit=False)
+                    if "Location" in ds.dims:
+#                        sliced = ds.isel(Location=retained_indices)
+#                        print(f"      [DEBUG] Sliced node '{path}' Location dim size: {sliced.sizes.get('Location')}")
+                        filtered_nodes[path] = ds.isel(Location=retained_indices)
+                    else:
+                        filtered_nodes[path] = ds
+
+                # Overwrite datatree with the filtered DataTree structure
+                datatree = xr.DataTree.from_dict(filtered_nodes)
+
+
+            # 4. Export filtered DataTree directly to NetCDF
+            print(f"      Writing DataTree to IODA NetCDF: {self.output_file}")
+            self.write_datatree_to_netcdf(datatree, self.output_file)
             return True
 
-        except Exception as e:  # noqa: BLE001
-            print(f"  [ERROR] Failed during Icechunk conversion: {e}", file=sys.stderr)
+        except Exception as e:
+            print(
+                f"  [ERROR] Failed during GEODE/Icechunk conversion: {e}",
+                file=sys.stderr,
+            )
             if self.debug:
                 import traceback
 
@@ -351,10 +303,18 @@ def print_netcdf_time_summary(output_pattern: str, debug: bool = False) -> None:
                             for ts in dt_var
                         ]
                     else:
-                        epoch = datetime(1970, 1, 1, tzinfo=UTC)
+                        # int64 epoch seconds - use fromtimestamp directly, avoid timedelta overflow
                         timestamps = [
-                            epoch + timedelta(seconds=int(ts)) for ts in dt_var
+                            datetime.fromtimestamp(int(ts), tz=UTC)
+                            for ts in dt_var
+                            if -2**31 <= int(ts) <= 2**31 - 1 or True  # guard removed, fromtimestamp handles int64
                         ]
+
+
+#                        epoch = datetime(1970, 1, 1, tzinfo=UTC)
+#                        timestamps = [
+#                            epoch + timedelta(seconds=int(ts)) for ts in dt_var
+#                        ]
 
                     if len(timestamps) > 0:
                         print(
@@ -408,22 +368,9 @@ def run_batch_conversion(
         print(f"   Processing Data Sub-type: {sub_id}")
         print("==================================================")
 
-        # Retrieve paths (item-level overrides common)
-        icechunk_path = dt_config.get("icechunk_path", common.get("icechunk_path", ""))
         output_path = dt_config.get("output_path", common.get("output_path", ""))
-        branch = dt_config.get("branch", common.get("branch", "main"))
-
-        # Infer repo name if not provided
-        icechunk_repo = dt_config.get("icechunk_repo", f"{sub_id}.icechunk")
-
-        # Item output_file overrides group output_file template
         output_file_template = dt_config.get("output_file", group_output_file)
 
-        snapshot_id = dt_config.get("snapshot_id", None)
-        tag = dt_config.get("tag", None)
-
-        if icechunk_path and not icechunk_path.startswith("/"):
-            icechunk_path = "/" + icechunk_path
         if output_path and not output_path.startswith("/"):
             output_path = "/" + output_path
 
@@ -443,15 +390,6 @@ def run_batch_conversion(
                     print(f"  [INFO] Creating output directory: {eval_out_dir}")
                     os.makedirs(eval_out_dir, exist_ok=True)
 
-                eval_icechunk_dir = icechunk_path.replace("{hour}", hr).replace(
-                    "{date}", date_str
-                )
-                eval_icechunk_repo = icechunk_repo.replace("{hour}", hr).replace(
-                    "{date}", date_str
-                )
-                repo_full_path = os.path.join(eval_icechunk_dir, eval_icechunk_repo)
-
-                # Format output filename using group template
                 eval_out_file = (
                     output_file_template.replace("{hour}", hr)
                     .replace("{date}", date_str)
@@ -466,19 +404,20 @@ def run_batch_conversion(
                 print(f"  [TIME WINDOW] Target range: {start_window} to {end_window}")
 
                 converter = IcechunkToIODAnetCDF(
-                    repo_path=repo_full_path,
+                    data_type=sub_id,
                     output_file=output_file,
-                    branch=branch,
-                    snapshot_id=snapshot_id,
-                    tag=tag,
                     start_window=start_window,
                     end_window=end_window,
                     debug=debug,
                 )
                 success = converter.convert()
 
-                if success:
-                    print_netcdf_time_summary(output_file, debug=debug)
+                if not success:
+                    raise RuntimeError(
+                        f"Conversion failed for {sub_id} at {date_str} {hr}Z"
+                    )
+
+                print_netcdf_time_summary(output_file, debug=debug)
 
             current_date += timedelta(days=1)
 
@@ -490,7 +429,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "data_type",
         type=str,
-        help="Data type ID defined in config (e.g., cris_n20_icechunk)",
+        help="Data type ID defined in config (e.g., iasi)",
     )
     parser.add_argument("start_date", type=str, help="Start date in YYYY-MM-DD format")
     parser.add_argument("end_date", type=str, help="End date in YYYY-MM-DD format")
