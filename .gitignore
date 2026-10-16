@@ -9,3 +9,4 @@ wis2-data-tmp
 .coverage
 coverage.xml
 htmlcov/
+build/

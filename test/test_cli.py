@@ -44,6 +44,68 @@ def test_geode_cli_dispatches_ncep_dump_reader(monkeypatch):
     }
 
 
+def test_geode_cli_dispatches_tac_gts_reader(monkeypatch):
+    recorded_call = {}
+
+    class FakeReader:
+        def ingest(self, data_type, file_paths, reference_datetime, include_raw_code):
+            recorded_call.update(
+                data_type=data_type,
+                file_paths=file_paths,
+                reference_datetime=reference_datetime,
+                include_raw_code=include_raw_code,
+            )
+
+    _install_fake_consumer_module(
+        monkeypatch,
+        "geode.ingest.consumers.tac_gts_reader",
+        "TacGTSReader",
+        FakeReader,
+    )
+
+    exit_code = cli.main(
+        [
+            "ingest",
+            "tac_gts_reader",
+            "temp",
+            "a.tac",
+            "b.tac",
+            "--reference-datetime",
+            "2026-08-01T12:00:00Z",
+            "--include-raw-code",
+        ]
+    )
+
+    assert exit_code == 0
+    assert recorded_call == {
+        "data_type": "temp",
+        "file_paths": ["a.tac", "b.tac"],
+        "reference_datetime": datetime.datetime(2026, 8, 1, 12, tzinfo=datetime.UTC),
+        "include_raw_code": True,
+    }
+
+
+def test_geode_cli_tac_gts_reader_defaults_reference_datetime_to_now(monkeypatch):
+    recorded_call = {}
+
+    class FakeReader:
+        def ingest(self, data_type, file_paths, reference_datetime, include_raw_code):
+            recorded_call["reference_datetime"] = reference_datetime
+
+    _install_fake_consumer_module(
+        monkeypatch,
+        "geode.ingest.consumers.tac_gts_reader",
+        "TacGTSReader",
+        FakeReader,
+    )
+
+    before = datetime.datetime.now(datetime.UTC)
+    assert cli.main(["ingest", "tac_gts_reader", "temp", "a.tac"]) == 0
+    after = datetime.datetime.now(datetime.UTC)
+
+    assert before <= recorded_call["reference_datetime"] <= after
+
+
 def test_geode_cli_dispatches_wis2_listener(monkeypatch):
     call_count = 0
 
