@@ -7,7 +7,6 @@ import xarray as xr
 
 from geode.configs.geode_config import geode_config
 
-
 def select_datatree_variables(
     datatree: xr.DataTree,
     variables: list[str],
@@ -164,7 +163,6 @@ class IceChunkDataManager(DataManager):
     ) -> xr.DataTree:
 
         file_path = self.get_file_path(data_type)
-
         print("Getting data from file path:", file_path)
 
         storage = ic.local_filesystem_storage(file_path)
@@ -178,39 +176,47 @@ class IceChunkDataManager(DataManager):
             consolidated=False,
         )
         
-        # Extract and normalize timestamps to integer epoch seconds (handles int64, datetime64, ns)
-        dt_var = datatree["MetaData"]["dateTime"] if "MetaData" in datatree else datatree["MetaData/dateTime"]
-        dt_raw = np.asarray(dt_var.values)
-        if np.issubdtype(dt_raw.dtype, np.datetime64) or dt_raw.dtype.kind in ("U", "S", "O"):
-            dt_secs = dt_raw.astype("datetime64[s]").astype(np.int64)
-        else:
-            dt_secs = dt_raw.astype(np.int64)
-            if len(dt_secs) > 0 and dt_secs[0] > 1e16:
-                dt_secs = dt_secs // 1_000_000_000
+        # 1. Safely locate dateTime variable across any group hierarchy
+        dt_var = None
+        for node in datatree.subtree:
+            ds = node.to_dataset(inherit=False)
+            if "dateTime" in ds.variables:
+                dt_var = ds["dateTime"]
+                break
 
-        start_sec = int(start_time.astimezone(UTC).timestamp())
-        end_sec = int(end_time.astimezone(UTC).timestamp())
+        if dt_var is not None:
+            dt_raw = np.asarray(dt_var.values)
 
-        retained_indices = np.where((dt_secs >= start_sec) & (dt_secs < end_sec))[0]
-        datatree = xr.map_over_datasets(
-            lambda ds: ds.isel(Location=retained_indices).compute() if "Location" in ds.dims else ds.compute(),
-            datatree,
-        )
+            # Normalize timestamps to integer epoch seconds (handles datetime64, strings, or ns/s int64)
+            if np.issubdtype(dt_raw.dtype, np.datetime64) or dt_raw.dtype.kind in ("U", "S", "O"):
+                dt_secs = dt_raw.astype("datetime64[s]").astype(np.int64)
+            else:
+                dt_secs = dt_raw.astype(np.int64)
+                valid_ts = dt_secs[(dt_secs > 0) & (dt_secs < 4102444800000000000)]
+                if len(valid_ts) > 0 and valid_ts[0] > 1e16:
+                    dt_secs = dt_secs // 1_000_000_000
 
-        # if vars is not None:
-        #    vars.append("Location")
-        #    vars.append("ObsValue/Dimensions")
-        #    vars.append("MetaData/Dimensions")
+            start_sec = int(start_time.astimezone(UTC).timestamp())
+            end_sec = int(end_time.astimezone(UTC).timestamp())
 
-        # if vars is not None:
-        #     datatree = select_datatree_variables(datatree, vars)
+            retained_indices = np.where((dt_secs >= start_sec) & (dt_secs < end_sec))[0]
+            print(f"      [DataManager] Slicing: Retained {len(retained_indices)} / {len(dt_secs)} observations.")
 
-        # if filter is not None:
-        #     for key, value in filter.items():
-        #         datatree = datatree.where(datatree[key].isin(value), drop=True)
+            # 2. Eagerly slice each node and rebuild a concrete DataTree
+            filtered_nodes = {}
+            for path, node in datatree.subtree_with_keys:
+                ds = node.to_dataset(inherit=False)
+                if "Location" in ds.dims:
+                    filtered_nodes[path] = ds.isel(Location=retained_indices).compute()
+                else:
+                    filtered_nodes[path] = ds.compute()
+
+            datatree = xr.DataTree.from_dict(filtered_nodes)
+
+        if vars is not None:
+            datatree = select_datatree_variables(datatree, vars)
 
         return datatree
-
 
 class ZarrDataManager(DataManager):
     def __init__(self):

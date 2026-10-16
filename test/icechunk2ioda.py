@@ -20,11 +20,10 @@ warnings.filterwarnings(
 )
 
 """
-usage:
+Usage:
 python icechunk2ioda.py radiosonde 2026-09-15 2026-09-15
 python icechunk2ioda.py iasi 2026-09-16 2026-09-16
 """
-
 
 class IcechunkToIODAnetCDF:
     def __init__(
@@ -48,7 +47,7 @@ class IcechunkToIODAnetCDF:
     def write_datatree_to_netcdf(self, data_tree: xr.DataTree, output_file: str):
         """
         Writes an xarray DataTree to a NetCDF4 file in a single write session,
-        enabling zlib compression to match original IODA file sizes.
+        scoping dimensions to root and applying zlib compression to match IODA baseline files.
         """
         out_path = Path(output_file)
         out_path.parent.mkdir(parents=True, exist_ok=True)
@@ -57,14 +56,22 @@ class IcechunkToIODAnetCDF:
             out_path.unlink()
 
         with nc.Dataset(output_file, "w", format="NETCDF4") as root:
+            # 1. Define all dimensions at root level first
+            for node in data_tree.subtree:
+                dataset = node.to_dataset(inherit=False)
+                for dim_name, dim_size in dataset.sizes.items():
+                    if dim_name not in root.dimensions:
+                        root.createDimension(dim_name, dim_size)
+
+            # 2. Populate groups and variables
             for node in data_tree.subtree:
                 group_path = node.path.lstrip("/")
                 dataset = node.to_dataset(inherit=False)
 
-                if len(dataset.data_vars) == 0:
+                # Skip completely empty nodes (use .variables so coords aren't skipped)
+                if len(dataset.variables) == 0:
                     continue
 
-                # Navigate/create group hierarchy
                 if group_path:
                     grp = root
                     for part in group_path.split("/"):
@@ -74,11 +81,6 @@ class IcechunkToIODAnetCDF:
                             grp = grp.groups[part]
                 else:
                     grp = root
-
-                # Create dimensions
-                for dim_name, dim_size in dataset.sizes.items():
-                    if dim_name not in grp.dimensions:
-                        grp.createDimension(dim_name, dim_size)
 
                 # Write variables
                 for var_name, var in dataset.variables.items():
@@ -133,12 +135,13 @@ class IcechunkToIODAnetCDF:
                 end_time=self.end_window,
             )
 
-            # 2. Check observation count
+            # 2. Check observation count across subtree
             num_obs = 0
-            if "MetaData" in datatree and "Location" in datatree["MetaData"].sizes:
-                num_obs = datatree["MetaData"].sizes["Location"]
-            elif "Location" in datatree.sizes:
-                num_obs = datatree.sizes["Location"]
+            for node in datatree.subtree:
+                ds = node.to_dataset(inherit=False)
+                if "Location" in ds.sizes:
+                    num_obs = ds.sizes["Location"]
+                    break
 
             print(f"      Filtering: Retained {num_obs} observations.")
 
