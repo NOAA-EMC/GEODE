@@ -298,9 +298,10 @@ def run_batch_conversion(
 
             for hr in hours:
                 cycle_hour = int(hr)
-                print(f"\n=== Processing Date/Cycle: {date_str} {hr}Z [{sub_id}] ===")
+                hr_str = f"{cycle_hour:02d}"
+                print(f"\n=== Processing Date/Cycle: {date_str} {hr_str}Z [{sub_id}] ===")
 
-                eval_out_dir = output_path.replace("{hour}", hr).replace(
+                eval_out_dir = output_path.replace("{hour}", hr_str).replace(
                     "{date}", date_str
                 )
                 if not os.path.exists(eval_out_dir):
@@ -308,7 +309,7 @@ def run_batch_conversion(
                     os.makedirs(eval_out_dir, exist_ok=True)
 
                 eval_out_file = (
-                    output_file_template.replace("{hour}", hr)
+                    output_file_template.replace("{hour}", hr_str)
                     .replace("{date}", date_str)
                     .replace("{id}", sub_id)
                 )
@@ -332,7 +333,7 @@ def run_batch_conversion(
                 # Gracefully skip if 0 observations matched the cycle window
                 if not success:
                     print(
-                        f"  [INFO] Skipping cycle {date_str} {hr}Z [{sub_id}] - no observations to output."
+                        f"  [INFO] Skipping cycle {date_str} {hr_str}Z [{sub_id}] - no observations to output."
                     )
                     continue
 
