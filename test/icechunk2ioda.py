@@ -11,7 +11,7 @@ import numpy as np
 import xarray as xr
 import yaml
 
-from geode.data.data_manager import IceChunkDataManager
+from geode.data.data_manager import GEODEDataManager
 
 warnings.filterwarnings(
     "ignore",
@@ -127,9 +127,9 @@ class IcechunkToIODAnetCDF:
         print(f"  --> Fetching data via GEODE DataManager for type: {self.data_type}")
 
         try:
-            # 1. Official GEODE DataManager API call
-            dm = IceChunkDataManager()
-            datatree = dm.get(
+            # 1. GEODE DataManager API call
+            geodedm = GEODEDataManager()
+            datatree = geodedm.get(
                 data_type=self.data_type,
                 start_time=self.start_window,
                 end_time=self.end_window,
