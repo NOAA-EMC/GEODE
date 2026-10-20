@@ -176,7 +176,7 @@ class IceChunkDataManager(DataManager):
             consolidated=False,
         )
         
-        # 1. Safely locate dateTime variable across any group hierarchy
+        # 1. Locate dateTime variable across any group hierarchy
         dt_var = None
         for node in datatree.subtree:
             ds = node.to_dataset(inherit=False)
@@ -196,13 +196,16 @@ class IceChunkDataManager(DataManager):
                 if len(valid_ts) > 0 and valid_ts[0] > 1e16:
                     dt_secs = dt_secs // 1_000_000_000
 
-            start_sec = int(start_time.astimezone(UTC).timestamp())
-            end_sec = int(end_time.astimezone(UTC).timestamp())
+            # Compute UTC epoch bounds
+            start_dt = start_time if start_time.tzinfo else start_time.replace(tzinfo=UTC)
+            end_dt = end_time if end_time.tzinfo else end_time.replace(tzinfo=UTC)
+            start_sec = int(start_dt.astimezone(UTC).timestamp())
+            end_sec = int(end_dt.astimezone(UTC).timestamp())
 
             retained_indices = np.where((dt_secs >= start_sec) & (dt_secs < end_sec))[0]
             print(f"      [DataManager] Slicing: Retained {len(retained_indices)} / {len(dt_secs)} observations.")
 
-            # 2. Eagerly slice each node and rebuild a concrete DataTree
+            # 2. Eagerly slice by index along Location and reconstruct a concrete DataTree
             filtered_nodes = {}
             for path, node in datatree.subtree_with_keys:
                 ds = node.to_dataset(inherit=False)

@@ -1,3 +1,7 @@
+# Default system prefix (e.g. gfs, gdas, rrfs...)
+system: "gdas"
+
+# Cycles to process
 hours: ["00", "06", "12", "18"]
 
 common:
