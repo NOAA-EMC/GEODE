@@ -11,24 +11,22 @@ class ValidationError(Exception):
         super().__init__(f"{filter_type}: {msg}")
 
 
-@dataclass
-class Filter:
-    class Kind(Enum):
-        Select = "sel"
-        Where = "where"
-
-    kind: Kind
-    kwargs: dict[str, Any]
-
-
-class FilterType:
-    @classmethod
-    def validate(cls, kwargs: dict[str, Any]) -> None:
-        raise NotImplementedError("Filter subclasses must implement the validate method.")
+class FilterBase:
+    def __init__(self):
+       pass
 
     @classmethod
-    def make(cls, kwargs: dict[str, Any]) -> Filter:
-        raise NotImplementedError("Filter subclasses must implement the make method.")
+    def make_mask(cls, ds: xr.DataTree, kwargs: dict[str, Any]):
+        cls._validate(kwargs)
+        return cls._make_mask(ds, kwargs)
+
+    @classmethod
+    def _validate(cls, args: Any) -> None:
+        raise NotImplementedError()
+
+    @classmethod
+    def _make_mask(cls, ds: xr.DataTree, kwargs: dict[str, Any]):
+        raise NotImplementedError()
 
     @classmethod
     def _validation_error(cls, msg: str) -> None:

@@ -1,42 +1,32 @@
 from typing import Any
 import xarray as xr
+import numpy as np
 
-from geode.data.filter.base import Filter
 
-filter_types: dict[str, object] = {}
+filter_types: dict[str, type] = {}
+
+LocationKey = "Location"
 
 def register_filter(name: str):
     def decorator(cls):
-        filter_types[name] = cls()
+        filter_types[name] = cls
         return cls
     return decorator
 
-def apply(data: xr.DataTree, vars: list[str], filters: dict[str, Any]) -> xr.DataTree:
+
+def apply(datatree, variables: list[str] = [], filters: dict[str, dict[str, Any]] = {}):
+    if variables:
+        datatree = datatree.map_over_datasets(lambda ds: ds[variables])
+
     if not filters:
-        return data
+        return datatree
 
-    # Make the filters
-    filter_list: list[Filter] = []
-    for filter_name, filter_args in filters.items():
-        if filter_name not in filter_types:
-            raise ValueError(f"Filter '{filter_name}' not recognized.")
+    mask = np.ones_like(datatree[LocationKey].values, dtype=bool)
 
-        filter_cls = filter_types[filter_name]
-        filter_cls.validate(filter_args)
-        filter_list.append(filter_cls.make(filter_args))
+    for filter_name, kwargs in filters.items():
+        filter_cls = filter_types.get(filter_name)
+        if filter_cls is None:
+            raise ValueError(f"Unknown filter: {filter_name}")
+        mask &= filter_cls.make_mask(datatree, kwargs)
 
-    # Split filter kinds
-    sel = {}
-    where = {}
-    for filter in filter_list:
-        if filter.kind == Filter.Kind.Select:
-            sel.update(filter.kwargs)
-        elif filter.kind == Filter.Kind.Where:
-            where.update(filter.args)
-
-    if sel:
-        data = data.sel(sel)
-    if where:
-        data = data.where(where)
-
-    return data
+    return datatree.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))

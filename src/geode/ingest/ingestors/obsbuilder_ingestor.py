@@ -6,6 +6,14 @@ from geode.ingest.ingestors.base_ingestor import BaseIngestor
 from geode.ingest.ingestors.bufr_ingestor import container_to_xarray
 
 
+MetaDataGroup = "MetaData"
+LocationCoords = ["latitude", "longitude"]
+LocationDim = "Location"
+
+PromotedCoords = ["dateTime", "latitude", "longitude"]
+IndexCoord = "dateTime"
+
+
 class ObsBuilderIngestor(BaseIngestor):
     def __init__(self, data_type: str, obs_builder: ObsBuilder):
         super().__init__(data_type)
@@ -19,70 +27,19 @@ class ObsBuilderIngestor(BaseIngestor):
         if comm.rank() == 0:
             self.obs_builder.finalize_container(container)
             datatree = container_to_xarray(container, self.obs_builder.description)
-            d = self._remap_locations(datatree)
-            print("*****", d)
+            d = self._promote_coords(datatree)
             return d
 
         return None
 
-    def _remap_locations(
-        self, 
-        datatree: xr.DataTree | dict[str, xr.DataTree]
-        original: list[str] = ["Location", "Channel"]
-        loc_mapping: dict[str, str] = {
-            "MetaData/dateTime": "time",
-            "MetaData/latitude": "latitude",
-            "MetaData/longitude": "longitude",
-        }
+    def _promote_coords(
+        self, data: xr.DataTree | dict[str, xr.DataTree]
     ) -> xr.DataTree | dict[str, xr.DataTree]:
+        def _promote(ds: xr.Dataset) -> xr.Dataset:
+            if all(name in ds.variables for name in PromotedCoords):
+                return ds.set_coords(PromotedCoords).set_xindex(IndexCoord)
+            return ds
 
-        if isinstance(datatree, dict):
-            return {
-                category: self._remap_location(tree, original, loc_mapping)
-                for category, tree in datatree.items()
-            }
-        return self._remap_location(datatree, original, loc_mapping)
-
-    def _remap_location(
-        self, 
-        datatree: xr.DataTree,
-        original: list[str],
-        loc_mapping: dict[str, str],
-    ) -> xr.DataTree:
-
-        if MetaDataGroup not in datatree.children:
-            raise ValueError(
-                f"FATAL ERROR: '{MetaDataGroup}' group not found in ObsBuilder data."
-            )
-
-        metadata = datatree[MetaDataGroup].to_dataset(inherit=False)
-        for name in LocationCoords:
-            if name not in metadata.variables:
-                raise ValueError(
-                    f"FATAL ERROR: '{MetaDataGroup}/{name}' not found in "
-                    "ObsBuilder data."
-                )
-            if metadata[name].dims != (LocationDim,):
-                raise ValueError(
-                    f"FATAL ERROR: '{MetaDataGroup}/{name}' has dims "
-                    f"{metadata[name].dims}, expected ({LocationDim!r},)."
-                )
-
-        location_coords = {name: metadata[name].variable for name in LocationCoords}
-
-        root = datatree.to_dataset(inherit=False)
-        root = root.drop_vars(LocationDim, errors="ignore")
-        root = root.assign_coords(location_coords)
-        for name in LocationCoords:
-            root = root.set_xindex(name)
-
-        nodes = {"/": root}
-        for node in datatree.subtree:
-            if node is datatree:
-                continue
-            dataset = node.to_dataset(inherit=False)
-            if node.path == f"/{MetaDataGroup}":
-                dataset = dataset.drop_vars(list(LocationCoords))
-            nodes[node.path] = dataset
-
-        return xr.DataTree.from_dict(nodes, name=datatree.name)
+        if isinstance(data, xr.DataTree):
+            return data.map_over_datasets(_promote)
+        return {key: tree.map_over_datasets(_promote) for key, tree in data.items()}

@@ -1,10 +1,12 @@
 import os
 from datetime import UTC, datetime
+from typing import Any
 import numpy as np
 import xarray as xr
 import icechunk as ic
 
 from geode.data.filter.apply import apply
+from geode.data.filter.time_window import TimeWindowFilter
 from geode.configs.geode_config import geode_config
 from geode.data.manager.manager_base import DataManager
 
@@ -74,7 +76,7 @@ class IceChunkDataManager(DataManager):
         start_time: datetime,
         end_time: datetime,
         variables: list[str] | None = None,
-        filters: dict | None = None,
+        filters: dict[str, dict[str, Any]] | None = None,
     ) -> xr.DataTree:
 
         file_path = self.get_file_path(data_type)
@@ -92,7 +94,11 @@ class IceChunkDataManager(DataManager):
         )
         
         filters = filters or {}
-        filters["time_window"] = (start_time, end_time)
+        filters.update({"time_window": {
+            "start_time": start_time,
+            "end_time": end_time,
+        }})
+
         datatree = apply(datatree, variables, filters)
 
         return datatree

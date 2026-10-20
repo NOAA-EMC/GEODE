@@ -4,28 +4,32 @@ import xarray as xr
 import numpy as np
 
 from geode.data.filter.apply import register_filter
-from geode.data.filter.base import Filter, FilterType, ValidationError
+from geode.data.filter.base import FilterBase
 
 
-LongitudeKey = "longitude"
-LatitudeKey = "latitude"
+LongitudeKey = "MetaData/longitude"
+LatitudeKey = "MetaData/latitude"
 
 @register_filter("bounding_box")
-class BoundingBoxFilter(FilterType):
+class BoundingBoxFilter(FilterBase):
 
     @classmethod
-    def validate(cls, args: dict[str, tuple[float, float]]) -> None:
-        if not isinstance(args, dict):
-            cls._validation_error("Arguments must be a dictionary with keys 'longitude' and 'latitude'.")
-        if LongitudeKey not in args or LatitudeKey not in args:
-            cls._validation_error("Arguments must contain 'longitude' and 'latitude' keys.")
-        min_lon, max_lon = args[LongitudeKey]
-        min_lat, max_lat = args[LatitudeKey]
-        if not all(isinstance(arg, (int, float)) for arg in (min_lon, max_lon, min_lat, max_lat)):
-            cls._validation_error("Arguments must be numeric instances.")
+    def _make_mask(cls, ds: xr.DataTree, kwargs: dict[str, Any]):
+        min_lat = kwargs["min_lat"]
+        max_lat = kwargs["max_lat"]
+        min_lon = kwargs["min_lon"]
+        max_lon = kwargs["max_lon"]
+        lat = ds[LatitudeKey].variable
+        lon = ds[LongitudeKey].variable
+        return ((lat >= min_lat) & (lat <= max_lat) & (lon >= min_lon) & (lon <= max_lon)).values
 
     @classmethod
-    def make(cls, args: dict[str, tuple[float, float]]) -> Filter:
-        min_lon, max_lon = args[LongitudeKey]
-        min_lat, max_lat = args[LatitudeKey]
-        return Filter(kind=Filter.Kind.Select, kwargs={LongitudeKey: slice(min_lon, max_lon), LatitudeKey: slice(min_lat, max_lat)})
+    def _validate(cls, kwargs: dict[str, Any]) -> None:
+        required_keys = ["min_lat", "max_lat", "min_lon", "max_lon"]
+        for key in required_keys:
+            if key not in kwargs:
+                raise ValueError(f"Missing required keyword argument: {key}")
+        if kwargs["min_lat"] > kwargs["max_lat"]:
+            raise ValueError("min_lat cannot be greater than max_lat")
+        if kwargs["min_lon"] > kwargs["max_lon"]:
+            raise ValueError("min_lon cannot be greater than max_lon")
