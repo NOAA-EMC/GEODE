@@ -10,7 +10,7 @@ def get(
     start_time: datetime | str,
     end_time: datetime | str,
     variables: list[str] | None = None,
-    filters: dict | None = None,
+    filters: list | None = None,
 ) -> xr.DataTree:
 
     if isinstance(start_time, str):

@@ -33,7 +33,8 @@ geode = "geode.cli:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
-#[tool.setuptools.package-data]
+[tool.setuptools.package-data]
+"geode.data.filter" = ["regions/*.geojson"]
 
 [tool.coverage.run]
 source = ["src/geode"]

@@ -14,7 +14,7 @@ def register_filter(name: str):
     return decorator
 
 
-def apply(datatree, variables: list[str] = [], filters: dict[str, dict[str, Any]] = {}):
+def apply(datatree, variables: list[str] = [], filters: dict[str, Any] = {}):
     if variables:
         datatree = datatree.map_over_datasets(lambda ds: ds[variables])
 

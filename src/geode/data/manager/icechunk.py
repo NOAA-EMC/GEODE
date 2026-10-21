@@ -76,7 +76,7 @@ class IceChunkDataManager(DataManager):
         start_time: datetime,
         end_time: datetime,
         variables: list[str] | None = None,
-        filters: dict[str, dict[str, Any]] | None = None,
+        filters: dict[str, Any] | None = None,
     ) -> xr.DataTree:
 
         file_path = self.get_file_path(data_type)

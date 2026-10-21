@@ -3,6 +3,7 @@ from typing import Any
 import json
 import shapely
 from shapely.geometry import shape
+from shapely.geometry.base import BaseGeometry
 
 from geode.data.filter.apply import register_filter
 from geode.data.filter.base import FilterBase
@@ -12,15 +13,24 @@ from geode.data.filter.base import FilterBase
 class GeoJsonFilter(FilterBase):
 
     @classmethod
-    def _make_mask(cls, ds: xr.DataTree, kwargs: dict[str, Any]):
-        if "path" in kwargs:
-            geom = cls._make_from_path(kwargs["path"])
-        elif "type" in kwargs:
-            geom = cls._make_from_geojson_dict(kwargs)
+    def _make_mask(cls, ds: xr.DataTree, kwargs: Any):
+        return cls._mask_from_geometry(ds, cls._make_geometry(kwargs))
 
-        return shapely.contains_xy(
-            geom, 
-            ds["MetaData/longitude"].values, 
+    @classmethod
+    def _make_geometry(cls, kwargs: dict[str, Any]) -> BaseGeometry:
+        """Build the shapely geometry described by the filter arguments.
+
+        Subclasses override this hook to resolve geometries from other sources.
+        """
+        if "path" in kwargs:
+            return cls._make_from_path(kwargs["path"])
+        return cls._make_from_geojson_dict(kwargs)
+
+    @staticmethod
+    def _mask_from_geometry(ds: xr.DataTree, geometry: BaseGeometry):
+        return shapely.intersects_xy(
+            geometry,
+            ds["MetaData/longitude"].values,
             ds["MetaData/latitude"].values,
         )
 
@@ -49,4 +59,6 @@ class GeoJsonFilter(FilterBase):
         elif "type" in kwargs:
             pass
         else:
-            raise ValueError("Either 'path' or 'type' argument must be provided for the GeoJSON filter.")
+            raise ValueError(
+                "Either 'path' or 'type' argument must be provided for the GeoJSON filter."
+            )
