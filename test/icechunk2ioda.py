@@ -22,31 +22,24 @@ python test/icechunk2ioda.py iasi_metop-b -s 2026-09-15T03:00:00 -e 2026-09-15T0
 
 
 def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
-    """Writes DataTree using native Xarray to_netcdf with zlib compression."""
+    """Writes DataTree using Xarray to_netcdf with compression."""
     for node in datatree.subtree:
         ds = node.to_dataset(inherit=False)
-        for var_name, var in ds.variables.items():
-            if var_name == "dateTime":
-                if np.issubdtype(var.dtype, np.datetime64):
-                    node[var_name] = var.astype("datetime64[s]").astype(np.int64)
-                elif var.dtype.kind in ("i", "u"):
-                    vals = np.asarray(var.values).ravel()
-                    valid = vals[(vals > 0) & (vals < 4102444800000000000)]
-                    if len(valid) > 0 and valid[0] > 1e16:
-                        node[var_name] = (var // 1_000_000_000).astype(np.int64)
 
-                node[var_name].attrs.pop("units", None)
-                node[var_name].attrs.pop("calendar", None)
-                node[var_name].encoding["dtype"] = "int64"
+        if "dateTime" in ds.variables:
+            ds["dateTime"].encoding = {
+                "dtype": "int64",
+                "units": "seconds since 1970-01-01T00:00:00Z",
+                "calendar": "proleptic_gregorian",
+                "_FillValue": np.int64(np.iinfo(np.int64).max),
+            }
 
-            if var.ndim > 0 and var.dtype.kind not in ("U", "S", "O"):
-                node[var_name].encoding["zlib"] = True
-                node[var_name].encoding["complevel"] = 4
+        for name, var in ds.variables.items():
+            if name != "dateTime" and var.ndim > 0 and var.dtype.kind not in ("U", "S", "O"):
+                var.encoding = {"zlib": True, "complevel": 4,
+                                "_FillValue": var.encoding.get("_FillValue")}
 
-    out_path = Path(output_file)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    if out_path.exists():
-        out_path.unlink()
+        node.dataset = ds
 
     datatree.to_netcdf(output_file, engine="netcdf4")
 
@@ -74,6 +67,10 @@ def convert_single_window(
         start_time=start_time,
         end_time=end_time,
     )
+
+#    dt = datatree["MetaData"]["dateTime"]
+#    print(dt.dtype, dt.attrs, dt.encoding)
+
 
     num_obs = 0
     for node in datatree.subtree:
