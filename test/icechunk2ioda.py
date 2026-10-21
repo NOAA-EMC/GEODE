@@ -20,7 +20,61 @@ usage
 python test/icechunk2ioda.py iasi_metop-b -s 2026-09-15T03:00:00 -e 2026-09-15T09:00:00 -o /path/to/output/gdas.t06z.radiance_iasi_metop-b.nc
 """
 
+def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
+    """
+    Writes DataTree using encoding parameters read directly from the GEODE dataset,
+    falling back to standard IODA defaults if not defined.
+    """
+    out_path = Path(output_file)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    if out_path.exists():
+        out_path.unlink()
 
+    for node in datatree.subtree:
+        ds = node.to_dataset(inherit=False)
+
+        for name, var in ds.variables.items():
+            # 1. Read existing encoding/attrs or fall back to IODA standards
+            existing_dtype = var.encoding.get("dtype", var.dtype)
+            existing_fill = var.encoding.get("_FillValue", var.attrs.get("_FillValue"))
+
+            if name == "dateTime":
+                # Read time units and calendar from dataset if present
+                units = (
+                    var.encoding.get("units")
+                    or var.attrs.get("units")
+                    or "seconds since 1970-01-01T00:00:00Z"
+                )
+                calendar = (
+                    var.encoding.get("calendar")
+                    or var.attrs.get("calendar")
+                    or "proleptic_gregorian"
+                )
+
+                node[name].encoding.update({
+                    "dtype": "int64",
+                    "units": units,
+                    "calendar": calendar,
+                    "_FillValue": np.int64(existing_fill if existing_fill is not None else -9223372036854775806),
+                })
+
+            elif var.ndim > 0 and var.dtype.kind not in ("U", "S", "O"):
+                # Inherit compression directives from dataset if present, else default to zlib
+                zlib = var.encoding.get("zlib", True)
+                complevel = var.encoding.get("complevel", 4)
+
+                encoding_update = {
+                    "zlib": zlib,
+                    "complevel": complevel,
+                }
+                if existing_fill is not None:
+                    encoding_update["_FillValue"] = existing_fill
+
+                node[name].encoding.update(encoding_update)
+
+    datatree.to_netcdf(output_file, engine="netcdf4")
+
+'''    
 def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
     """Writes DataTree using Xarray to_netcdf with compression."""
     for node in datatree.subtree:
@@ -42,7 +96,7 @@ def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
         node.dataset = ds
 
     datatree.to_netcdf(output_file, engine="netcdf4")
-
+'''
 
 def parse_iso_datetime(dt_str: str) -> datetime:
     """Parses ISO-8601 string or standard YYYY-MM-DD[THH:MM:SS] to UTC datetime."""
