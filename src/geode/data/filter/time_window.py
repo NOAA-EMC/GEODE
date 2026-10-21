@@ -4,8 +4,8 @@ import xarray as xr
 import numpy as np
 from datetime import datetime, timezone
 
-from geode.data.filter.apply import register_filter
-from geode.data.filter.base import FilterBase
+from geode.data.filter.factory import register_filter
+from geode.data.filter.base import FilterBase, FilterType
 
 TimeKey = "MetaData/dateTime"
 StartTimeKey = "start_time"
@@ -21,11 +21,12 @@ def _to_utc_datetime64(value: datetime) -> np.datetime64:
 
 @register_filter("time_window")
 class TimeWindowFilter(FilterBase):
+    def __init__(self, kwargs: dict[str, Any]):
+        super().__init__(kwargs, FilterType.INTERSECT)
 
-    @classmethod
-    def _make_mask(cls, ds: xr.DataTree, kwargs: dict[str, Any]):
-        t0 = _to_utc_datetime64(kwargs[StartTimeKey])
-        t1 = _to_utc_datetime64(kwargs[EndTimeKey])
+    def make_mask(self, ds: xr.DataTree):
+        t0 = _to_utc_datetime64(self.kwargs[StartTimeKey])
+        t1 = _to_utc_datetime64(self.kwargs[EndTimeKey])
         return ((ds[TimeKey] >= t0) & (ds[TimeKey] <= t1)).values
 
     @classmethod

@@ -7,7 +7,7 @@ import shapely
 import xarray as xr
 from shapely.geometry.base import BaseGeometry
 
-from geode.data.filter.apply import register_filter
+from geode.data.filter.factory import register_filter
 from geode.data.filter.geojson import GeoJsonFilter
 
 RegionFileSuffix = ".geojson"
@@ -51,18 +51,32 @@ region_catalog = RegionCatalog(files(__package__) / "regions")
 class RegionFilter(GeoJsonFilter):
     catalog: RegionCatalog = region_catalog
 
-    @classmethod
-    def _make_geometry(cls, region: str) -> BaseGeometry:
-        return cls._make_from_geojson_dict(cls.catalog.geojson(region))
+    def __init__(self, kwargs: str | dict[str, Any]):
+        super().__init__(kwargs)
+
+    def _make_geometry(self) -> BaseGeometry:
+        return self._make_from_geojson_dict(
+            self.catalog.geojson(self.kwargs if isinstance(self.kwargs, str) else self.kwargs["type"])
+        )
 
     @classmethod
-    def _validate(cls, region: Any) -> None:
-        if not isinstance(region, str):
+    def _validate(cls, args: str | dict[str, Any]) -> None:
+        if not isinstance(args, str) and not isinstance(args, dict):
             cls._validation_error(
                 f"Region must be a string naming one of {cls.catalog.names}, "
-                f"got {type(region).__name__}."
+                f"got {type(args).__name__}."
             )
-        if region not in cls.catalog:
-            cls._validation_error(
-                f"Unknown region '{region}'. Available regions: {cls.catalog.names}"
-            )
+        if isinstance(args, str):
+            if args not in cls.catalog:
+                cls._validation_error(
+                    f"Unknown region '{args}'. Available regions: {cls.catalog.names}"
+                )
+        elif isinstance(args, dict):
+            if "type" not in args:
+                cls._validation_error(
+                    f"Region dictionary must have a 'type' key. Available regions: {cls.catalog.names}"
+                )
+            if args["type"] not in cls.catalog:
+                cls._validation_error(
+                    f"Unknown region '{args['type']}'. Available regions: {cls.catalog.names}"
+                )

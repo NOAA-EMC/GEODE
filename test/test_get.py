@@ -29,12 +29,12 @@ def test_get_with_bounding_box(use_data_lake):
         "atms_n20", 
         "2021-07-31T22:44:00",
         "2021-07-31T22:44:42",
-        filters={"bounding_box": {
+        filters=[{"bounding_box": {
             "min_lat": min_lat,
             "max_lat": max_lat,
             "min_lon": min_lon,
             "max_lon": max_lon
-    }})
+    }}])
 
     assert result is not None
 
@@ -66,7 +66,7 @@ def test_get_with_geojson(use_data_lake):
         "atms_n20",
         "2021-07-31T22:44:00",
         "2021-07-31T22:44:42",
-        filters={"geojson": geojson}
+        filters=[{"geojson": geojson}]
     )
 
     assert result is not None
@@ -91,14 +91,14 @@ def test_get_combined(use_data_lake):
         "atms_n20",
         "2021-07-31T22:44:00",
         "2021-07-31T22:44:42",
-        filters={
-            "bounding_box": {
+        filters=[
+            {"bounding_box": {
                 "min_lat": min_lat,
                 "max_lat": max_lat,
                 "min_lon": -180.0,
                 "max_lon": 180.0
-            },
-            "geojson":  {
+            }},
+            {"geojson": {
                 "type": "Polygon",
                 "coordinates": [
                     [
@@ -109,8 +109,8 @@ def test_get_combined(use_data_lake):
                         [min_lon, -90.0]
                     ]
                 ]
-            }
-        }
+            }}
+        ]
     )
 
     assert result is not None

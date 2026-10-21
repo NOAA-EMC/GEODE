@@ -11,21 +11,22 @@ class ValidationError(Exception):
         super().__init__(f"{filter_type}: {msg}")
 
 
+class FilterType(Enum):
+    INTERSECT = "intersect",
+    UNION = "union"
+
+
 class FilterBase:
-    def __init__(self):
-       pass
+    def __init__(self, kwargs: dict[str, Any], type: FilterType = FilterType.UNION):
+        self._validate(kwargs)
+        self.kwargs = kwargs
+        self.type = type
 
-    @classmethod
-    def make_mask(cls, ds: xr.DataTree, kwargs: dict[str, Any]):
-        cls._validate(kwargs)
-        return cls._make_mask(ds, kwargs)
-
-    @classmethod
-    def _validate(cls, args: Any) -> None:
+    def make_mask(self, ds: xr.DataTree):
         raise NotImplementedError()
 
     @classmethod
-    def _make_mask(cls, ds: xr.DataTree, kwargs: dict[str, Any]):
+    def _validate(cls, kwargs: dict[str, Any]) -> None:
         raise NotImplementedError()
 
     @classmethod
