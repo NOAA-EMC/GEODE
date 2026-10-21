@@ -16,22 +16,22 @@ def apply(datatree, variables: list[str] = [], filters: list[dict[str, Any]] = [
         return datatree
 
     intersect_filters = []
-    union_groups: dict[str, list] = {}
+    union_filters = []
     for filter_dict in filters:
         filter_name, kwargs = next(iter(filter_dict.items()))
         filter = make_filter(filter_name, kwargs)
         if filter.type == FilterType.INTERSECT:
             intersect_filters.append(filter)
         else:
-            union_groups.setdefault(filter_name, []).append(filter)
+            union_filters.append(filter)
     
     mask = np.ones_like(datatree[LocationKey].values, dtype=bool)
     for filter in intersect_filters:
         mask &= filter.make_mask(datatree)
 
-    for group in union_groups.values():
+    if union_filters:
         group_mask = np.zeros_like(mask)
-        for filter in group:
+        for filter in union_filters:
             group_mask |= filter.make_mask(datatree)
         mask &= group_mask
 
