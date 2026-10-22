@@ -20,6 +20,7 @@ usage
 python test/icechunk2ioda.py iasi_metop-b -s 2026-09-15T03:00:00 -e 2026-09-15T09:00:00 -o /path/to/output/gdas.t06z.radiance_iasi_metop-b.nc
 """
 
+
 def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
     """
     Writes DataTree using encoding parameters read directly from the GEODE dataset,
@@ -45,21 +46,33 @@ def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
                     or var.attrs.get("units")
                     or "seconds since 1970-01-01T00:00:00Z"
                 )
+                # IODA/JEDI standard requires 'Z' rather than '+00:00'
+                units = str(units).replace("+00:00", "Z")
+
                 calendar = (
                     var.encoding.get("calendar")
                     or var.attrs.get("calendar")
                     or "proleptic_gregorian"
                 )
 
-                node[name].encoding.update({
-                    "dtype": "int64",
-                    "units": units,
-                    "calendar": calendar,
-                    "_FillValue": np.int64(existing_fill if existing_fill is not None else -9223372036854775806),
-                })
+                # Use int64 max fallback matching GEODE Lake convention
+                fill_val = (
+                    existing_fill
+                    if existing_fill is not None
+                    else np.iinfo(np.int64).max
+                )
 
-            elif var.ndim > 0 and var.dtype.kind not in ("U", "S", "O"):
-                # Inherit compression directives from dataset if present, else default to zlib
+                node[name].encoding.update(
+                    {
+                        "dtype": "int64",
+                        "units": units,
+                        "calendar": calendar,
+                        "_FillValue": np.int64(fill_val),
+                    }
+                )
+
+            # Numeric whitelist avoids crashing on NumPy 2.0 StringDType (kind='T')
+            elif var.ndim > 0 and var.dtype.kind in "biuf":
                 zlib = var.encoding.get("zlib", True)
                 complevel = var.encoding.get("complevel", 4)
 
@@ -74,29 +87,6 @@ def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
 
     datatree.to_netcdf(output_file, engine="netcdf4")
 
-'''    
-def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
-    """Writes DataTree using Xarray to_netcdf with compression."""
-    for node in datatree.subtree:
-        ds = node.to_dataset(inherit=False)
-
-        if "dateTime" in ds.variables:
-            ds["dateTime"].encoding = {
-                "dtype": "int64",
-                "units": "seconds since 1970-01-01T00:00:00Z",
-                "calendar": "proleptic_gregorian",
-                "_FillValue": np.int64(np.iinfo(np.int64).max),
-            }
-
-        for name, var in ds.variables.items():
-            if name != "dateTime" and var.ndim > 0 and var.dtype.kind not in ("U", "S", "O"):
-                var.encoding = {"zlib": True, "complevel": 4,
-                                "_FillValue": var.encoding.get("_FillValue")}
-
-        node.dataset = ds
-
-    datatree.to_netcdf(output_file, engine="netcdf4")
-'''
 
 def parse_iso_datetime(dt_str: str) -> datetime:
     """Parses ISO-8601 string or standard YYYY-MM-DD[THH:MM:SS] to UTC datetime."""
@@ -121,10 +111,6 @@ def convert_single_window(
         start_time=start_time,
         end_time=end_time,
     )
-
-#    dt = datatree["MetaData"]["dateTime"]
-#    print(dt.dtype, dt.attrs, dt.encoding)
-
 
     num_obs = 0
     for node in datatree.subtree:
