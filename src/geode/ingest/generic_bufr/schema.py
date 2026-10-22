@@ -44,6 +44,19 @@ class BufrField:
     replications: tuple[Replication, ...] = ()
     name: str = ""
     dimensions: tuple[str, ...] = ("Location",)
+    target: str = ""
+    long_name: str = ""
+    output_units: str = ""
+
+    @property
+    def key(self) -> str:
+        """Path-qualified source key, e.g. ``CHNL/TMBR`` or ``CLATH``."""
+        return "/".join(self.path + (self.mnemonic,))
+
+    @property
+    def output_name(self) -> str:
+        """Lake variable path: the mapped target or ``<group>/<name>``."""
+        return self.target or f"{self.group}/{self.name}"
 
     @property
     def query(self) -> str:
@@ -64,6 +77,7 @@ class BufrSchema:
 
     subset: str
     fields: list[BufrField] = field(default_factory=list)
+    emit_datetime: bool = False
 
     @property
     def dimension_sizes(self) -> dict[str, int | None]:
@@ -76,8 +90,8 @@ class BufrSchema:
 
     @property
     def has_datetime(self) -> bool:
-        scalar = {f.mnemonic for f in self.fields if not f.replications}
-        return all(m in scalar for m in DATETIME_MNEMONICS)
+        """True if time elements were scalar at discovery (kept when mapped out)."""
+        return self.emit_datetime
 
     @property
     def schema_hash(self) -> str:
@@ -172,7 +186,12 @@ def discover_schema(tables: BufrTables, subset: str | None = None) -> BufrSchema
     fields = sorted(found.values(), key=lambda f: (f.group, f.path, f.mnemonic))
     _assign_dimensions(fields)
     _assign_names(fields)
-    return BufrSchema(subset=subset, fields=fields)
+    scalar = {f.mnemonic for f in fields if not f.replications}
+    return BufrSchema(
+        subset=subset,
+        fields=fields,
+        emit_datetime=all(m in scalar for m in DATETIME_MNEMONICS),
+    )
 
 
 def _assign_dimensions(fields: list[BufrField]) -> None:
@@ -210,6 +229,7 @@ def schema_hash(schema: BufrSchema) -> str:
     """SHA-256 of the canonical schema (order and content sensitive)."""
     payload = {
         "subset": schema.subset,
+        "emit_datetime": schema.emit_datetime,
         "fields": [asdict(f) for f in schema.fields],
     }
     encoded = json.dumps(payload, sort_keys=True, default=list).encode()
@@ -239,13 +259,15 @@ def build_mapping(schema: BufrSchema) -> dict:
     variables = {}
     encoder_vars = []
     for bufr_field in schema.fields:
-        key = f"{bufr_field.group}_{bufr_field.name}"
+        key = sanitize_name(bufr_field.output_name)
         variables[key] = {"query": bufr_field.query}
         entry = {
-            "name": f"{bufr_field.group}/{bufr_field.name}",
+            "name": bufr_field.output_name,
             "source": f"variables/{key}",
-            "longName": bufr_field.description or bufr_field.mnemonic,
-            "units": bufr_field.units,
+            "longName": bufr_field.long_name
+            or bufr_field.description
+            or bufr_field.mnemonic,
+            "units": bufr_field.output_units or bufr_field.units,
         }
         if len(bufr_field.dimensions) > 1:
             entry["dimensions"] = list(bufr_field.dimensions)
@@ -278,7 +300,7 @@ def build_mapping(schema: BufrSchema) -> dict:
 def provenance(schema: BufrSchema) -> dict[str, dict]:
     """Per-variable provenance keyed by ``<group>/<name>``."""
     return {
-        f"{f.group}/{f.name}": {
+        f.output_name: {
             "bufr_mnemonic": f.mnemonic,
             "bufr_path": f.query,
             "bufr_units": f.units,

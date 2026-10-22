@@ -19,6 +19,7 @@ from geode.ingest.generic_bufr.schema import (
     provenance,
 )
 from geode.ingest.generic_bufr.tables import BufrTableError, parse_dx_table
+from geode.ingest.generic_bufr.varmap import apply_variable_map, load_variable_map
 from geode.ingest.ingestors import register
 from geode.ingest.ingestors.base_ingestor import BaseIngestor
 from geode.ingest.ingestors.bufr_ingestor import container_to_xarray
@@ -64,6 +65,10 @@ class GenericBufrIngestor(BaseIngestor):
         Behavior when the discovered schema differs from the stored one.
     max_replication_length : int, optional
         Pad delayed replication dimensions to this size (append-safe).
+    variable_map : str, optional
+        YAML file mapping BUFR fields to curated lake names, dimensions and
+        units (see ``geode.ingest.generic_bufr.varmap``). Unmapped fields are
+        kept under their discovered names unless the map sets ``unmapped: drop``.
     """
 
     def __init__(
@@ -73,6 +78,7 @@ class GenericBufrIngestor(BaseIngestor):
         subset: str | None = None,
         on_schema_mismatch: str = "error",
         max_replication_length: int | None = None,
+        variable_map: str | None = None,
     ):
         super().__init__(data_type)
         if on_schema_mismatch not in MISMATCH_POLICIES:
@@ -84,6 +90,7 @@ class GenericBufrIngestor(BaseIngestor):
         self.subset = subset
         self.on_schema_mismatch = on_schema_mismatch
         self.max_replication_length = max_replication_length
+        self.variable_map = load_variable_map(variable_map) if variable_map else None
         self.table_path = geode_config.bufr.table_path
 
     def discover(self, file_path: str) -> BufrSchema:
@@ -94,7 +101,10 @@ class GenericBufrIngestor(BaseIngestor):
                 text = table_file.read()
         else:
             text = read_embedded_dx_table(file_path)
-        return discover_schema(parse_dx_table(text), self.subset)
+        schema = discover_schema(parse_dx_table(text), self.subset)
+        if self.variable_map:
+            apply_variable_map(schema, self.variable_map)
+        return schema
 
     def _process(self, file_path: str) -> xr.DataTree | None:
         schema = self.discover(file_path)

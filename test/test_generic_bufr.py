@@ -134,9 +134,7 @@ def test_build_mapping_has_provenance_and_datetime():
     assert tmbr["units"] == "K"
     assert tmbr["dimensions"] == ["Location", "CHNL"]
     assert tmbr["path"] == "*/CHNL/TMBR"
-    lat = next(
-        v for v in mapping["encoder"]["variables"] if v["name"] == "HDR/CLATH"
-    )
+    lat = next(v for v in mapping["encoder"]["variables"] if v["name"] == "HDR/CLATH")
     assert "dimensions" not in lat
 
 
@@ -210,3 +208,71 @@ def test_generic_ingestor_integration_with_dump(use_dump, tmp_path):
     tree = GenericBufrIngestor()._process(files[0])
     if tree is not None:
         assert tree.attrs["ingestor"] == "generic_bufr"
+
+
+def _mapped(variable_map):
+    from geode.ingest.generic_bufr.varmap import apply_variable_map
+
+    return apply_variable_map(_schema(), variable_map)
+
+
+def test_variable_map_renames_and_overrides(tmp_path):
+    from geode.ingest.generic_bufr.varmap import load_variable_map
+
+    map_file = tmp_path / "map.yaml"
+    map_file.write_text(
+        "unmapped: drop\n"
+        "dimensions: {CHNL: Channel}\n"
+        "variables:\n"
+        "  - {source: CHNL/TMBR, name: ObsValue/brightnessTemperature, units: K}\n"
+        "  - {source: CLATH, name: MetaData/latitude, longName: Latitude}\n"
+    )
+    schema = _mapped(load_variable_map(str(map_file)))
+    assert [f.output_name for f in schema.fields] == [
+        "ObsValue/brightnessTemperature",
+        "MetaData/latitude",
+    ]
+    mapping = build_mapping(schema)
+    names = [v["name"] for v in mapping["encoder"]["variables"]]
+    assert names[0] == "MetaData/dateTime"
+    tmbr = mapping["encoder"]["variables"][1]
+    assert tmbr["dimensions"] == ["Location", "Channel"]
+    assert schema.dimension_sizes == {"Channel": 3}
+    assert schema.schema_hash != _schema().schema_hash
+
+
+def test_variable_map_errors():
+    from geode.ingest.generic_bufr.varmap import VariableMapError
+
+    with pytest.raises(VariableMapError, match="not in schema"):
+        _mapped(
+            {
+                "unmapped": "include",
+                "dimensions": {},
+                "variables": [{"source": "NOPE", "name": "A/b"}],
+            }
+        )
+    with pytest.raises(VariableMapError, match="ambiguous"):
+        _mapped(
+            {
+                "unmapped": "include",
+                "dimensions": {},
+                "variables": [{"source": "PRLC", "name": "A/b"}],
+            }
+        )
+    two = [
+        {"source": "CLATH", "name": "A/b"},
+        {"source": "YEAR", "name": "A/b"},
+    ]
+    with pytest.raises(VariableMapError, match="Duplicate"):
+        _mapped({"unmapped": "include", "dimensions": {}, "variables": two})
+    with pytest.raises(VariableMapError, match="Location"):
+        _mapped(
+            {
+                "unmapped": "include",
+                "dimensions": {},
+                "variables": [
+                    {"source": "CHNL/TMBR", "name": "A/b", "dimensions": ["X"]}
+                ],
+            }
+        )

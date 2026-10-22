@@ -70,3 +70,27 @@ writes to `<data_type>_schema_<hash12>`; `skip` logs and drops the file.
 - Queries use replicated sequence names only (`*/SEQ/ELEM`).
 - Root attributes are not persisted by the Icechunk writer; provenance lives on
   variables and the hash on group attributes.
+
+## Mapping to curated lake names
+
+Pass `variable_map="/path/to/map.yaml"` to store fields under the same names
+and dimensions as the curated ingestors:
+
+```yaml
+unmapped: include          # "include" (default) keeps discovered names; "drop" removes them
+dimensions:
+  CHNL: Channel            # rename a replication dimension for all other fields
+variables:
+  - source: CHNL/TMBR      # path-qualified key, or a bare mnemonic if unambiguous
+    name: ObsValue/brightnessTemperature
+    units: K               # optional
+    longName: Brightness Temperature   # optional
+    dimensions: [Location, Channel]    # optional; same rank as the source field
+```
+
+Unknown or ambiguous sources, duplicate lake names and rank mismatches raise
+errors. The map is part of the schema hash, so changing it triggers the drift
+policy. `MetaData/dateTime` is still generated when time elements were
+discovered, even if they are dropped, and must not be mapped by name.
+Dimension renames rely on the encoder honoring the generated `dimensions` key
+(unverified, see above).
