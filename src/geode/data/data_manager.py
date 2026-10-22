@@ -7,7 +7,6 @@ import xarray as xr
 
 from geode.configs.geode_config import geode_config
 
-
 def select_datatree_variables(
     datatree: xr.DataTree,
     variables: list[str],
@@ -153,7 +152,7 @@ class IceChunkDataManager(DataManager):
                         group=group,
                         consolidated=False,
                     )
-
+    
     def get(
         self,
         data_type: str,
@@ -164,7 +163,6 @@ class IceChunkDataManager(DataManager):
     ) -> xr.DataTree:
 
         file_path = self.get_file_path(data_type)
-
         print("Getting data from file path:", file_path)
 
         storage = ic.local_filesystem_storage(file_path)
@@ -174,35 +172,73 @@ class IceChunkDataManager(DataManager):
         datatree = xr.open_datatree(
             session.store,
             engine="zarr",
-            #            zarr_version=3,
             consolidated=False,
         )
 
-        date_time = datatree["MetaData/dateTime"]
-        start = np.datetime64(start_time.astimezone(UTC).replace(tzinfo=None))
-        end = np.datetime64(end_time.astimezone(UTC).replace(tzinfo=None))
+        # 1. Locate dateTime variable across any group hierarchy
+        dt_var = None
+        for node in datatree.subtree:
+            ds = node.to_dataset(inherit=False)
+            if "dateTime" in ds.variables:
+                dt_var = ds["dateTime"]
+                break
 
-        time_mask = (date_time >= start) & (date_time < end)
-        print(time_mask)
-        datatree = xr.map_over_datasets(
-            lambda ds: ds.where(time_mask, drop=True) if "Location" in ds.dims else ds,
-            datatree,
-        )
+        if dt_var is None:
+            raise ValueError(f"No 'dateTime' variable found in {file_path}")
 
-        # if vars is not None:
-        #    vars.append("Location")
-        #    vars.append("ObsValue/Dimensions")
-        #    vars.append("MetaData/Dimensions")
+        if dt_var is not None:
+            # Standardize timestamps to epoch seconds using native dtypes and CF units
+            if np.issubdtype(dt_var.dtype, np.datetime64) or dt_var.dtype.kind in ("U", "S", "O"):
+                dt_secs = np.asarray(dt_var.values, dtype="datetime64[s]").astype(np.int64)
+            else:
+                # In IODA/CF conventions, numeric dateTime is integer seconds since 1970-01-01T00:00:00Z
+                units = str(dt_var.attrs.get("units") or dt_var.encoding.get("units", "")).lower()
+                if "nanosecond" in units:
+                    dt_secs = np.asarray(dt_var.values, dtype="datetime64[ns]").astype("datetime64[s]").astype(np.int64)
+                elif "microsecond" in units:
+                    dt_secs = np.asarray(dt_var.values, dtype="datetime64[us]").astype("datetime64[s]").astype(np.int64)
+                elif "millisecond" in units:
+                    dt_secs = np.asarray(dt_var.values, dtype="datetime64[ms]").astype("datetime64[s]").astype(np.int64)
+                else:
+                    dt_secs = np.asarray(dt_var.values, dtype=np.int64)
 
-        # if vars is not None:
-        #     datatree = select_datatree_variables(datatree, vars)
+            # Compute UTC epoch bounds
+            start_dt = start_time if start_time.tzinfo else start_time.replace(tzinfo=UTC)
+            end_dt = end_time if end_time.tzinfo else end_time.replace(tzinfo=UTC)
+            start_sec = int(start_dt.astimezone(UTC).timestamp())
+            end_sec = int(end_dt.astimezone(UTC).timestamp())
 
-        # if filter is not None:
-        #     for key, value in filter.items():
-        #         datatree = datatree.where(datatree[key].isin(value), drop=True)
+            retained_indices = np.where((dt_secs >= start_sec) & (dt_secs < end_sec))[0]
+            print(f"      [DataManager] Slicing: Retained {len(retained_indices)} / {len(dt_secs)} observations.")
+
+            # 2. Eagerly slice by index along Location while preserving variable encodings
+            filtered_nodes = {}
+            for path, node in datatree.subtree_with_keys:
+                ds = node.to_dataset(inherit=False)
+
+                # Snapshot storage encodings before compute() drops them
+                saved_encodings = {v: ds[v].encoding.copy() for v in ds.variables}
+
+                if "Location" in ds.dims:
+                    filtered_ds = ds.isel(Location=retained_indices).compute()
+                else:
+                    filtered_ds = ds.compute()
+
+                # Reapply encodings, stripping Zarr-specific chunk keys
+                for v, enc in saved_encodings.items():
+                    if v in filtered_ds.variables:
+                        enc.pop("chunks", None)
+                        enc.pop("preferred_chunks", None)
+                        filtered_ds[v].encoding.update(enc)
+
+                filtered_nodes[path] = filtered_ds
+
+            datatree = xr.DataTree.from_dict(filtered_nodes)
+
+        if vars is not None:
+            datatree = select_datatree_variables(datatree, vars)
 
         return datatree
-
 
 class ZarrDataManager(DataManager):
     def __init__(self):
