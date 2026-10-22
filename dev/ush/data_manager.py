@@ -7,6 +7,7 @@ import xarray as xr
 
 from geode.configs.geode_config import geode_config
 
+
 def select_datatree_variables(
     datatree: xr.DataTree,
     variables: list[str],
@@ -152,7 +153,7 @@ class IceChunkDataManager(DataManager):
                         group=group,
                         consolidated=False,
                     )
-    
+
     def get(
         self,
         data_type: str,
@@ -188,28 +189,52 @@ class IceChunkDataManager(DataManager):
 
         if dt_var is not None:
             # Standardize timestamps to epoch seconds using native dtypes and CF units
-            if np.issubdtype(dt_var.dtype, np.datetime64) or dt_var.dtype.kind in ("U", "S", "O"):
-                dt_secs = np.asarray(dt_var.values, dtype="datetime64[s]").astype(np.int64)
+            if np.issubdtype(dt_var.dtype, np.datetime64) or dt_var.dtype.kind in (
+                "U",
+                "S",
+                "O",
+            ):
+                dt_secs = np.asarray(dt_var.values, dtype="datetime64[s]").astype(
+                    np.int64
+                )
             else:
                 # In IODA/CF conventions, numeric dateTime is integer seconds since 1970-01-01T00:00:00Z
-                units = str(dt_var.attrs.get("units") or dt_var.encoding.get("units", "")).lower()
+                units = str(
+                    dt_var.attrs.get("units") or dt_var.encoding.get("units", "")
+                ).lower()
                 if "nanosecond" in units:
-                    dt_secs = np.asarray(dt_var.values, dtype="datetime64[ns]").astype("datetime64[s]").astype(np.int64)
+                    dt_secs = (
+                        np.asarray(dt_var.values, dtype="datetime64[ns]")
+                        .astype("datetime64[s]")
+                        .astype(np.int64)
+                    )
                 elif "microsecond" in units:
-                    dt_secs = np.asarray(dt_var.values, dtype="datetime64[us]").astype("datetime64[s]").astype(np.int64)
+                    dt_secs = (
+                        np.asarray(dt_var.values, dtype="datetime64[us]")
+                        .astype("datetime64[s]")
+                        .astype(np.int64)
+                    )
                 elif "millisecond" in units:
-                    dt_secs = np.asarray(dt_var.values, dtype="datetime64[ms]").astype("datetime64[s]").astype(np.int64)
+                    dt_secs = (
+                        np.asarray(dt_var.values, dtype="datetime64[ms]")
+                        .astype("datetime64[s]")
+                        .astype(np.int64)
+                    )
                 else:
                     dt_secs = np.asarray(dt_var.values, dtype=np.int64)
 
             # Compute UTC epoch bounds
-            start_dt = start_time if start_time.tzinfo else start_time.replace(tzinfo=UTC)
+            start_dt = (
+                start_time if start_time.tzinfo else start_time.replace(tzinfo=UTC)
+            )
             end_dt = end_time if end_time.tzinfo else end_time.replace(tzinfo=UTC)
             start_sec = int(start_dt.astimezone(UTC).timestamp())
             end_sec = int(end_dt.astimezone(UTC).timestamp())
 
             retained_indices = np.where((dt_secs >= start_sec) & (dt_secs < end_sec))[0]
-            print(f"      [DataManager] Slicing: Retained {len(retained_indices)} / {len(dt_secs)} observations.")
+            print(
+                f"      [DataManager] Slicing: Retained {len(retained_indices)} / {len(dt_secs)} observations."
+            )
 
             # 2. Eagerly slice by index along Location while preserving variable encodings
             filtered_nodes = {}
@@ -239,6 +264,7 @@ class IceChunkDataManager(DataManager):
             datatree = select_datatree_variables(datatree, vars)
 
         return datatree
+
 
 class ZarrDataManager(DataManager):
     def __init__(self):
