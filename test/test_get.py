@@ -89,8 +89,8 @@ def test_get_with_geojson_path(use_data_lake):
 
     result = geode.get(
         "atms_n20",
-        "2021-07-31T22:44:00",
-        "2021-07-31T22:44:42",
+        "2021-07-30T00:00:00",
+        "2021-07-31T23:59:59",
         filters=[{"geojson": str(geojson_path)}]
     )
 
