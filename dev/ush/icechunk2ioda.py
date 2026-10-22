@@ -17,7 +17,10 @@ warnings.filterwarnings(
 
 """
 usage
-python test/icechunk2ioda.py iasi_metop-b -s 2026-09-15T03:00:00 -e 2026-09-15T09:00:00 -o /path/to/output/gdas.t06z.radiance_iasi_metop-b.nc
+python dev/ush/icechunk2ioda.py iasi_metop-b \
+        -s 2026-09-15T03:00:00 \
+        -e 2026-09-15T09:00:00 \
+        -o /path/to/output/gdas.t06z.radiance_iasi_metop-b.nc
 """
 
 
