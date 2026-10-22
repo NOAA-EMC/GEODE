@@ -1,3 +1,4 @@
+import os
 import xarray as xr
 from typing import Any
 import json
@@ -11,7 +12,7 @@ from geode.data.filter.base import FilterBase
 
 @register_filter("geojson")
 class GeoJsonFilter(FilterBase):
-    def __init__(self, kwargs: dict[str, Any]):
+    def __init__(self, kwargs: dict[str, Any] | str):
         super().__init__(kwargs)
 
     def make_mask(self, ds: xr.DataTree):
@@ -22,8 +23,8 @@ class GeoJsonFilter(FilterBase):
 
         Subclasses override this hook to resolve geometries from other sources.
         """
-        if "path" in self.kwargs:
-            return self._make_from_path(self.kwargs["path"])
+        if isinstance(self.kwargs, str):
+            return self._make_from_path(self.kwargs)
         return self._make_from_geojson_dict(self.kwargs)
 
     def _mask_from_geometry(self, ds: xr.DataTree, geometry: BaseGeometry):
@@ -51,11 +52,21 @@ class GeoJsonFilter(FilterBase):
 
     @classmethod
     def _validate(cls, kwargs: dict[str, Any]) -> None:
-        if "path" in kwargs:
-            pass
-        elif "type" in kwargs:
-            pass
-        else:
+        if not isinstance(kwargs, dict) and not isinstance(kwargs, str):
             cls._validation_error(
-                "Either 'path' or 'type' argument must be provided for the GeoJSON filter."
+                f"GeoJSON filter must be a string or dictionary, got {type(kwargs).__name__}."
             )
+
+        if isinstance(kwargs, str):
+            if not os.path.exists(kwargs):
+                cls._validation_error(
+                    f"GeoJSON file at path {kwargs} does not exist."
+                )
+
+        if isinstance(kwargs, dict):
+            if "type" not in kwargs:
+                cls._validation_error(
+                    "Missing 'type' argument in GeoJSON dictionary. Must be a valid GeoJSON object."
+                )
+        
+        

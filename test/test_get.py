@@ -2,8 +2,10 @@ import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 import pytest
+from importlib.resources import files
 
 import geode
+import geode.data.filter
 
 def test_get(use_data_lake):
     result = geode.get("atms_n20", "2021-07-31T22:44:00", "2021-07-31T22:44:42")
@@ -78,6 +80,30 @@ def test_get_with_geojson(use_data_lake):
 
     assert np.all(lats >= 30.0) and np.all(lats <= 32.0)
     assert np.all(lons >= -180.0) and np.all(lons <= 180.0)
+
+
+def test_get_with_geojson_path(use_data_lake):
+    geojson_path = (
+        files(geode.data.filter) / "regions" / "central_pacific_basin.geojson"
+    )
+
+    result = geode.get(
+        "atms_n20",
+        "2021-07-31T22:44:00",
+        "2021-07-31T22:44:42",
+        filters=[{"geojson": str(geojson_path)}]
+    )
+
+    assert result is not None
+
+    lats = result["MetaData/latitude"].values[:]
+    lons = result["MetaData/longitude"].values[:]
+
+    assert len(lats) > 0
+    assert len(lons) > 0
+
+    assert np.all(lats >= 20.0) and np.all(lats <= 40.0)
+    assert np.all(lons >= -180.0) and np.all(lons <= -100.0)
 
 
 def test_get_region(use_data_lake):
