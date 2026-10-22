@@ -75,7 +75,6 @@ class IceChunkDataManager(DataManager):
         data_type: str,
         start_time: datetime,
         end_time: datetime,
-        variables: list[str] | None = None,
         filters: list[dict[str, Any]] | None = None,
     ) -> xr.DataTree:
 
@@ -93,11 +92,8 @@ class IceChunkDataManager(DataManager):
             consolidated=False,
         )
         
-        filters = [
-            {"time_window": {"start_time": start_time, "end_time": end_time}},
-            *(filters or []),
-        ]
-
-        datatree = apply(datatree, variables, filters)
+        datatree = apply(
+            datatree, start_time, end_time, filters=filters
+        )
 
         return datatree

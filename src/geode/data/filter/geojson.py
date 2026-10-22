@@ -7,13 +7,13 @@ from shapely.geometry import shape
 from shapely.geometry.base import BaseGeometry
 
 from geode.data.filter.factory import register_filter
-from geode.data.filter.base import FilterBase
+from geode.data.filter.base import OrFilter
 
 
 @register_filter("geojson")
-class GeoJsonFilter(FilterBase):
-    def __init__(self, kwargs: dict[str, Any] | str):
-        super().__init__(kwargs)
+class GeoJsonFilter(OrFilter):
+    def __init__(self, arg: dict[str, Any] | str):
+        super().__init__(arg)
 
     def make_mask(self, ds: xr.DataTree):
         return self._mask_from_geometry(ds, self._make_geometry())
@@ -23,9 +23,9 @@ class GeoJsonFilter(FilterBase):
 
         Subclasses override this hook to resolve geometries from other sources.
         """
-        if isinstance(self.kwargs, str):
-            return self._make_from_path(self.kwargs)
-        return self._make_from_geojson_dict(self.kwargs)
+        if isinstance(self.arg, str):
+            return self._make_from_path(self.arg)
+        return self._make_from_geojson_dict(self.arg)
 
     def _mask_from_geometry(self, ds: xr.DataTree, geometry: BaseGeometry):
         return shapely.intersects_xy(
@@ -55,23 +55,23 @@ class GeoJsonFilter(FilterBase):
             raise ValueError(f"Failed to load GeoJSON data from dictionary: {e}")
 
     @classmethod
-    def _validate(cls, kwargs: dict[str, Any]) -> None:
-        if not isinstance(kwargs, dict) and not isinstance(kwargs, str):
+    def _validate(cls, arg: dict[str, Any] | str) -> None:
+        if not isinstance(arg, dict) and not isinstance(arg, str):
             cls._validation_error(
-                f"GeoJSON filter must be a string or dictionary, got {type(kwargs).__name__}."
+                f"GeoJSON filter must be a string or dictionary, got {type(arg).__name__}."
             )
 
-        if isinstance(kwargs, str):
-            path = os.path.expanduser(kwargs)
+        if isinstance(arg, str):
+            path = os.path.expanduser(arg)
             path = os.path.abspath(path)
-            
+
             if not os.path.exists(path):
                 cls._validation_error(
                     f"GeoJSON file at path {path} does not exist."
                 )
 
-        if isinstance(kwargs, dict):
-            if "type" not in kwargs:
+        if isinstance(arg, dict):
+            if "type" not in arg:
                 cls._validation_error(
                     "Missing 'type' argument in GeoJSON dictionary. Must be a valid GeoJSON object."
                 )

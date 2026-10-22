@@ -1,5 +1,6 @@
 from datetime import UTC, datetime
 import xarray as xr
+from typing import Any
 
 from geode.configs.geode_config import geode_config
 
@@ -32,8 +33,7 @@ class DataManager:
         data_type: str,
         start_time: datetime,
         end_time: datetime,
-        vars: list[str] | None = None,
-        filter: dict | None = None,
+        filters: list[dict[str, Any]] | None = None,
     ) -> xr.DataTree:
 
         raise NotImplementedError("This method should be implemented by subclasses.")

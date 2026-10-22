@@ -5,8 +5,9 @@ import numpy as np
 from datetime import datetime, timezone
 
 from geode.data.filter.factory import register_filter
-from geode.data.filter.base import FilterBase, FilterType
+from geode.data.filter.base import AndFilter
 
+LocationKey = "Location"
 TimeKey = "MetaData/dateTime"
 StartTimeKey = "start_time"
 EndTimeKey = "end_time"
@@ -20,23 +21,16 @@ def _to_utc_datetime64(value: datetime) -> np.datetime64:
 
 
 @register_filter("time_window")
-class TimeWindowFilter(FilterBase):
-    def __init__(self, kwargs: dict[str, Any]):
-        super().__init__(kwargs, FilterType.INTERSECT)
+class TimeWindowFilter(AndFilter):
+    def __init__(self, arg: dict[str, Any]):
+        super().__init__(arg)
 
-    def make_mask(self, ds: xr.DataTree):
-        t0 = _to_utc_datetime64(self.kwargs[StartTimeKey])
-        t1 = _to_utc_datetime64(self.kwargs[EndTimeKey])
-        return ((ds[TimeKey] >= t0) & (ds[TimeKey] <= t1)).values
+    def apply(self, dt: xr.DataTree) -> xr.DataTree:
+        t0 = _to_utc_datetime64(self.arg[StartTimeKey])
+        t1 = _to_utc_datetime64(self.arg[EndTimeKey])
+        mask = ((dt[TimeKey] >= t0) & (dt[TimeKey] <= t1)).values
+        return dt.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))
 
     @classmethod
-    def _validate(cls, kwargs: dict[str, Any]) -> None:
-        if not isinstance(kwargs, dict):
-            cls._validation_error("Arguments must be a dictionary with keys 'start_time' and 'end_time'.")
-        if StartTimeKey not in kwargs or EndTimeKey not in kwargs:
-            cls._validation_error("Arguments must contain 'start_time' and 'end_time'.")
-        start_time, end_time = kwargs[StartTimeKey], kwargs[EndTimeKey]
-        if not isinstance(start_time, datetime) or not isinstance(end_time, datetime):
-            cls._validation_error("Arguments must be datetime instances.")
-        if start_time >= end_time:
-            cls._validation_error("start_time must be earlier than end_time.")
+    def _validate(cls, arg: dict[str, Any]) -> None:
+        pass  # Not a user filter

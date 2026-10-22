@@ -52,38 +52,38 @@ region_catalog = RegionCatalog(files(__package__) / "regions")
 class RegionFilter(GeoJsonFilter):
     catalog: RegionCatalog = region_catalog
 
-    def __init__(self, kwargs: str | dict[str, Any]):
-        super().__init__(kwargs)
+    def __init__(self, arg: str | dict[str, Any]):
+        super().__init__(arg)
 
     def _make_geometry(self) -> BaseGeometry:
-        if isinstance(self.kwargs, str):
-            self.kwargs = {"name": self.kwargs}
+        if isinstance(self.arg, str):
+            self.arg = {"name": self.arg}
 
-        geometry = shape(self.catalog.geojson(self.kwargs["name"]))
+        geometry = shape(self.catalog.geojson(self.arg["name"]))
 
-        if "border_width" in self.kwargs:
-            geometry = geometry.buffer(self.kwargs["border_width"])
+        if "border_width" in self.arg:
+            geometry = geometry.buffer(self.arg["border_width"])
 
         return geometry
 
     @classmethod
-    def _validate(cls, args: str | dict[str, Any]) -> None:
-        if not isinstance(args, str) and not isinstance(args, dict):
+    def _validate(cls, arg: str | dict[str, Any]) -> None:
+        if not isinstance(arg, str) and not isinstance(arg, dict):
             cls._validation_error(
                 f"Region must be a string naming one of {cls.catalog.names}, "
                 f"got {type(args).__name__}."
             )
-        if isinstance(args, str):
-            if args not in cls.catalog:
+        if isinstance(arg, str):
+            if arg not in cls.catalog:
                 cls._validation_error(
-                    f"Unknown region '{args}'. Available regions: {cls.catalog.names}"
+                    f"Unknown region '{arg}'. Available regions: {cls.catalog.names}"
                 )
-        elif isinstance(args, dict):
-            if "name" not in args:
+        elif isinstance(arg, dict):
+            if "name" not in arg:
                 cls._validation_error(
                     f"Region dictionary must have a 'name' key. Available regions: {cls.catalog.names}"
                 )
-            if args["name"] not in cls.catalog:
+            if arg["name"] not in cls.catalog:
                 cls._validation_error(
-                    f"Unknown region '{args['name']}'. Available regions: {cls.catalog.names}"
+                    f"Unknown region '{arg['name']}'. Available regions: {cls.catalog.names}"
                 )

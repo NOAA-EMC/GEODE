@@ -171,5 +171,32 @@ def test_get_combined(use_data_lake):
     assert np.all(lats >= -90.0) and np.all(lats <= 40.0)
     assert np.all(lons >= -180.0) and np.all(lons <= -75.0)
 
+
+def test_get_w_channels(use_data_lake):
+
+    result = geode.get("atms_n20", 
+                       "2021-07-30T00:00:00",
+                       "2021-07-31T23:59:59",
+                       filters=[{"channels": [1, 2]}]
+    )
+
+    assert result is not None
+
+    channels = result["Channel"].values[:]
+    assert len(channels) > 0
+    assert all(ch in [1, 2] for ch in channels)
+
+
+def test_get_w_vars(use_data_lake):
+
+    result = geode.get("atms_n20", 
+                       "2021-07-30T00:00:00",
+                       "2021-07-31T23:59:59",
+                       filters=[{"variables": ["ObsValue/brightnessTemperature"]}]
+    )
+
+    assert result is not None
+    assert set(result["ObsValue"].data_vars) == {"brightnessTemperature"}
+
 if __name__ == "__main__":
     raise SystemExit(pytest.main([__file__, "-v"]))

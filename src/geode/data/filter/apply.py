@@ -1,38 +1,50 @@
 from typing import Any
 import xarray as xr
+from datetime import datetime
 import numpy as np
 
-from geode.data.filter.base import FilterType
+from geode.data.filter.base import OrFilter, AndFilter
 from geode.data.filter.factory import make_filter
 
 
 LocationKey = "Location"
 
-def apply(datatree, variables: list[str] = [], filters: list[dict[str, Any]] = []):
-    if variables:
-        datatree = datatree.map_over_datasets(lambda ds: ds[variables])
+def apply(
+    datatree: xr.DataTree,
+    start_time: datetime,
+    end_time: datetime,
+    filters: list[dict[str, Any]] = None
+):
+    filters = filters or []
 
-    if not filters:
-        return datatree
+    # Strategicaly order the filters
+    ordered_filters = []
+    ordered_filters.extend([f for f in filters if "variables" in f])
+    ordered_filters.extend([f for f in filters if "channels" in f])
+    ordered_filters.append({"time_window": {"start_time": start_time, "end_time": end_time}})
+    ordered_filters.extend([f for f in filters if "variables" not in f and "channels" not in f])
 
-    intersect_filters = []
-    union_filters = []
-    for filter_dict in filters:
+    # Apply the filters to the datatree
+    and_filters = []
+    or_filters = []
+    for filter_dict in ordered_filters:
         filter_name, kwargs = next(iter(filter_dict.items()))
         filter = make_filter(filter_name, kwargs)
-        if filter.type == FilterType.INTERSECT:
-            intersect_filters.append(filter)
-        else:
-            union_filters.append(filter)
-    
-    mask = np.ones_like(datatree[LocationKey].values, dtype=bool)
-    for filter in intersect_filters:
-        mask &= filter.make_mask(datatree)
+        if isinstance(filter, AndFilter):
+            and_filters.append(filter)
+        elif isinstance(filter, OrFilter):
+            or_filters.append(filter)
 
-    if union_filters:
-        group_mask = np.zeros_like(mask)
-        for filter in union_filters:
-            group_mask |= filter.make_mask(datatree)
-        mask &= group_mask
+    # Temporal filters are ANDed. We update the datatree with each filter's mask
+    # to save computation by applying each filter sequentially
+    for filter in and_filters:
+        datatree = filter.apply(datatree) 
 
-    return datatree.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))
+    # Spatial filters are applied with an OR operation
+    if or_filters:
+        mask = np.zeros_like(datatree[LocationKey].values, dtype=bool)
+        for filter in or_filters:
+            mask |= filter.make_mask(datatree)
+        datatree = datatree.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))
+
+    return datatree

@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import xarray as xr
+from typing import Any
 
 from geode.data.manager import data_manager
 
@@ -9,8 +10,7 @@ def get(
     data_type: str,
     start_time: datetime | str,
     end_time: datetime | str,
-    variables: list[str] | None = None,
-    filters: list | None = None,
+    filters: list[dict[str, Any]] | None = None,
 ) -> xr.DataTree:
 
     if isinstance(start_time, str):
@@ -22,6 +22,5 @@ def get(
         data_type, 
         start_time, 
         end_time, 
-        variables=variables, 
         filters=filters,
     )
