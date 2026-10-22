@@ -65,6 +65,7 @@ nav:
   - Home: index.md
   - Getting Started: getting-started.md
   - Command Line: command-line.md
+  - Generic BUFR Ingestor: generic-bufr.md
   - API Reference:
       - Overview: api/index.md
       - Core API: api/core.md
