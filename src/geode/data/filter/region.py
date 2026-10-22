@@ -5,6 +5,7 @@ from typing import Any
 
 import shapely
 import xarray as xr
+from shapely.geometry import shape
 from shapely.geometry.base import BaseGeometry
 
 from geode.data.filter.factory import register_filter
@@ -55,9 +56,15 @@ class RegionFilter(GeoJsonFilter):
         super().__init__(kwargs)
 
     def _make_geometry(self) -> BaseGeometry:
-        return self._make_from_geojson_dict(
-            self.catalog.geojson(self.kwargs if isinstance(self.kwargs, str) else self.kwargs["type"])
-        )
+        if isinstance(self.kwargs, str):
+            self.kwargs = {"name": self.kwargs}
+
+        geometry = shape(self.catalog.geojson(self.kwargs["name"]))
+
+        if "border_width" in self.kwargs:
+            geometry = geometry.buffer(self.kwargs["border_width"])
+
+        return geometry
 
     @classmethod
     def _validate(cls, args: str | dict[str, Any]) -> None:
@@ -72,11 +79,11 @@ class RegionFilter(GeoJsonFilter):
                     f"Unknown region '{args}'. Available regions: {cls.catalog.names}"
                 )
         elif isinstance(args, dict):
-            if "type" not in args:
+            if "name" not in args:
                 cls._validation_error(
-                    f"Region dictionary must have a 'type' key. Available regions: {cls.catalog.names}"
+                    f"Region dictionary must have a 'name' key. Available regions: {cls.catalog.names}"
                 )
-            if args["type"] not in cls.catalog:
+            if args["name"] not in cls.catalog:
                 cls._validation_error(
-                    f"Unknown region '{args['type']}'. Available regions: {cls.catalog.names}"
+                    f"Unknown region '{args['name']}'. Available regions: {cls.catalog.names}"
                 )

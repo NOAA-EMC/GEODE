@@ -100,7 +100,7 @@ def test_get_region(use_data_lake):
     assert np.all(lons >= -180.0) and np.all(lons <= -100.0)
 
 
-def test_get_region_combined(use_data_lake):
+def test_get_combined(use_data_lake):
     result = geode.get("atms_n20", 
                        "2021-07-30T00:00:00",
                        "2021-07-31T23:59:59",
