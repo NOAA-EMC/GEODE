@@ -132,7 +132,7 @@ def test_get_region_w_border(use_data_lake):
                        "2021-07-30T00:00:00",
                        "2021-07-31T23:59:59",
                        filters=[{"region": {"name": "central_pacific_basin",
-                                            "border_width": 180}}] # make huge border
+                                            "border_width": 180}}] # huge border
     )
 
     assert result is not None
@@ -143,7 +143,8 @@ def test_get_region_w_border(use_data_lake):
     assert len(lats) > 0
     assert len(lons) > 0
 
-    assert np.any(lons >= -75.0) # make sure we captured something outside the original region
+    # make sure we captured something outside the original region
+    assert np.any(lons >= -75.0) 
 
 
 def test_get_combined(use_data_lake):

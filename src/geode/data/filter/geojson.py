@@ -36,6 +36,10 @@ class GeoJsonFilter(FilterBase):
 
     def _make_from_path(self, path: str):
         try:
+            # resolve the path to an absolute path and home directory ~
+            path = os.path.expanduser(path)
+            path = os.path.abspath(path)
+
             with open(path, "r") as f:
                 geojson_data = json.load(f)
             return shape(geojson_data)
@@ -58,9 +62,12 @@ class GeoJsonFilter(FilterBase):
             )
 
         if isinstance(kwargs, str):
-            if not os.path.exists(kwargs):
+            path = os.path.expanduser(kwargs)
+            path = os.path.abspath(path)
+            
+            if not os.path.exists(path):
                 cls._validation_error(
-                    f"GeoJSON file at path {kwargs} does not exist."
+                    f"GeoJSON file at path {path} does not exist."
                 )
 
         if isinstance(kwargs, dict):
@@ -68,5 +75,4 @@ class GeoJsonFilter(FilterBase):
                 cls._validation_error(
                     "Missing 'type' argument in GeoJSON dictionary. Must be a valid GeoJSON object."
                 )
-        
         
