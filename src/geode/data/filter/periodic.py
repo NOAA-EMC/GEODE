@@ -25,10 +25,9 @@ class PeriodicFilter(AndFilter):
         mask = np.zeros_like(dt[TimeKey].values, dtype=bool)
         current_time = start_time
         while current_time <= end_time:
-            # Implement the periodic snapshot logic here
-            window = np.timedelta64(self.arg[WindowKey], 'h')
-            period = np.timedelta64(self.arg[PeriodKey], 'h')
-            mask |= (np.abs(dt[TimeKey].values - current_time) <= window)
+            window = np.timedelta64(int(self.arg[WindowKey] * 60), 'm')
+            period = np.timedelta64(int(self.arg[PeriodKey] * 60), 'm')
+            mask |= (dt[TimeKey].values >= current_time) & (dt[TimeKey].values <= (current_time + window))
             current_time += period
 
         return dt.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))

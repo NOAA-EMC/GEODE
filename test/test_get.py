@@ -198,5 +198,21 @@ def test_get_w_vars(use_data_lake):
     assert result is not None
     assert set(result["ObsValue"].data_vars) == {"brightnessTemperature"}
 
+
+def test_get_periodic(use_data_lake):
+
+    result = geode.get("atms_n20", 
+                       "2021-07-30T00:00:00",
+                       "2021-08-30T23:59:59",
+                       filters=[{"periodic": {"period_h": 12,
+                                              "window_h": 6}}]
+    )
+
+    assert result is not None
+    
+    times = result["MetaData/dateTime"]
+    assert len(times) > 0
+    
+
 if __name__ == "__main__":
     raise SystemExit(pytest.main([__file__, "-v"]))

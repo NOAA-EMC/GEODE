@@ -90,6 +90,7 @@ class IceChunkDataManager(DataManager):
             session.store,
             engine="zarr",
             consolidated=False,
+            create_default_indexes=False,
         )
         
         datatree = apply(
