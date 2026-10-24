@@ -6,8 +6,10 @@ import tempfile
 from glob import glob
 from pathlib import Path
 
+import numpy as np
 import pytest
 import requests
+import xarray as xr
 
 from geode.configs.geode_config import geode_config
 
@@ -99,6 +101,7 @@ def use_empty_data_lake():
 
 @pytest.fixture()
 def use_data_lake(use_dump):
+    from geode.data.manager import data_manager
     from geode.ingest.consumers import ncep_dump_reader
 
     os.makedirs(geode_config.data_lake.full_base_path, exist_ok=True)
@@ -109,6 +112,60 @@ def use_data_lake(use_dump):
         start_date=datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC),
         end_date=datetime.datetime(2024, 1, 2, tzinfo=datetime.UTC),
     )
+
+    slice_times = np.arange(
+        np.datetime64("2021-07-30T00", "m"),
+        np.datetime64("2021-08-01T00", "m"),
+        np.timedelta64(1, "m"),
+    )
+    times, latitudes = np.meshgrid(
+        slice_times,
+        np.arange(-20.0, 21.0, 1.0),
+        indexing="ij",
+    )
+    longitudes = np.broadcast_to(
+        np.linspace(-180.0, 180.0, slice_times.size, endpoint=False)[:, None],
+        times.shape,
+    )
+    stripe = xr.DataTree.from_dict(
+        {
+            "/": xr.Dataset(
+                coords={"Location": np.arange(times.size)},
+                attrs={
+                    "history": (
+                        "Created deterministic equatorial test stripe sweeping "
+                        "eastward at one longitude slice per minute, with "
+                        "temperature increasing by 0.1 K per degree longitude."
+                    )
+                },
+            ),
+            "/MetaData": xr.Dataset(
+                coords={
+                    "dateTime": ("Location", times.ravel().astype("datetime64[s]")),
+                    "latitude": (
+                        "Location",
+                        latitudes.ravel(),
+                        {"units": "degrees_north"},
+                    ),
+                    "longitude": (
+                        "Location",
+                        longitudes.ravel(),
+                        {"units": "degrees_east"},
+                    ),
+                }
+            ),
+            "/ObsValue": xr.Dataset(
+                {
+                    "temperature": (
+                        "Location",
+                        280.0 + 0.1 * latitudes.ravel() + 0.1 * longitudes.ravel(),
+                        {"units": "K"},
+                    )
+                }
+            ),
+        }
+    )
+    data_manager.put("stripe", stripe)
 
     yield
 

@@ -197,21 +197,38 @@ def test_get_w_vars(use_data_lake):
 
     assert result is not None
     assert set(result["ObsValue"].data_vars) == {"brightnessTemperature"}
+    assert set(result["MetaData"].coords) == {"longitude", "latitude", "dateTime"}
 
 
 def test_get_periodic(use_data_lake):
+    """Periodic windows include both their start and end timestamps."""
+    period_hours = 3
+    window_hours = 1
 
-    result = geode.get("atms_n20", 
-                       "2021-07-30T00:00:00",
-                       "2021-08-30T23:59:59",
-                       filters=[{"periodic": {"period_h": 12,
-                                              "window_h": 6}}]
+    result = geode.get(
+        "stripe",
+        "2021-07-30T00:00:00",
+        "2021-07-31T23:59:59",
+        filters=[{"periodic": {"period": period_hours, "window": window_hours}}],
     )
 
-    assert result is not None
+    unfiltered = geode.get(
+        "stripe",
+        "2021-07-30T00:00:00",
+        "2021-07-31T23:59:59",
+    )
     
-    times = result["MetaData/dateTime"]
-    assert len(times) > 0
+    times = unfiltered["MetaData/dateTime"].values
+    assert times.size > 0
+    offsets = times - times[0]
+    expected_times = times[
+        offsets % np.timedelta64(period_hours, "h")
+        <= np.timedelta64(window_hours, "h")
+    ]
+    np.testing.assert_array_equal(
+        result["MetaData/dateTime"].values,
+        expected_times,
+    )
     
 
 if __name__ == "__main__":
