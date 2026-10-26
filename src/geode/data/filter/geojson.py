@@ -8,6 +8,7 @@ from shapely.geometry.base import BaseGeometry
 
 from geode.data.filter.factory import register_filter
 from geode.data.filter.base import OrFilter
+from geode.data.keys import LatitudeKey, LongitudeKey
 
 
 @register_filter("geojson")
@@ -30,8 +31,8 @@ class GeoJsonFilter(OrFilter):
     def _mask_from_geometry(self, ds: xr.DataTree, geometry: BaseGeometry):
         return shapely.intersects_xy(
             geometry,
-            ds["MetaData/longitude"].values,
-            ds["MetaData/latitude"].values,
+            ds[LongitudeKey].values,
+            ds[LatitudeKey].values,
         )
 
     def _make_from_path(self, path: str):

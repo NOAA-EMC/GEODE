@@ -6,9 +6,8 @@ from datetime import datetime, timezone
 
 from geode.data.filter.factory import register_filter
 from geode.data.filter.base import AndFilter
+from geode.data.keys import LocationKey, TimeKey
 
-LocationKey = "Location"
-TimeKey = "MetaData/dateTime"
 PeriodKey = "period"
 WindowKey = "window"
 
@@ -76,4 +75,3 @@ class PeriodicFilter(AndFilter):
 
         if not isinstance(arg[WindowKey], (str, int, float, np.timedelta64)):
             cls._validation_error(f"'{WindowKey}' must be an int, float, or np.timedelta64.")
-

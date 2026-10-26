@@ -5,11 +5,7 @@ import xarray as xr
 
 from geode.data.filter.base import AndFilter
 from geode.data.filter.factory import register_filter
-
-LocationKey = "Location"
-TimeKey = "MetaData/dateTime"
-LatitudeKey = "MetaData/latitude"
-LongitudeKey = "MetaData/longitude"
+from geode.data.keys import LatitudeKey, LocationKey, LongitudeKey, TimeKey
 
 
 @register_filter("variables")

@@ -9,6 +9,7 @@ from geode.data.filter.apply import apply
 from geode.data.filter.time_window import TimeWindowFilter
 from geode.configs.geode_config import geode_config
 from geode.data.manager.manager_base import DataManager
+from geode.data.keys import LocationKey
 
 
 class IceChunkDataManager(DataManager):
@@ -53,7 +54,7 @@ class IceChunkDataManager(DataManager):
                 for node in data_tree.subtree:
                     dataset = node.to_dataset(inherit=False)
 
-                    if "Location" not in dataset.dims:
+                    if LocationKey not in dataset.dims:
                         continue
 
                     group = node.path.lstrip("/") or None
@@ -63,7 +64,7 @@ class IceChunkDataManager(DataManager):
                         mode="a",
                         zarr_format=3,
                         group=group,
-                        append_dim="Location",
+                        append_dim=LocationKey,
                         consolidated=False,
                     )
         else:

@@ -5,9 +5,8 @@ import numpy as np
 
 from geode.data.filter.base import OrFilter, AndFilter
 from geode.data.filter.factory import make_filter
+from geode.data.keys import LocationKey
 
-
-LocationKey = "Location"
 
 def apply(
     datatree: xr.DataTree,

@@ -4,11 +4,11 @@ from bufr.obs_builder import ObsBuilder
 
 from geode.ingest.ingestors.base_ingestor import BaseIngestor
 from geode.ingest.ingestors.bufr_ingestor import container_to_xarray
+from geode.data.keys import LocationKey as LocationDim
 
 
 MetaDataGroup = "MetaData"
 LocationCoords = ["latitude", "longitude"]
-LocationDim = "Location"
 
 PromotedCoords = ["dateTime", "latitude", "longitude"]
 IndexCoord = "dateTime"

@@ -6,6 +6,7 @@ import zarr
 
 from geode.configs.geode_config import geode_config
 from geode.data.manager.manager_base import DataManager
+from geode.data.keys import LocationKey
 
 
 class ZarrDataManager(DataManager):
@@ -77,6 +78,5 @@ class ZarrDataManager(DataManager):
             data_tree.to_zarr(file_path, mode="w", consolidated=True)
         else:
             data_tree.to_zarr(
-                file_path, mode="a", append_dim="Location", consolidated=True
+                file_path, mode="a", append_dim=LocationKey, consolidated=True
             )
-

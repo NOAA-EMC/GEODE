@@ -6,10 +6,9 @@ from datetime import datetime, timezone
 
 from geode.data.filter.factory import register_filter
 from geode.data.filter.base import AndFilter
+from geode.data.keys import LocationKey, TimeKey
 
-LocationKey = "Location"
 IsSortedKey = "is_sorted"
-TimeKey = "MetaData/dateTime"
 StartTimeKey = "start_time"
 EndTimeKey = "end_time"
 

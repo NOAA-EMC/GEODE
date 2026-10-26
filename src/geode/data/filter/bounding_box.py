@@ -5,10 +5,8 @@ import numpy as np
 
 from geode.data.filter.factory import register_filter
 from geode.data.filter.base import OrFilter
+from geode.data.keys import LatitudeKey, LongitudeKey
 
-
-LongitudeKey = "MetaData/longitude"
-LatitudeKey = "MetaData/latitude"
 
 @register_filter("bounding_box")
 class BoundingBoxFilter(OrFilter):

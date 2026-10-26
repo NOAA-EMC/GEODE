@@ -7,11 +7,8 @@ from datetime import datetime, timezone
 
 from geode.data.filter.factory import register_filter
 from geode.data.filter.base import AndFilter
+from geode.data.keys import ChannelKey
 
-LocationKey = "Location"
-ChannelKey = "Channel"
-
-TimeKey = "MetaData/dateTime"
 PeriodKey = "period_h"
 WindowKey = "window_h"
 
