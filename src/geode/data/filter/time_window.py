@@ -8,7 +8,6 @@ from geode.data.filter.factory import register_filter
 from geode.data.filter.base import AndFilter
 from geode.data.keys import LocationKey, TimeKey
 
-IsSortedKey = "is_sorted"
 StartTimeKey = "start_time"
 EndTimeKey = "end_time"
 
@@ -26,9 +25,7 @@ class TimeWindowFilter(AndFilter):
         super().__init__(arg)
 
     def apply(self, dt: xr.DataTree) -> xr.DataTree:
-        if IsSortedKey in dt:
-            return self._apply_to_sorted_data(dt)
-        return self._apply_to_unsorted_data(dt)
+        return self._apply_to_sorted_data(dt)
 
     def _apply_to_sorted_data(self, dt: xr.DataTree) -> xr.DataTree:
         
