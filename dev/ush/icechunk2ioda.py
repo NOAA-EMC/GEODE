@@ -1,3 +1,12 @@
+#  Convert a single time window of GEODE Lake data to an IODA NetCDF file.
+
+#  Usage:
+#     python dev/ush/icechunk2ioda.py iasi_metop-b \
+#         -s 2026-09-15T03:00:00 \
+#         -e 2026-09-15T09:00:00 \
+#         -o test_20261023_3.nc
+
+
 import os
 
 # Set Icechunk and Rust logging level to error before any libraries load
@@ -24,21 +33,13 @@ warnings.filterwarnings(
     category=DeprecationWarning,
 )
 
-"""
-usage:
-python dev/ush/icechunk2ioda.py iasi_metop-b \
-    -s 2026-09-15T03:00:00 \
-    -e 2026-09-15T09:00:00 \
-    -o test_20261023_3.nc
-"""
-
 
 def format_ioda_datatree(datatree: xr.DataTree) -> xr.DataTree:
     """
-    Formats the DataTree to strictly match the obsForge / IODA NetCDF convention:
-      - Location and Channel are defined as root-level int32 dimension scales.
-      - Child groups (MetaData, ObsValue) inherit root dimensions without local coordinates.
-      - Group declaration order is preserved (MetaData first, then ObsValue).
+     Formats the DataTree to strictly match the obsForge / IODA NetCDF convention:
+       - Location and Channel are defined as root-level int32 dimension scales.
+       - Child groups (MetaData, ObsValue) inherit root dimensions without local coordinates.
+       - Group declaration order is preserved (MetaData first, then ObsValue).
     """
     num_locs = 0
     num_channels = None
@@ -74,9 +75,7 @@ def format_ioda_datatree(datatree: xr.DataTree) -> xr.DataTree:
             np.arange(num_locs, dtype=np.int32), dims=["Location"]
         )
     if num_channels is not None:
-        root_coords["Channel"] = xr.DataArray(
-            channel_vals, dims=["Channel"]
-        )
+        root_coords["Channel"] = xr.DataArray(channel_vals, dims=["Channel"])
 
     saved_global_attrs = datatree.attrs.copy()
     datatree.dataset = datatree.dataset.assign_coords(root_coords)
@@ -138,11 +137,7 @@ def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
             if name == "dateTime":
                 # Convert datetime64 directly to int64 epoch seconds to bypass Xarray's CF coder
                 if np.issubdtype(node[name].dtype, np.datetime64):
-                    secs = (
-                        node[name]
-                        .values.astype("datetime64[s]")
-                        .astype(np.int64)
-                    )
+                    secs = node[name].values.astype("datetime64[s]").astype(np.int64)
                     attrs = node[name].attrs.copy()
                     attrs["long_name"] = "Datetime"
                     attrs["units"] = "seconds since 1970-01-01T00:00:00Z"
@@ -160,12 +155,18 @@ def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
                 node[name].encoding = {
                     "dtype": "int64",
                     "_FillValue": np.int64(
-                        existing_fill if existing_fill is not None else 9223372036854775807
+                        existing_fill
+                        if existing_fill is not None
+                        else 9223372036854775807
                     ),
                 }
 
             # Preserve numeric encodings and compression
-            elif var.ndim > 0 and var.dtype.kind in "biuf" and name not in ("Location", "Channel"):
+            elif (
+                var.ndim > 0
+                and var.dtype.kind in "biuf"
+                and name not in ("Location", "Channel")
+            ):
                 zlib = var.encoding.get("zlib", True)
                 complevel = var.encoding.get("complevel", 4)
 
@@ -183,7 +184,7 @@ def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
 
 def parse_iso_datetime(dt_str: str) -> datetime:
     """Parses ISO-8601 string or standard YYYY-MM-DD[THH:MM:SS] to UTC datetime."""
-    dt = datetime.fromisoformat(dt_str.replace("Z", "+00:00"))
+    dt = datetime.fromisoformat(dt_str)
     return dt if dt.tzinfo else dt.replace(tzinfo=UTC)
 
 
