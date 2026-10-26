@@ -1,4 +1,3 @@
-import datetime
 import os
 import shutil
 import tarfile
@@ -91,7 +90,8 @@ def use_dump():
 
 
 @pytest.fixture()
-def use_empty_data_lake():
+def use_empty_data_lake(tmp_path, monkeypatch):
+    monkeypatch.setattr(geode_config.data_lake, "root_dir", str(tmp_path))
     os.makedirs(geode_config.data_lake.full_base_path, exist_ok=True)
 
     yield
@@ -100,18 +100,8 @@ def use_empty_data_lake():
 
 
 @pytest.fixture()
-def use_data_lake(use_dump):
+def use_data_lake(use_empty_data_lake):
     from geode.data.manager import data_manager
-    from geode.ingest.consumers import ncep_dump_reader
-
-    os.makedirs(geode_config.data_lake.full_base_path, exist_ok=True)
-
-    reader = ncep_dump_reader.NcepDumpReader()
-    reader.ingest(
-        "atms",
-        start_date=datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC),
-        end_date=datetime.datetime(2024, 1, 2, tzinfo=datetime.UTC),
-    )
 
     slice_times = np.arange(
         np.datetime64("2021-07-30T00", "m"),
@@ -166,6 +156,68 @@ def use_data_lake(use_dump):
         }
     )
     data_manager.put("stripe", stripe)
+
+    times, latitudes, longitudes = np.meshgrid(
+        np.array(
+            [
+                "2021-07-30T00:00:00",
+                "2021-07-31T00:00:00",
+                "2021-07-31T22:44:00",
+                "2021-07-31T22:44:30",
+            ],
+            dtype="datetime64[s]",
+        ),
+        np.arange(-90.0, 91.0, 2.0),
+        np.arange(-180.0, 180.0, 2.0),
+        indexing="ij",
+    )
+    channels = np.arange(1, 5)
+    temperature = 280.0 + 0.1 * latitudes.ravel() + 0.1 * longitudes.ravel()
+    globe = xr.DataTree.from_dict(
+        {
+            "/": xr.Dataset(
+                coords={"Location": np.arange(times.size), "Channel": channels},
+                attrs={
+                    "history": (
+                        "Created deterministic global test grid at 2-degree "
+                        "spacing, with four time slices and four channels."
+                    )
+                },
+            ),
+            "/MetaData": xr.Dataset(
+                {
+                    "sensorChannelNumber": (
+                        ("Location", "Channel"),
+                        np.broadcast_to(channels, (times.size, channels.size)),
+                    )
+                },
+                coords={
+                    "dateTime": ("Location", times.ravel()),
+                    "latitude": (
+                        "Location",
+                        latitudes.ravel(),
+                        {"units": "degrees_north"},
+                    ),
+                    "longitude": (
+                        "Location",
+                        longitudes.ravel(),
+                        {"units": "degrees_east"},
+                    ),
+                },
+            ),
+            "/ObsValue": xr.Dataset(
+                {
+                    "temperature": ("Location", temperature, {"units": "K"}),
+                    "brightnessTemperature": (
+                        ("Location", "Channel"),
+                        temperature[:, None] + channels[None, :],
+                        {"units": "K"},
+                    ),
+                }
+            ),
+        }
+    )
+    data_manager.put("globe", globe)
 
     yield
 
