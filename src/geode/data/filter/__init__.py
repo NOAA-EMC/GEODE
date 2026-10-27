@@ -10,4 +10,3 @@ from geode.data.filter import (
 from geode.data.filter.apply import apply
 
 __all__ = ["apply"]
-``
