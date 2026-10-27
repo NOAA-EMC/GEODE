@@ -1,5 +1,4 @@
 import json
-
 from importlib.resources import files
 from importlib.resources.abc import Traversable
 from typing import Any
