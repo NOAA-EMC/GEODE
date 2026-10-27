@@ -128,7 +128,7 @@ def use_data_lake(use_empty_data_lake):
                         "Created deterministic equatorial test stripe sweeping "
                         "eastward at one longitude slice per minute, with "
                         "temperature increasing by 0.1 K per degree longitude."
-                    )
+                    ),
                 },
             ),
             "/MetaData": xr.Dataset(
