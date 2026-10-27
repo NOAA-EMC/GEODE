@@ -8,6 +8,6 @@ from geode.data.filter import (
     channels,
     periodic,
     variables,
-)  # noqa: F401 
+)  # noqa: F401
 
 __all__ = ["apply"]
