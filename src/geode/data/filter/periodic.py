@@ -3,8 +3,8 @@ from typing import Any
 import numpy as np
 import xarray as xr
 
-from geode.data.filter.factory import register_filter
 from geode.data.filter.base import AndFilter
+from geode.data.filter.factory import register_filter
 from geode.data.keys import LocationKey, TimeKey
 
 PeriodKey = "period"

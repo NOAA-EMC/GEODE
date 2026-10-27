@@ -1,16 +1,14 @@
 import bufr
-from bufr.obs_builder import ObsBuilder
 import xarray as xr
+from bufr.obs_builder import ObsBuilder
 
 from geode.ingest.ingestors.base_ingestor import BaseIngestor
 from geode.ingest.ingestors.bufr_ingestor import container_to_xarray
 
-
-MetaDataGroup = "MetaData"
-LocationCoords = ["latitude", "longitude"]
-
-PromotedCoords = ["dateTime", "latitude", "longitude"]
 IndexCoord = "dateTime"
+LocationCoords = ["latitude", "longitude"]
+MetaDataGroup = "MetaData"
+PromotedCoords = ["dateTime", "latitude", "longitude"]
 
 
 class ObsBuilderIngestor(BaseIngestor):

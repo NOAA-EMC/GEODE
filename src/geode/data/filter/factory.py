@@ -1,6 +1,5 @@
 from typing import Any
 
-
 _filter_types: dict[str, type] = {}
 
 

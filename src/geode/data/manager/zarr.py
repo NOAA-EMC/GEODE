@@ -1,12 +1,11 @@
 import os
-
 from datetime import datetime
 
 import xarray as xr
 
 from geode.configs.geode_config import geode_config
-from geode.data.manager.manager_base import DataManager
 from geode.data.keys import LocationKey
+from geode.data.manager.manager_base import DataManager
 
 
 class ZarrDataManager(DataManager):

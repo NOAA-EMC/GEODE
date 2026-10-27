@@ -4,7 +4,7 @@ from typing import Any
 import numpy as np
 import xarray as xr
 
-from geode.data.filter.base import OrFilter, AndFilter
+from geode.data.filter.base import AndFilter, OrFilter
 from geode.data.filter.factory import make_filter
 from geode.data.keys import LocationKey
 

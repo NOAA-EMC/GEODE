@@ -1,12 +1,11 @@
-import os
 import json
-
+import os
 from typing import Any
 
 import shapely
+import xarray as xr
 from shapely.geometry import shape
 from shapely.geometry.base import BaseGeometry
-import xarray as xr
 
 from geode.data.filter.base import OrFilter
 from geode.data.filter.factory import register_filter

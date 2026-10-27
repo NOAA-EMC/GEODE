@@ -3,7 +3,6 @@ from geode.data.manager.icechunk import IceChunkDataManager
 from geode.data.manager.netcdf import NetCDFDataManager
 from geode.data.manager.zarr import ZarrDataManager
 
-
 manager_mapping = {
     "icechunk": IceChunkDataManager,
     "zarr": ZarrDataManager,

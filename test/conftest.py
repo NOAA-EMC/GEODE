@@ -1,20 +1,19 @@
 import os
-import pytest
 import shutil
 import tarfile
 import tempfile
-
 from glob import glob
 from pathlib import Path
 
 import numpy as np
+import pytest
 import requests
 import xarray as xr
 
-from geode.data.keys import IsSortedFlag
 from geode.configs.geode_config import geode_config
+from geode.data.keys import IsSortedFlag
 
-REQUEST_TIMEOUT_SECONDS = 30
+RequestTimeoutSeconds = 30
 
 
 def _safe_extract_tar(tar_ref: tarfile.TarFile, destination: str) -> None:
@@ -62,7 +61,7 @@ def use_dump():
     zip_path = os.path.join(download_dir, "bufr_query-0.0.2.tgz")
 
     if not os.path.exists(zip_path):
-        response = requests.get(zip_url, timeout=REQUEST_TIMEOUT_SECONDS)
+        response = requests.get(zip_url, timeout=RequestTimeoutSeconds)
         response.raise_for_status()
         with open(zip_path, "wb") as f:
             f.write(response.content)

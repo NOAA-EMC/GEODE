@@ -6,7 +6,7 @@ import xarray as xr
 
 from geode.data.filter.base import AndFilter
 from geode.data.filter.factory import register_filter
-from geode.data.keys import LocationKey, TimeKey, IsSortedFlag
+from geode.data.keys import IsSortedFlag, LocationKey, TimeKey
 
 StartTimeKey = "start_time"
 EndTimeKey = "end_time"
