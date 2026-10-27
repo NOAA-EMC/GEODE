@@ -4,6 +4,7 @@
 #     python dev/ush/icechunk2ioda.py iasi_metop-b \
 #         -s 2026-09-15T03:00:00 \
 #         -e 2026-09-15T09:00:00 \
+#         --clobber \
 #         -o test_20261023_3.nc
 
 
@@ -36,10 +37,10 @@ warnings.filterwarnings(
 
 def format_ioda_datatree(datatree: xr.DataTree) -> xr.DataTree:
     """
-     Formats the DataTree to strictly match the obsForge / IODA NetCDF convention:
-       - Location and Channel are defined as root-level int32 dimension scales.
-       - Child groups (MetaData, ObsValue) inherit root dimensions without local coordinates.
-       - Group declaration order is preserved (MetaData first, then ObsValue).
+    Formats the DataTree to strictly match the obsForge / IODA NetCDF convention:
+      - Location and Channel are defined as root-level int32 dimension scales.
+      - Child groups (MetaData, ObsValue) inherit root dimensions without local coordinates.
+      - Group declaration order is preserved (MetaData first, then ObsValue).
     """
     num_locs = 0
     num_channels = None
@@ -111,13 +112,26 @@ def format_ioda_datatree(datatree: xr.DataTree) -> xr.DataTree:
     return out_tree
 
 
-def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str) -> None:
+def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str, clobber: bool = False) -> None:
     """
     Writes DataTree using encoding parameters matching the obsForge IODA standard.
+
+    Parameters
+    ----------
+    datatree : xr.DataTree
+        The populated DataTree to write.
+    output_file : str
+        Target NetCDF file path.
+    clobber : bool, default False
+        Whether to overwrite an existing output file.
     """
     out_path = Path(output_file)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     if out_path.exists():
+        if not clobber:
+            raise FileExistsError(
+                f"Output file '{out_path}' already exists. Use '--clobber' (-c) to overwrite."
+            )
         out_path.unlink()
 
     datatree = format_ioda_datatree(datatree)
@@ -193,9 +207,19 @@ def convert_single_window(
     start_time: datetime,
     end_time: datetime,
     output_file: str,
+    clobber: bool = False,
     debug: bool = False,
 ) -> bool:
     """Core function to convert one time window for one observation type."""
+    out_path = Path(output_file)
+    if out_path.exists() and not clobber:
+        print(
+            f"[ERROR] Output file '{out_path}' already exists. "
+            "Pass '--clobber' (-c) to overwrite.",
+            file=sys.stderr,
+        )
+        return False
+
     print(f"--> Fetching data via IceChunkDataManager for type: {data_type}")
     print(f"    Window: {start_time} to {end_time}")
 
@@ -249,7 +273,7 @@ def convert_single_window(
         print(f"  [DEBUG] DataTree summary:\n{datatree}")
 
     print(f"--> Writing DataTree to NetCDF via Xarray: {output_file}")
-    write_datatree_to_netcdf(datatree, output_file)
+    write_datatree_to_netcdf(datatree, output_file, clobber=clobber)
     print("Conversion completed successfully.")
     return True
 
@@ -285,6 +309,12 @@ def main():
         help="Full path for the output NetCDF file",
     )
     parser.add_argument(
+        "-c",
+        "--clobber",
+        action="store_true",
+        help="Overwrite output file if it already exists",
+    )
+    parser.add_argument(
         "--debug",
         action="store_true",
         help="Enable verbose debug logging",
@@ -300,6 +330,7 @@ def main():
         start_time=start_window,
         end_time=end_window,
         output_file=args.output,
+        clobber=args.clobber,
         debug=args.debug,
     )
 
