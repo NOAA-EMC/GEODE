@@ -120,10 +120,10 @@ def use_data_lake(use_empty_data_lake):
     )
     stripe = xr.DataTree.from_dict(
         {
-            IsSortedFlag: True,
             "/": xr.Dataset(
                 coords={"Location": np.arange(times.size)},
                 attrs={
+                    IsSortedFlag: True,
                     "history": (
                         "Created deterministic equatorial test stripe sweeping "
                         "eastward at one longitude slice per minute, with "

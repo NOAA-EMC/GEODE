@@ -220,7 +220,10 @@ def test_get_w_vars(use_data_lake):
     assert result is not None
     assert set(result["ObsValue"].data_vars) == {"brightnessTemperature"}
     assert set(result["MetaData"].coords) == {
-        "Location", "dateTime", "latitude", "longitude"
+        "Location",
+        "dateTime",
+        "latitude",
+        "longitude",
     }
 
 

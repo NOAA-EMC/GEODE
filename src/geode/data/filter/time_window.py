@@ -36,7 +36,7 @@ class TimeWindowFilter(AndFilter):
         if not dt.attrs.get(IsSortedFlag, False):
             # Guard against unsorted data in the remaining subset.
             dt = self._apply_to_unsorted_data(dt)
-        
+
         return dt
 
     def _apply_to_sorted_data(self, dt: xr.DataTree) -> xr.DataTree:

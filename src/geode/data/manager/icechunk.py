@@ -93,7 +93,7 @@ class IceChunkDataManager(DataManager):
             consolidated=False,
             create_default_indexes=False,
         )
-        
+
         datatree = apply(datatree, start_time, end_time, filters=filters)
 
         return datatree
