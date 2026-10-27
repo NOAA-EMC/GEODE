@@ -112,7 +112,9 @@ def format_ioda_datatree(datatree: xr.DataTree) -> xr.DataTree:
     return out_tree
 
 
-def write_datatree_to_netcdf(datatree: xr.DataTree, output_file: str, clobber: bool = False) -> None:
+def write_datatree_to_netcdf(
+    datatree: xr.DataTree, output_file: str, clobber: bool = False
+) -> None:
     """
     Writes DataTree using encoding parameters matching the obsForge IODA standard.
 
