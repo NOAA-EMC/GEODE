@@ -1,4 +1,3 @@
-
 LocationKey = "Location"
 ChannelKey = "Channel"
 TimeKey = "MetaData/dateTime"

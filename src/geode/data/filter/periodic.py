@@ -30,15 +30,17 @@ class PeriodicFilter(AndFilter):
             self.arg[WindowKey] = self._parse_timedelta_str(WindowKey)
 
         if isinstance(self.arg[PeriodKey], (int, float)):
-            self.arg[PeriodKey] = np.timedelta64(int(self.arg[PeriodKey] * 60), 'm')
+            self.arg[PeriodKey] = np.timedelta64(int(self.arg[PeriodKey] * 60), "m")
         if isinstance(self.arg[WindowKey], (int, float)):
-            self.arg[WindowKey] = np.timedelta64(int(self.arg[WindowKey] * 60), 'm')
+            self.arg[WindowKey] = np.timedelta64(int(self.arg[WindowKey] * 60), "m")
 
         window = self.arg[WindowKey]
         period = self.arg[PeriodKey]
-        
+
         while current_time <= end_time:
-            mask |= (dt[TimeKey].values >= current_time) & (dt[TimeKey].values <= (current_time + window))
+            mask |= (dt[TimeKey].values >= current_time) & (
+                dt[TimeKey].values <= (current_time + window)
+            )
             current_time += period
 
         return dt.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))
@@ -57,12 +59,14 @@ class PeriodicFilter(AndFilter):
             seconds = 0
         else:
             raise ValueError(f"Invalid time format for {key}: {time_str}")
-        return np.timedelta64(hours * 3600 + minutes * 60 + seconds, 's')
+        return np.timedelta64(hours * 3600 + minutes * 60 + seconds, "s")
 
     @classmethod
     def _validate(cls, arg: dict[str, Any]) -> None:
         if not isinstance(arg, dict):
-            cls._validation_error("Arguments must be a dictionary with keys 'period' and 'window'.")
+            cls._validation_error(
+                "Arguments must be a dictionary with keys 'period' and 'window'."
+            )
 
         if PeriodKey not in arg:
             cls._validation_error(f"Missing '{PeriodKey}' argument.")
@@ -71,7 +75,11 @@ class PeriodicFilter(AndFilter):
             cls._validation_error(f"Missing '{WindowKey}' argument.")
 
         if not isinstance(arg[PeriodKey], (str, int, float, np.timedelta64)):
-            cls._validation_error(f"'{PeriodKey}' must be an int, float, or np.timedelta64.")
+            cls._validation_error(
+                f"'{PeriodKey}' must be an int, float, or np.timedelta64."
+            )
 
         if not isinstance(arg[WindowKey], (str, int, float, np.timedelta64)):
-            cls._validation_error(f"'{WindowKey}' must be an int, float, or np.timedelta64.")
+            cls._validation_error(
+                f"'{WindowKey}' must be an int, float, or np.timedelta64."
+            )

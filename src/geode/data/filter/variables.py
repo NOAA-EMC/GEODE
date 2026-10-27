@@ -32,9 +32,7 @@ class VariableFilter(AndFilter):
             groups[group].append(variable)
 
         # Preserve root attributes
-        datasets = {
-            "/": xr.Dataset(attrs=dt.attrs)
-        }
+        datasets = {"/": xr.Dataset(attrs=dt.attrs)}
 
         # Select only requested variables in each group
         for group, variables in groups.items():

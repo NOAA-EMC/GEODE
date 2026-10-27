@@ -67,13 +67,10 @@ class GeoJsonFilter(OrFilter):
             path = os.path.abspath(path)
 
             if not os.path.exists(path):
-                cls._validation_error(
-                    f"GeoJSON file at path {path} does not exist."
-                )
+                cls._validation_error(f"GeoJSON file at path {path} does not exist.")
 
         if isinstance(arg, dict):
             if "type" not in arg:
                 cls._validation_error(
                     "Missing 'type' argument in GeoJSON dictionary. Must be a valid GeoJSON object."
                 )
-        

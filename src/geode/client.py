@@ -19,8 +19,8 @@ def get(
         end_time = datetime.fromisoformat(end_time)
 
     return data_manager.get(
-        data_type, 
-        start_time, 
-        end_time, 
+        data_type,
+        start_time,
+        end_time,
         filters=filters,
     )

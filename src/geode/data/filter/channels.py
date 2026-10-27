@@ -32,14 +32,18 @@ class ChannelFilter(AndFilter):
             cls._validation_error("Argument must be a sequence of channel indices.")
 
         if not all(isinstance(i, int) for i in arg):
-            cls._validation_error("All elements in the channel sequence must be integers.")
+            cls._validation_error(
+                "All elements in the channel sequence must be integers."
+            )
 
         # make sure the channel indices are in the correct range
         if not all(i > 0 for i in arg):
             cls._validation_error("All channel indices must be positive.")
 
         if len(set(arg)) != len(arg):
-            cls._validation_error("Channel sequence must not contain duplicate indices.")
+            cls._validation_error(
+                "Channel sequence must not contain duplicate indices."
+            )
 
         if len(arg) == 0:
             cls._validation_error("Channel sequence must not be empty.")

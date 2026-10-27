@@ -12,7 +12,7 @@ def apply(
     datatree: xr.DataTree,
     start_time: datetime,
     end_time: datetime,
-    filters: list[dict[str, Any]] = None
+    filters: list[dict[str, Any]] = None,
 ):
     filters = filters or []
 
@@ -20,8 +20,12 @@ def apply(
     ordered_filters = []
     ordered_filters.extend([f for f in filters if "variables" in f])
     ordered_filters.extend([f for f in filters if "channels" in f])
-    ordered_filters.append({"time_window": {"start_time": start_time, "end_time": end_time}})
-    ordered_filters.extend([f for f in filters if "variables" not in f and "channels" not in f])
+    ordered_filters.append(
+        {"time_window": {"start_time": start_time, "end_time": end_time}}
+    )
+    ordered_filters.extend(
+        [f for f in filters if "variables" not in f and "channels" not in f]
+    )
 
     # Apply the filters to the datatree
     and_filters = []
@@ -37,7 +41,7 @@ def apply(
     # Temporal filters are ANDed. We update the datatree with each filter's mask
     # to save computation by applying each filter sequentially
     for filter in and_filters:
-        datatree = filter.apply(datatree) 
+        datatree = filter.apply(datatree)
 
     # Spatial filters are applied with an OR operation
     if or_filters:
