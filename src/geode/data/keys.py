@@ -1,3 +1,4 @@
+IsSortedFlag = "is_sorted"
 LocationKey = "Location"
 ChannelKey = "Channel"
 TimeKey = "MetaData/dateTime"

@@ -15,8 +15,8 @@ IndexCoord = "dateTime"
 
 
 class ObsBuilderIngestor(BaseIngestor):
-    def __init__(self, data_type: str, obs_builder: ObsBuilder):
-        super().__init__(data_type)
+    def __init__(self, data_type: str, obs_builder: ObsBuilder, is_sorted: bool = True):
+        super().__init__(data_type, is_sorted=is_sorted)
         self.obs_builder = obs_builder
 
     def _process(self, file_path: str) -> xr.DataTree | dict[str, xr.DataTree]:

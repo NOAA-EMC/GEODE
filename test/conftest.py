@@ -10,6 +10,7 @@ import pytest
 import requests
 import xarray as xr
 
+from geode.data.keys import IsSortedFlag
 from geode.configs.geode_config import geode_config
 
 REQUEST_TIMEOUT_SECONDS = 30
@@ -119,6 +120,7 @@ def use_data_lake(use_empty_data_lake):
     )
     stripe = xr.DataTree.from_dict(
         {
+            IsSortedFlag: True,
             "/": xr.Dataset(
                 coords={"Location": np.arange(times.size)},
                 attrs={
