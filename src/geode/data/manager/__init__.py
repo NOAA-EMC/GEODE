@@ -1,7 +1,7 @@
 from geode.configs.geode_config import geode_config
 from geode.data.manager.icechunk import IceChunkDataManager
-from geode.data.manager.zarr import ZarrDataManager
 from geode.data.manager.netcdf import NetCDFDataManager
+from geode.data.manager.zarr import ZarrDataManager
 
 
 manager_mapping = {

@@ -1,11 +1,11 @@
+from datetime import UTC, datetime
 from typing import Any
 
-import xarray as xr
 import numpy as np
-from datetime import datetime, timezone
+import xarray as xr
 
-from geode.data.filter.factory import register_filter
 from geode.data.filter.base import AndFilter
+from geode.data.filter.factory import register_filter
 from geode.data.keys import LocationKey, TimeKey, IsSortedFlag
 
 StartTimeKey = "start_time"
@@ -15,7 +15,7 @@ EndTimeKey = "end_time"
 def _to_utc_datetime64(value: datetime) -> np.datetime64:
     # Stored dateTime values are naive UTC; naive inputs are assumed to already be UTC.
     if value.tzinfo is not None:
-        value = value.astimezone(timezone.utc).replace(tzinfo=None)
+        value = value.astimezone(UTC).replace(tzinfo=None)
     return np.datetime64(value, "s")
 
 

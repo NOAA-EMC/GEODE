@@ -1,12 +1,13 @@
 import os
+import pytest
 import shutil
 import tarfile
 import tempfile
+
 from glob import glob
 from pathlib import Path
 
 import numpy as np
-import pytest
 import requests
 import xarray as xr
 

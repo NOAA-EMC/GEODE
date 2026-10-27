@@ -1,13 +1,15 @@
 import os
-import xarray as xr
-from typing import Any
 import json
+
+from typing import Any
+
 import shapely
 from shapely.geometry import shape
 from shapely.geometry.base import BaseGeometry
+import xarray as xr
 
-from geode.data.filter.factory import register_filter
 from geode.data.filter.base import OrFilter
+from geode.data.filter.factory import register_filter
 from geode.data.keys import LatitudeKey, LongitudeKey
 
 
@@ -44,7 +46,7 @@ class GeoJsonFilter(OrFilter):
             with open(path, "r") as f:
                 geojson_data = json.load(f)
             return shape(geojson_data)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             raise ValueError(f"Failed to load GeoJSON file at {path}: {e}")
 
         return shape(geojson_data)
@@ -52,7 +54,7 @@ class GeoJsonFilter(OrFilter):
     def _make_from_geojson_dict(self, geojson_dict: dict[str, Any]):
         try:
             return shape(geojson_dict)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             raise ValueError(f"Failed to load GeoJSON data from dictionary: {e}")
 
     @classmethod
@@ -69,8 +71,7 @@ class GeoJsonFilter(OrFilter):
             if not os.path.exists(path):
                 cls._validation_error(f"GeoJSON file at path {path} does not exist.")
 
-        if isinstance(arg, dict):
-            if "type" not in arg:
-                cls._validation_error(
-                    "Missing 'type' argument in GeoJSON dictionary. Must be a valid GeoJSON object."
-                )
+        if isinstance(arg, dict) and "type" not in arg:
+            cls._validation_error(
+                "Missing 'type' argument in GeoJSON dictionary. Must be a valid GeoJSON object."
+            )

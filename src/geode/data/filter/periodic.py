@@ -1,8 +1,7 @@
 from typing import Any
 
-import xarray as xr
 import numpy as np
-from datetime import datetime, timezone
+import xarray as xr
 
 from geode.data.filter.factory import register_filter
 from geode.data.filter.base import AndFilter

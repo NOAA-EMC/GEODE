@@ -1,10 +1,9 @@
 import bufr
-import xarray as xr
 from bufr.obs_builder import ObsBuilder
+import xarray as xr
 
 from geode.ingest.ingestors.base_ingestor import BaseIngestor
 from geode.ingest.ingestors.bufr_ingestor import container_to_xarray
-from geode.data.keys import LocationKey as LocationDim
 
 
 MetaDataGroup = "MetaData"

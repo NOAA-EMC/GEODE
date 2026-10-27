@@ -1,15 +1,15 @@
 import os
-from datetime import UTC, datetime
-from typing import Any
-import numpy as np
-import xarray as xr
-import icechunk as ic
 
-from geode.data.filter.apply import apply
-from geode.data.filter.time_window import TimeWindowFilter
+from datetime import datetime
+from typing import Any
+
+import icechunk as ic
+import xarray as xr
+
 from geode.configs.geode_config import geode_config
-from geode.data.manager.manager_base import DataManager
+from geode.data.filter.apply import apply
 from geode.data.keys import LocationKey
+from geode.data.manager.manager_base import DataManager
 
 
 class IceChunkDataManager(DataManager):

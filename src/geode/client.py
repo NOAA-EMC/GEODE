@@ -1,7 +1,7 @@
 from datetime import datetime
+from typing import Any
 
 import xarray as xr
-from typing import Any
 
 from geode.data.manager import data_manager
 

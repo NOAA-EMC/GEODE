@@ -1,10 +1,9 @@
 import json
+
 from importlib.resources import files
 from importlib.resources.abc import Traversable
 from typing import Any
 
-import shapely
-import xarray as xr
 from shapely.geometry import shape
 from shapely.geometry.base import BaseGeometry
 
@@ -71,7 +70,7 @@ class RegionFilter(GeoJsonFilter):
         if not isinstance(arg, str) and not isinstance(arg, dict):
             cls._validation_error(
                 f"Region must be a string naming one of {cls.catalog.names}, "
-                f"got {type(args).__name__}."
+                f"got {type(arg).__name__}."
             )
         if isinstance(arg, str):
             if arg not in cls.catalog:

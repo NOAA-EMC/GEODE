@@ -1,16 +1,11 @@
-from typing import Any
 from collections.abc import Sequence
 
-import xarray as xr
 import numpy as np
-from datetime import datetime, timezone
+import xarray as xr
 
-from geode.data.filter.factory import register_filter
 from geode.data.filter.base import AndFilter
+from geode.data.filter.factory import register_filter
 from geode.data.keys import ChannelKey
-
-PeriodKey = "period_h"
-WindowKey = "window_h"
 
 
 @register_filter("channels")

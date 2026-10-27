@@ -1,6 +1,7 @@
-from datetime import UTC, datetime
-import xarray as xr
+from datetime import datetime
 from typing import Any
+
+import xarray as xr
 
 from geode.configs.geode_config import geode_config
 

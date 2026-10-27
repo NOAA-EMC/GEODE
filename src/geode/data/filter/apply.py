@@ -1,7 +1,8 @@
-from typing import Any
-import xarray as xr
 from datetime import datetime
+from typing import Any
+
 import numpy as np
+import xarray as xr
 
 from geode.data.filter.base import OrFilter, AndFilter
 from geode.data.filter.factory import make_filter
@@ -12,7 +13,7 @@ def apply(
     datatree: xr.DataTree,
     start_time: datetime,
     end_time: datetime,
-    filters: list[dict[str, Any]] = None,
+    filters: list[dict[str, Any]] | None = None,
 ):
     filters = filters or []
 

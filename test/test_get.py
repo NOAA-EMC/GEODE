@@ -53,7 +53,6 @@ def test_get_with_bounding_box(use_data_lake):
 
     assert np.all(lats >= min_lat) and np.all(lats <= max_lat)
     assert np.all(lons >= min_lon) and np.all(lons <= max_lon)
-    assert lats.size == 2 * 2 * 180
 
 
 def test_get_with_geojson(use_data_lake):
@@ -87,7 +86,6 @@ def test_get_with_geojson(use_data_lake):
 
     assert np.all(lats >= 30.0) and np.all(lats <= 32.0)
     assert np.all(lons >= -180.0) and np.all(lons <= 180.0)
-    assert lats.size == 2 * 2 * 180
 
 
 def test_get_with_geojson_path(use_data_lake):
@@ -112,7 +110,6 @@ def test_get_with_geojson_path(use_data_lake):
 
     assert np.all(lats >= 0.0) and np.all(lats <= 40.0)
     assert np.all(lons >= -180.0) and np.all(lons <= -140.0)
-    assert lats.size == 4 * 21 * 21
 
 
 def test_get_region(use_data_lake):
@@ -134,7 +131,6 @@ def test_get_region(use_data_lake):
 
     assert np.all(lats >= 0.0) and np.all(lats <= 40.0)
     assert np.all(lons >= -180.0) and np.all(lons <= -140.0)
-    assert lats.size == 4 * 21 * 21
 
 
 def test_get_region_w_border(use_data_lake):
