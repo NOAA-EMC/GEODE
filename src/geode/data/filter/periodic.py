@@ -70,7 +70,7 @@ class PeriodicFilter(AndFilter):
 
         if PeriodKey not in arg:
             cls._validation_error(f"Missing '{PeriodKey}' argument.")
-        
+
         if WindowKey not in arg:
             cls._validation_error(f"Missing '{WindowKey}' argument.")
 

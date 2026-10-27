@@ -6,6 +6,7 @@ import pytest
 import geode
 import geode.data.filter
 
+
 def test_get(use_data_lake):
     result = geode.get("globe", "2021-07-31T22:44:00", "2021-07-31T22:44:42")
 
@@ -218,7 +219,9 @@ def test_get_w_vars(use_data_lake):
 
     assert result is not None
     assert set(result["ObsValue"].data_vars) == {"brightnessTemperature"}
-    assert set(result["MetaData"].coords) == {"longitude", "latitude", "dateTime"}
+    assert set(result["MetaData"].coords) == {
+        "Location", "dateTime", "latitude", "longitude"
+    }
 
 
 def test_get_periodic(use_data_lake):

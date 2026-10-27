@@ -8,6 +8,7 @@ def register_filter(name: str):
     def decorator(cls):
         _filter_types[name] = cls
         return cls
+
     return decorator
 
 

@@ -28,7 +28,7 @@ class TimeWindowFilter(AndFilter):
         return self._apply_to_sorted_data(dt)
 
     def _apply_to_sorted_data(self, dt: xr.DataTree) -> xr.DataTree:
-        
+
         def _find_bound(
             times: xr.DataArray,
             target: np.datetime64,
@@ -57,7 +57,7 @@ class TimeWindowFilter(AndFilter):
         return dt.map_over_datasets(
             lambda ds: ds.isel({LocationKey: slice(start, end)})
         )
-    
+
     def _apply_to_unsorted_data(self, dt: xr.DataTree) -> xr.DataTree:
         t0 = _to_utc_datetime64(self.arg[StartTimeKey])
         t1 = _to_utc_datetime64(self.arg[EndTimeKey])

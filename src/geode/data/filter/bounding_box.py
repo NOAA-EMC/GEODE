@@ -20,7 +20,7 @@ class BoundingBoxFilter(OrFilter):
         max_lon = self.arg["max_lon"]
         lat = ds[LatitudeKey].variable
         lon = ds[LongitudeKey].variable
-        
+
         return (
             (lat >= min_lat) & (lat <= max_lat) & (lon >= min_lon) & (lon <= max_lon)
         ).values
