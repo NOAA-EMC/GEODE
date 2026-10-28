@@ -33,7 +33,7 @@ class TimeWindowFilter(AndFilter):
         border = np.timedelta64(0, "s")
         if not is_sorted:
             # look 30 minutes beyond the time window for unsorted data
-            border = np.timedelta64(30, "m") 
+            border = np.timedelta64(30, "m")
 
         # Decimate the the data tree based on the time window first. This
         # eliminates the vast majority of irrelevant data points without
@@ -48,11 +48,7 @@ class TimeWindowFilter(AndFilter):
 
     def _slice_window(self, dt: xr.DataTree, border: np.timedelta64) -> xr.DataTree:
 
-        def _find_bound(
-            times: xr.DataArray,
-            target: np.datetime64
-        ) -> int:
-
+        def _find_bound(times: xr.DataArray, target: np.datetime64) -> int:
             start = 0
             end = times.sizes[LocationKey]
 
