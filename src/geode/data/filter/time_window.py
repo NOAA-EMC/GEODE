@@ -50,35 +50,36 @@ class TimeWindowFilter(AndFilter):
 
         def _find_bound(
             times: xr.DataArray,
-            target: np.datetime64,
-            from_right: bool,
+            target: np.datetime64
         ) -> int:
 
             start = 0
             end = times.sizes[LocationKey]
 
             while start < end:
-                current_pos = (end + start) // 2
+                current_pos = (start + end) // 2
                 timestamp = times.isel({LocationKey: current_pos}).values[()]
 
-                if timestamp < target or (from_right and timestamp == target):
+                if timestamp < target:
                     start = current_pos + 1
                 else:
                     end = current_pos
 
+            # start = current_pos - 1 if from_right else current_pos
+
             return start
 
-        start = _find_bound(dt[TimeKey], self.t0 - border, from_right=False)
-        end = _find_bound(dt[TimeKey], self.t1 + border, from_right=True)
+        start = _find_bound(dt[TimeKey], self.t0 - border)
+        end = _find_bound(dt[TimeKey], self.t1 + border)
         return dt.map_over_datasets(
             lambda ds: ds.isel({LocationKey: slice(start, end)})
         )
 
     def _apply_mask(self, dt: xr.DataTree) -> xr.DataTree:
-        mask = ((dt[TimeKey] >= self.t0) & (dt[TimeKey] <= self.t1)).values
+        mask = ((dt[TimeKey] >= self.t0) & (dt[TimeKey] < self.t1)).values
 
         if not np.all(mask):
-            return dt.map_over_datasets(lambda ds: ds.isel({LocationKey: slice(0, 0)}))
+            return dt.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))
 
         return dt
 
