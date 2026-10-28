@@ -33,7 +33,7 @@ class TimeWindowFilter(AndFilter):
         border = np.timedelta64(0, "s")
         if not is_sorted:
              # look 30 minutes beyond the time window for unsorted data
-            border = np.timedelta64(30, "m") 
+            border = np.timedelta64(1, "h") 
 
         # Decimate the the data tree based on the time window first. This
         # eliminates the vast majority of irrelevant data points without
@@ -41,7 +41,7 @@ class TimeWindowFilter(AndFilter):
         dt = self._slice_window(dt, border)
 
         if not is_sorted:
-            # Guard against unsorted data in the remaining subset.
+            # Filter out any remaining data points outside the time window.
             dt = self._apply_mask(dt)
 
         return dt
