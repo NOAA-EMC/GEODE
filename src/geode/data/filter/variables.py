@@ -6,11 +6,11 @@ import xarray as xr
 from geode.data.filter.base import AndFilter
 from geode.data.filter.factory import register_filter
 from geode.data.keys import (
+    ChannelKey,
     LatitudeKey,
     LocationKey,
     LongitudeKey,
     TimeKey,
-    ChannelKey,
 )
 
 
