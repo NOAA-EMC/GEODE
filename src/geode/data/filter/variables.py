@@ -5,7 +5,13 @@ import xarray as xr
 
 from geode.data.filter.base import AndFilter
 from geode.data.filter.factory import register_filter
-from geode.data.keys import LatitudeKey, LocationKey, LongitudeKey, TimeKey
+from geode.data.keys import (
+    LatitudeKey,
+    LocationKey,
+    LongitudeKey,
+    TimeKey,
+    ChannelKey,
+)
 
 
 @register_filter("variables")
@@ -18,6 +24,7 @@ class VariableFilter(AndFilter):
         arg.add(LocationKey)
         arg.add(LatitudeKey)
         arg.add(LongitudeKey)
+        arg.add(ChannelKey)
         arg = list(arg)
 
         super().__init__(arg)

@@ -28,18 +28,25 @@ class TimeWindowFilter(AndFilter):
         self.t1 = _to_utc_datetime64(arg[EndTimeKey])
 
     def apply(self, dt: xr.DataTree) -> xr.DataTree:
+        is_sorted = dt.attrs.get(IsSortedFlag, False)
+
+        border = np.timedelta64(0, "s")
+        if not is_sorted:
+             # look 30 minutes beyond the time window for unsorted data
+            border = np.timedelta64(30, "m") 
+
         # Decimate the the data tree based on the time window first. This
         # eliminates the vast majority of irrelevant data points without
         # loading all the datetime values into memory.
-        dt = self._apply_to_sorted_data(dt)
+        dt = self._slice_window(dt, border)
 
-        if not dt.attrs.get(IsSortedFlag, False):
+        if not is_sorted:
             # Guard against unsorted data in the remaining subset.
-            dt = self._apply_to_unsorted_data(dt)
+            dt = self._apply_mask(dt)
 
         return dt
 
-    def _apply_to_sorted_data(self, dt: xr.DataTree) -> xr.DataTree:
+    def _slice_window(self, dt: xr.DataTree, border: np.timedelta64) -> xr.DataTree:
 
         def _find_bound(
             times: xr.DataArray,
@@ -61,13 +68,13 @@ class TimeWindowFilter(AndFilter):
 
             return start
 
-        start = _find_bound(dt[TimeKey], self.t0, from_right=False)
-        end = _find_bound(dt[TimeKey], self.t1, from_right=True)
+        start = _find_bound(dt[TimeKey], self.t0 - border, from_right=False)
+        end = _find_bound(dt[TimeKey], self.t1 + border, from_right=True)
         return dt.map_over_datasets(
             lambda ds: ds.isel({LocationKey: slice(start, end)})
         )
 
-    def _apply_to_unsorted_data(self, dt: xr.DataTree) -> xr.DataTree:
+    def _apply_mask(self, dt: xr.DataTree) -> xr.DataTree:
         mask = ((dt[TimeKey] >= self.t0) & (dt[TimeKey] <= self.t1)).values
 
         if not np.all(mask):
