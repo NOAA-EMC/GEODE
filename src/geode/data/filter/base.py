@@ -22,6 +22,11 @@ class FilterBase:
     def _validation_error(cls, msg: str) -> None:
         raise ValidationError(filter_type=cls.__name__, msg=msg)
 
+    @classmethod
+    def _warning(cls, msg: str) -> None:
+        import warnings
+        warnings.warn(f"{cls.__name__}: {msg}")
+
 
 class AndFilter(FilterBase):
     def apply(self, ds: xr.DataTree) -> xr.DataTree:

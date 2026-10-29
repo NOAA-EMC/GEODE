@@ -14,6 +14,12 @@ class ChannelFilter(AndFilter):
         super().__init__(arg)
 
     def apply(self, dt: xr.DataTree) -> xr.DataTree:
+        if ChannelKey not in dt:
+            self._warning(
+                f"\"{ChannelKey}\" coordinate not found. \"channels\" filter is ignored."
+            )
+            return dt
+
         channels = dt[ChannelKey].values[:]
         mask = np.zeros_like(dt[ChannelKey].values, dtype=bool)
         for i in self.arg:
