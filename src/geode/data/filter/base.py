@@ -25,7 +25,7 @@ class FilterBase:
     @classmethod
     def _warning(cls, msg: str) -> None:
         import warnings
-        
+
         warnings.warn(f"{cls.__name__}: {msg}")
 
 

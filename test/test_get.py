@@ -26,8 +26,9 @@ def test_get_time_bounds(use_data_lake):
 
     times = result["MetaData/dateTime"].values[:]
 
-    assert np.min(times) == np.datetime64("2021-07-31T22:44:00") and np.max(
-        times) == np.datetime64("2021-07-31T22:44:00")
+    assert (np.min(times) == np.datetime64("2021-07-31T22:44:00")) and (
+        np.max(times) == np.datetime64("2021-07-31T22:44:00")
+    )
 
     result = geode.get("stripe", "2021-07-31T22:44:00", "2021-07-31T22:45:01")
 
@@ -219,7 +220,7 @@ def test_get_w_channels(use_data_lake):
     channels = result["Channel"].values[:]
     np.testing.assert_array_equal(channels, [1, 2])
     assert result["ObsValue/brightnessTemperature"].sizes["Channel"] == 2
-    
+
     # Test when no Channels coordinate in data
     result = geode.get(
         "stripe",
