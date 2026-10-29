@@ -15,8 +15,21 @@ def test_get(use_data_lake):
     assert len(times) > 0
 
     assert np.all(times >= np.datetime64("2021-07-31T22:44:00")) and np.all(
-        times <= np.datetime64("2021-07-31T22:44:42")
+        times < np.datetime64("2021-07-31T22:44:42")
     )
+
+    assert result is not None
+
+
+def test_get_time_bounds(use_data_lake):
+    result = geode.get("stripe", "2021-07-31T22:44:00", "2021-07-31T22:45:00")
+
+    times = result["MetaData/dateTime"].values[:]
+
+    assert len(times) > 0
+
+    assert np.min(times) == np.datetime64("2021-07-31T22:44:00") and np.max(
+        times) == np.datetime64("2021-07-31T22:44:00")
 
     assert result is not None
 
