@@ -132,7 +132,7 @@ def use_data_lake(use_empty_data_lake):
                 },
             ),
             "/MetaData": xr.Dataset(
-                coords={
+                {
                     "dateTime": ("Location", times.ravel().astype("datetime64[s]")),
                     "latitude": (
                         "Location",
@@ -188,12 +188,6 @@ def use_data_lake(use_empty_data_lake):
             ),
             "/MetaData": xr.Dataset(
                 {
-                    "sensorChannelNumber": (
-                        ("Location", "Channel"),
-                        np.broadcast_to(channels, (times.size, channels.size)),
-                    )
-                },
-                coords={
                     "dateTime": ("Location", times.ravel()),
                     "latitude": (
                         "Location",

@@ -10,6 +10,8 @@ import geode.data.filter
 def test_get(use_data_lake):
     result = geode.get("globe", "2021-07-31T22:44:00", "2021-07-31T22:44:42")
 
+    assert result is not None
+
     times = result["MetaData/dateTime"].values[:]
 
     assert len(times) > 0
@@ -18,20 +20,21 @@ def test_get(use_data_lake):
         times < np.datetime64("2021-07-31T22:44:42")
     )
 
-    assert result is not None
-
 
 def test_get_time_bounds(use_data_lake):
     result = geode.get("stripe", "2021-07-31T22:44:00", "2021-07-31T22:45:00")
 
     times = result["MetaData/dateTime"].values[:]
 
-    assert len(times) > 0
-
     assert np.min(times) == np.datetime64("2021-07-31T22:44:00") and np.max(
         times) == np.datetime64("2021-07-31T22:44:00")
 
-    assert result is not None
+    result = geode.get("stripe", "2021-07-31T22:44:00", "2021-07-31T22:45:01")
+
+    times = result["MetaData/dateTime"].values[:]
+
+    assert np.min(times) == np.datetime64("2021-07-31T22:44:00") and np.max(
+        times) == np.datetime64("2021-07-31T22:45:00")
 
 
 def test_get_with_bounding_box(use_data_lake):
@@ -227,9 +230,10 @@ def test_get_w_vars(use_data_lake):
     )
 
     assert result is not None
+
+    assert set(result["/"].coords) == {"Location", "Channel"}
     assert set(result["ObsValue"].data_vars) == {"brightnessTemperature"}
-    assert set(result["MetaData"].coords) == {
-        "Location",
+    assert set(result["MetaData"].data_vars) == {
         "dateTime",
         "latitude",
         "longitude",

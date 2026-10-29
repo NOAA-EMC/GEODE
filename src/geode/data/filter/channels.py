@@ -19,7 +19,9 @@ class ChannelFilter(AndFilter):
         for i in self.arg:
             mask[np.where(channels == i)] = True
 
-        return dt.map_over_datasets(lambda ds: ds.isel({ChannelKey: mask}))
+        return dt.map_over_datasets(
+            lambda ds: ds.isel({ChannelKey: mask}, missing_dims="ignore")
+        )
 
     @classmethod
     def _validate(cls, arg: Sequence[int]) -> None:
