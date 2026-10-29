@@ -36,7 +36,8 @@ where = ["src"]
 "share/geode/configs/bufr" = [
 	"configs/bufr/table_a_types.yaml",
 	"configs/bufr/table_a_subtypes.yaml",
-	"configs/bufr/table_a_filenames.yaml",
+	"configs/bufr/table_a_standard_filenames.yaml",
+	"configs/bufr/table_a_local_filenames.yaml",
 ]
 
 [tool.coverage.run]
