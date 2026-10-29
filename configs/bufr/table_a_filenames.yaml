@@ -1,9 +1,9 @@
 0-standard-0: hourly_synoptic_observations_from_fixed_land_stations_synop
 0-standard-1: intermediate_synoptic_observations_from_fixed_land_stations_synop
 0-standard-2: main_synoptic_observations_from_fixed_land_stations_synop
-0-standard-3: hourly_synoptic_observations_from_mobile_land_stations_synop_mobil
-0-standard-4: intermediate_synoptic_observations_from_mobile_land_stations_synop_mobil
-0-standard-5: main_synoptic_observations_from_mobile_land_stations_synop_mobil
+0-standard-3: hourly_synoptic_observations_from_mobile_land_stations_synop_mobile
+0-standard-4: intermediate_synoptic_observations_from_mobile_land_stations_synop_mobile
+0-standard-5: main_synoptic_observations_from_mobile_land_stations_synop_mobile
 0-standard-6: one_hour_observations_from_automated_stations
 0-standard-7: n_minute_observations_from_aws_stations
 0-standard-8: radiation_observations_from_one_hour_period
@@ -20,7 +20,7 @@
 0-standard-52: main_synoptic_observations_with_supplementary_one_hour_data
 0-local-0: synoptic_land_restricted
 0-local-1: synoptic_land_fixed
-0-local-2: synoptic_land_mobil
+0-local-2: synoptic_land_mobile
 0-local-7: aviation_metar_speci
 0-local-8: noaa_profiler_network_npn_and_multi_agency_profiler_map_surface_data
 0-local-10: shef_products_not_included_within_any_other_subtype
@@ -30,7 +30,7 @@
 0-local-20: wind_energy_nacelle_restricted
 0-local-100: synoptic_land_restricted_bufr
 0-local-101: synoptic_land_fixed_bufr
-0-local-102: synoptic_land_mobil_bufr
+0-local-102: synoptic_land_mobile_bufr
 1-standard-0: synoptic_observations_ship
 1-standard-6: one_hour_observations_from_automated_stations
 1-standard-7: n_minute_observations_from_aws_stations
@@ -64,10 +64,10 @@
 1-local-121: surface_marine_sofar_bufr
 2-standard-1: upper_wind_reports_from_fixed_land_stations_pilot
 2-standard-2: upper_wind_reports_from_ships_pilot_ship
-2-standard-3: upper_wind_reports_from_mobile_land_stations_pilot_mobil
+2-standard-3: upper_wind_reports_from_mobile_land_stations_pilot_mobile
 2-standard-4: upper_level_temperature_humidity_wind_reports_from_fixed_land_stations_temp
 2-standard-5: upper_level_temperature_humidity_wind_reports_from_ships_temp_ship
-2-standard-6: upper_level_temperature_humidity_wind_report_from_mobile_land_stations_temp_mobil
+2-standard-6: upper_level_temperature_humidity_wind_report_from_mobile_land_stations_temp_mobile
 2-standard-7: upper_level_temperature_humidity_wind_reports_from_dropwinsondes_temp_drop
 2-standard-10: wind_profiler_reports
 2-standard-11: rass_temperature_profiles
@@ -82,12 +82,12 @@
 2-standard-50: radio_occultation_sounding
 2-standard-104: upper_level_temperature_humidity_wind_reports_from_fixed_land_stations_temp_with_re_used_radiosondes
 2-standard-105: upper_level_temperature_humidity_wind_reports_from_ships_temp_ship_with_re_used_radiosondes
-2-standard-106: upper_level_temperature_humidity_wind_reports_from_mobile_land_stations_temp_mobil_with_re_used_radiosondes
+2-standard-106: upper_level_temperature_humidity_wind_reports_from_mobile_land_stations_temp_mobile_with_re_used_radiosondes
 2-standard-114: upper_level_temperature_humidity_wind_reports_from_descent_radiosondes_originally_launched_from_fixed_land_stations_with_re_used_radiosondes
 2-standard-115: upper_level_temperature_humidity_wind_reports_from_descent_radiosondes_originally_launched_from_ships_with_re_used_radiosondes
 2-standard-116: upper_level_temperature_humidity_wind_reports_from_descent_radiosondes_originally_launched_from_mobile_land_stations_with_re_used_radiosondes
 2-local-1: rawinsonde_fixed_land
-2-local-2: rawinsonde_mobil_land
+2-local-2: rawinsonde_mobile_land
 2-local-3: rawinsonde_ship
 2-local-4: dropwinsonde
 2-local-5: pibal
@@ -105,7 +105,7 @@
 2-local-20: wind_energy_tower_restricted
 2-local-21: wind_energy_tower
 2-local-101: radiosonde_fixed_land_bufr
-2-local-102: rawinsonde_mobil_land_bufr
+2-local-102: rawinsonde_mobile_land_bufr
 2-local-103: rawinsonde_ship_bufr
 2-local-104: dropwinsonde_bufr
 2-local-105: pibal_bufr
