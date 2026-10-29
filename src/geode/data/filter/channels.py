@@ -16,7 +16,7 @@ class ChannelFilter(AndFilter):
     def apply(self, dt: xr.DataTree) -> xr.DataTree:
         if ChannelKey not in dt:
             self._warning(
-                f"\"{ChannelKey}\" coordinate not found. \"channels\" filter is ignored."
+                f'"{ChannelKey}" coordinate not found. "channels" filter is ignored.'
             )
             return dt
 
