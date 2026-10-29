@@ -1,0 +1,1341 @@
+0-local-0:
+  filename: synoptic_land_restricted
+  restricted: true
+0-local-1:
+  filename: synoptic_land_fixed
+  restricted: false
+0-local-2:
+  filename: synoptic_land_mobile
+  restricted: false
+0-local-7:
+  filename: aviation_metar_speci
+  restricted: false
+0-local-8:
+  filename: noaa_profiler_network_npn_and_multi_agency_profiler_map_surface_data
+  restricted: false
+0-local-10:
+  filename: shef_products_not_included_within_any_other_subtype
+  restricted: false
+0-local-11:
+  filename: shef_products_afos_precipitation
+  restricted: false
+0-local-12:
+  filename: supplementary_climatological_data
+  restricted: false
+0-local-15:
+  filename: snow_cover_depth_density_and_water_equivalent
+  restricted: false
+0-local-20:
+  filename: wind_energy_nacelle_restricted
+  restricted: true
+0-local-100:
+  filename: synoptic_land_restricted_bufr
+  restricted: true
+0-local-101:
+  filename: synoptic_land_fixed_bufr
+  restricted: false
+0-local-102:
+  filename: synoptic_land_mobile_bufr
+  restricted: false
+1-local-1:
+  filename: surface_marine_ship_restricted
+  restricted: true
+1-local-2:
+  filename: surface_marine_buoy_fm_18
+  restricted: false
+1-local-3:
+  filename: surface_marine_buoy_fm_13
+  restricted: false
+1-local-4:
+  filename: surface_marine_cman
+  restricted: false
+1-local-5:
+  filename: surface_tide_gauge_crex
+  restricted: false
+1-local-6:
+  filename: mean_sea_level_pressure_bogus
+  restricted: false
+1-local-7:
+  filename: surface_marine_coast_guard
+  restricted: false
+1-local-8:
+  filename: surface_tide_gauge_cman
+  restricted: false
+1-local-9:
+  filename: usgs_river_stream
+  restricted: false
+1-local-10:
+  filename: surface_marine_cman_shef
+  restricted: false
+1-local-11:
+  filename: surface_marine_buoy_shef
+  restricted: false
+1-local-12:
+  filename: surface_tide_gauge_shef
+  restricted: false
+1-local-13:
+  filename: surface_marine_ship
+  restricted: false
+1-local-14:
+  filename: rvf_river_forecast
+  restricted: false
+1-local-21:
+  filename: canadian_water_level
+  restricted: false
+1-local-22:
+  filename: canadian_river_gauge
+  restricted: false
+1-local-101:
+  filename: surface_marine_ship_restricted_bufr
+  restricted: true
+1-local-102:
+  filename: surface_marine_drifting_buoy_bufr
+  restricted: false
+1-local-103:
+  filename: surface_marine_moored_buoy_bufr
+  restricted: false
+1-local-104:
+  filename: surface_marine_cman_bufr
+  restricted: false
+1-local-113:
+  filename: surface_marine_ship_bufr
+  restricted: false
+1-local-120:
+  filename: surface_marine_autonomous_usv_bufr
+  restricted: false
+1-local-121:
+  filename: surface_marine_sofar_bufr
+  restricted: true
+2-local-1:
+  filename: rawinsonde_fixed_land
+  restricted: false
+2-local-2:
+  filename: rawinsonde_mobile_land
+  restricted: false
+2-local-3:
+  filename: rawinsonde_ship
+  restricted: false
+2-local-4:
+  filename: dropwinsonde
+  restricted: false
+2-local-5:
+  filename: pibal
+  restricted: false
+2-local-7:
+  filename: noaa_profiler_network_npn_winds
+  restricted: false
+2-local-8:
+  filename: nexrad_velocity_azimuth_display_vad_winds_radar_coded_message
+  restricted: false
+2-local-9:
+  filename: profiler_winds_pibal
+  restricted: false
+2-local-10:
+  filename: noaa_profiler_network_npn_and_multi_agency_profiler_map_spectral_moments
+  restricted: false
+2-local-11:
+  filename: multi_agency_profiler_map_winds
+  restricted: false
+2-local-12:
+  filename: noaa_profiler_network_npn_and_multi_agency_profiler_map_rass_temperatures
+  restricted: false
+2-local-13:
+  filename: japan_profiler_winds
+  restricted: false
+2-local-14:
+  filename: other_profiler_winds
+  restricted: false
+2-local-16:
+  filename: europe_profiler_winds
+  restricted: false
+2-local-17:
+  filename: nexrad_velocity_azimuth_display_vad_winds_level_2
+  restricted: false
+2-local-18:
+  filename: other_velocity_azimuth_display_vad_winds_bufr
+  restricted: false
+2-local-20:
+  filename: wind_energy_tower_restricted
+  restricted: true
+2-local-21:
+  filename: wind_energy_tower
+  restricted: false
+2-local-101:
+  filename: radiosonde_fixed_land_bufr
+  restricted: false
+2-local-102:
+  filename: rawinsonde_mobile_land_bufr
+  restricted: false
+2-local-103:
+  filename: rawinsonde_ship_bufr
+  restricted: false
+2-local-104:
+  filename: dropwinsonde_bufr
+  restricted: false
+2-local-105:
+  filename: pibal_bufr
+  restricted: false
+3-local-1:
+  filename: goes_5x5_fov_cloud_and_sounder_radiances
+  restricted: false
+3-local-2:
+  filename: goes_1x1_fov_cloud
+  restricted: false
+3-local-3:
+  filename: goes_1x1_fov_sounder_radiances
+  restricted: false
+3-local-10:
+  filename: radio_occultation
+  restricted: true
+3-local-101:
+  filename: polar_orbiting_tovs
+  restricted: false
+3-local-102:
+  filename: polar_orbiting_rtovs
+  restricted: false
+3-local-104:
+  filename: polar_orbiting_atovs
+  restricted: false
+4-local-1:
+  filename: airep
+  restricted: false
+4-local-2:
+  filename: pirep
+  restricted: false
+4-local-3:
+  filename: asdar_acars_amdar
+  restricted: true
+4-local-4:
+  filename: u_s_asdar_acars_arinc_to_ncep
+  restricted: true
+4-local-5:
+  filename: flight_level_reconnaisance_recco
+  restricted: false
+4-local-6:
+  filename: europe_asdar_acars
+  restricted: true
+4-local-7:
+  filename: u_s_asdar_acars_arinc_to_afwa_to_ncep
+  restricted: true
+4-local-8:
+  filename: tamdar_madis_mesaba
+  restricted: true
+4-local-9:
+  filename: canada_asdar_acars
+  restricted: true
+4-local-10:
+  filename: tamdar_bufr
+  restricted: true
+4-local-11:
+  filename: korea_asdar_acars
+  restricted: true
+4-local-12:
+  filename: tamdar_madis_penair
+  restricted: true
+4-local-13:
+  filename: tamdar_madis_chautauqua
+  restricted: true
+4-local-14:
+  filename: france_asdar_acars
+  restricted: false
+4-local-15:
+  filename: flight_level_reconnaisance_high_density_observations
+  restricted: false
+4-local-16:
+  filename: mode_s_asdar_acars
+  restricted: false
+4-local-17:
+  filename: amdar_over_afirs
+  restricted: false
+4-local-30:
+  filename: long_duration_balloon
+  restricted: false
+4-local-103:
+  filename: asdar_acars_bufr
+  restricted: true
+5-local-1:
+  filename: goes_low_density_winds_infrared_long_wave_nesdis_binary_format
+  restricted: false
+5-local-2:
+  filename: goes_low_density_winds_visible_nesdis_binary_format
+  restricted: false
+5-local-3:
+  filename: goes_low_density_winds_water_vapor_imager_nesdis_binary_format
+  restricted: false
+5-local-4:
+  filename: goes_low_density_winds_picture_triplet_nesdis_binary_format
+  restricted: false
+5-local-5:
+  filename: goes_high_density_winds_infrared_long_wave_nesdis_binary_format
+  restricted: false
+5-local-6:
+  filename: goes_high_density_winds_water_vapor_imager_nesdis_binary_format
+  restricted: false
+5-local-8:
+  filename: goes_high_density_winds_visible_nesdis_binary_format
+  restricted: false
+5-local-9:
+  filename: goes_high_density_winds_picture_triplet_nesdis_binary_format
+  restricted: false
+5-local-10:
+  filename: goes_high_density_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-11:
+  filename: goes_high_density_winds_water_vapor_imager_bufr
+  restricted: false
+5-local-12:
+  filename: goes_high_density_winds_visible_bufr
+  restricted: false
+5-local-13:
+  filename: goes_high_density_winds_picture_triplet_bufr
+  restricted: false
+5-local-14:
+  filename: goes_high_density_winds_water_vapor_sounder_bufr
+  restricted: false
+5-local-15:
+  filename: goes_high_density_winds_infrared_long_wave_bufr_via_gts
+  restricted: false
+5-local-16:
+  filename: goes_high_density_winds_water_vapor_imager_bufr_via_gts
+  restricted: false
+5-local-17:
+  filename: goes_high_density_winds_visible_bufr_via_gts
+  restricted: false
+5-local-18:
+  filename: goes_high_density_winds_water_vapor_sounder_bufr_via_gts
+  restricted: false
+5-local-19:
+  filename: goes_high_density_winds_infrared_short_wave_bufr
+  restricted: false
+5-local-20:
+  filename: nesdis_goes_satellite_cloud_product_scp
+  restricted: false
+5-local-21:
+  filename: india_low_density_winds_infrared_long_wave_satob
+  restricted: false
+5-local-22:
+  filename: india_low_density_winds_visible_satob
+  restricted: false
+5-local-23:
+  filename: india_low_density_winds_water_vapor_imager_satob
+  restricted: false
+5-local-24:
+  filename: india_high_density_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-25:
+  filename: india_high_density_winds_visible_bufr
+  restricted: false
+5-local-26:
+  filename: india_high_density_winds_water_vapor_imager_bufr
+  restricted: false
+5-local-30:
+  filename: goes_high_density_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-31:
+  filename: goes_high_density_winds_water_vapor_imager_deep_layer_bufr
+  restricted: false
+5-local-32:
+  filename: goes_high_density_winds_visible_bufr
+  restricted: false
+5-local-34:
+  filename: goes_high_density_winds_water_vapor_imager_cloud_top_bufr
+  restricted: false
+5-local-39:
+  filename: goes_high_density_winds_infrared_short_wave_bufr
+  restricted: false
+5-local-41:
+  filename: japan_low_density_winds_infrared_long_wave_satob
+  restricted: false
+5-local-42:
+  filename: japan_low_density_winds_visible_satob
+  restricted: false
+5-local-43:
+  filename: japan_low_density_winds_water_vapor_imager_satob
+  restricted: false
+5-local-44:
+  filename: japan_high_density_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-45:
+  filename: japan_high_density_winds_visible_bufr
+  restricted: false
+5-local-46:
+  filename: japan_high_density_winds_water_vapor_imager_bufr
+  restricted: false
+5-local-47:
+  filename: japan_high_density_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-48:
+  filename: japan_high_density_winds_visible_bufr
+  restricted: false
+5-local-49:
+  filename: japan_high_density_winds_water_vapor_imager_bufr
+  restricted: false
+5-local-50:
+  filename: gms_high_density_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-51:
+  filename: gms_high_density_winds_water_vapor_imager_bufr
+  restricted: false
+5-local-52:
+  filename: goes_high_density_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-53:
+  filename: goes_high_density_winds_water_vapor_imager_deep_layer_bufr
+  restricted: false
+5-local-54:
+  filename: goes_high_density_winds_visible_bufr
+  restricted: false
+5-local-55:
+  filename: goes_high_density_winds_water_vapor_imager_cloud_top_bufr
+  restricted: false
+5-local-56:
+  filename: goes_high_density_winds_infrared_short_wave_bufr
+  restricted: false
+5-local-61:
+  filename: europe_low_density_winds_infrared_long_wave_satob
+  restricted: false
+5-local-62:
+  filename: europe_low_density_winds_visible_satob
+  restricted: false
+5-local-63:
+  filename: europe_low_density_winds_water_vapor_imager_satob
+  restricted: false
+5-local-64:
+  filename: europe_high_density_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-65:
+  filename: europe_high_density_winds_visible_bufr
+  restricted: false
+5-local-66:
+  filename: europe_high_density_winds_water_vapor_imager_bufr
+  restricted: false
+5-local-67:
+  filename: europe_high_density_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-68:
+  filename: europe_high_density_winds_visible_bufr
+  restricted: false
+5-local-69:
+  filename: europe_high_density_winds_water_vapor_imager_bufr
+  restricted: false
+5-local-70:
+  filename: modis_aqua_terra_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-71:
+  filename: modis_aqua_terra_winds_water_vapor_imager_bufr
+  restricted: false
+5-local-72:
+  filename: ssec_wisc_leo_geo_winds
+  restricted: false
+5-local-80:
+  filename: metop_avhrr_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-81:
+  filename: metop_avhrr_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-90:
+  filename: npp_viirs_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-91:
+  filename: npp_viirs_winds_infrared_long_wave_bufr
+  restricted: false
+5-local-99:
+  filename: cimss_tropical_cyclone_winds
+  restricted: false
+6-local-1:
+  filename: nexrad_level_3_radial_wind_superob
+  restricted: false
+6-local-2:
+  filename: nexrad_level_2_5_radial_wind_superob
+  restricted: false
+6-local-10:
+  filename: nexrad_level_2_radial_wind_00z
+  restricted: false
+6-local-11:
+  filename: nexrad_level_2_radial_wind_01z
+  restricted: false
+6-local-12:
+  filename: nexrad_level_2_radial_wind_02z
+  restricted: false
+6-local-13:
+  filename: nexrad_level_2_radial_wind_03z
+  restricted: false
+6-local-14:
+  filename: nexrad_level_2_radial_wind_04z
+  restricted: false
+6-local-15:
+  filename: nexrad_level_2_radial_wind_05z
+  restricted: false
+6-local-16:
+  filename: nexrad_level_2_radial_wind_06z
+  restricted: false
+6-local-17:
+  filename: nexrad_level_2_radial_wind_07z
+  restricted: false
+6-local-18:
+  filename: nexrad_level_2_radial_wind_08z
+  restricted: false
+6-local-19:
+  filename: nexrad_level_2_radial_wind_09z
+  restricted: false
+6-local-20:
+  filename: nexrad_level_2_radial_wind_10z
+  restricted: false
+6-local-21:
+  filename: nexrad_level_2_radial_wind_11z
+  restricted: false
+6-local-22:
+  filename: nexrad_level_2_radial_wind_12z
+  restricted: false
+6-local-23:
+  filename: nexrad_level_2_radial_wind_13z
+  restricted: false
+6-local-24:
+  filename: nexrad_level_2_radial_wind_14z
+  restricted: false
+6-local-25:
+  filename: nexrad_level_2_radial_wind_15z
+  restricted: false
+6-local-26:
+  filename: nexrad_level_2_radial_wind_16z
+  restricted: false
+6-local-27:
+  filename: nexrad_level_2_radial_wind_17z
+  restricted: false
+6-local-28:
+  filename: nexrad_level_2_radial_wind_18z
+  restricted: false
+6-local-29:
+  filename: nexrad_level_2_radial_wind_19z
+  restricted: false
+6-local-30:
+  filename: nexrad_level_2_radial_wind_20z
+  restricted: false
+6-local-31:
+  filename: nexrad_level_2_radial_wind_21z
+  restricted: false
+6-local-32:
+  filename: nexrad_level_2_radial_wind_22z
+  restricted: false
+6-local-33:
+  filename: nexrad_level_2_radial_wind_23z
+  restricted: false
+6-local-40:
+  filename: nexrad_level_2_reflectivity_00z
+  restricted: false
+6-local-41:
+  filename: nexrad_level_2_reflectivity_01z
+  restricted: false
+6-local-42:
+  filename: nexrad_level_2_reflectivity_02z
+  restricted: false
+6-local-43:
+  filename: nexrad_level_2_reflectivity_03z
+  restricted: false
+6-local-44:
+  filename: nexrad_level_2_reflectivity_04z
+  restricted: false
+6-local-45:
+  filename: nexrad_level_2_reflectivity_05z
+  restricted: false
+6-local-46:
+  filename: nexrad_level_2_reflectivity_06z
+  restricted: false
+6-local-47:
+  filename: nexrad_level_2_reflectivity_07z
+  restricted: false
+6-local-48:
+  filename: nexrad_level_2_reflectivity_08z
+  restricted: false
+6-local-49:
+  filename: nexrad_level_2_reflectivity_09z
+  restricted: false
+6-local-50:
+  filename: nexrad_level_2_reflectivity_10z
+  restricted: false
+6-local-51:
+  filename: nexrad_level_2_reflectivity_11z
+  restricted: false
+6-local-52:
+  filename: nexrad_level_2_reflectivity_12z
+  restricted: false
+6-local-53:
+  filename: nexrad_level_2_reflectivity_13z
+  restricted: false
+6-local-54:
+  filename: nexrad_level_2_reflectivity_14z
+  restricted: false
+6-local-55:
+  filename: nexrad_level_2_reflectivity_15z
+  restricted: false
+6-local-56:
+  filename: nexrad_level_2_reflectivity_16z
+  restricted: false
+6-local-57:
+  filename: nexrad_level_2_reflectivity_17z
+  restricted: false
+6-local-58:
+  filename: nexrad_level_2_reflectivity_18z
+  restricted: false
+6-local-59:
+  filename: nexrad_level_2_reflectivity_19z
+  restricted: false
+6-local-60:
+  filename: nexrad_level_2_reflectivity_20z
+  restricted: false
+6-local-61:
+  filename: nexrad_level_2_reflectivity_21z
+  restricted: false
+6-local-62:
+  filename: nexrad_level_2_reflectivity_22z
+  restricted: false
+6-local-63:
+  filename: nexrad_level_2_reflectivity_23z
+  restricted: false
+6-local-70:
+  filename: aircraft_tail_doppler_radial_wind
+  restricted: false
+6-local-80:
+  filename: canada_reflectivity_00z
+  restricted: true
+6-local-81:
+  filename: canada_reflectivity_01z
+  restricted: true
+6-local-82:
+  filename: canada_reflectivity_02z
+  restricted: true
+6-local-83:
+  filename: canada_reflectivity_03z
+  restricted: true
+6-local-84:
+  filename: canada_reflectivity_04z
+  restricted: true
+6-local-85:
+  filename: canada_reflectivity_05z
+  restricted: true
+6-local-86:
+  filename: canada_reflectivity_06z
+  restricted: true
+6-local-87:
+  filename: canada_reflectivity_07z
+  restricted: true
+6-local-88:
+  filename: canada_reflectivity_08z
+  restricted: true
+6-local-89:
+  filename: canada_reflectivity_09z
+  restricted: true
+6-local-90:
+  filename: canada_reflectivity_10z
+  restricted: true
+6-local-91:
+  filename: canada_reflectivity_11z
+  restricted: true
+6-local-92:
+  filename: canada_reflectivity_12z
+  restricted: true
+6-local-93:
+  filename: canada_reflectivity_13z
+  restricted: true
+6-local-94:
+  filename: canada_reflectivity_14z
+  restricted: true
+6-local-95:
+  filename: canada_reflectivity_15z
+  restricted: true
+6-local-96:
+  filename: canada_reflectivity_16z
+  restricted: true
+6-local-97:
+  filename: canada_reflectivity_17z
+  restricted: true
+6-local-98:
+  filename: canada_reflectivity_18z
+  restricted: true
+6-local-99:
+  filename: canada_reflectivity_19z
+  restricted: true
+6-local-100:
+  filename: canada_reflectivity_20z
+  restricted: true
+6-local-101:
+  filename: canada_reflectivity_21z
+  restricted: true
+6-local-102:
+  filename: canada_reflectivity_22z
+  restricted: true
+6-local-103:
+  filename: canada_reflectivity_23z
+  restricted: true
+6-local-110:
+  filename: canada_radial_wind_00z
+  restricted: true
+6-local-111:
+  filename: canada_radial_wind_01z
+  restricted: true
+6-local-112:
+  filename: canada_radial_wind_02z
+  restricted: true
+6-local-113:
+  filename: canada_radial_wind_03z
+  restricted: true
+6-local-114:
+  filename: canada_radial_wind_04z
+  restricted: true
+6-local-115:
+  filename: canada_radial_wind_05z
+  restricted: true
+6-local-116:
+  filename: canada_radial_wind_06z
+  restricted: true
+6-local-117:
+  filename: canada_radial_wind_07z
+  restricted: true
+6-local-118:
+  filename: canada_radial_wind_08z
+  restricted: true
+6-local-119:
+  filename: canada_radial_wind_09z
+  restricted: true
+6-local-120:
+  filename: canada_radial_wind_10z
+  restricted: true
+6-local-121:
+  filename: canada_radial_wind_11z
+  restricted: true
+6-local-122:
+  filename: canada_radial_wind_12z
+  restricted: true
+6-local-123:
+  filename: canada_radial_wind_13z
+  restricted: true
+6-local-124:
+  filename: canada_radial_wind_14z
+  restricted: true
+6-local-125:
+  filename: canada_radial_wind_15z
+  restricted: true
+6-local-126:
+  filename: canada_radial_wind_16z
+  restricted: true
+6-local-127:
+  filename: canada_radial_wind_17z
+  restricted: true
+6-local-128:
+  filename: canada_radial_wind_18z
+  restricted: true
+6-local-129:
+  filename: canada_radial_wind_19z
+  restricted: true
+6-local-130:
+  filename: canada_radial_wind_20z
+  restricted: true
+6-local-131:
+  filename: canada_radial_wind_21z
+  restricted: true
+6-local-132:
+  filename: canada_radial_wind_22z
+  restricted: true
+6-local-133:
+  filename: canada_radial_wind_23z
+  restricted: true
+7-local-0:
+  filename: tropical_storm
+  restricted: false
+7-local-1:
+  filename: vaisala_lightning_nldn_short_range
+  restricted: true
+7-local-2:
+  filename: vaisala_lightning_lldn_long_range
+  restricted: true
+7-local-3:
+  filename: earth_networks_lightning
+  restricted: false
+7-local-21:
+  filename: nexrad_level_2_boundary_layer_heights
+  restricted: false
+8-local-10:
+  filename: atovs_sbuv_2_ozone
+  restricted: false
+8-local-11:
+  filename: atovs_sbuv_2_ozone
+  restricted: false
+8-local-12:
+  filename: global_ozone_monitoring_experiment_gome
+  restricted: false
+8-local-13:
+  filename: aura_ozone_monitoring_instrument_omi
+  restricted: false
+8-local-14:
+  filename: npp_omps_ozone_nadir_profile
+  restricted: false
+8-local-15:
+  filename: aura_ozone_microwave_limb_sounder_mls
+  restricted: false
+8-local-16:
+  filename: npp_omps_ozone_total_column
+  restricted: false
+8-local-17:
+  filename: npp_omps_ozone_nadir_profile
+  restricted: false
+8-local-18:
+  filename: npp_omps_ozone_total_column
+  restricted: false
+8-local-19:
+  filename: npp_omps_ozone_limb_profile
+  restricted: false
+8-local-20:
+  filename: airnow_ozone_1_hr_and_8_hr_forward_averaged_daily_ingest
+  restricted: false
+8-local-21:
+  filename: airnow_ozone_1_hr_backward_averaged_daily_ingest
+  restricted: false
+8-local-22:
+  filename: airnow_ozone_8_hr_backward_averaged_daily_ingest
+  restricted: false
+8-local-23:
+  filename: airnow_ozone_1_hr_backward_averaged_hourly_ingest
+  restricted: false
+8-local-31:
+  filename: airnow_particulate_matter_1_hr_backward_averaged_daily_ingest
+  restricted: false
+8-local-32:
+  filename: airnow_particulate_matter_1_hr_backward_averaged_hourly_ingest
+  restricted: false
+8-local-41:
+  filename: modis_aerosol_optical_depth
+  restricted: false
+8-local-42:
+  filename: npp_aerosol_optical_depth
+  restricted: false
+8-local-45:
+  filename: aeronet_aerosol_optical_depths_and_thicknesses
+  restricted: false
+12-local-1:
+  filename: dmsp_ssm_i_brightness_temperatures
+  restricted: false
+12-local-2:
+  filename: dmsp_ssm_i_derived_products
+  restricted: false
+12-local-3:
+  filename: gps_integrated_precipitable_water
+  restricted: false
+12-local-4:
+  filename: gnss_ground_based
+  restricted: true
+12-local-5:
+  filename: ers_sar
+  restricted: false
+12-local-6:
+  filename: dmsp_ssm_is_derived_products
+  restricted: false
+12-local-8:
+  filename: ers_scatterometer
+  restricted: false
+12-local-9:
+  filename: ers_radar_altimeter
+  restricted: false
+12-local-10:
+  filename: navoceano_poes_low_resolution_sea_surface_temperatures
+  restricted: false
+12-local-11:
+  filename: nesdis_poes_high_resolution_sea_surface_temperatures_brightness_temperatures_and_albedo
+  restricted: false
+12-local-12:
+  filename: navoceano_poes_high_resolution_sea_surface_temperatures_brightness_temperatures_and_albedo
+  restricted: false
+12-local-13:
+  filename: nasa_trmm_microwave_imager
+  restricted: false
+12-local-17:
+  filename: navoceano_poes_sea_surface_temperatures
+  restricted: false
+12-local-18:
+  filename: nesdis_poes_sea_surface_temperatures
+  restricted: false
+12-local-22:
+  filename: nesdis_goes_sea_surface_temperatures
+  restricted: false
+12-local-23:
+  filename: s_npp_noaa_20_viirs_sea_surface_temperatures_clear_sky_without_land
+  restricted: false
+12-local-24:
+  filename: s_npp_noaa_20_viirs_sea_surface_temperatures_probably_clear_sky_without_land
+  restricted: false
+12-local-25:
+  filename: s_npp_noaa_20_viirs_sea_surface_temperatures_everything_but_clear_sky_without_land_and_probably_clear_sky_without_land
+  restricted: false
+12-local-31:
+  filename: aqua_amsr_e_ocean_surface_products_level_2
+  restricted: false
+12-local-34:
+  filename: aqua_amsr_e_ocean_surface_products_misst
+  restricted: false
+12-local-103:
+  filename: dmsp_ssm_i_neural_net_3_products
+  restricted: false
+12-local-122:
+  filename: metop_50_km_ascat_scatterometer
+  restricted: false
+12-local-123:
+  filename: metop_25_km_ascat_scatterometer
+  restricted: false
+12-local-137:
+  filename: quickscat_scatterometer
+  restricted: false
+12-local-138:
+  filename: windsat_scatterometer_fnmoc
+  restricted: false
+12-local-139:
+  filename: windsat_scatterometer_nesdis
+  restricted: false
+12-local-150:
+  filename: nasa_langley_goes_1x1_fov_cloud
+  restricted: false
+12-local-160:
+  filename: university_of_wisconsin_goes_imager_effective_cloud
+  restricted: false
+12-local-222:
+  filename: gcom_w_advanced_microwave_scanning_radiometer_2_amsr2_sea_surface_temperatures
+  restricted: false
+12-local-255:
+  filename: oceansat_50_km_oscat_scatterometer
+  restricted: false
+21-local-21:
+  filename: noaa_rtovs_brightness_temperatures_hirs_2
+  restricted: false
+21-local-22:
+  filename: noaa_rtovs_brightness_temperatures_msu
+  restricted: false
+21-local-23:
+  filename: noaa_atovs_brightness_temperatures_amsu_a
+  restricted: false
+21-local-24:
+  filename: noaa_atovs_brightness_temperatures_amsu_b
+  restricted: false
+21-local-25:
+  filename: noaa_atovs_brightness_temperatures_hirs_3
+  restricted: false
+21-local-27:
+  filename: noaa_atovs_brightness_temperatures_mhs
+  restricted: false
+21-local-28:
+  filename: noaa_atovs_brightness_temperatures_hirs_4
+  restricted: false
+21-local-33:
+  filename: rars_atovs_brightness_temperatures_amsu_a
+  restricted: false
+21-local-34:
+  filename: rars_atovs_brightness_temperatures_amsu_b
+  restricted: false
+21-local-35:
+  filename: rars_atovs_brightness_temperatures_hirs_3
+  restricted: false
+21-local-36:
+  filename: rars_atovs_brightness_temperatures_mhs
+  restricted: false
+21-local-37:
+  filename: rars_atovs_radiances_cris
+  restricted: false
+21-local-38:
+  filename: rars_atovs_brightness_temperatures_atms
+  restricted: false
+21-local-39:
+  filename: rars_atovs_radiances_iasi
+  restricted: false
+21-local-41:
+  filename: nesdis_goes_imager_brightness_temperatures
+  restricted: false
+21-local-42:
+  filename: seviri_all_sky_radiances
+  restricted: false
+21-local-43:
+  filename: seviri_clear_sky_radiances
+  restricted: false
+21-local-44:
+  filename: himawari_8_clear_sky_radiances
+  restricted: false
+21-local-45:
+  filename: goes_16_all_sky_radiances
+  restricted: false
+21-local-46:
+  filename: goes_16_clear_sky_radiances
+  restricted: false
+21-local-51:
+  filename: noaa_17_and_metop_2_avhrr_brightness_temperatures_clear_and_over_ocean
+  restricted: false
+21-local-52:
+  filename: noaa_17_and_metop_2_avhrr_brightness_temperatures_cloudy_or_over_land
+  restricted: false
+21-local-53:
+  filename: noaa_18_avhrr_brightness_temperatures_clear_and_over_ocean
+  restricted: false
+21-local-54:
+  filename: noaa_18_avhrr_brightness_temperatures_cloudy_or_over_land
+  restricted: false
+21-local-100:
+  filename: mtg_irs_radiances_from_principal_components
+  restricted: false
+21-local-123:
+  filename: antenna_temperatures_amsu_a
+  restricted: false
+21-local-201:
+  filename: dmsp_ssmi_s_brightness_temperatures
+  restricted: false
+21-local-202:
+  filename: npp_cris_radiances
+  restricted: false
+21-local-203:
+  filename: npp_atms_brightness_temperatures
+  restricted: false
+21-local-204:
+  filename: npp_viirs_radiances
+  restricted: false
+21-local-205:
+  filename: cris_full_spectral_radiances_2211_channels
+  restricted: false
+21-local-206:
+  filename: cris_full_spectral_radiances_431_channels
+  restricted: false
+21-local-212:
+  filename: cris_radiances_direct_broadcast
+  restricted: false
+21-local-213:
+  filename: atms_brightness_temperatures_direct_broadcast
+  restricted: false
+21-local-214:
+  filename: tms_radiance_data
+  restricted: false
+21-local-239:
+  filename: iasi_radiances_direct_broadcast
+  restricted: false
+21-local-241:
+  filename: iasi_radiances
+  restricted: false
+21-local-242:
+  filename: megha_tropiques_saphir_l1a2_brightness_temperatures
+  restricted: true
+21-local-246:
+  filename: gmi_brightness_temperatures
+  restricted: false
+21-local-247:
+  filename: gcom_w_advanced_microwave_scanning_radiometer_2_amsr2_1b_brightness_temperature_data_gsi_14_channel
+  restricted: false
+21-local-248:
+  filename: amsr2_brightness_temperatures
+  restricted: false
+21-local-249:
+  filename: aqua_airs_amsu_a_brightness_temperatures_every_field_of_view
+  restricted: false
+21-local-250:
+  filename: aqua_airs_amsu_a_brightness_temperatures_central_field_of_view
+  restricted: false
+21-local-251:
+  filename: atovs_amsu_a_radiances
+  restricted: false
+21-local-252:
+  filename: atovs_amsu_b_radiances
+  restricted: false
+21-local-253:
+  filename: aqua_airs_principal_components
+  restricted: false
+21-local-254:
+  filename: aqua_amsr_e_brightness_temperatures
+  restricted: false
+21-local-255:
+  filename: aqua_airs_amsu_a_brightness_temperatures_warmest_field_of_view
+  restricted: false
+31-local-1:
+  filename: bathy
+  restricted: false
+31-local-2:
+  filename: tesac
+  restricted: false
+31-local-3:
+  filename: trackob
+  restricted: false
+31-local-4:
+  filename: airborne_expendable_bathythermograph_axbt
+  restricted: false
+31-local-5:
+  filename: subsurface_float_profiles_bufr
+  restricted: false
+31-local-6:
+  filename: xbt_xctd_tesac_profiles_bufr
+  restricted: false
+31-local-7:
+  filename: along_track_trackob_observations_bufr
+  restricted: false
+31-local-8:
+  filename: marine_mammal_profiles
+  restricted: false
+31-local-11:
+  filename: nlsa_ers_2_sea_surface_height_anomaly_high_resolution_regional
+  restricted: false
+31-local-12:
+  filename: nlsa_topex_sea_surface_height_anomaly_high_resolution_regional
+  restricted: false
+31-local-13:
+  filename: nlsa_topex_sea_surface_height_anomaly_low_resolution_global
+  restricted: false
+31-local-14:
+  filename: nlsa_gfo_sea_surface_height_anomaly_high_resolution_regional
+  restricted: false
+31-local-101:
+  filename: navoceano_ers_2_sea_surface_height_anomaly_high_resolution_global
+  restricted: false
+31-local-102:
+  filename: navoceano_gfo_sea_surface_height_anomaly_high_resolution_global
+  restricted: false
+31-local-103:
+  filename: navoceano_topex_sea_surface_height_anomaly_high_resolution_global
+  restricted: false
+31-local-104:
+  filename: navoceano_jason_1_sea_surface_height_anomaly_high_resolution_global
+  restricted: false
+31-local-105:
+  filename: navoceano_gfo_altimeter_wind_wave_igdr
+  restricted: false
+31-local-106:
+  filename: cnes_jason_1_altimeter_wind_wave_igdr
+  restricted: false
+31-local-107:
+  filename: navoceano_gfo_altimeter_wind_wave_fast_delivery
+  restricted: false
+31-local-108:
+  filename: navoceano_envisat_altimeter_wind_wave_fast_delivery
+  restricted: false
+31-local-109:
+  filename: navoceano_envisat_sea_surface_height_anomaly_high_resolution_global
+  restricted: false
+31-local-110:
+  filename: navoceano_jason_1_altimeter_wind_wave_fast_delivery
+  restricted: false
+31-local-111:
+  filename: cnes_jason_2_altimeter_wind_wave_ogdr
+  restricted: false
+31-local-112:
+  filename: navoceano_jason_2_sea_surface_height_anomaly_high_resolution_global_ogdr
+  restricted: false
+31-local-113:
+  filename: navoceano_jason_2_sea_surface_height_anomaly_high_resolution_global_igdr
+  restricted: false
+31-local-114:
+  filename: navoceano_jason_2_altimeter_wind_wave_fast_delivery
+  restricted: false
+31-local-115:
+  filename: cnes_jason_2_altimeter_wind_wave_ogdr
+  restricted: false
+31-local-116:
+  filename: ssalto_duacs_envisat_sea_surface_height_anomaly_high_resolution_global
+  restricted: false
+31-local-117:
+  filename: navoceano_cryosat_2_sea_surface_height_anomaly_high_resolution_global_igdr
+  restricted: false
+31-local-118:
+  filename: navoceano_saral_sea_surface_height_anomaly_high_resolution_global_ogdr
+  restricted: false
+31-local-119:
+  filename: navoceano_saral_sea_surface_height_anomaly_high_resolution_global_igdr
+  restricted: false
+31-local-120:
+  filename: navoceano_cryosat_2_altimeter_wind_wave_fast_delivery
+  restricted: false
+31-local-121:
+  filename: navoceano_saral_altimeter_wind_wave_fast_delivery
+  restricted: false
+31-local-122:
+  filename: cnes_saral_altimeter_wind_wave_ogdr
+  restricted: false
+31-local-123:
+  filename: cnes_cryosat_2_altimeter_wind_wave_ogdr
+  restricted: false
+31-local-124:
+  filename: cnes_jason_3_altimeter_wind_wave_ogdr
+  restricted: false
+31-local-125:
+  filename: navoceano_jason_3_sea_surface_height_anomaly_high_resolution_global_ogdr
+  restricted: false
+31-local-126:
+  filename: navoceano_jason_3_sea_surface_height_anomaly_high_resolution_global_igdr
+  restricted: false
+31-local-127:
+  filename: navoceano_jason_3_altimeter_wind_wave_fast_delivery
+  restricted: false
+31-local-128:
+  filename: navoceano_sentinel_3a_sea_surface_height_anomaly_high_resolution_global_nrt
+  restricted: false
+31-local-129:
+  filename: navoceano_sentinel_3a_sea_surface_height_anomaly_high_resolution_global_stc
+  restricted: false
+31-local-130:
+  filename: navoceano_sentinel_3a_altimeter_wind_wave_fast_delivery
+  restricted: false
+31-local-131:
+  filename: navoceano_sentinel_3b_sea_surface_height_anomaly_high_resolution_global_nrt
+  restricted: false
+31-local-132:
+  filename: navoceano_sentinel_3b_sea_surface_height_anomaly_high_resolution_global_stc
+  restricted: false
+31-local-133:
+  filename: navoceano_sentinel_3b_altimeter_wind_wave_fast_delivery
+  restricted: false
+31-local-134:
+  filename: cnes_sentinel_3a_altimeter_wind_wave_ogdr
+  restricted: false
+31-local-135:
+  filename: cnes_sentinel_3b_altimeter_wind_wave_ogdr
+  restricted: false
+31-local-136:
+  filename: navoceano_cryosat_2_sea_surface_height_anomaly_high_resolution_global_ogdr
+  restricted: false
+31-local-137:
+  filename: navoceano_sentinel_6a_sea_surface_height_anomaly_high_resolution_global_nrt
+  restricted: false
+31-local-138:
+  filename: navoceano_sentinel_6a_sea_surface_height_anomaly_high_resolution_global_stc
+  restricted: false
+31-local-139:
+  filename: navoceano_sentinel_6a_altimeter_wind_wave_fast_delivery
+  restricted: false
+255-local-1:
+  filename: mesonet_denver_urban_drainage_madis
+  restricted: true
+255-local-2:
+  filename: mesonet_raws_national_interagency_fire_center_madis
+  restricted: true
+255-local-3:
+  filename: mesonet_mesowest_madis
+  restricted: true
+255-local-4:
+  filename: mesonet_aprs_weathernet_madis
+  restricted: true
+255-local-5:
+  filename: mesonet_kansas_dot_madis
+  restricted: true
+255-local-6:
+  filename: mesonet_florida_madis
+  restricted: true
+255-local-7:
+  filename: mesonet_iowa_dot_madis
+  restricted: true
+255-local-8:
+  filename: mesonet_minnesota_dot_madis
+  restricted: true
+255-local-9:
+  filename: mesonet_anything_weather_madis
+  restricted: true
+255-local-10:
+  filename: mesonet_national_ocean_service_ports_madis
+  restricted: true
+255-local-11:
+  filename: mesonet_aberdeen_proving_grounds_madis
+  restricted: true
+255-local-12:
+  filename: mesonet_weather_for_you_madis
+  restricted: true
+255-local-13:
+  filename: mesonet_nws_cooperative_observers_madis
+  restricted: false
+255-local-14:
+  filename: mesonet_nws_hads_madis
+  restricted: true
+255-local-15:
+  filename: mesonet_aws_madis
+  restricted: true
+255-local-16:
+  filename: mesonet_iowa_environmental_madis
+  restricted: true
+255-local-17:
+  filename: mesonet_oklahoma_madis
+  restricted: true
+255-local-18:
+  filename: mesonet_colorado_dot_madis
+  restricted: true
+255-local-19:
+  filename: mesonet_west_texas_madis
+  restricted: true
+255-local-20:
+  filename: mesonet_wisconsin_dot_madis
+  restricted: true
+255-local-21:
+  filename: mesonet_lsu_jsu_madis
+  restricted: true
+255-local-22:
+  filename: mesonet_colorado_e_470_madis
+  restricted: true
+255-local-23:
+  filename: mesonet_dc_net_madis
+  restricted: true
+255-local-24:
+  filename: mesonet_indiana_dot_madis
+  restricted: true
+255-local-25:
+  filename: mesonet_florida_dot_madis
+  restricted: true
+255-local-26:
+  filename: mesonet_alaska_dot_madis
+  restricted: true
+255-local-27:
+  filename: mesonet_georgia_dot_madis
+  restricted: true
+255-local-28:
+  filename: mesonet_virginia_dot_madis
+  restricted: true
+255-local-29:
+  filename: mesonet_missouri_commercial_agriculture_weather_net_madis
+  restricted: true
+255-local-30:
+  filename: mesonet_miscellaneous_madis
+  restricted: true
+255-local-31:
+  filename: urbanet_miscellaneous_madis
+  restricted: true
+255-local-32:
+  filename: urbanet_university_of_south_alabama_madis
+  restricted: true
+255-local-33:
+  filename: hf_metar_one_minute_asos
+  restricted: true
+255-local-34:
+  filename: rwis_south_dakota_dot_madis
+  restricted: true
+255-local-35:
+  filename: upper_missouri_river_basin
+  restricted: false
+255-local-101:
+  filename: cooperative_observer_surface_new_england_pilot_project_nepp_and_historical_climatology_network_hcn_madis
+  restricted: true
+255-local-102:
+  filename: cooperative_observer_surface_nws_cooperative_observers_shef
+  restricted: true
+255-local-111:
+  filename: mesonet_climate_reference_network_madis
+  restricted: true
+255-local-131:
+  filename: hydrological_surface_denver_urban_drainage_madis
+  restricted: false
+255-local-160:
+  filename: hydrological_surface_miscellaneous_madis
+  restricted: true
+255-local-161:
+  filename: snow_madis
+  restricted: false
+6-local-104:
+  filename: null
+  restricted: true
+6-local-105:
+  filename: null
+  restricted: true
+6-local-106:
+  filename: null
+  restricted: true
+6-local-107:
+  filename: null
+  restricted: true
+6-local-108:
+  filename: null
+  restricted: true
+6-local-109:
+  filename: null
+  restricted: true
