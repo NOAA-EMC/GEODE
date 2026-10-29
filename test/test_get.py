@@ -33,8 +33,9 @@ def test_get_time_bounds(use_data_lake):
 
     times = result["MetaData/dateTime"].values[:]
 
-    assert (np.min(times) == np.datetime64("2021-07-31T22:44:00")) and \
-           (np.max(times) == np.datetime64("2021-07-31T22:45:00"))
+    assert (np.min(times) == np.datetime64("2021-07-31T22:44:00")) and (
+        np.max(times) == np.datetime64("2021-07-31T22:45:00")
+    )
 
 
 def test_get_with_bounding_box(use_data_lake):
