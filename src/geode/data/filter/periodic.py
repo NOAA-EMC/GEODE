@@ -17,6 +17,9 @@ class PeriodicFilter(AndFilter):
         super().__init__(arg)
 
     def apply(self, dt: xr.DataTree) -> xr.DataTree:
+        if dt[TimeKey].sizes[LocationKey] == 0:
+            return dt
+
         times = dt[TimeKey].values
         start_time = times[0]
         end_time = times[-1]
@@ -81,6 +84,9 @@ class PeriodicFilter(AndFilter):
 
         period = cls._decode_time(arg[PeriodKey])
         window = cls._decode_time(arg[WindowKey])
+
+        if np.isnat(period) or np.isnat(window):
+            cls._validation_error("Period and window must be valid times.")
 
         if period <= np.timedelta64(0, "s"):
             cls._validation_error(f"'{PeriodKey}' must be positive.")

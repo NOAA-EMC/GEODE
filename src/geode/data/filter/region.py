@@ -3,13 +3,17 @@ from importlib.resources import files
 from importlib.resources.abc import Traversable
 from typing import Any
 
+from shapely.affinity import translate
+from shapely.geometry import box
 from shapely.geometry import shape
 from shapely.geometry.base import BaseGeometry
+from shapely.ops import unary_union
 
 from geode.data.filter.factory import register_filter
 from geode.data.filter.geojson import GeoJsonFilter
 
 RegionFileSuffix = ".geojson"
+BorderWidthKey = "border_width"
 
 
 class RegionCatalog:
@@ -59,10 +63,29 @@ class RegionFilter(GeoJsonFilter):
 
         geometry = shape(self.catalog.geojson(self.arg["name"]))
 
-        if "border_width" in self.arg:
-            geometry = geometry.buffer(self.arg["border_width"])
+        if BorderWidthKey in self.arg:
+            geometry = self._wrap_antimeridian(
+                geometry.buffer(self.arg[BorderWidthKey])
+            )
 
         return geometry
+
+    @staticmethod
+    def _wrap_antimeridian(geometry: BaseGeometry) -> BaseGeometry:
+        """Wrap any parts extending beyond lon=+/-180 back onto the map."""
+
+        world = box(-180.0, -90.0, 180.0, 90.0)
+        parts = [geometry.intersection(world)]
+
+        west = geometry.intersection(box(-540.0, -90.0, -180.0, 90.0))
+        if not west.is_empty:
+            parts.append(translate(west, xoff=360.0))
+
+        east = geometry.intersection(box(180.0, -90.0, 540.0, 90.0))
+        if not east.is_empty:
+            parts.append(translate(east, xoff=-360.0))
+
+        return unary_union(parts)
 
     @classmethod
     def _validate(cls, arg: str | dict[str, Any]) -> None:
