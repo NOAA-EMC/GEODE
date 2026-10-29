@@ -61,7 +61,8 @@ class TimeWindowFilter(AndFilter):
 
     def _apply_mask(self, dt: xr.DataTree) -> xr.DataTree:
         mask = (
-            (dt[TimeKey] >= self.arg[StartTimeKey]) & (dt[TimeKey] < self.arg[EndTimeKey])
+            (dt[TimeKey] >= self.arg[StartTimeKey]) 
+            & (dt[TimeKey] < self.arg[EndTimeKey])
         ).values
 
         if not np.all(mask):

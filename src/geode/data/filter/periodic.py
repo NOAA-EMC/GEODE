@@ -31,17 +31,13 @@ class PeriodicFilter(AndFilter):
         window = self._decode_time(self.arg[WindowKey])
 
         while current_time <= end_time:
-            mask |= (
-                (times >= current_time) & (times <= (current_time + window))
-            )
+            mask |= (times >= current_time) & (times <= (current_time + window))
             current_time += period
 
         return dt.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))
 
     @classmethod
-    def _decode_time(
-        cls, time: np.datetime64 | int | float | str
-    ) -> np.timedelta64:
+    def _decode_time(cls, time: np.datetime64 | int | float | str) -> np.timedelta64:
 
         def _parse_timedelta_str(time_str: str) -> np.timedelta64:
             parts = list(map(int, time_str.split(":")))
