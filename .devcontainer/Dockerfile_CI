@@ -2,7 +2,7 @@ FROM python:3.12
 
 ARG GSL_LITE_REF=v1.1.0
 ARG NCEPLIBS_BUFR_REF=v12.3.0
-ARG BUFR_QUERY_REF=v0.0.5
+ARG BUFR_QUERY_REF=develop
 
 # Install system dependencies required by BUFR tooling.
 RUN apt-get update && \
