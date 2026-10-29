@@ -4,8 +4,7 @@ from importlib.resources.abc import Traversable
 from typing import Any
 
 from shapely.affinity import translate
-from shapely.geometry import box
-from shapely.geometry import shape
+from shapely.geometry import box, shape
 from shapely.geometry.base import BaseGeometry
 from shapely.ops import unary_union
 

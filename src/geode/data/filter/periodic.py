@@ -37,7 +37,7 @@ class PeriodicFilter(AndFilter):
         return dt.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))
 
     @classmethod
-    def _decode_time(cls, time: np.datetime64 | int | float | str) -> np.timedelta64:
+    def _decode_time(cls, time: np.datetime64 | float | str) -> np.timedelta64:
 
         def _parse_timedelta_str(time_str: str) -> np.timedelta64:
             parts = list(map(int, time_str.split(":")))
