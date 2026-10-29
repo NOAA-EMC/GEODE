@@ -24,7 +24,6 @@ class VariableFilter(AndFilter):
         arg.add(LocationKey)
         arg.add(LatitudeKey)
         arg.add(LongitudeKey)
-        arg.add(ChannelKey)
         arg = list(arg)
 
         super().__init__(arg)
@@ -32,6 +31,8 @@ class VariableFilter(AndFilter):
     def apply(self, dt: xr.DataTree) -> xr.DataTree:
         # Organize variables by group
         groups = defaultdict(list)
+        if ChannelKey in dt.to_dataset(inherit=False):
+            groups["/"].append(ChannelKey)
 
         for path in self.arg:
             group, _, variable = path.strip("/").rpartition("/")
