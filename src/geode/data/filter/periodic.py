@@ -17,25 +17,28 @@ class PeriodicFilter(AndFilter):
         super().__init__(arg)
 
     def apply(self, dt: xr.DataTree) -> xr.DataTree:
-        start_time = dt[TimeKey].values[0]
-        end_time = dt[TimeKey].values[-1]
+        times = dt[TimeKey].values
+        start_time = times[0]
+        end_time = times[-1]
 
-        mask = np.zeros_like(dt[TimeKey].values, dtype=bool)
+        mask = np.zeros_like(times, dtype=bool)
         current_time = start_time
 
         period = self._decode_time(self.arg[PeriodKey])
         window = self._decode_time(self.arg[WindowKey])
 
         while current_time <= end_time:
-            mask |= (dt[TimeKey].values >= current_time) & (
-                dt[TimeKey].values <= (current_time + window)
+            mask |= (
+                (times >= current_time) & (times <= (current_time + window))
             )
             current_time += period
 
         return dt.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))
 
     @classmethod
-    def _decode_time(cls, time: np.datetime64 | int | float | str) -> np.timedelta64:
+    def _decode_time(
+        cls, time: np.datetime64 | int | float | str
+    ) -> np.timedelta64:
 
         def _parse_timedelta_str(time_str: str) -> np.timedelta64:
             parts = list(map(int, time_str.split(":")))

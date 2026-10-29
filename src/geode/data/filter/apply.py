@@ -1,4 +1,3 @@
-from datetime import datetime
 from typing import Any
 
 import numpy as np
@@ -11,8 +10,8 @@ from geode.data.keys import LocationKey
 
 def apply(
     datatree: xr.DataTree,
-    start_time: datetime,
-    end_time: datetime,
+    start_time: np.datetime64,
+    end_time: np.datetime64,
     filters: list[dict[str, Any]] | None = None,
 ):
     filters = filters or []

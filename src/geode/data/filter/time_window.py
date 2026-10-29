@@ -12,20 +12,10 @@ StartTimeKey = "start_time"
 EndTimeKey = "end_time"
 
 
-def _to_utc_datetime64(value: datetime) -> np.datetime64:
-    # Stored dateTime values are naive UTC; naive inputs are assumed to already be UTC.
-    if value.tzinfo is not None:
-        value = value.astimezone(UTC).replace(tzinfo=None)
-    return np.datetime64(value, "s")
-
-
 @register_filter("time_window")
 class TimeWindowFilter(AndFilter):
     def __init__(self, arg: dict[str, Any]):
         super().__init__(arg)
-
-        self.t0 = _to_utc_datetime64(arg[StartTimeKey])
-        self.t1 = _to_utc_datetime64(arg[EndTimeKey])
 
     def apply(self, dt: xr.DataTree) -> xr.DataTree:
         is_sorted = dt.attrs.get(IsSortedFlag, False)
@@ -63,14 +53,16 @@ class TimeWindowFilter(AndFilter):
 
             return start
 
-        start = _find_bound(dt[TimeKey], self.t0 - border)
-        end = _find_bound(dt[TimeKey], self.t1 + border)
+        start = _find_bound(dt[TimeKey], self.arg[StartTimeKey] - border)
+        end = _find_bound(dt[TimeKey], self.arg[EndTimeKey] + border)
         return dt.map_over_datasets(
             lambda ds: ds.isel({LocationKey: slice(start, end)})
         )
 
     def _apply_mask(self, dt: xr.DataTree) -> xr.DataTree:
-        mask = ((dt[TimeKey] >= self.t0) & (dt[TimeKey] < self.t1)).values
+        mask = (
+            (dt[TimeKey] >= self.arg[StartTimeKey]) & (dt[TimeKey] < self.arg[EndTimeKey])
+        ).values
 
         if not np.all(mask):
             return dt.map_over_datasets(lambda ds: ds.isel({LocationKey: mask}))
@@ -79,4 +71,12 @@ class TimeWindowFilter(AndFilter):
 
     @classmethod
     def _validate(cls, arg: dict[str, Any]) -> None:
-        pass  # Not a user filter
+        if StartTimeKey not in arg:
+            raise ValueError(f"Missing required key: {StartTimeKey}")
+        if EndTimeKey not in arg:
+            raise ValueError(f"Missing required key: {EndTimeKey}")
+
+        if not isinstance(arg[StartTimeKey], np.datetime64):
+            raise TypeError(f"{StartTimeKey} must be a np.datetime64")
+        if not isinstance(arg[EndTimeKey], np.datetime64):
+            raise TypeError(f"{EndTimeKey} must be a np.datetime64")

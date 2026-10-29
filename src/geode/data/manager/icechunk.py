@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Any
 
 import icechunk as ic
+import numpy as np
 import xarray as xr
 
 from geode.configs.geode_config import geode_config
@@ -73,8 +74,8 @@ class IceChunkDataManager(DataManager):
     def get(
         self,
         data_type: str,
-        start_time: datetime,
-        end_time: datetime,
+        start_time: np.datetime64,
+        end_time: np.datetime64,
         filters: list[dict[str, Any]] | None = None,
     ) -> xr.DataTree:
 

@@ -222,12 +222,13 @@ def test_get_w_channels(use_data_lake):
     assert result["ObsValue/brightnessTemperature"].sizes["Channel"] == 2
 
     # Test when no Channels coordinate in data
-    result = geode.get(
-        "stripe",
-        "2021-07-30T00:00:00",
-        "2021-07-31T23:59:59",
-        filters=[{"channels": [1, 2]}],
-    )
+    with pytest.warns(Warning):
+        result = geode.get(
+            "stripe",
+            "2021-07-30T00:00:00",
+            "2021-07-31T23:59:59",
+            filters=[{"channels": [1, 2]}],
+        )
 
     assert result is not None
     assert len(result["ObsValue/temperature"]) > 0
