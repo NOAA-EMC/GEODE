@@ -39,7 +39,7 @@ def _run_admin(args: argparse.Namespace) -> int:
         for ingestor in ingestors.directory():
             print(ingestor)
     if args.list_data_types:
-        from geode.data.data_manager import data_manager
+        from geode.data.manager import data_manager
 
         for data_type in data_manager.list_data_types():
             print(data_type)
