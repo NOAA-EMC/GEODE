@@ -1,0 +1,75 @@
+# Mapping for BUFR Table A message types
+# using local descriptors
+# from type codes to snake case strings
+# Legacy decoding using local descriptors
+# would produce BUFR tanks of the form bAAA/xxBBB
+# This YAML file provides the mapping from AAA and BBB to their corresponding snake case strings
+# 
+# The file is structured as so:
+# A:
+#   category: <category_name>
+#   standard subtypes: {} # not yet used
+#   local subtypes:
+#     BBB: <snake_case_string>
+#
+0:
+  category: surface land
+  standard subtypes: {}
+  local subtypes:
+    0: synoptic_restricted_tac
+    1: synoptic_tac
+    2: synoptic_tac
+    7: aviation_metar
+    8: profiler_npn_map
+    10: shef_other
+    11: shef_afos
+    15: snow
+    20: wind_nacelle_restricted
+    100: synoptic_restricted
+    101: synoptic
+    102: synoptic
+1:
+  category: surface marine
+  standard subtypes: {}
+  local subtypes:
+    1: ship_tac_restricted
+    2: buoy_drifter_tac
+    3: buoy_moored_tac
+    4: synoptic_cman
+    5: tide_crex
+    7: uscg
+    8: tide_cman
+    10: cman_shef
+    11: buoy_shef
+    12: tide_shef
+    13: ship_tac
+    14: rvf
+    101: ship_bufr_restricted
+    102: buoy_drifter_bufr
+    103: buoy_moored_bufr
+    104: synoptic_cman_bufr
+    113: ship_bufr
+    120: autonomous_usv
+    121: sofar_restricted
+2:
+  category: vertical soundings other than satellite
+  standard subtypes: {}
+  local subtypes:
+    1: sonde_land_fixed
+    2: sonde_land_mobile
+    3: sonde_ship
+    4: dropsondes
+    5: pibal
+    9: profiler_winds
+    11: map_winds
+    12: map_rass
+    13: jma_winds
+    14: other_winds
+    16: euro_winds
+    17: nexrad_vad
+    18: other_vad
+    101: sonde_land_fixed_bufr
+    102: sonde_land_mobile_bufr
+    103: sonde_ship_bufr
+    104: dropsondes_bufr
+    105: pibal_bufr
