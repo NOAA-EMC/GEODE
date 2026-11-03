@@ -29,7 +29,7 @@ class MhsIngestor(ObsBuilderIngestor):
         if comm.rank() == 0:
             self.obs_builder.finalize_container(container)
             datatree = container_to_xarray(container, self.obs_builder.description)
-            return datatree
+            return self._promote_coords(datatree)
 
         return None
 

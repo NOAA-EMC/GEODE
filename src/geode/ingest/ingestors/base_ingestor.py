@@ -1,11 +1,13 @@
 import xarray as xr
 
-from geode.data.data_manager import data_manager
+from geode.data.keys import IsSortedFlag
+from geode.data.manager import data_manager
 
 
 class BaseIngestor:
-    def __init__(self, data_type: str):
+    def __init__(self, data_type: str, is_sorted: bool = False):
         self.data_type = data_type
+        self.is_sorted = is_sorted
 
     def process(self, file_path: str) -> None:
         data_tree = self._process(file_path)
@@ -41,6 +43,8 @@ class BaseIngestor:
                     f"[SKIP] Skipping category '{cat_label}' - missing dimension data."
                 )
                 continue
+
+            tree.attrs[IsSortedFlag] = self.is_sorted
 
             target_key = f"{self.data_type}_{category}" if category else self.data_type
 

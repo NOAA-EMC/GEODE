@@ -1,4 +1,3 @@
-import datetime
 import os
 import shutil
 import tarfile
@@ -6,12 +5,15 @@ import tempfile
 from glob import glob
 from pathlib import Path
 
+import numpy as np
 import pytest
 import requests
+import xarray as xr
 
 from geode.configs.geode_config import geode_config
+from geode.data.keys import IsSortedFlag
 
-REQUEST_TIMEOUT_SECONDS = 30
+RequestTimeoutSeconds = 30
 
 
 def _safe_extract_tar(tar_ref: tarfile.TarFile, destination: str) -> None:
@@ -59,7 +61,7 @@ def use_dump():
     zip_path = os.path.join(download_dir, "bufr_query-0.0.2.tgz")
 
     if not os.path.exists(zip_path):
-        response = requests.get(zip_url, timeout=REQUEST_TIMEOUT_SECONDS)
+        response = requests.get(zip_url, timeout=RequestTimeoutSeconds)
         response.raise_for_status()
         with open(zip_path, "wb") as f:
             f.write(response.content)
@@ -89,7 +91,8 @@ def use_dump():
 
 
 @pytest.fixture()
-def use_empty_data_lake():
+def use_empty_data_lake(tmp_path, monkeypatch):
+    monkeypatch.setattr(geode_config.data_lake, "root_dir", str(tmp_path))
     os.makedirs(geode_config.data_lake.full_base_path, exist_ok=True)
 
     yield
@@ -98,17 +101,119 @@ def use_empty_data_lake():
 
 
 @pytest.fixture()
-def use_data_lake(use_dump):
-    from geode.ingest.consumers import ncep_dump_reader
+def use_data_lake(use_empty_data_lake):
+    from geode.data.manager import data_manager
 
-    os.makedirs(geode_config.data_lake.full_base_path, exist_ok=True)
-
-    reader = ncep_dump_reader.NcepDumpReader()
-    reader.ingest(
-        "atms",
-        start_date=datetime.datetime(2024, 1, 1, tzinfo=datetime.UTC),
-        end_date=datetime.datetime(2024, 1, 2, tzinfo=datetime.UTC),
+    slice_times = np.arange(
+        np.datetime64("2021-07-30T00", "m"),
+        np.datetime64("2021-08-01T00", "m"),
+        np.timedelta64(1, "m"),
     )
+    times, latitudes = np.meshgrid(
+        slice_times,
+        np.arange(-20.0, 21.0, 1.0),
+        indexing="ij",
+    )
+    longitudes = np.broadcast_to(
+        np.linspace(-180.0, 180.0, slice_times.size, endpoint=False)[:, None],
+        times.shape,
+    )
+    stripe = xr.DataTree.from_dict(
+        {
+            "/": xr.Dataset(
+                coords={"Location": np.arange(times.size)},
+                attrs={
+                    IsSortedFlag: True,
+                    "history": (
+                        "Created deterministic equatorial test stripe sweeping "
+                        "eastward at one longitude slice per minute, with "
+                        "temperature increasing by 0.1 K per degree longitude."
+                    ),
+                },
+            ),
+            "/MetaData": xr.Dataset(
+                {
+                    "dateTime": ("Location", times.ravel().astype("datetime64[s]")),
+                    "latitude": (
+                        "Location",
+                        latitudes.ravel(),
+                        {"units": "degrees_north"},
+                    ),
+                    "longitude": (
+                        "Location",
+                        longitudes.ravel(),
+                        {"units": "degrees_east"},
+                    ),
+                }
+            ),
+            "/ObsValue": xr.Dataset(
+                {
+                    "temperature": (
+                        "Location",
+                        280.0 + 0.1 * latitudes.ravel() + 0.1 * longitudes.ravel(),
+                        {"units": "K"},
+                    )
+                }
+            ),
+        }
+    )
+    data_manager.put("stripe", stripe)
+
+    times, latitudes, longitudes = np.meshgrid(
+        np.array(
+            [
+                "2021-07-30T00:00:00",
+                "2021-07-31T00:00:00",
+                "2021-07-31T22:44:00",
+                "2021-07-31T22:44:30",
+            ],
+            dtype="datetime64[s]",
+        ),
+        np.arange(-90.0, 91.0, 2.0),
+        np.arange(-180.0, 180.0, 2.0),
+        indexing="ij",
+    )
+    channels = np.arange(1, 5)
+    temperature = 280.0 + 0.1 * latitudes.ravel() + 0.1 * longitudes.ravel()
+    globe = xr.DataTree.from_dict(
+        {
+            "/": xr.Dataset(
+                coords={"Location": np.arange(times.size), "Channel": channels},
+                attrs={
+                    "history": (
+                        "Created deterministic global test grid at 2-degree "
+                        "spacing, with four time slices and four channels."
+                    )
+                },
+            ),
+            "/MetaData": xr.Dataset(
+                {
+                    "dateTime": ("Location", times.ravel()),
+                    "latitude": (
+                        "Location",
+                        latitudes.ravel(),
+                        {"units": "degrees_north"},
+                    ),
+                    "longitude": (
+                        "Location",
+                        longitudes.ravel(),
+                        {"units": "degrees_east"},
+                    ),
+                },
+            ),
+            "/ObsValue": xr.Dataset(
+                {
+                    "temperature": ("Location", temperature, {"units": "K"}),
+                    "brightnessTemperature": (
+                        ("Location", "Channel"),
+                        temperature[:, None] + channels[None, :],
+                        {"units": "K"},
+                    ),
+                }
+            ),
+        }
+    )
+    data_manager.put("globe", globe)
 
     yield
 
