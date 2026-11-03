@@ -711,15 +711,375 @@
       dataset: retrieval_osw_ascat
       format: BUFR
       restricted: false
+    150:
+      dataset: retrieval_cloud_larc_goes
+      format: netCDF
+      restricted: false
+    160:
+      dataset: retrieval_cloud_wisc_goes
+      format: BUFR
+      restricted: false
+    222:
+      dataset: retrieval_sst_amsr2
+      format: BUFR
+      restricted: false
 21:
   category: radiances from satellite
   standard subtypes: {}
   local subtypes:
+    23:
+      dataset: radiance_amsua
+      format: binary
+      restricted: false
+    27:
+      dataset: radiance_mhs
+      format: binary
+      restricted: false
+    28:
+      dataset: radiance_hirs
+      format: binary
+      restricted: false
+    33:
+      dataset: radiance_amsua
+      format: BUFR
+      restricted: false
+    36:
+      dataset: radiance_mhs
+      format: BUFR
+      restricted: false
+    37:
+      dataset: radiance_cris
+      format: BUFR
+      restricted: false
+    38:
+      dataset: radiance_atms
+      format: BUFR
+      restricted: false
+    39:
+      dataset: radiance_iasi
+      format: BUFR
+      restricted: false
+    42:
+      dataset: radiance_seviri
+      format: BUFR
+      restricted: false
+    44:
+      dataset: radiance_ahi
+      format: BUFR
+      restricted: false
+    45:
+      dataset: radiance_abi
+      format: binary
+      restricted: false
+    46:
+      dataset: radiance_abi
+      format: binary
+      restricted: false
+    51:
+      dataset: radiance_avhrr
+      format: binary
+      restricted: false
+    52:
+      dataset: radiance_avhrr
+      format: binary
+      restricted: false
+    53:
+      dataset: radiance_avhrr
+      format: binary
+      restricted: false
+    54:
+      dataset: radiance_avhrr
+      format: binary
+      restricted: false
+    123:
+      dataset: radiance_amsua
+      format: binary
+      restricted: false
+    201:
+      dataset: radiance_ssmis
+      format: BUFR
+      restricted: false
+    203:
+      dataset: radiance_atms
+      format: BUFR
+      restricted: false
+    204:
+      dataset: radiance_viirs
+      format: BUFR
+      restricted: false
+    205:
+      dataset: radiance_cris
+      format: BUFR
+      restricted: false
+    206:
+      dataset: radiance_cris
+      format: BUFR
+      restricted: false
+    212:
+      dataset: radiance_cris
+      format: BUFR
+      restricted: false
+    213:
+      dataset: radiance_atms
+      format: BUFR
+      restricted: false
+    239:
+      dataset: radiance_iasi
+      format: BUFR
+      restricted: false
+    241:
+      dataset: radiance_iasi
+      format: BUFR
+      restricted: false
+    246:
+      dataset: radiance_ahi
+      format: BUFR
+      restricted: false
+    248:
+      dataset: radiance_amsr2
+      format: BUFR
+      restricted: false
+    249:
+      dataset: radiance_amsua
+      format: BUFR
+      restricted: false
 31:
   category: oceanographic data
   standard subtypes: {}
   local subtypes:
+    1:
+      dataset: marine_bathythermal
+      format: WMO FM-63 BATHY
+      restricted: false
+    2:
+      dataset: marine_tesac
+      format: WMO FM-64 TESAC
+      restricted: false
+    3:
+      dataset: marine_trackob
+      format: WMO FM-62 TRACKOB
+      restricted: false
+    4:
+      dataset: marine_axbt
+      format: ASCII
+      restricted: false
+    5:
+      dataset: marine_subsurface_float
+      format: BUFR
+      restricted: false
+    6:
+      dataset: maine_subsurface_tesac
+      format: BUFR
+      restricted: false
+    7:
+      dataset: marine_subsurface_alongtrack
+      format: BUFR
+      restricted: false
+    8:
+      dataset: marine_subsurface_mammals
+      format: BUFR
+      restricted: false
+    120:
+      dataset: maine_altimeter_cryosat2
+      format: BUFR
+      restricted: false
+    121:
+      dataset: maine_altimeter_saral
+      format: BUFR
+      restricted: false
+    122:
+      dataset: maine_altimeter_saral
+      format: BUFR
+      restricted: false
+    123:
+      dataset: maine_altimeter_cryosat2
+      format: BUFR
+      restricted: false
+    124:
+      dataset: maine_altimeter_jason3
+      format: BUFR
+      restricted: false
+    127:
+      dataset: maine_altimeter_jason3
+      format: BUFR
+      restricted: false
+    130:
+      dataset: maine_altimeter_sentinel3a
+      format: BUFR
+      restricted: false
+    133:
+      dataset: maine_altimeter_sentinel3b
+      format: BUFR
+      restricted: false
+    134:
+      dataset: maine_altimeter_sentinel3a
+      format: BUFR
+      restricted: false
+    135:
+      dataset: maine_altimeter_sentinel3b
+      format: BUFR
+      restricted: false
 255:
   category: other
   standard subtypes: {}
   local subtypes:
+    1:
+      dataset: mesonet_madis_denver-urban-drainage
+      format: netCDF
+      restricted: true
+    2:
+      dataset: mesonet_madis_raws
+      format: netCDF
+      restricted: true
+    3:
+      dataset: mesonet_madis_mesowest
+      format: netCDF
+      restricted: true
+    4:
+      dataset: mesonet_madis_aprs-weathernet
+      format: netCDF
+      restricted: true
+    5:
+      dataset: mesonet_madis_kansas-dot
+      format: netCDF
+      restricted: true
+    6:
+      dataset: mesonet_madis_florida
+      format: netCDF
+      restricted: true
+    7:
+      dataset: mesonet_madis_iowa-dot
+      format: netCDF
+      restricted: true
+    8:
+      dataset: mesonet_madis_minnesota-dot
+      format: netCDF
+      restricted: true
+    9:
+      dataset: mesonet_madis_anything-weather
+      format: netCDF
+      restricted: true
+    10:
+      dataset: mesonet_madis_nos-ports
+      format: netCDF
+      restricted: true
+    11:
+      dataset: mesonet_madis_army-aberdeen
+      format: netCDF
+      restricted: true
+    12:
+      dataset: mesonet_madis_weather-for-you
+      format: netCDF
+      restricted: true
+    14:
+      dataset: mesonet_madis_nws-hads
+      format: netCDF
+      restricted: true
+    15:
+      dataset: mesonet_madis_aws
+      format: netCDF
+      restricted: true
+    16:
+      dataset: mesonet_madis_iowa-environmental
+      format: netCDF
+      restricted: true
+    17:
+      dataset: mesonet_madis_oklahoma
+      format: netCDF
+      restricted: true
+    18:
+      dataset: mesonet_madis_colorado-dot
+      format: netCDF
+      restricted: true
+    19:
+      dataset: mesonet_madis_west-texas
+      format: netCDF
+      restricted: true
+    20:
+      dataset: mesonet_madis_wisconsin-dot
+      format: netCDF
+      restricted: true
+    21:
+      dataset: mesonet_madis_lsu-jsu
+      format: netCDF
+      restricted: true
+    22:
+      dataset: mesonet_madis_colorado-e470
+      format: netCDF
+      restricted: true
+    23:
+      dataset: mesonet_madis_dc-net
+      format: netCDF
+      restricted: true
+    24:
+      dataset: mesonet_madis_indiana-dot
+      format: netCDF
+      restricted: true
+    25:
+      dataset: mesonet_madis_florida-dot
+      format: netCDF
+      restricted: true
+    26:
+      dataset: mesonet_madis_alaska-dot
+      format: netCDF
+      restricted: true
+    27:
+      dataset: mesonet_madis_georgia-dot
+      format: netCDF
+      restricted: true
+    28:
+      dataset: mesonet_madis_virginia-dot
+      format: netCDF
+      restricted: true
+    29:
+      dataset: mesonet_madis_missouri-agric-wx-net
+      format: netCDF
+      restricted: true
+    30:
+      dataset: mesonet_madis_other
+      format: netCDF
+      restricted: true
+    31:
+      dataset: mesonet_madis_urbanet
+      format: netCDF
+      restricted: true
+    32:
+      dataset: mesonet_madis_south-alabama
+      format: netCDF
+      restricted: true
+    33:
+      dataset: surface_madis_one-minute-asos
+      format: netCDF
+      restricted: true
+    34:
+      dataset: rwis_madis_south-dakota-dot
+      format: netCDF
+      restricted: true
+    35:
+      dataset: mesonet_synoptic_umrb
+      format: BUFR
+      restricted: true
+    101:
+      dataset: surface_coop_madis_hcn-nepp
+      format: netCDF
+      restricted: true
+    102:
+      dataset: surface_coop
+      format: SHEF
+      restricted: true
+    111:
+      dataset: mesonet_madis_crn
+      format: netCDF
+      restricted: true
+    131:
+      dataset: hydro_madis_denver-urban-drainage
+      format: netCDF
+      restricted: true
+    160:
+      dataset: hydro_madis_other
+      format: netCDF
+      restricted: true
+    161:
+      dataset: surface_snow_madis
+      format: netCDF
+      restricted: true
