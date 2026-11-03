@@ -17,6 +17,7 @@
 #
 # note each observation will have metadata indicating its raw category and local subtype integers
 #
+# A good reference for this is https://www.emc.ncep.noaa.gov/emc/pages/infrastructure/bufrlib/tables/bufrtab_tablea.html
 0:
   category: surface land
   standard subtypes: {}
