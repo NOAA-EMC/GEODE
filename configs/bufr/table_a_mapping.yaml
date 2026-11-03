@@ -10,66 +10,716 @@
 #   category: <category_name>
 #   standard subtypes: {} # not yet used
 #   local subtypes:
-#     BBB: <snake_case_string>
+#     BBB:
+#       dataset: <dataset_name> (what user will request/how it will be stored as one dataset)
+#       format: <format_name> (e.g., BUFR, SHEF, WMO FM-12 SYNOP) which will be metadata for each observation
+#       restricted: <true/false>
+#
+# note each observation will have metadata indicating its raw category and local subtype integers
 #
 0:
   category: surface land
   standard subtypes: {}
   local subtypes:
-    0: synoptic_restricted_tac
-    1: synoptic_tac
-    2: synoptic_tac
-    7: aviation_metar
-    8: profiler_npn_map
-    10: shef_other
-    11: shef_afos
-    15: snow
-    20: wind_nacelle_restricted
-    100: synoptic_restricted
-    101: synoptic
-    102: synoptic
+    0:
+      dataset: surface_synop_restricted
+      format: WMO FM-12 SYNOP
+      restricted: true
+    1:
+      dataset: surface_synop
+      format: WMO FM-12 SYNOP
+      restricted: false
+    2:
+      dataset: surface_synop
+      format: WMO FM-14 SYNOP MOBIL
+      restricted: false
+    7:
+      dataset: surface_metar
+      format: WMO FM-15 METAR / WMO FM-16 SPECI
+      restricted: false
+    10: 
+      dataset: surface_shef_other
+      format: SHEF
+      restricted: false
+    11:
+      dataset: surface_shef_afos
+      format: SHEF
+      restricted: false
+    15:
+      dataset: surface_snow
+      format: BUFR
+      restricted: false
+    100:
+      dataset: surface_synop_restricted
+      format: BUFR
+      restricted: true
+    101:
+      dataset: surface_synop
+      format: BUFR
+      restricted: false
+    102:
+      dataset: surface_synop
+      format: BUFR
+      restricted: false
 1:
   category: surface marine
   standard subtypes: {}
   local subtypes:
-    1: ship_tac_restricted
-    2: buoy_drifter_tac
-    3: buoy_moored_tac
-    4: synoptic_cman
-    5: tide_crex
-    7: uscg
-    8: tide_cman
-    10: cman_shef
-    11: buoy_shef
-    12: tide_shef
-    13: ship_tac
-    14: rvf
-    101: ship_bufr_restricted
-    102: buoy_drifter_bufr
-    103: buoy_moored_bufr
-    104: synoptic_cman_bufr
-    113: ship_bufr
-    120: autonomous_usv
-    121: sofar_restricted
+    1: 
+      dataset: surface_ship_restricted
+      format: WMO FM-13 SHIP
+      restricted: true
+    2:
+      dataset: surface_buoy_drifter
+      format: WMO FM-18 BUOY
+      restricted: false
+    3:
+      dataset: surface_buoy_moored
+      format: WMO FM-13 SHIP
+      restricted: false
+    4:
+      dataset: surface_cman
+      format: CMAN
+      restricted: false
+    5:
+      dataset: surface_tide
+      format: CREX
+      restricted: false
+    7:
+      dataset: surface_uscg
+      format: ASCII
+      restricted: false
+    8:
+      dataset: surface_tide
+      format: CMAN
+      restricted: false
+    10:
+      dataset: surface_cman
+      format: SHEF
+      restricted: false
+    11:
+      dataset: surface_buoy_moored
+      format: SHEF
+      restricted: false
+    12:
+      dataset: surface_tide
+      format: SHEF
+      restricted: false
+    13:
+      dataset: surface_ship
+      format: WMO FM-13 SHIP
+      restricted: false
+    14:
+      dataset: surface_rvf
+      format: SHEF
+      restricted: false
+    101:
+      dataset: surface_ship_restricted
+      format: BUFR
+      restricted: true
+    102:
+      dataset: surface_buoy_drifter
+      format: BUFR
+      restricted: false
+    103:
+      dataset: surface_buoy_moored
+      format: BUFR
+      restricted: false
+    104:
+      dataset: surface_cman
+      format: BUFR
+      restricted: false
+    113:
+      dataset: surface_ship
+      format: BUFR
+      restricted: false
+    120:
+      dataset: surface_autonomous_usv
+      format: BUFR
+      restricted: false
+    121:
+      dataset: surface_sofar_restricted
+      format: BUFR
+      restricted: true
 2:
   category: vertical soundings other than satellite
   standard subtypes: {}
   local subtypes:
-    1: sonde_land_fixed
-    2: sonde_land_mobile
-    3: sonde_ship
-    4: dropsondes
-    5: pibal
-    9: profiler_winds
-    11: map_winds
-    12: map_rass
-    13: jma_winds
-    14: other_winds
-    16: euro_winds
-    17: nexrad_vad
-    18: other_vad
-    101: sonde_land_fixed_bufr
-    102: sonde_land_mobile_bufr
-    103: sonde_ship_bufr
-    104: dropsondes_bufr
-    105: pibal_bufr
+    1:
+      dataset: upperair_radiosonde
+      format: WMO FM-32 PILOT / WMO FM-35 TEMP
+      restricted: false
+    2:
+      dataset: upperair_radiosonde
+      format: WMO FM-34 PILOT MOBIL / WMO FM-38 TEMP MOBIL
+      restricted: false
+    3:
+      dataset: upperair_radiosonde
+      format: WMO FM-33 PILOT SHIP / WMO FM-36 TEMP SHIP
+      restricted: false
+    4:
+      dataset: upperair_dropsonde
+      format: WMO FM-37 TEMP DROP
+      restricted: false
+    5:
+      dataset: upperair_pibal
+      format: WMO FM-32 PILOT
+      restricted: false
+    9:
+      dataset: profiler_winds
+      format: WMO FM-32 PILOT
+      restricted: false
+    11:
+      dataset: profiler_map_winds
+      format: netCDF
+      restricted: false
+    12:
+      dataset: profiler_map_rass
+      format: netCDF
+      restricted: false
+    13:
+      dataset: profiler_jma
+      format: BUFR
+      restricted: false
+    14:
+      dataset: profiler_other
+      format: BUFR
+      restricted: false
+    16:
+      dataset: profiler_europe
+      format: BUFR
+      restricted: false
+    17:
+      dataset: vad_nexrad
+      format: binary
+      restricted: false
+    18:
+      dataset: vad_other
+      format: BUFR
+      restricted: false
+    101:
+      dataset: upperair_radiosonde
+      format: BUFR
+      restricted: false
+    102:
+      dataset: upperair_radiosonde
+      format: BUFR
+      restricted: false
+    103:
+      dataset: upperair_radiosonde
+      format: BUFR
+      restricted: false
+    104:
+      dataset: upperair_dropsonde
+      format: BUFR
+      restricted: false
+    105:
+      dataset: upperair_pibal
+      format: BUFR
+      restricted: false
+3:
+  category: vertical soundings from satellite
+  standard subtypes: {}
+  local subtypes:
+    10:
+      dataset: gnssro
+      format: BUFR
+      restricted: false
+    104:
+      dataset: sounding_atovs
+      format: BUFR
+      restricted: false
+4:
+  category: single level upper-air data other than satellite
+  standard subtypes: {}
+  local subtypes:
+    1:
+      dataset: aircraft_airep
+      format: AIREP
+      restricted: false
+    2:
+      dataset: aircraft_pirep
+      format: PIREP
+      restricted: false
+    3:
+      dataset: aircraft_amdar
+      format: WMO FM-42 AMDAR
+      restricted: true
+    4:
+      dataset: aircraft_amdar_us
+      format: BUFR
+      restricted: true
+    5:
+      dataset: aircraft_recon
+      format: RECCO
+      restricted: false
+    6:
+      dataset: aircraft_amdar_europe
+      format: BUFR
+      restricted: true
+    9:
+      dataset: aircraft_amdar_canada
+      format: BUFR
+      restricted: true
+    10:
+      dataset: aircraft_tamdar
+      format: BUFR
+      restricted: true
+    11:
+      dataset: aircraft_amdar_korea
+      format: BUFR
+      restricted: true
+    15:
+      dataset: aircraft_recon
+      format: HDOB
+      restricted: false
+    16:
+      dataset: aircraft_mode-s
+      format: BUFR
+      restricted: true
+    17:
+      dataset: aircraft_amdar_afirs
+      format: BUFR
+      restricted: false
+    30:
+      dataset: upperair_balloons
+      format: BUFR
+      restricted: true
+    103:
+      dataset: aircraft_amdar
+      format: BUFR
+      restricted: true
+5:
+  category: single level upper-air data from satellite
+  standard subtypes: {}
+  local subtypes:
+    20:
+      dataset: retrieval_cloud_nesdis_goes
+      format: ASCII
+      restricted: false
+    24:
+      dataset: retrieval_amv_insat
+      format: BUFR
+      restricted: false
+    25:
+      dataset: retrieval_amv_insat
+      format: BUFR
+      restricted: false
+    26:
+      dataset: retrieval_amv_insat
+      format: BUFR
+      restricted: false
+    30:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    31:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    32:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    34:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    39:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    44:
+      dataset: retrieval_amv_ahi
+      format: BUFR
+      restricted: false
+    45:
+      dataset: retrieval_amv_ahi
+      format: BUFR
+      restricted: false
+    46:
+      dataset: retrieval_amv_ahi
+      format: BUFR
+      restricted: false
+    47:
+      dataset: retrieval_amv_ahi
+      format: BUFR
+      restricted: false
+    48:
+      dataset: retrieval_amv_ahi
+      format: BUFR
+      restricted: false
+    49:
+      dataset: retrieval_amv_ahi
+      format: BUFR
+      restricted: false
+    52:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    53:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    54:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    55:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    56:
+      dataset: retrieval_amv_abi
+      format: BUFR
+      restricted: false
+    67:
+      dataset: retrieval_amv_seviri
+      format: BUFR
+      restricted: false
+    68:
+      dataset: retrieval_amv_seviri
+      format: BUFR
+      restricted: false
+    69:
+      dataset: retrieval_amv_seviri
+      format: BUFR
+      restricted: false
+    70:
+      dataset: retrieval_amv_modis
+      format: BUFR
+      restricted: false
+    71:
+      dataset: retrieval_amv_modis
+      format: BUFR
+      restricted: false
+    72:
+      dataset: retrieval_amv_leogeo
+      format: BUFR
+      restricted: false
+    80:
+      dataset: retrieval_amv_avhrr
+      format: BUFR
+      restricted: false
+    81:
+      dataset: retrieval_amv_avhrr
+      format: BUFR
+      restricted: false
+    91:
+      dataset: retrieval_amv_viirs
+      format: BUFR
+      restricted: false
+    99:
+      dataset: retrieval_amv_abi-meso
+      format: ASCII
+      restricted: false
+    150:
+      dataset: retrieval_amv_abi-meso
+      format: BUFR
+      restricted: false
+    151:
+      dataset: retrieval_amv_abi-meso
+      format: BUFR
+      restricted: false
+    152:
+      dataset: retrieval_amv_abi-meso
+      format: BUFR
+      restricted: false
+    154:
+      dataset: retrieval_amv_abi-meso
+      format: BUFR
+      restricted: false
+    159:
+      dataset: retrieval_amv_abi-meso
+      format: BUFR
+      restricted: false
+6:
+  category: radar
+  standard subtypes: {}
+  local subtypes:
+    # BUFR tanks are hourly, may need to match this
+    # but for now, combine them together
+    10:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    11:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    12:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    13:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    14:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    15:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    16:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    17:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    18:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    19:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    20:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    21:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    22:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    23:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    24:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    25:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    26:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    27:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    28:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    29:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    30:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    31:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    32:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    33:
+      dataset: radar_nexrad_l2_wind
+      format: binary
+      restricted: false
+    40:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    41:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    42:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    43:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    44:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    45:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    46:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    47:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    48:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    49:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    50:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    51:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    52:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    53:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    54:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    55:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    56:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    57:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    58:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    59:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    60:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    61:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    62:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    63:
+      dataset: radar_nexrad_l2_reflectivity
+      format: binary
+      restricted: false
+    70:
+      dataset: radar_aircraft_p3_wind
+      format: binary
+      restricted: false
+7:
+  category: synoptic features
+  standard subtypes: {}
+  local subtypes:
+    1:
+      dataset: lightning_nldn_restricted
+      format: binary
+      restricted: true
+    2:
+      dataset: lightning_lldn_restricted
+      format: binary
+      restricted: true
+    3:
+      dataset: lightning_tln
+      format: binary
+      restricted: false
+    21:
+      dataset: retrieval_pblh_nexrad
+      format: binary
+      restricted: false
+8:
+  category: physical / chemical constituents
+  standard subtypes: {}
+  local subtypes:
+    11:
+      dataset: retrieval_ozone_sbuv
+      format: BUFR
+      restricted: false
+    12:
+      dataset: retrieval_ozone_gome
+      format: BUFR
+      restricted: false
+    17:
+      dataset: retrieval_ozone_omps-np
+      format: BUFR
+      restricted: false
+    18:
+      dataset: retrieval_ozone_omps-tc
+      format: BUFR
+      restricted: false
+    19:
+      dataset: retrieval_ozone_omps-lp
+      format: BUFR
+      restricted: false
+    41:
+      dataset: retrieval_aod_modis
+      format: BUFR
+      restricted: false
+12:
+  category: surface data from satellite
+  standard subtypes: {}
+  local subtypes:
+    4:
+      dataset: gnssro_ground
+      format: BUFR
+      restricted: true
+    12:
+      dataset: retrieval_sst_poes
+      format: binary
+      restricted: false
+    23:
+      dataset: retrieval_sst_viirs
+      format: BUFR
+      restricted: false
+    24:
+      dataset: retrieval_sst_viirs
+      format: BUFR
+      restricted: false
+    25:
+      dataset: retrieval_sst_viirs
+      format: BUFR
+      restricted: false
+    122:
+      dataset: retrieval_osw_ascat
+      format: BUFR
+      restricted: false
+21:
+  category: radiances from satellite
+  standard subtypes: {}
+  local subtypes:
+31:
+  category: oceanographic data
+  standard subtypes: {}
+  local subtypes:
+255:
+  category: other
+  standard subtypes: {}
+  local subtypes:
