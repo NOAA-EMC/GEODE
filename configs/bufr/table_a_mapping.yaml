@@ -689,7 +689,7 @@
   standard subtypes: {}
   local subtypes:
     4:
-      dataset: gnssro_ground
+      dataset: gnss_ground
       format: BUFR
       restricted: true
     12:
