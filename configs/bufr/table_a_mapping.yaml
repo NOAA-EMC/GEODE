@@ -18,6 +18,10 @@
 # note each observation will have metadata indicating its raw category and local subtype integers
 #
 # A good reference for this is https://www.emc.ncep.noaa.gov/emc/pages/infrastructure/bufrlib/tables/bufrtab_tablea.html
+#
+# Also note, the final dataset names may have additional suffixes
+# such as platform, channel subset, or other distinguishing features
+#
 0:
   category: surface land
   standard subtypes: {}
