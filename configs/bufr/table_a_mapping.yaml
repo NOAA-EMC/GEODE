@@ -869,7 +869,7 @@
       format: BUFR
       restricted: false
     6:
-      dataset: maine_subsurface_tesac
+      dataset: marine_subsurface_tesac
       format: BUFR
       restricted: false
     7:
@@ -881,43 +881,43 @@
       format: BUFR
       restricted: false
     120:
-      dataset: maine_altimeter_cryosat2
+      dataset: marine_altimeter_cryosat2
       format: BUFR
       restricted: false
     121:
-      dataset: maine_altimeter_saral
+      dataset: marine_altimeter_saral
       format: BUFR
       restricted: false
     122:
-      dataset: maine_altimeter_saral
+      dataset: marine_altimeter_saral
       format: BUFR
       restricted: false
     123:
-      dataset: maine_altimeter_cryosat2
+      dataset: marine_altimeter_cryosat2
       format: BUFR
       restricted: false
     124:
-      dataset: maine_altimeter_jason3
+      dataset: marine_altimeter_jason3
       format: BUFR
       restricted: false
     127:
-      dataset: maine_altimeter_jason3
+      dataset: marine_altimeter_jason3
       format: BUFR
       restricted: false
     130:
-      dataset: maine_altimeter_sentinel3a
+      dataset: marine_altimeter_sentinel3a
       format: BUFR
       restricted: false
     133:
-      dataset: maine_altimeter_sentinel3b
+      dataset: marine_altimeter_sentinel3b
       format: BUFR
       restricted: false
     134:
-      dataset: maine_altimeter_sentinel3a
+      dataset: marine_altimeter_sentinel3a
       format: BUFR
       restricted: false
     135:
-      dataset: maine_altimeter_sentinel3b
+      dataset: marine_altimeter_sentinel3b
       format: BUFR
       restricted: false
 255:
