@@ -833,7 +833,7 @@
       format: BUFR
       restricted: false
     246:
-      dataset: radiance_ahi
+      dataset: radiance_gmi
       format: BUFR
       restricted: false
     248:
