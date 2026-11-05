@@ -4,61 +4,61 @@ import os
 
 from geode.configs.geode_config import geode_config
 from geode.configs.table_a_mapping import (
-    TankInfo,
-    UnmappedTankError,
+    BufrTankInfo,
+    UnmappedBufrTankError,
     table_a_mapping,
-    unmapped_tank_info,
+    unmapped_bufr_tank_info,
 )
 from geode.ingest import ingestors
 
 logger = logging.getLogger(__name__)
 
-IngestorPrefix = "tank"
+IngestorPrefix = "bufr_tank"
 
 
-class TankConfigError(ValueError):
+class BufrTankConfigError(ValueError):
     """Raised when geode.yaml has no usable ``tank`` section."""
 
 
-class RestrictedTankError(PermissionError):
+class RestrictedBufrTankError(PermissionError):
     """Raised when a restricted tank is requested without opting in."""
 
 
-class TankReader:
+class BufrTankReader:
     """Consume NCEP BUFR tanks of the form ``{root}/YYYYMMDD/bAAA/xxBBB``."""
 
     def __init__(self):
-        if geode_config.tank is None:
-            raise TankConfigError(
-                "No 'tank' section in geode.yaml; add tank.root_path to read BUFR tanks"
+        if geode_config.bufr_tank is None:
+            raise BufrTankConfigError(
+                "No 'bufr_tank' section in geode.yaml; add bufr_tank.root_path to read BUFR tanks"
             )
-        self.config = geode_config.tank
+        self.config = geode_config.bufr_tank
         self._mpi_app = None
 
-    def get_tank_info(self, tank_id: str) -> TankInfo:
-        """Resolve a ``bAAA/xxBBB`` tank ID and enforce the restricted-data policy.
+    def get_bufr_tank_info(self, tank_id: str) -> BufrTankInfo:
+        """Resolve a ``bAAA/xxBBB`` BUFR tank ID and enforce the restricted-data policy.
 
-        Unmapped tanks raise ``UnmappedTankError`` unless ``tank.allow_unmapped``
+        Unmapped BUFR tanks raise ``UnmappedBufrTankError`` unless ``bufr_tank.allow_unmapped``
         is set, in which case they get a ``bAAA_xxBBB`` dataset name.
         """
         try:
             info = table_a_mapping.get(tank_id)
-        except UnmappedTankError as error:
+        except UnmappedBufrTankError as error:
             if not self.config.allow_unmapped:
-                raise UnmappedTankError(
+                raise UnmappedBufrTankError(
                     f"{error}; add it to the mapping or set "
-                    "tank.allow_unmapped: true in geode.yaml"
+                    "bufr_tank.allow_unmapped: true in geode.yaml"
                 ) from error
-            info = unmapped_tank_info(tank_id)
+            info = unmapped_bufr_tank_info(tank_id)
             logger.warning(
                 f"BUFR tank '{info.tank_id}' is not in {table_a_mapping.mapping_path}; "
                 f"using fallback dataset name '{info.dataset}'"
             )
 
         if info.restricted and not self.config.include_restricted:
-            raise RestrictedTankError(
+            raise RestrictedBufrTankError(
                 f"BUFR tank '{info.tank_id}' ({info.dataset}) is restricted; set "
-                "tank.include_restricted: true in geode.yaml to ingest it"
+                "bufr_tank.include_restricted: true in geode.yaml to ingest it"
             )
         return info
 
@@ -81,7 +81,7 @@ class TankReader:
         self, tank_id: str, start_date: datetime.datetime, end_date: datetime.datetime
     ) -> str:
         """Ingest a BUFR tank over a date range and return its dataset name."""
-        info = self.get_tank_info(tank_id)
+        info = self.get_bufr_tank_info(tank_id)
         file_paths = self.get_file_paths(info.tank_id, start_date, end_date)
         logger.info(
             f"BUFR tank {info.tank_id} -> dataset '{info.dataset}' "
@@ -104,7 +104,7 @@ class TankReader:
         return info.dataset
 
     @staticmethod
-    def _find_ingestor(info: TankInfo) -> type | None:
+    def _find_ingestor(info: BufrTankInfo) -> type | None:
         """Prefer a tank-specific ingestor, then fall back to a per-dataset one."""
         registered = ingestors.directory()
         for key in (info.tank_id, info.dataset):

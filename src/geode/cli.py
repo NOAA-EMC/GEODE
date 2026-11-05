@@ -25,26 +25,30 @@ def _run_ncep_dump_reader(args: argparse.Namespace) -> int:
     return 0
 
 
-def _parse_tank_id(value: str) -> str:
-    from geode.configs.table_a_mapping import format_tank_id, parse_tank_id
+def _parse_bufr_tank_id(value: str) -> str:
+    from geode.configs.table_a_mapping import format_bufr_tank_id, parse_bufr_tank_id
 
     try:
-        return format_tank_id(*parse_tank_id(value))
+        return format_bufr_tank_id(*parse_bufr_tank_id(value))
     except ValueError as error:
         raise argparse.ArgumentTypeError(str(error)) from error
 
 
-def _run_tank_reader(args: argparse.Namespace) -> int:
-    from geode.configs.table_a_mapping import UnmappedTankError, table_a_mapping
-    from geode.ingest.consumers.tank_reader import (
-        RestrictedTankError,
-        TankConfigError,
-        TankReader,
+def _run_bufr_tank_reader(args: argparse.Namespace) -> int:
+    from geode.configs.table_a_mapping import UnmappedBufrTankError, table_a_mapping
+    from geode.ingest.consumers.bufr_tank_reader import (
+        BufrTankConfigError,
+        BufrTankReader,
+        RestrictedBufrTankError,
     )
 
     try:
-        dataset = TankReader().ingest(args.tank_id, args.start_date, args.end_date)
-    except (UnmappedTankError, RestrictedTankError, TankConfigError) as error:
+        dataset = BufrTankReader().ingest(args.tank_id, args.start_date, args.end_date)
+    except (
+        UnmappedBufrTankError,
+        RestrictedBufrTankError,
+        BufrTankConfigError,
+    ) as error:
         print(f"geode: error: {error}", file=sys.stderr)
         return 1
 
@@ -78,10 +82,10 @@ def _run_admin(args: argparse.Namespace) -> int:
 
         for data_type in data_manager.list_data_types():
             print(data_type)
-    if args.list_tank_datasets:
+    if args.list_bufr_tank_datasets:
         from geode.configs.table_a_mapping import table_a_mapping
 
-        for tank_id in table_a_mapping.tank_ids():
+        for tank_id in table_a_mapping.bufr_tank_ids():
             info = table_a_mapping.get(tank_id)
             restricted = "\trestricted" if info.restricted else ""
             print(f"{tank_id}\t{info.dataset}\t{info.format}{restricted}")
@@ -111,20 +115,20 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     ncep_dump_parser.set_defaults(handler=_run_ncep_dump_reader)
 
-    tank_parser = ingest_parsers.add_parser(
-        "tank_reader",
+    bufr_tank_parser = ingest_parsers.add_parser(
+        "bufr_tank_reader",
         help="Read NCEP BUFR tank files (bAAA/xxBBB) for a UTC date range.",
     )
-    tank_parser.add_argument(
-        "tank_id", type=_parse_tank_id, help="BUFR tank ID, e.g. b000/xx001."
+    bufr_tank_parser.add_argument(
+        "tank_id", type=_parse_bufr_tank_id, help="BUFR tank ID, e.g. b000/xx001."
     )
-    tank_parser.add_argument(
+    bufr_tank_parser.add_argument(
         "start_date", type=_parse_utc_date, help="Start date in YYYY-MM-DD format."
     )
-    tank_parser.add_argument(
+    bufr_tank_parser.add_argument(
         "end_date", type=_parse_utc_date, help="End date in YYYY-MM-DD format."
     )
-    tank_parser.set_defaults(handler=_run_tank_reader)
+    bufr_tank_parser.set_defaults(handler=_run_bufr_tank_reader)
 
     wis2_parser = ingest_parsers.add_parser(
         "wis2_listener", help="Start the WIS2 notification listener."
@@ -141,7 +145,7 @@ def _build_parser() -> argparse.ArgumentParser:
         help="List data types available to the get command.",
     )
     admin_parser.add_argument(
-        "--list-tank-datasets",
+        "--list-bufr-tank-datasets",
         action="store_true",
         help="List BUFR tank IDs with their dataset, format, and restriction.",
     )

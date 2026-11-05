@@ -20,8 +20,8 @@ UnmappedCategoryName = "unmapped"
 UnmappedFormat = "unknown"
 
 
-class UnmappedTankError(KeyError):
-    """Raised when a tank ID is well formed but not in table_a_mapping.yaml."""
+class UnmappedBufrTankError(KeyError):
+    """Raised when a BUFR tank ID is well formed but not in table_a_mapping.yaml."""
 
     def __str__(self) -> str:
         # KeyError quotes its message by default; keep it readable
@@ -29,7 +29,7 @@ class UnmappedTankError(KeyError):
 
 
 @dataclass(frozen=True)
-class TankInfo:
+class BufrTankInfo:
     category: int
     subtype: int
     category_name: str
@@ -39,16 +39,16 @@ class TankInfo:
 
     @property
     def tank_id(self) -> str:
-        return format_tank_id(self.category, self.subtype)
+        return format_bufr_tank_id(self.category, self.subtype)
 
 
-def format_tank_id(category: int, subtype: int) -> str:
-    """Return the ``bAAA/xxBBB`` tank ID for a category/subtype pair."""
+def format_bufr_tank_id(category: int, subtype: int) -> str:
+    """Return the ``bAAA/xxBBB`` BUFR tank ID for a category/subtype pair."""
     return f"b{category:03d}/xx{subtype:03d}"
 
 
-def parse_tank_id(tank_id: str) -> tuple[int, int]:
-    """Parse a ``bAAA/xxBBB`` tank ID into ``(category, subtype)`` integers."""
+def parse_bufr_tank_id(tank_id: str) -> tuple[int, int]:
+    """Parse a ``bAAA/xxBBB`` BUFR tank ID into ``(category, subtype)`` integers."""
     match = _TANK_ID_PATTERN.match(tank_id.strip().strip("/"))
     if match is None:
         raise ValueError(
@@ -58,14 +58,14 @@ def parse_tank_id(tank_id: str) -> tuple[int, int]:
     return int(match.group(1)), int(match.group(2))
 
 
-def unmapped_tank_info(tank_id: str) -> TankInfo:
-    """Build a placeholder entry named ``bAAA_xxBBB`` for a tank with no mapping."""
-    category, subtype = parse_tank_id(tank_id)
-    return TankInfo(
+def unmapped_bufr_tank_info(tank_id: str) -> BufrTankInfo:
+    """Build a placeholder entry named ``bAAA_xxBBB`` for a BUFR tank with no mapping."""
+    category, subtype = parse_bufr_tank_id(tank_id)
+    return BufrTankInfo(
         category=category,
         subtype=subtype,
         category_name=UnmappedCategoryName,
-        dataset=format_tank_id(category, subtype).replace("/", "_"),
+        dataset=format_bufr_tank_id(category, subtype).replace("/", "_"),
         format=UnmappedFormat,
         restricted=False,
     )
@@ -77,11 +77,11 @@ class TableAMapping:
         with open(mapping_path) as mapping_file:
             raw = yaml.safe_load(mapping_file) or {}
 
-        self._tanks: dict[tuple[int, int], TankInfo] = {}
+        self._tanks: dict[tuple[int, int], BufrTankInfo] = {}
         for category, category_entry in raw.items():
             local_subtypes = category_entry.get("local subtypes") or {}
             for subtype, entry in local_subtypes.items():
-                info = TankInfo(
+                info = BufrTankInfo(
                     category=int(category),
                     subtype=int(subtype),
                     category_name=category_entry["category"],
@@ -91,11 +91,11 @@ class TableAMapping:
                 )
                 self._tanks[(info.category, info.subtype)] = info
 
-    def get(self, tank_id: str) -> TankInfo:
-        """Return the mapping entry for a ``bAAA/xxBBB`` tank ID."""
-        key = parse_tank_id(tank_id)
+    def get(self, tank_id: str) -> BufrTankInfo:
+        """Return the mapping entry for a ``bAAA/xxBBB`` BUFR tank ID."""
+        key = parse_bufr_tank_id(tank_id)
         if key not in self._tanks:
-            raise UnmappedTankError(
+            raise UnmappedBufrTankError(
                 f"BUFR tank '{tank_id}' is not defined in {self.mapping_path}"
             )
         return self._tanks[key]
@@ -103,12 +103,12 @@ class TableAMapping:
     def get_dataset(self, tank_id: str) -> str:
         return self.get(tank_id).dataset
 
-    def tank_ids(self) -> list[str]:
+    def bufr_tank_ids(self) -> list[str]:
         return [info.tank_id for _, info in sorted(self._tanks.items())]
 
     def __contains__(self, tank_id: str) -> bool:
         try:
-            return parse_tank_id(tank_id) in self._tanks
+            return parse_bufr_tank_id(tank_id) in self._tanks
         except ValueError:
             return False
 

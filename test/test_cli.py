@@ -44,7 +44,7 @@ def test_geode_cli_dispatches_ncep_dump_reader(monkeypatch):
     }
 
 
-def test_geode_cli_dispatches_tank_reader(monkeypatch, capsys):
+def test_geode_cli_dispatches_bufr_tank_reader(monkeypatch, capsys):
     recorded_call = {}
 
     class FakeReader:
@@ -54,12 +54,12 @@ def test_geode_cli_dispatches_tank_reader(monkeypatch, capsys):
             recorded_call["end_date"] = end_date
             return "surface_synop"
 
-    from geode.ingest.consumers import tank_reader
+    from geode.ingest.consumers import bufr_tank_reader
 
-    monkeypatch.setattr(tank_reader, "TankReader", FakeReader)
+    monkeypatch.setattr(bufr_tank_reader, "BufrTankReader", FakeReader)
 
     exit_code = cli.main(
-        ["ingest", "tank_reader", "/b000/xx001/", "2026-08-01", "2026-08-02"]
+        ["ingest", "bufr_tank_reader", "/b000/xx001/", "2026-08-01", "2026-08-02"]
     )
 
     assert exit_code == 0
@@ -71,9 +71,11 @@ def test_geode_cli_dispatches_tank_reader(monkeypatch, capsys):
     assert capsys.readouterr().out == "b000/xx001 -> surface_synop\n"
 
 
-def test_geode_cli_rejects_invalid_tank_id(capsys):
+def test_geode_cli_rejects_invalid_bufr_tank_id(capsys):
     with pytest.raises(SystemExit) as error:
-        cli.main(["ingest", "tank_reader", "surface_synop", "2026-08-01", "2026-08-02"])
+        cli.main(
+            ["ingest", "bufr_tank_reader", "surface_synop", "2026-08-01", "2026-08-02"]
+        )
 
     assert error.value.code == 2
     assert "bAAA/xxBBB" in capsys.readouterr().err
@@ -82,18 +84,18 @@ def test_geode_cli_rejects_invalid_tank_id(capsys):
 @pytest.mark.parametrize(
     ("error_name", "message"),
     [
-        ("UnmappedTankError", "BUFR tank 'b000/xx999' is not defined"),
-        ("RestrictedTankError", "BUFR tank 'b000/xx000' is restricted"),
-        ("TankConfigError", "No 'tank' section in geode.yaml"),
+        ("UnmappedBufrTankError", "BUFR tank 'b000/xx999' is not defined"),
+        ("RestrictedBufrTankError", "BUFR tank 'b000/xx000' is restricted"),
+        ("BufrTankConfigError", "No 'bufr_tank' section in geode.yaml"),
     ],
 )
-def test_geode_cli_reports_tank_errors_without_traceback(
+def test_geode_cli_reports_bufr_tank_errors_without_traceback(
     monkeypatch, capsys, error_name, message
 ):
     from geode.configs import table_a_mapping
-    from geode.ingest.consumers import tank_reader
+    from geode.ingest.consumers import bufr_tank_reader
 
-    error_class = getattr(tank_reader, error_name, None) or getattr(
+    error_class = getattr(bufr_tank_reader, error_name, None) or getattr(
         table_a_mapping, error_name
     )
 
@@ -101,10 +103,10 @@ def test_geode_cli_reports_tank_errors_without_traceback(
         def __init__(self):
             raise error_class(message)
 
-    monkeypatch.setattr(tank_reader, "TankReader", FailingReader)
+    monkeypatch.setattr(bufr_tank_reader, "BufrTankReader", FailingReader)
 
     exit_code = cli.main(
-        ["ingest", "tank_reader", "b000/xx999", "2026-08-01", "2026-08-02"]
+        ["ingest", "bufr_tank_reader", "b000/xx999", "2026-08-01", "2026-08-02"]
     )
 
     captured = capsys.readouterr()
@@ -114,16 +116,16 @@ def test_geode_cli_reports_tank_errors_without_traceback(
 
 
 def test_geode_cli_warns_on_unmapped_fallback(monkeypatch, capsys):
-    from geode.ingest.consumers import tank_reader
+    from geode.ingest.consumers import bufr_tank_reader
 
     class FallbackReader:
         def ingest(self, tank_id, start_date, end_date):
             return "b000_xx999"
 
-    monkeypatch.setattr(tank_reader, "TankReader", FallbackReader)
+    monkeypatch.setattr(bufr_tank_reader, "BufrTankReader", FallbackReader)
 
     exit_code = cli.main(
-        ["ingest", "tank_reader", "b000/xx999", "2026-08-01", "2026-08-02"]
+        ["ingest", "bufr_tank_reader", "b000/xx999", "2026-08-01", "2026-08-02"]
     )
 
     captured = capsys.readouterr()
@@ -133,21 +135,23 @@ def test_geode_cli_warns_on_unmapped_fallback(monkeypatch, capsys):
     assert "fallback dataset name 'b000_xx999'" in captured.err
 
 
-def test_geode_cli_lets_unexpected_tank_errors_propagate(monkeypatch):
-    from geode.ingest.consumers import tank_reader
+def test_geode_cli_lets_unexpected_bufr_tank_errors_propagate(monkeypatch):
+    from geode.ingest.consumers import bufr_tank_reader
 
     class BrokenReader:
         def ingest(self, *args):
             raise RuntimeError("decoder blew up")
 
-    monkeypatch.setattr(tank_reader, "TankReader", BrokenReader)
+    monkeypatch.setattr(bufr_tank_reader, "BufrTankReader", BrokenReader)
 
     with pytest.raises(RuntimeError, match="decoder blew up"):
-        cli.main(["ingest", "tank_reader", "b000/xx001", "2026-08-01", "2026-08-02"])
+        cli.main(
+            ["ingest", "bufr_tank_reader", "b000/xx001", "2026-08-01", "2026-08-02"]
+        )
 
 
-def test_geode_cli_lists_tank_datasets(capsys):
-    assert cli.main(["admin", "--list-tank-datasets"]) == 0
+def test_geode_cli_lists_bufr_tank_datasets(capsys):
+    assert cli.main(["admin", "--list-bufr-tank-datasets"]) == 0
     lines = capsys.readouterr().out.splitlines()
 
     assert "b000/xx001\tsurface_synop\tWMO FM-12 SYNOP" in lines
