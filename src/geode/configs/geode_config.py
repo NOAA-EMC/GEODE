@@ -122,6 +122,21 @@ class NcepDumpConfig(ConfigBase):
         return [os.path.join(src_path, rel_path) for rel_path in rel_paths]
 
 
+# BUFR Tank Configuration
+
+
+class TankConfig(ConfigBase):
+    """BUFR tanks laid out as ``{root_path}/YYYYMMDD/bAAA/xxBBB``."""
+
+    root_path = StrField()
+    include_restricted = Optional(BoolField(), default=False)
+    # Ingest tanks missing from table_a_mapping.yaml under a bAAA_xxBBB dataset name
+    allow_unmapped = Optional(BoolField(), default=False)
+
+    def get_file_path(self, tank_id: str, day: datetime) -> str:
+        return os.path.join(self.root_path, day.strftime("%Y%m%d"), tank_id)
+
+
 # Main Configuration Class
 
 
@@ -138,6 +153,8 @@ class GeodeConfig(ConfigBase):
     )
     wis2 = Wis2Config(root_dir=root_dir)
     ncep_dump = NcepDumpConfig()
+    # Optional so existing user geode.yaml files without a tank block still load
+    tank = Optional(TankConfig(), default=None)
     bufr = BufrConfig()
 
     def __init__(self, config_path: str):

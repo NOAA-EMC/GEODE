@@ -16,4 +16,9 @@ wis2:
 ncep_dump:
   root_path: ""
 
+tank:
+  root_path: ""
+  include_restricted: false
+  allow_unmapped: false
+
 bufr: null

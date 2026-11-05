@@ -16,4 +16,9 @@ wis2:
 ncep_dump:
   root_path: "/tmp/geode_test/dump"
 
+tank:
+  root_path: "/tmp/geode_test/tank"
+  include_restricted: false
+  allow_unmapped: false
+
 bufr: null

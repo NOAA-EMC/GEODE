@@ -1,5 +1,10 @@
 from typing import TYPE_CHECKING, Any
 
+from geode._logging import import_wxflow_quietly
+
+# Must run before anything imports bufr.obs_builder (and with it wxflow)
+import_wxflow_quietly()
+
 if TYPE_CHECKING:
     from geode.client import get as get
 
