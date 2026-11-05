@@ -11,8 +11,23 @@ GeodeConfigName = f"{AppName}.yaml"
 class _ConfigPaths:
     @staticmethod
     def get_package_config_dir() -> str:
-        return os.path.realpath(
+        # Source tree / editable install: <repo>/src/geode/configs -> <repo>/configs
+        source_dir = os.path.realpath(
             os.path.join(os.path.dirname(__file__), "..", "..", "..", "configs")
+        )
+        if os.path.isdir(source_dir):
+            return source_dir
+
+        # Regular install: configs are shipped as data-files under
+        # <prefix>/share/geode/configs (see [tool.setuptools.data-files]).
+        for prefix in (sys.prefix, sys.base_prefix):
+            installed_dir = os.path.join(prefix, "share", AppName, "configs")
+            if os.path.isdir(installed_dir):
+                return installed_dir
+
+        raise FileNotFoundError(
+            f"Could not locate geode package configs; looked in {source_dir} and "
+            f"{os.path.join(sys.prefix, 'share', AppName, 'configs')}"
         )
 
     @classmethod

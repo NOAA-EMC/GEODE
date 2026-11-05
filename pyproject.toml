@@ -34,8 +34,11 @@ geode = "geode.cli:main"
 where = ["src"]
 
 [tool.setuptools.data-files]
+"share/geode/configs" = [
+	"configs/*.yaml",
+]
 "share/geode/configs/bufr" = [
-	"configs/bufr/table_a_mapping.yaml",
+	"configs/bufr/*.yaml",
 ]
 
 [tool.setuptools.package-data]
