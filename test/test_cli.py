@@ -113,6 +113,26 @@ def test_geode_cli_reports_tank_errors_without_traceback(
     assert captured.err == f"geode: error: {message}\n"
 
 
+def test_geode_cli_warns_on_unmapped_fallback(monkeypatch, capsys):
+    from geode.ingest.consumers import tank_reader
+
+    class FallbackReader:
+        def ingest(self, tank_id, start_date, end_date):
+            return "b000_xx999"
+
+    monkeypatch.setattr(tank_reader, "TankReader", FallbackReader)
+
+    exit_code = cli.main(
+        ["ingest", "tank_reader", "b000/xx999", "2026-08-01", "2026-08-02"]
+    )
+
+    captured = capsys.readouterr()
+    assert exit_code == 0
+    assert captured.out == "b000/xx999 -> b000_xx999\n"
+    assert captured.err.startswith("geode: warning: b000/xx999 is not in ")
+    assert "fallback dataset name 'b000_xx999'" in captured.err
+
+
 def test_geode_cli_lets_unexpected_tank_errors_propagate(monkeypatch):
     from geode.ingest.consumers import tank_reader
 

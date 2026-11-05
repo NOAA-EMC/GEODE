@@ -35,7 +35,7 @@ def _parse_tank_id(value: str) -> str:
 
 
 def _run_tank_reader(args: argparse.Namespace) -> int:
-    from geode.configs.table_a_mapping import UnmappedTankError
+    from geode.configs.table_a_mapping import UnmappedTankError, table_a_mapping
     from geode.ingest.consumers.tank_reader import (
         RestrictedTankError,
         TankConfigError,
@@ -47,6 +47,14 @@ def _run_tank_reader(args: argparse.Namespace) -> int:
     except (UnmappedTankError, RestrictedTankError, TankConfigError) as error:
         print(f"geode: error: {error}", file=sys.stderr)
         return 1
+
+    # Printed directly: wxflow sets the root logger to ERROR on import, hiding warnings
+    if args.tank_id not in table_a_mapping:
+        print(
+            f"geode: warning: {args.tank_id} is not in {table_a_mapping.mapping_path}; "
+            f"using fallback dataset name '{dataset}'",
+            file=sys.stderr,
+        )
 
     print(f"{args.tank_id} -> {dataset}")
     return 0
