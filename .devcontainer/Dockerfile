@@ -3,7 +3,7 @@ FROM python:3.12
 ARG USERNAME=developer
 ARG GSL_LITE_REF=v1.1.0
 ARG NCEPLIBS_BUFR_REF=v12.3.0
-ARG BUFR_QUERY_REF=develop
+ARG BUFR_QUERY_REF=feature/more-python
 
 RUN useradd -ms /bin/bash ${USERNAME}
 
