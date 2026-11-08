@@ -1,4 +1,5 @@
 import os
+import shutil
 import tempfile
 
 import bufr
@@ -6,6 +7,15 @@ import xarray as xr
 
 from geode.configs.geode_config import geode_config
 from geode.ingest.ingestors.base_ingestor import BaseIngestor
+
+
+def find_table_path() -> str:
+    gettab_path = shutil.which("gettab")
+    if gettab_path is None:
+        raise FileNotFoundError(
+            "gettab path could not be found. Please ensure it is installed and in your PATH."
+        )
+    return os.path.realpath(os.path.join(gettab_path, "..", "..", "tables"))
 
 
 def container_to_xarray(
@@ -42,7 +52,7 @@ class BufrIngestor(BaseIngestor):
     def __init__(self, data_type: str, bufr_yaml: str):
         super().__init__(data_type)
         self.bufr_yaml = os.path.join(geode_config.bufr.map_dir, bufr_yaml)
-        self.table_path = geode_config.bufr.table_path
+        self.table_path = geode_config.bufr.table_path or find_table_path()
 
     def _process(self, file_path: str) -> xr.DataTree | dict[xr.DataTree]:
         container = bufr.Parser(file_path, self.bufr_yaml, self.table_path).parse()
