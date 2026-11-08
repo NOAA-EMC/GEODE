@@ -24,12 +24,8 @@ def test_time_window_unsorted():
                 coords={"Location": np.arange(len(times))},
                 attrs={IsSortedFlag: False},
             ),
-            "/MetaData": xr.Dataset(
-                {"dateTime": ("Location", times)}
-            ),
-            "/ObsValue": xr.Dataset(
-                {"value": ("Location", values)}
-            ),
+            "/MetaData": xr.Dataset({"dateTime": ("Location", times)}),
+            "/ObsValue": xr.Dataset({"value": ("Location", values)}),
         }
     )
 
