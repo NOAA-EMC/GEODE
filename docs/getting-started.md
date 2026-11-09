@@ -94,3 +94,22 @@ print(data)
 ## Configuration
 
 The configuration is loaded from the YAML files in the `configs/` directory. The configuration classes in `geode.configs` define the available lake types, database settings, and WIS2 ingest options.
+
+### BUFR tanks
+
+To ingest NCEP BUFR tanks, add a `bufr_tank` section to `geode.yaml`:
+
+```yaml
+bufr_tank:
+  root_path: "/path/to/tanks"
+  include_restricted: false
+  allow_unmapped: false
+```
+
+| Option | Description |
+|---|---|
+| `root_path` | Directory containing the tanks, laid out as `YYYYMMDD/bAAA/xxBBB` |
+| `include_restricted` | Allow tanks marked restricted in `table_a_mapping.yaml` |
+| `allow_unmapped` | Allow tanks that are not in `table_a_mapping.yaml`, stored under the name `bAAA_xxBBB` |
+
+See [BUFR Tanks](bufr-tanks.md) for how tanks are stored.

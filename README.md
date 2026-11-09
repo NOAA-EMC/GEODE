@@ -40,12 +40,15 @@ admin tasks:
 
 ```bash
 geode ingest ncep_dump_reader atms 2026-08-01 2026-09-02
+geode ingest bufr_tank_reader b002/xx001 2026-11-01 2026-11-05
 geode ingest wis2_listener
 geode admin --list-ingestors
 ```
 
 The `admin` subcommand exposes GEODE administrative utilities. For example,
 `geode admin --list-ingestors` prints the currently available ingestors.
+
+See [BUFR Tanks](docs/bufr-tanks.md) for how NCEP BUFR tanks are stored.
 
 ## Dependencies
 

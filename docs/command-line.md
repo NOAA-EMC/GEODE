@@ -1,7 +1,6 @@
 # Command Line
 
-GEODE currently provides one command-line operation: look up a BUFR Table B
-descriptor by its six-digit FXY value.
+This page describes GEODE's command-line operations.
 
 ## Install
 
@@ -62,3 +61,24 @@ code figure, entry name, notes, and status.
 The code figure must exactly match a `CodeFigure` value in the CodeFlag table.
 An unknown FXY and code-figure combination causes the command to exit with an
 error message.
+
+## Ingest BUFR Tanks
+
+Use `geode ingest bufr_tank_reader` to ingest an NCEP BUFR tank for a range of UTC
+days, inclusive:
+
+```bash
+geode ingest bufr_tank_reader b002/xx001 2026-11-01 2026-11-05
+```
+
+The command prints the tank and its dataset name. Days with no file for the tank are
+skipped. Restricted and unmapped tanks exit with an error unless they are allowed in the
+[configuration](getting-started.md#bufr-tanks).
+
+To list every known tank with its dataset, format, and restriction:
+
+```bash
+geode admin --list-bufr-tank-datasets
+```
+
+See [BUFR Tanks](bufr-tanks.md) for how tanks are stored.
