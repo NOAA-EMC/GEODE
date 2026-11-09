@@ -10,10 +10,14 @@ TODO(step 5): attach BufrTankInfo metadata (category, subtype, format, restricte
   to each observation before storing.
 """
 
+import gc
 import glob
 import logging
 import os
 import re
+import tempfile
+from collections.abc import Iterator
+from typing import BinaryIO
 
 import bufr
 import numpy as np
@@ -21,6 +25,7 @@ import xarray as xr
 import yaml
 
 from geode.configs.config_path import PackageConfigDir
+from geode.configs.geode_config import geode_config
 from geode.configs.table_a_mapping import BufrTankInfo
 from geode.data.keys import LocationKey
 from geode.ingest.ingestors import register
@@ -34,6 +39,10 @@ TanksConfigDir = os.path.join(PackageConfigDir, "bufr", "tanks")
 RawReportPieces = "rawReportString"
 RawReportDimension = "RawReportChunk"
 RawReportPieceLength = 8
+
+BufrMagic = b"BUFR"
+BufrTableCategory = 11  # DX table messages describe the data messages that follow
+_ReadSize = 1 << 20
 
 DatasetSplitsPath = os.path.join(PackageConfigDir, "bufr", "dataset_splits.yaml")
 OtherGroup = "other"
@@ -254,6 +263,76 @@ def split_rows(tree: xr.DataTree, split: dict) -> dict[str, xr.DataTree]:
     return result
 
 
+def _bufr_messages(handle: BinaryIO) -> Iterator[tuple[int, int, int]]:
+    """Yield (offset, length, data category) for each BUFR message in a file."""
+    offset = 0
+    while True:
+        handle.seek(offset)
+        header = handle.read(32)
+        if len(header) < 8:
+            return
+        if header[:4] != BufrMagic:
+            # Tanks can have padding between messages
+            handle.seek(offset)
+            chunk = handle.read(_ReadSize)
+            position = chunk.find(BufrMagic, 1)
+            if position >= 0:
+                offset += position
+            elif len(chunk) < _ReadSize:
+                return
+            else:
+                offset += len(chunk) - len(BufrMagic) + 1
+            continue
+
+        length = int.from_bytes(header[4:7], "big")
+        edition = header[7]
+        yield offset, length, header[18] if edition >= 4 else header[16]
+        offset += length
+
+
+def _write_batch(handle: BinaryIO, messages: list[tuple[int, int]], path: str) -> None:
+    with open(path, "wb") as batch:
+        for offset, length in messages:
+            handle.seek(offset)
+            batch.write(handle.read(length))
+
+
+def iter_message_batches(file_path: str, max_bytes: int) -> Iterator[str]:
+    """Yield paths of files holding up to ``max_bytes`` of a tank's data messages.
+
+    Every batch starts with the DX table messages seen so far, so each can be decoded
+    on its own. Each batch is deleted once the caller moves on to the next one. A file
+    at or below the limit is yielded as is.
+    """
+    if max_bytes <= 0 or os.path.getsize(file_path) <= max_bytes:
+        yield file_path
+        return
+
+    with (
+        open(file_path, "rb") as handle,
+        tempfile.TemporaryDirectory(prefix="bufr_tank_") as work_dir,
+    ):
+        path = os.path.join(work_dir, "batch")
+        tables: list[tuple[int, int]] = []
+        current: list[tuple[int, int]] = []
+        size = 0
+        for offset, length, category in _bufr_messages(handle):
+            if category == BufrTableCategory:
+                tables.append((offset, length))
+                current.append((offset, length))
+                continue
+            if size + length > max_bytes and size > 0:
+                _write_batch(handle, current, path)
+                yield path
+                current = list(tables)
+                size = 0
+            current.append((offset, length))
+            size += length
+        if size > 0:
+            _write_batch(handle, current, path)
+            yield path
+
+
 def record_type(yaml_path: str) -> str | None:
     """Return the ``recordType`` global of a mapping, if it has one."""
     with open(yaml_path) as yaml_file:
@@ -313,10 +392,14 @@ class MappedBufrTankIngestor(BufrTankIngestor):
         self.split = load_dataset_split(tank_info.dataset)
 
     def process(self, file_path: str) -> None:
+        tank_config = geode_config.bufr_tank
+        max_bytes = tank_config.max_batch_bytes if tank_config else 0
         for bufr_yaml, data_type in self.mappings:
             self.bufr_yaml = bufr_yaml
             self.data_type = data_type
-            super().process(file_path)
+            for batch_path in iter_message_batches(file_path, max_bytes):
+                super().process(batch_path)
+                gc.collect()
 
     def _process(self, file_path: str) -> xr.DataTree | dict[str, xr.DataTree]:
         # No table path: tanks carry their own NCEP tables, and passing one selects

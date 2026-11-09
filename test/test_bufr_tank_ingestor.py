@@ -1,3 +1,5 @@
+import os
+
 import icechunk as ic
 import numpy as np
 import pytest
@@ -263,3 +265,81 @@ def test_add_record_type_labels_every_row():
     tree = bufr_tank.add_record_type(_satellite_tree([1, 2]), "currents")
 
     assert tree["MetaData/recordType"].values.tolist() == ["currents", "currents"]
+
+
+def _bufr_message(category, body=b"", edition=4):
+    message = bytearray(32) + body
+    message[:4] = b"BUFR"
+    message[4:7] = len(message).to_bytes(3, "big")
+    message[7] = edition
+    message[18 if edition >= 4 else 16] = category
+    return bytes(message)
+
+
+def _batches(path, max_bytes):
+    return [
+        open(batch, "rb").read()
+        for batch in bufr_tank.iter_message_batches(str(path), max_bytes)
+    ]
+
+
+def test_small_files_are_not_split(tmp_path):
+    path = tmp_path / "tank"
+    path.write_bytes(_bufr_message(0))
+
+    batches = list(bufr_tank.iter_message_batches(str(path), 1000))
+
+    assert batches == [str(path)]
+
+
+def test_every_batch_starts_with_the_tables_seen_so_far(tmp_path):
+    table = _bufr_message(11)
+    data = [_bufr_message(0, bytes([n]) * 30) for n in range(3)]
+    path = tmp_path / "tank"
+    path.write_bytes(table + b"".join(data))
+
+    batches = _batches(path, len(data[0]) + 1)
+
+    assert batches == [table + data[0], table + data[1], table + data[2]]
+
+
+def test_batches_keep_every_data_message_once_and_in_order(tmp_path):
+    table = _bufr_message(11)
+    data = [_bufr_message(0, bytes([n]) * 40) for n in range(5)]
+    path = tmp_path / "tank"
+    path.write_bytes(table + b"".join(data))
+
+    batches = _batches(path, 2 * len(data[0]))
+
+    assert b"".join(b[len(table) :] for b in batches) == b"".join(data)
+
+
+def test_tables_later_in_the_file_reach_later_batches(tmp_path):
+    first, second = _bufr_message(11, b"a"), _bufr_message(11, b"b")
+    data = [_bufr_message(0, bytes([n]) * 30) for n in range(2)]
+    path = tmp_path / "tank"
+    path.write_bytes(first + data[0] + second + data[1])
+
+    batches = _batches(path, len(data[0]) + 1)
+
+    assert batches[-1] == first + second + data[1]
+
+
+def test_padding_between_messages_is_skipped_and_edition_three_is_read(tmp_path):
+    table = _bufr_message(11, edition=3)
+    data = [_bufr_message(0, bytes([n]) * 30, edition=3) for n in range(2)]
+    path = tmp_path / "tank"
+    path.write_bytes(table + b"7777" + data[0] + b"\0" * 8 + data[1])
+
+    batches = _batches(path, len(data[0]) + 1)
+
+    assert batches == [table + data[0], table + data[1]]
+
+
+def test_batch_files_are_removed_afterward(tmp_path):
+    path = tmp_path / "tank"
+    path.write_bytes(_bufr_message(0, b"a" * 40) + _bufr_message(0, b"b" * 40))
+
+    seen = list(bufr_tank.iter_message_batches(str(path), 80))
+
+    assert seen and not any(os.path.exists(batch) for batch in seen)
