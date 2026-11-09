@@ -23,6 +23,9 @@ ways:
 Tanks that share a dataset in table_a_mapping.yaml get the same set of variables, because
 the store cannot append data whose variables differ. See share_variables.
 
+A tank with several unrelated profiles (MULTI_PROFILE_TANKS) gets one mapping per profile,
+bAAA_xxBBB_<profile>.yaml, each stored as its own dataset.
+
 Inputs, one file per tank named bAAA_xxBBB.txt. Run these for each tank, inside the
 GEODE container:
 
@@ -306,6 +309,10 @@ VERTICAL_SEQUENCES = {"UARLV", "UARLVB", "WPLVL", "PFLEV", "OZPROFSQ", "NL2RF", 
 LONG_SEQUENCE = 20
 MAX_NUMBERED = 20
 MAX_NUMBERED_WITH_GROUP = 50
+# Tanks holding several unrelated profiles, one mapping per profile: tank -> profile -> sequence
+MULTI_PROFILE_TANKS = {
+    "b003_xx010": {"bending_angle": "ROSEQ1", "refractivity": "ROSEQ3", "retrieval": "ROSEQ4"},
+}
 # A mnemonic no subset contains, for variables a tank does not have
 ABSENT_MNEMONIC = "ABSENT"
 
@@ -683,7 +690,8 @@ def pick_coordinate(queries, top_names):
     return None, None
 
 
-def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, sizes, replications):
+def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, sizes, replications,
+          profile=None, profile_sequence=None):  # fmt: skip
     # bufr-query's QueryParser segfaults on "."-prefixed mnemonics, so they cannot be mapped
     unparsable = [q for q in queries if q.mnemonic.startswith(".")]
     queries = [q for q in queries if not q.mnemonic.startswith(".")]
@@ -714,6 +722,18 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
 
     lat_query, lat_path = pick_coordinate(remaining, ["CLATH", "CLAT"])
     lon_query, lon_path = pick_coordinate(remaining, ["CLONH", "CLON"])
+    if profile_sequence:
+        # Use the location of each level; the report's location becomes a reference point
+        for mnemonics, reference in ((("CLATH", "CLAT"), "referenceLatitude"), (("CLONH", "CLON"), "referenceLongitude")):
+            level = [q for q in remaining if q.mnemonic in mnemonics and q.parents == [profile_sequence]]
+            if level:
+                top = next((q for q in remaining if q.mnemonic in mnemonics and not q.parents), None)
+                if top is not None:
+                    top.name = reference
+                if reference == "referenceLatitude":
+                    lat_query, lat_path = level[0], level[0].query
+                else:
+                    lon_query, lon_path = level[0], level[0].query
     if lat_path is None or lon_path is None:
         raise ValueError(f"{tank}: no latitude/longitude")
     remaining = [q for q in remaining if q not in (lat_query, lon_query)]
@@ -755,6 +775,8 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
         if not direct:
             raise ValueError(f"{tank}: no variable to group {plan.group_path} by")
         group_key = direct[0].name
+    if profile:
+        said = None  # split by dataset_splits.yaml in the ingestor instead
     dims = []
     for path, (name, source, varies) in plan.keep.items():
         written = path
@@ -824,7 +846,7 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
     if category:
         globs.append(("dataCategory", category))
     if entry:
-        globs.append(("dataset", entry["dataset"]))
+        globs.append(("dataset", f"{entry['dataset']}_{profile}" if profile else entry["dataset"]))
         globs.append(("dataFormat", entry["format"]))
         globs.append(("restricted", str(entry["restricted"]).lower()))
     globs += [
@@ -862,7 +884,7 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
         out.pop()
     return "\n".join(out) + "\n", {"said": said is not None, "dims": len(dims), "vars": len(ordered) + 3 + has_receipt,
                                    "mapped": entry is not None, "subset": subset,
-                                   "dataset": entry["dataset"] if entry else None,
+                                   "dataset": (f"{entry['dataset']}_{profile}" if profile else entry["dataset"]) if entry else None,
                                    "unparsable": [q.query for q in unparsable],
                                    "group": plan.group_path}  # fmt: skip
 
@@ -1003,20 +1025,27 @@ def main():
     datasets = collections.defaultdict(list)
     for path in sorted(glob.glob(f"{queries_dir}/b*.txt")):
         tank = os.path.basename(path)[:-4]
-        try:
-            subset, dim_paths, queries = parse_listing(path)
-            table_a, table_b = read_tables(f"{tables_dir}/{tank}.txt")
-            replications = read_replications(f"{tables_dir}/{tank}.txt")
-            text, info = build(
-                tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, sizes, replications
-            )
-        except ValueError as error:
-            failures[tank] = str(error)
-            continue
-        texts[tank] = text
-        types[tank] = {q.path: q.dtype for q in queries}
-        datasets[info["dataset"] or tank].append(tank)
-        summary[tank] = info
+        profiles = MULTI_PROFILE_TANKS.get(tank, {None: None})
+        for profile, sequence in profiles.items():
+            key = f"{tank}_{profile}" if profile else tank
+            try:
+                subset, dim_paths, queries = parse_listing(path)
+                others = [s for s in profiles.values() if s and s != sequence]
+                queries = [q for q in queries if not (q.parents and q.parents[0] in others)]
+                dim_paths = [p for p in dim_paths if p.split("/")[1] not in others]
+                table_a, table_b = read_tables(f"{tables_dir}/{tank}.txt")
+                replications = read_replications(f"{tables_dir}/{tank}.txt")
+                text, info = build(
+                    tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, sizes,
+                    replications, profile, sequence,
+                )  # fmt: skip
+            except ValueError as error:
+                failures[key] = str(error)
+                continue
+            texts[key] = text
+            types[key] = {q.path: q.dtype for q in queries}
+            datasets[info["dataset"] or key].append(key)
+            summary[key] = info
 
     problems = []
     for tanks in datasets.values():
@@ -1026,7 +1055,7 @@ def main():
             texts.update(group)
     for tank, text in texts.items():
         yaml.safe_load(text)
-        if not wanted or tank in wanted:
+        if not wanted or tank[:10] in wanted:
             with open(f"{out_dir}/{tank}.yaml", "w") as handle:
                 handle.write(text)
     print(json.dumps({"generated": len(summary), "failures": failures, "problems": problems,

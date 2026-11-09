@@ -6,11 +6,14 @@ import yaml
 import zarr
 
 from geode.data.manager.icechunk import AppendSchemaError, IceChunkDataManager
+from geode.ingest.ingestors import bufr_tank
 from geode.ingest.ingestors.bufr_tank import (
     drop_empty_rows,
     finalize_tree,
     join_raw_report,
     level_variables,
+    split_rows,
+    store_large_integers_as_float,
     use_variable_length_strings,
 )
 
@@ -156,3 +159,84 @@ def test_append_with_matching_variables_extends_store(tmp_path, monkeypatch):
     repo = ic.Repository.open(ic.local_filesystem_storage(path))
     root = zarr.open_group(repo.readonly_session("main").store, mode="r")
     assert root["MetaData/a"].shape == (5,)
+
+
+SPLIT = {
+    "variable": "MetaData/satelliteIdentifier",
+    "groups": {"cosmic2": [750, 751], "spire": [269]},
+}
+
+
+def _satellite_tree(ids):
+    meta = xr.Dataset(
+        {"satelliteIdentifier": ("Location", np.array(ids, dtype=float))},
+    )
+    root = xr.Dataset(coords={"Location": np.arange(len(ids))})
+    return xr.DataTree.from_dict({"/": root, "/MetaData": meta})
+
+
+def test_split_rows_groups_several_ids_under_one_name():
+    result = split_rows(_satellite_tree([750, 269, 751]), SPLIT)
+
+    assert sorted(result) == ["cosmic2", "spire"]
+    assert result["cosmic2"]["MetaData/satelliteIdentifier"].values.tolist() == [
+        750.0,
+        751.0,
+    ]
+    assert result["spire"].sizes["Location"] == 1
+
+
+def test_split_rows_keeps_unlisted_and_missing_ids_in_other(monkeypatch):
+    warnings = []
+    monkeypatch.setattr(bufr_tank.logger, "warning", warnings.append)
+
+    result = split_rows(_satellite_tree([269, 999, np.nan]), SPLIT)
+
+    assert result["other"].sizes["Location"] == 2
+    assert sum(tree.sizes["Location"] for tree in result.values()) == 3
+    assert "999" in warnings[0]
+
+
+def test_tank_mappings_uses_one_file_per_profile(tmp_path, monkeypatch):
+    monkeypatch.setattr(bufr_tank, "TanksConfigDir", str(tmp_path))
+    (tmp_path / "b003_xx010_retrieval.yaml").write_text("")
+    (tmp_path / "b003_xx010_bending_angle.yaml").write_text("")
+
+    mappings = bufr_tank.tank_mappings("b003/xx010", "gnssro")
+
+    assert [data_type for _, data_type in mappings] == [
+        "gnssro_bending_angle",
+        "gnssro_retrieval",
+    ]
+
+
+def test_tank_mappings_uses_the_dataset_name_for_a_single_file(tmp_path, monkeypatch):
+    monkeypatch.setattr(bufr_tank, "TanksConfigDir", str(tmp_path))
+    (tmp_path / "b002_xx001.yaml").write_text("")
+
+    mappings = bufr_tank.tank_mappings("b002/xx001", "upperair_radiosonde")
+
+    assert [data_type for _, data_type in mappings] == ["upperair_radiosonde"]
+
+
+def test_missing_values_in_int64_variables_stay_missing_when_stored(
+    tmp_path, monkeypatch
+):
+    manager, path = _manager(tmp_path, monkeypatch)
+    data = xr.DataArray(np.array([1.5e9, np.nan]), dims="Location")
+    data.encoding.update(dtype=np.int64, _FillValue=np.iinfo(np.int64).max)
+    meta = xr.Dataset({"frequency": data})
+    root = xr.Dataset(coords={"Location": np.arange(2)})
+    datasets = store_large_integers_as_float({"/": root, "/MetaData": meta})
+
+    manager.put("data", xr.DataTree.from_dict(datasets))
+
+    repo = ic.Repository.open(ic.local_filesystem_storage(path))
+    stored = xr.open_datatree(
+        repo.readonly_session("main").store,
+        engine="zarr",
+        consolidated=False,
+        create_default_indexes=False,
+    )["MetaData/frequency"].values
+    assert stored[0] == 1.5e9
+    assert np.isnan(stored[1])

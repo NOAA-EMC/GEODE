@@ -13,6 +13,7 @@ TODO(step 5): attach BufrTankInfo metadata (category, subtype, format, restricte
 import glob
 import logging
 import os
+import re
 
 import bufr
 import numpy as np
@@ -33,6 +34,10 @@ TanksConfigDir = os.path.join(PackageConfigDir, "bufr", "tanks")
 RawReportPieces = "rawReportString"
 RawReportDimension = "RawReportChunk"
 RawReportPieceLength = 8
+
+DatasetSplitsPath = os.path.join(PackageConfigDir, "bufr", "dataset_splits.yaml")
+OtherGroup = "other"
+_MappingFilePattern = re.compile(r"^b\d{3}_xx\d{3}(?:_\w+)?\.yaml$")
 
 
 class BufrTankIngestor(BaseIngestor):
@@ -171,24 +176,124 @@ def use_variable_length_strings(
     return result
 
 
+def store_large_integers_as_float(
+    datasets: dict[str, xr.Dataset],
+) -> dict[str, xr.Dataset]:
+    """Keep missing values in 64-bit integer variables missing when stored.
+
+    These decode to float64 with NaN for missing. Writing them back as int64 overflows,
+    because the fill value 2**63 - 1 has no exact float64 form, and missing values are
+    stored as -2**63, which no longer reads as missing.
+    """
+    result = {}
+    for path, dataset in datasets.items():
+        updates = {}
+        for name, data in dataset.data_vars.items():
+            if data.dtype.kind == "f" and data.encoding.get("dtype") == np.int64:
+                converted = data.copy(deep=False)
+                converted.encoding = {
+                    key: value
+                    for key, value in data.encoding.items()
+                    if key not in ("dtype", "_FillValue")
+                }
+                updates[name] = converted
+        result[path] = dataset.assign(updates) if updates else dataset
+    return result
+
+
 def finalize_tree(tree: xr.DataTree, level_names: list[str]) -> xr.DataTree | None:
     """Apply tank post-processing. Returns None when no observations remain."""
     datasets = {node.path: node.to_dataset(inherit=False) for node in tree.subtree}
     datasets = join_raw_report(drop_empty_rows(datasets, level_names))
     datasets = use_variable_length_strings(datasets)
+    datasets = store_large_integers_as_float(datasets)
 
     if datasets["/"].sizes.get(LocationKey, 0) == 0:
         return None
     return xr.DataTree.from_dict(datasets)
 
 
+def split_rows(tree: xr.DataTree, split: dict) -> dict[str, xr.DataTree]:
+    """Separate a tree's rows into groups by the value of one variable."""
+    group, name = split["variable"].rsplit("/", 1)
+    values = tree[group].to_dataset(inherit=False)[name].values
+    lookup = {
+        int(value): label
+        for label, members in split["groups"].items()
+        for value in members
+    }
+
+    labels = np.empty(values.shape, dtype=object)
+    unknown = []
+    for value in np.unique(values):
+        is_valid = np.isfinite(value)
+        label = lookup.get(int(value)) if is_valid else None
+        if label is None:
+            label = OtherGroup
+            unknown.append(value)
+        labels[(values == value) | (np.isnan(values) if not is_valid else False)] = (
+            label
+        )
+    if unknown:
+        logger.warning(
+            f"{split['variable']} values not in {DatasetSplitsPath}: {unknown}"
+        )
+
+    datasets = {node.path: node.to_dataset(inherit=False) for node in tree.subtree}
+    result = {}
+    for label in sorted(set(labels.tolist())):
+        indices = np.flatnonzero(labels == label)
+        result[label] = xr.DataTree.from_dict(
+            {
+                path: dataset.isel({LocationKey: indices})
+                if LocationKey in dataset.dims
+                else dataset
+                for path, dataset in datasets.items()
+            }
+        )
+    return result
+
+
+def tank_mappings(tank_id: str, dataset: str) -> list[tuple[str, str]]:
+    """Return (mapping path, data type) for each mapping of a tank.
+
+    A tank usually has one mapping, ``bAAA_xxBBB.yaml``. A tank holding several separate
+    profiles has one per profile, ``bAAA_xxBBB_<profile>.yaml``, stored as
+    ``<dataset>_<profile>``.
+    """
+    stem = tank_id.replace("/", "_")
+    single = os.path.join(TanksConfigDir, f"{stem}.yaml")
+    if os.path.isfile(single):
+        return [(single, dataset)]
+
+    mappings = []
+    for path in sorted(glob.glob(os.path.join(TanksConfigDir, f"{stem}_*.yaml"))):
+        profile = os.path.basename(path)[len(stem) + 1 : -len(".yaml")]
+        mappings.append((path, f"{dataset}_{profile}"))
+    return mappings
+
+
+def load_dataset_split(dataset: str) -> dict | None:
+    if not os.path.isfile(DatasetSplitsPath):
+        return None
+    with open(DatasetSplitsPath) as splits_file:
+        return (yaml.safe_load(splits_file) or {}).get(dataset)
+
+
 class MappedBufrTankIngestor(BufrTankIngestor):
-    """Decode a tank using its mapping from configs/bufr/tanks."""
+    """Decode a tank using its mapping or mappings from configs/bufr/tanks."""
 
     def __init__(self, tank_info: BufrTankInfo):
         super().__init__(tank_info)
-        file_name = f"{tank_info.tank_id.replace('/', '_')}.yaml"
-        self.bufr_yaml = os.path.join(TanksConfigDir, file_name)
+        self.mappings = tank_mappings(tank_info.tank_id, tank_info.dataset)
+        self.bufr_yaml = self.mappings[0][0] if self.mappings else None
+        self.split = load_dataset_split(tank_info.dataset)
+
+    def process(self, file_path: str) -> None:
+        for bufr_yaml, data_type in self.mappings:
+            self.bufr_yaml = bufr_yaml
+            self.data_type = data_type
+            super().process(file_path)
 
     def _process(self, file_path: str) -> xr.DataTree | dict[str, xr.DataTree]:
         # No table path: tanks carry their own NCEP tables, and passing one selects
@@ -211,9 +316,18 @@ class MappedBufrTankIngestor(BufrTankIngestor):
                 f"{self.tank_info.tank_id}"
             )
             return {}
-        return kept.get(None, kept)
+        if self.split is None:
+            return kept.get(None, kept)
+
+        split_trees = {}
+        for category, tree in kept.items():
+            for label, part in split_rows(tree, self.split).items():
+                split_trees[f"{category}_{label}" if category else label] = part
+        return split_trees
 
 
 for mapping_path in sorted(glob.glob(os.path.join(TanksConfigDir, "*.yaml"))):
-    tank_name = os.path.basename(mapping_path)[: -len(".yaml")]
-    register(f"bufr_tank/{tank_name.replace('_', '/')}")(MappedBufrTankIngestor)
+    mapping_name = os.path.basename(mapping_path)
+    if _MappingFilePattern.match(mapping_name):
+        tank_id = f"{mapping_name[:4]}/{mapping_name[5:10]}"
+        register(f"bufr_tank/{tank_id}")(MappedBufrTankIngestor)

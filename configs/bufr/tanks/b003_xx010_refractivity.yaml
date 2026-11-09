@@ -1,0 +1,493 @@
+bufr:
+  subsets:
+    - NC003010
+
+  # One row per element of this sequence
+  group_by_variable: height
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    satelliteSubIdentifier:
+      query: "*/SASBID"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    instrumentIdentifier:
+      query: "*/SIID"
+
+    dataProviderOrigin:
+      query: "*/OGCE"
+
+    productTypeForRetrievedAtmosphericGases:
+      query: "*/PTAG"
+
+    softwareIdentification:
+      query: "*/SWID"
+
+    timeSignificance:
+      query: "*/TSIG"
+
+    qfro:
+      query: "*/QFRO"
+
+    qiWithoutForecast1:
+      query: "*/PCCF[1]"
+
+    inDirectionOf0DegLongDistanceFromEarths:
+      query: "*/PD00"
+
+    inDirectionOf90DegEDistanceFromEarthsCenter:
+      query: "*/PD90"
+
+    absolutePlatformVelocityFirstComponent:
+      query: "*/PS00"
+
+    absolutePlatformVelocitySecondComponent:
+      query: "*/PS90"
+
+    absolutePlatformVelocityThirdComponent:
+      query: "*/PSNP"
+
+    satelliteConstellationRO:
+      query: "*/SCLF"
+
+    satelliteTransmitterId:
+      query: "*/PTID"
+
+    inDirectionOf0DegLongDistanceFromEarths2:
+      query: "*/PD00"
+
+    inDirectionOf90DegEDistanceFromEarthsCenter2:
+      query: "*/PD90"
+
+    absolutePlatformVelocityFirstComponent2:
+      query: "*/PS00"
+
+    absolutePlatformVelocitySecondComponent2:
+      query: "*/PS90"
+
+    absolutePlatformVelocityThirdComponent2:
+      query: "*/PSNP"
+
+    timeIncrement:
+      query: "*/TISE"
+
+    inDirectionOf0DegLongDistanceFromEarths3:
+      query: "*/PD00"
+
+    inDirectionOf90DegEDistanceFromEarthsCenter3:
+      query: "*/PD90"
+
+    earthRadiusCurvature:
+      query: "*/ELRC"
+
+    sensorAzimuthAngle:
+      query: "*/BEARAZ"
+
+    geoidUndulation:
+      query: "*/GEODU"
+
+    height:
+      query: "*/ROSEQ3/HEIT"
+
+    firstOrderStatistics1Roseq3:
+      query: "*/ROSEQ3/FOST[1]"
+
+    firstOrderStatistics2Roseq3:
+      query: "*/ROSEQ3/FOST[2]"
+
+    qiWithoutForecast:
+      query: "*/ROSEQ3/PCCF"
+
+    verticalSignificanceSatellite:
+      query: "*/VSAT"
+
+    geopotentialHeight:
+      query: "*/GPHTST"
+
+    firstOrderStatistics1:
+      query: "*/FOST[1]"
+
+    firstOrderStatistics2:
+      query: "*/FOST[2]"
+
+    qiWithoutForecast2:
+      query: "*/PCCF[2]"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    # ObsValue
+    inDirOfNorthPoleDistanceFromTheEarthsCenter:
+      query: "*/PDNP"
+
+    inDirOfNorthPoleDistanceFromTheEarthsCenter2:
+      query: "*/PDNP"
+
+    inDirOfNorthPoleDistanceFromTheEarthsCenter3:
+      query: "*/PDNP"
+
+    atmosphericRefractivity1:
+      query: "*/ROSEQ3/ARFR[1]"
+
+    atmosphericRefractivity2:
+      query: "*/ROSEQ3/ARFR[2]"
+
+    airPressure1:
+      query: "*/PRES[1]"
+
+    airPressure2:
+      query: "*/PRES[2]"
+
+    # QualityMarker
+    correctedReportIndicator:
+      query: "*/CORN"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Mtyp 003-010 Gps Radio Occultn -CHAMP,COSMIC,GRACE,GRAS"
+
+    - name: "dataCategory"
+      type: string
+      value: "vertical soundings from satellite"
+
+    - name: "dataset"
+      type: string
+      value: "gnssro_refractivity"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "003"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "010"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b003/xx010 NC003010"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/satelliteSubIdentifier"
+      source: variables/satelliteSubIdentifier
+      longName: "Satellite SUB-IDENTIFIER"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier"
+
+    - name: "MetaData/instrumentIdentifier"
+      source: variables/instrumentIdentifier
+      longName: "Satellite Instruments"
+
+    - name: "MetaData/dataProviderOrigin"
+      source: variables/dataProviderOrigin
+      longName: "Identification Of ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/productTypeForRetrievedAtmosphericGases"
+      source: variables/productTypeForRetrievedAtmosphericGases
+      longName: "Product Type For Retrieved Atmospheric Gases"
+
+    - name: "MetaData/softwareIdentification"
+      source: variables/softwareIdentification
+      longName: "Software Identification"
+
+    - name: "MetaData/timeSignificance"
+      source: variables/timeSignificance
+      longName: "Time Significance"
+
+    - name: "MetaData/qfro"
+      source: variables/qfro
+      longName: "Quality Flags For Radio Occultation Data"
+
+    - name: "MetaData/qiWithoutForecast1"
+      source: variables/qiWithoutForecast1
+      longName: "Per Cent Confidence"
+      units: "%"
+
+    - name: "MetaData/inDirectionOf0DegLongDistanceFromEarths"
+      source: variables/inDirectionOf0DegLongDistanceFromEarths
+      longName: "In Direction Of 0 Deg LONG, Distance From EARTH'S Cent"
+      units: "m"
+
+    - name: "MetaData/inDirectionOf90DegEDistanceFromEarthsCenter"
+      source: variables/inDirectionOf90DegEDistanceFromEarthsCenter
+      longName: "In Direction Of 90 Deg E, Distance From EARTH'S Center"
+      units: "m"
+
+    - name: "MetaData/absolutePlatformVelocityFirstComponent"
+      source: variables/absolutePlatformVelocityFirstComponent
+      longName: "Absolute Platform Velocity - First Component"
+      units: "m s-1"
+
+    - name: "MetaData/absolutePlatformVelocitySecondComponent"
+      source: variables/absolutePlatformVelocitySecondComponent
+      longName: "Absolute Platform Velocity - Second Component"
+      units: "m s-1"
+
+    - name: "MetaData/absolutePlatformVelocityThirdComponent"
+      source: variables/absolutePlatformVelocityThirdComponent
+      longName: "Absolute Platform Velocity - Third Component"
+      units: "m s-1"
+
+    - name: "MetaData/satelliteConstellationRO"
+      source: variables/satelliteConstellationRO
+      longName: "Satellite Classification"
+
+    - name: "MetaData/satelliteTransmitterId"
+      source: variables/satelliteTransmitterId
+      longName: "Platform Transmitter Id Number"
+
+    - name: "MetaData/inDirectionOf0DegLongDistanceFromEarths2"
+      source: variables/inDirectionOf0DegLongDistanceFromEarths2
+      longName: "In Direction Of 0 Deg LONG, Distance From EARTH'S Cent"
+      units: "m"
+
+    - name: "MetaData/inDirectionOf90DegEDistanceFromEarthsCenter2"
+      source: variables/inDirectionOf90DegEDistanceFromEarthsCenter2
+      longName: "In Direction Of 90 Deg E, Distance From EARTH'S Center"
+      units: "m"
+
+    - name: "MetaData/absolutePlatformVelocityFirstComponent2"
+      source: variables/absolutePlatformVelocityFirstComponent2
+      longName: "Absolute Platform Velocity - First Component"
+      units: "m s-1"
+
+    - name: "MetaData/absolutePlatformVelocitySecondComponent2"
+      source: variables/absolutePlatformVelocitySecondComponent2
+      longName: "Absolute Platform Velocity - Second Component"
+      units: "m s-1"
+
+    - name: "MetaData/absolutePlatformVelocityThirdComponent2"
+      source: variables/absolutePlatformVelocityThirdComponent2
+      longName: "Absolute Platform Velocity - Third Component"
+      units: "m s-1"
+
+    - name: "MetaData/timeIncrement"
+      source: variables/timeIncrement
+      longName: "Time Increment"
+      units: "s"
+
+    - name: "MetaData/inDirectionOf0DegLongDistanceFromEarths3"
+      source: variables/inDirectionOf0DegLongDistanceFromEarths3
+      longName: "In Direction Of 0 Deg LONG, Distance From EARTH'S Cent"
+      units: "m"
+
+    - name: "MetaData/inDirectionOf90DegEDistanceFromEarthsCenter3"
+      source: variables/inDirectionOf90DegEDistanceFromEarthsCenter3
+      longName: "In Direction Of 90 Deg E, Distance From EARTH'S Center"
+      units: "m"
+
+    - name: "MetaData/earthRadiusCurvature"
+      source: variables/earthRadiusCurvature
+      longName: "EARTH'S Loc Radius Of Curvature"
+      units: "m"
+
+    - name: "MetaData/sensorAzimuthAngle"
+      source: variables/sensorAzimuthAngle
+      longName: "Bearing Or Azimuth"
+      units: "degree"
+
+    - name: "MetaData/geoidUndulation"
+      source: variables/geoidUndulation
+      longName: "Geoid Undulation"
+      units: "m"
+
+    - name: "MetaData/height"
+      source: variables/height
+      longName: "Height"
+      units: "m"
+
+    - name: "MetaData/firstOrderStatistics1Roseq3"
+      source: variables/firstOrderStatistics1Roseq3
+      longName: "First Order Statistics"
+
+    - name: "MetaData/firstOrderStatistics2Roseq3"
+      source: variables/firstOrderStatistics2Roseq3
+      longName: "First Order Statistics"
+
+    - name: "MetaData/qiWithoutForecast"
+      source: variables/qiWithoutForecast
+      longName: "Per Cent Confidence"
+      units: "%"
+
+    - name: "MetaData/verticalSignificanceSatellite"
+      source: variables/verticalSignificanceSatellite
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/geopotentialHeight"
+      source: variables/geopotentialHeight
+      longName: "Geopotential Height"
+      units: "gpm"
+
+    - name: "MetaData/firstOrderStatistics1"
+      source: variables/firstOrderStatistics1
+      longName: "First Order Statistics"
+
+    - name: "MetaData/firstOrderStatistics2"
+      source: variables/firstOrderStatistics2
+      longName: "First Order Statistics"
+
+    - name: "MetaData/qiWithoutForecast2"
+      source: variables/qiWithoutForecast2
+      longName: "Per Cent Confidence"
+      units: "%"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    # ObsValue
+    - name: "ObsValue/inDirOfNorthPoleDistanceFromTheEarthsCenter"
+      source: variables/inDirOfNorthPoleDistanceFromTheEarthsCenter
+      longName: "In Dir Of North POLE, Distance From The EARTH'S Center"
+      units: "m"
+
+    - name: "ObsValue/inDirOfNorthPoleDistanceFromTheEarthsCenter2"
+      source: variables/inDirOfNorthPoleDistanceFromTheEarthsCenter2
+      longName: "In Dir Of North POLE, Distance From The EARTH'S Center"
+      units: "m"
+
+    - name: "ObsValue/inDirOfNorthPoleDistanceFromTheEarthsCenter3"
+      source: variables/inDirOfNorthPoleDistanceFromTheEarthsCenter3
+      longName: "In Dir Of North POLE, Distance From The EARTH'S Center"
+      units: "m"
+
+    - name: "ObsValue/atmosphericRefractivity1"
+      source: variables/atmosphericRefractivity1
+      longName: "Atmospheric Refractivity"
+      units: "N-units"
+
+    - name: "ObsValue/atmosphericRefractivity2"
+      source: variables/atmosphericRefractivity2
+      longName: "Atmospheric Refractivity"
+      units: "N-units"
+
+    - name: "ObsValue/airPressure1"
+      source: variables/airPressure1
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/airPressure2"
+      source: variables/airPressure2
+      longName: "Pressure"
+      units: "Pa"
+
+    # QualityMarker
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"

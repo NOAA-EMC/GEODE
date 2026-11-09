@@ -1,0 +1,24 @@
+# Split a dataset's observations into separate datasets by the value of a variable.
+#
+# The tank ingestor does this after decoding, because a bufr-query category map keeps only
+# the first ID mapped to a name and drops any ID that is not listed. Observations with an
+# ID that is not listed here go to a group named "other", with a warning in the log.
+#
+# The result is stored as <dataset>_<group>.
+
+gnssro:
+  variable: MetaData/satelliteIdentifier
+  # Missions follow GDASApp parm/jcb-gdas/observations/atmosphere/gnssro_*.yaml.j2
+  groups:
+    cosmic2: [750, 751, 752, 753, 754, 755]
+    geoopt: [265, 266]
+    grace: [803, 804]
+    k5: [825]
+    metop: [3, 4, 5]
+    paz: [44]
+    piq: [267, 268]
+    s6: [66, 67]
+    spire: [269]
+    tdm: [43]
+    tsx: [42]
+    yam: [768]  # Loft Orbital YAM (not in GDASApp)
