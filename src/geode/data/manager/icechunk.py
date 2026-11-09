@@ -112,6 +112,8 @@ class IceChunkDataManager(DataManager):
                 if (
                     np.issubdtype(var.dtype, np.integer)
                     and isinstance(fill_value, (int, np.integer))
+                    and "scale_factor" not in var.attrs
+                    and "add_offset" not in var.attrs
                     and " since " not in units
                 ):
                     mask_options[name] = False
