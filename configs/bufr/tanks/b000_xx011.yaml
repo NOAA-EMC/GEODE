@@ -1,0 +1,214 @@
+bufr:
+  subsets:
+    - NC000011
+
+  variables:
+    # Not mapped: bufr-query cannot parse these "."-prefixed mnemonics
+    #   */SHEFTPA/SHEFTPX/.DTHMXTM
+    #   */SHEFTPA/SHEFTPN/.DTHMITM
+
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    # ObsValue
+    totalPrecipitationPast1Hour:
+      query: "*/SHEFPRC/SHEFP01/TP01"
+
+    totalPrecipitationPast3Hours:
+      query: "*/SHEFPRC/SHEFP03/TP03"
+
+    totalPrecipitationPast6Hours:
+      query: "*/SHEFPRC/SHEFP06/TP06"
+
+    totalPrecipitationPast12Hours:
+      query: "*/SHEFPRC/SHEFP12/TP12"
+
+    totalPrecipitationPast24Hours:
+      query: "*/SHEFPRC/SHEFP24/TP24"
+
+    maximumTemperature:
+      query: "*/SHEFTPA/SHEFTPX/MXTM"
+
+    minimumTemperature:
+      query: "*/SHEFTPA/SHEFTPN/MITM"
+
+    totalSnowDepth:
+      query: "*/SHEFSNW/SHEFSDP/TOSD"
+
+    totalPrecipitation:
+      query: "*/SHEFSNW/SHEFSWE/TOPC"
+
+    depthOfFreshSnow:
+      query: "*/SHEFSNW/SHEFSFL/DOFS"
+
+    groundState:
+      query: "*/SHEFSOG/SOGR"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Mtyp 000-011 Afos Products (PRECIP) (SHEF)"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface land"
+
+    - name: "dataset"
+      type: string
+      value: "surface_shef_afos"
+
+    - name: "dataFormat"
+      type: string
+      value: "SHEF"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "000"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "011"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b000/xx011 NC000011"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    # ObsValue
+    - name: "ObsValue/totalPrecipitationPast1Hour"
+      source: variables/totalPrecipitationPast1Hour
+      longName: "Total Precipitation Past 1 Hour"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast3Hours"
+      source: variables/totalPrecipitationPast3Hours
+      longName: "Total Precipitation Past 3 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast6Hours"
+      source: variables/totalPrecipitationPast6Hours
+      longName: "Total Precipitation Past 6 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast12Hours"
+      source: variables/totalPrecipitationPast12Hours
+      longName: "Total Precipitation Past 12 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast24Hours"
+      source: variables/totalPrecipitationPast24Hours
+      longName: "Total Precipitation Past 24 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/maximumTemperature"
+      source: variables/maximumTemperature
+      longName: "Maximum Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature"
+      source: variables/minimumTemperature
+      longName: "Minimum Temperature"
+      units: "K"
+
+    - name: "ObsValue/totalSnowDepth"
+      source: variables/totalSnowDepth
+      longName: "Total Snow Depth"
+      units: "m"
+
+    - name: "ObsValue/totalPrecipitation"
+      source: variables/totalPrecipitation
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent"
+      units: "kg m-2"
+
+    - name: "ObsValue/depthOfFreshSnow"
+      source: variables/depthOfFreshSnow
+      longName: "Depth Of Fresh Snow"
+      units: "m"
+
+    - name: "ObsValue/groundState"
+      source: variables/groundState
+      longName: "State Of The Ground"

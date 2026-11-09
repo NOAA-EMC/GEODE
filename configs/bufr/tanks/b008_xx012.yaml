@@ -1,0 +1,241 @@
+bufr:
+  subsets:
+    - NC008012
+
+  # One row per element of this sequence
+  group_by_variable: numberOfRetrievedLayers
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    solarZenithAngle:
+      query: "*/SOZA"
+
+    ascendingDescendingOrbitQualifier:
+      query: "*/STKO"
+
+    bestOzoneAlgorithmFlag:
+      query: "*/AFBO"
+
+    totalOzoneQualityCode:
+      query: "*/TOQC"
+
+    totalOzoneQualityFlag:
+      query: "*/TOQF"
+
+    sensorScanPosition:
+      query: "*/FOVN"
+
+    verticalSignificanceSatellite:
+      query: "*/VSAT"
+
+    pressure:
+      query: "*/PRLC"
+
+    pressure1:
+      query: "*/OZPROFSQ/PRLC[1]"
+
+    pressure2:
+      query: "*/OZPROFSQ/PRLC[2]"
+
+    linearCoefficient:
+      query: "*/OZPROFSQ/LINCOF"
+
+    # ObsValue
+    viewingZenithAngle:
+      query: "*/VZAN"
+
+    ozoneTotal1:
+      query: "*/OZON[1]"
+
+    aerosolContaminationIndex:
+      query: "*/ACIDX"
+
+    cloudAmount:
+      query: "*/CLDMNT"
+
+    ozoneTotal2:
+      query: "*/OZON[2]"
+
+    numberOfRetrievedLayers:
+      query: "*/OZPROFSQ/NRLY"
+
+    ozoneLayer:
+      query: "*/OZPROFSQ/OZOP"
+
+    # QualityMarker
+    typeOfLimitRepresentedByFollowingValue:
+      query: "*/TLRFV"
+
+  splits:
+    satId:
+      category:
+        variable: satelliteIdentifier
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Mtyp 008-012 Gbl Ozone Monitoring EXPERIMENT-2 (GOME-2)"
+
+    - name: "dataCategory"
+      type: string
+      value: "physical / chemical constituents"
+
+    - name: "dataset"
+      type: string
+      value: "retrieval_ozone_gome"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "008"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "012"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b008/xx012 NC008012"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier *"
+
+    - name: "MetaData/solarZenithAngle"
+      source: variables/solarZenithAngle
+      longName: "Solar Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/ascendingDescendingOrbitQualifier"
+      source: variables/ascendingDescendingOrbitQualifier
+      longName: "ASCENDING/DESCENDING Orbit Qualifier"
+
+    - name: "MetaData/bestOzoneAlgorithmFlag"
+      source: variables/bestOzoneAlgorithmFlag
+      longName: "Algorithm Flag For Best Ozone"
+
+    - name: "MetaData/totalOzoneQualityCode"
+      source: variables/totalOzoneQualityCode
+      longName: "Total Ozone Quality Code"
+
+    - name: "MetaData/totalOzoneQualityFlag"
+      source: variables/totalOzoneQualityFlag
+      longName: "Total Ozone Quality Flag"
+
+    - name: "MetaData/sensorScanPosition"
+      source: variables/sensorScanPosition
+      longName: "Field Of View Number"
+
+    - name: "MetaData/verticalSignificanceSatellite"
+      source: variables/verticalSignificanceSatellite
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/pressure"
+      source: variables/pressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/pressure1"
+      source: variables/pressure1
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/pressure2"
+      source: variables/pressure2
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/linearCoefficient"
+      source: variables/linearCoefficient
+      longName: "Linear Coefficient"
+
+    # ObsValue
+    - name: "ObsValue/viewingZenithAngle"
+      source: variables/viewingZenithAngle
+      longName: "Viewing Zenith Angle"
+      units: "degree"
+
+    - name: "ObsValue/ozoneTotal1"
+      source: variables/ozoneTotal1
+      longName: "Total Ozone"
+      units: "DU"
+
+    - name: "ObsValue/aerosolContaminationIndex"
+      source: variables/aerosolContaminationIndex
+      longName: "Aerosol Contamination Index"
+
+    - name: "ObsValue/cloudAmount"
+      source: variables/cloudAmount
+      longName: "Cloud Amount In Segment"
+      units: "%"
+
+    - name: "ObsValue/ozoneTotal2"
+      source: variables/ozoneTotal2
+      longName: "Total Ozone"
+      units: "DU"
+
+    - name: "ObsValue/numberOfRetrievedLayers"
+      source: variables/numberOfRetrievedLayers
+      longName: "Number Of Retrieved Layers"
+
+    - name: "ObsValue/ozoneLayer"
+      source: variables/ozoneLayer
+      longName: "Ozone P"
+      units: "DU"
+
+    # QualityMarker
+    - name: "QualityMarker/typeOfLimitRepresentedByFollowingValue"
+      source: variables/typeOfLimitRepresentedByFollowingValue
+      longName: "Type Of Limit Represented By Following Value"

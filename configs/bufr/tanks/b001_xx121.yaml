@@ -1,0 +1,661 @@
+bufr:
+  subsets:
+    - NC001121
+
+  # One row per element of this sequence
+  group_by_variable: depthBelowSeaSurface
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    wmoMarineObservingPlatformExtendedIdentifier:
+      query: "*/WMOP"
+
+    wmoRegionNumber:
+      query: "*/WMOR"
+
+    wmoRegionSubArea:
+      query: "*/WMORS4"
+
+    wigosIdentifierSeries:
+      query: "*/WGOSIDS"
+
+    wigosIssuerOfIdentifier:
+      query: "*/WGOSISID"
+
+    wigosIssueNumber:
+      query: "*/WGOSISNM"
+
+    wigosLocalIdentifierCharacter:
+      query: "*/WGOSLID"
+
+    buoyPlatformIdentifier:
+      query: "*/BPID"
+
+    stationLongName:
+      query: "*/LSTN"
+
+    buoyType:
+      query: "*/BUYT"
+
+    timeSignificance1:
+      query: "*/TSIG[1]"
+
+    platformTransmitterIdNumber:
+      query: "*/PTIDC"
+
+    surfaceType:
+      query: "*/RSST"
+
+    precisionOfTemperatureObservation:
+      query: "*/PCAT"
+
+    indicatorForDigitization:
+      query: "*/IDMSMDBS/IDGT"
+
+    methodOfSalinityDepthMeasurementIdmsmdbs:
+      query: "*/IDMSMDBS/MSDM"
+
+    depthBelowSeaSurface:
+      query: "*/IDMSMDBS/BBYSTSL/DBSS"
+
+    precisionOfTemperatureObservationBbyssts:
+      query: "*/BBYSSTS/PCAT"
+
+    methodOfSalinityDepthMeasurementBbyssts:
+      query: "*/BBYSSTS/MSDM"
+
+    heightOfSensorAboveWater:
+      query: "*/HSAWS"
+
+    anemometerType:
+      query: "*/ANTP"
+
+    heightOfSensorAboveWater2:
+      query: "*/HSAWS"
+
+    timeSignificance:
+      query: "*/TSIG"
+
+    timePeriodMinutes:
+      query: "*/TPMI"
+
+    timeSignificance2:
+      query: "*/TSIG[2]"
+
+    year:
+      query: "*/YEAR"
+
+    month:
+      query: "*/MNTH"
+
+    day:
+      query: "*/DAYS"
+
+    hour:
+      query: "*/HOUR"
+
+    minute:
+      query: "*/MINU"
+
+    dataCollectionAndOrLocationSystem:
+      query: "*/DCLS"
+
+    dirOfMotionOfMovingObservingPlatform:
+      query: "*/DOMO"
+
+    platformDriftSpeedHighPrecision:
+      query: "*/PLDS"
+
+    batteryVoltageLargeRange:
+      query: "*/BVOLH"
+
+    drogueType:
+      query: "*/DROT"
+
+    depthAtWhichDrogueIsAttached:
+      query: "*/DROD"
+
+    lagrangianDrifterSubmergence:
+      query: "*/LDRS"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    # ObsValue
+    iceThickness:
+      query: "*/ITHK"
+
+    seaSurfaceTemperatureSST1:
+      query: "*/IDMSMDBS/BBYSTSL/SST1"
+
+    salinity:
+      query: "*/IDMSMDBS/BBYSTSL/SALN"
+
+    seaSurfaceTemperatureSST0:
+      query: "*/BBYSSTS/SST0"
+
+    seaSurfaceSalinity:
+      query: "*/BBYSSTS/SSS0"
+
+    durationOfWaveRecord:
+      query: "*/BASICWAV/DOWR"
+
+    significantWaveHeight:
+      query: "*/BASICWAV/SGWH"
+
+    maximumWaveHeight:
+      query: "*/BASICWAV/MXWH"
+
+    averageWavePeriod:
+      query: "*/BASICWAV/AVWP"
+
+    spectralPeakWavePeriod:
+      query: "*/BASICWAV/SPWP"
+
+    directionFromWhichDominantWavesAreComing:
+      query: "*/BASICWAV/DDWC"
+
+    directionalSpreadOfDominantWave:
+      query: "*/BASICWAV/DSDW"
+
+    airPressure:
+      query: "*/PRES"
+
+    pressureReducedToMeanSeaLevel:
+      query: "*/PMSL"
+
+    pressureChange3Hour:
+      query: "*/3HPC"
+
+    pressureTendencyCharacteristic:
+      query: "*/CHPT"
+
+    airTemperatureTMDB:
+      query: "*/TMDB"
+
+    dewPointTemperature:
+      query: "*/TMDP"
+
+    relativeHumidity:
+      query: "*/REHU"
+
+    windDirection:
+      query: "*/WDIR"
+
+    windSpeed:
+      query: "*/WSPD"
+
+    lagrangianDrifterDrogueStatus:
+      query: "*/LDDS"
+
+    # QualityMarker
+    seaSurfaceTemperature:
+      query: "*/QMST"
+
+    pressure:
+      query: "*/QMPR"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    qualityOfBuoySatelliteTransmission:
+      query: "*/QBST"
+
+    qualityOfBuoyLocation:
+      query: "*/QCIL"
+
+    locationQualityClass:
+      query: "*/QCLS"
+
+    correctedReportIndicator:
+      query: "*/CORN"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Message Type 001-121 Surface Marine SOFAR,RESTRCTD(BUFR"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface marine"
+
+    - name: "dataset"
+      type: string
+      value: "surface_sofar_restricted"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "true"
+
+    - name: "bufrCategory"
+      type: string
+      value: "001"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "121"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b001/xx121 NC001121"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/wmoMarineObservingPlatformExtendedIdentifier"
+      source: variables/wmoMarineObservingPlatformExtendedIdentifier
+      longName: "WMO marine observing platform extended identifier"
+
+    - name: "MetaData/wmoRegionNumber"
+      source: variables/wmoRegionNumber
+      longName: "Wmo Region Number"
+
+    - name: "MetaData/wmoRegionSubArea"
+      source: variables/wmoRegionSubArea
+      longName: "WMO Region sub-area"
+
+    - name: "MetaData/wigosIdentifierSeries"
+      source: variables/wigosIdentifierSeries
+      longName: "Wigos Identifier Series"
+
+    - name: "MetaData/wigosIssuerOfIdentifier"
+      source: variables/wigosIssuerOfIdentifier
+      longName: "Wigos Issuer Of Identifier"
+
+    - name: "MetaData/wigosIssueNumber"
+      source: variables/wigosIssueNumber
+      longName: "Wigos Issue Number"
+
+    - name: "MetaData/wigosLocalIdentifierCharacter"
+      source: variables/wigosLocalIdentifierCharacter
+      longName: "Wigos Local Identifier (CHARACTER)"
+
+    - name: "MetaData/buoyPlatformIdentifier"
+      source: variables/buoyPlatformIdentifier
+      longName: "BUOY/PLATFORM Identifier"
+
+    - name: "MetaData/stationLongName"
+      source: variables/stationLongName
+      longName: "Long station or site name"
+
+    - name: "MetaData/buoyType"
+      source: variables/buoyType
+      longName: "Buoy Type"
+
+    - name: "MetaData/timeSignificance1"
+      source: variables/timeSignificance1
+      longName: "Time Significance"
+
+    - name: "MetaData/platformTransmitterIdNumber"
+      source: variables/platformTransmitterIdNumber
+      longName: "Platform transmitter ID number"
+
+    - name: "MetaData/surfaceType"
+      source: variables/surfaceType
+      longName: "Surface type"
+
+    - name: "MetaData/precisionOfTemperatureObservation"
+      source: variables/precisionOfTemperatureObservation
+      longName: "Precision of temperature observation"
+      units: "K"
+
+    - name: "MetaData/indicatorForDigitization"
+      source: variables/indicatorForDigitization
+      longName: "Indicator for digitization"
+
+    - name: "MetaData/methodOfSalinityDepthMeasurementIdmsmdbs"
+      source: variables/methodOfSalinityDepthMeasurementIdmsmdbs
+      longName: "Method Of SALINITY/DEPTH Measurement"
+
+    - name: "MetaData/depthBelowSeaSurface"
+      source: variables/depthBelowSeaSurface
+      longName: "Depth Below Sea Surface"
+      units: "m"
+
+    - name: "MetaData/precisionOfTemperatureObservationBbyssts"
+      source: variables/precisionOfTemperatureObservationBbyssts
+      longName: "Precision of temperature observation"
+      units: "K"
+
+    - name: "MetaData/methodOfSalinityDepthMeasurementBbyssts"
+      source: variables/methodOfSalinityDepthMeasurementBbyssts
+      longName: "Method Of SALINITY/DEPTH Measurement"
+
+    - name: "MetaData/heightOfSensorAboveWater"
+      source: variables/heightOfSensorAboveWater
+      longName: "Height of sensor above water surface"
+      units: "m"
+
+    - name: "MetaData/anemometerType"
+      source: variables/anemometerType
+      longName: "Anemometer Type"
+
+    - name: "MetaData/heightOfSensorAboveWater2"
+      source: variables/heightOfSensorAboveWater2
+      longName: "Height of sensor above water surface"
+      units: "m"
+
+    - name: "MetaData/timeSignificance"
+      source: variables/timeSignificance
+      longName: "Time Significance"
+
+    - name: "MetaData/timePeriodMinutes"
+      source: variables/timePeriodMinutes
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/timeSignificance2"
+      source: variables/timeSignificance2
+      longName: "Time Significance"
+
+    - name: "MetaData/year"
+      source: variables/year
+      longName: "Year"
+      units: "year"
+
+    - name: "MetaData/month"
+      source: variables/month
+      longName: "Month"
+      units: "month"
+
+    - name: "MetaData/day"
+      source: variables/day
+      longName: "Day"
+      units: "day"
+
+    - name: "MetaData/hour"
+      source: variables/hour
+      longName: "Hour"
+      units: "h"
+
+    - name: "MetaData/minute"
+      source: variables/minute
+      longName: "Minute"
+      units: "min"
+
+    - name: "MetaData/dataCollectionAndOrLocationSystem"
+      source: variables/dataCollectionAndOrLocationSystem
+      longName: "Data collection and/or location system"
+
+    - name: "MetaData/dirOfMotionOfMovingObservingPlatform"
+      source: variables/dirOfMotionOfMovingObservingPlatform
+      longName: "DIR. Of Motion Of Moving Observing Platform"
+      units: "degree"
+
+    - name: "MetaData/platformDriftSpeedHighPrecision"
+      source: variables/platformDriftSpeedHighPrecision
+      longName: "Platform Drift Speed (HIGH PRECISION)"
+      units: "m s-1"
+
+    - name: "MetaData/batteryVoltageLargeRange"
+      source: variables/batteryVoltageLargeRange
+      longName: "Battery voltage (large range)"
+      units: "V"
+
+    - name: "MetaData/drogueType"
+      source: variables/drogueType
+      longName: "Drogue Type"
+
+    - name: "MetaData/depthAtWhichDrogueIsAttached"
+      source: variables/depthAtWhichDrogueIsAttached
+      longName: "Depth At Which Drogue Is Attached"
+      units: "m"
+
+    - name: "MetaData/lagrangianDrifterSubmergence"
+      source: variables/lagrangianDrifterSubmergence
+      longName: "Lagrangian Drifter Submergence"
+      units: "%"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    # ObsValue
+    - name: "ObsValue/iceThickness"
+      source: variables/iceThickness
+      longName: "Ice thickness"
+      units: "m"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST1"
+      source: variables/seaSurfaceTemperatureSST1
+      longName: "Sea Temperature"
+      units: "K"
+
+    - name: "ObsValue/salinity"
+      source: variables/salinity
+      longName: "Salinity"
+      units: "1e-3"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST0"
+      source: variables/seaSurfaceTemperatureSST0
+      longName: "Sea-surface temperature"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceSalinity"
+      source: variables/seaSurfaceSalinity
+      longName: "Sea-surface salinity"
+      units: "1e-3"
+
+    - name: "ObsValue/durationOfWaveRecord"
+      source: variables/durationOfWaveRecord
+      longName: "Duration of wave record"
+      units: "s"
+
+    - name: "ObsValue/significantWaveHeight"
+      source: variables/significantWaveHeight
+      longName: "Significant wave height"
+      units: "m"
+
+    - name: "ObsValue/maximumWaveHeight"
+      source: variables/maximumWaveHeight
+      longName: "Maximum Wave Height"
+      units: "m"
+
+    - name: "ObsValue/averageWavePeriod"
+      source: variables/averageWavePeriod
+      longName: "Average wave period"
+      units: "s"
+
+    - name: "ObsValue/spectralPeakWavePeriod"
+      source: variables/spectralPeakWavePeriod
+      longName: "Spectral peak wave period"
+      units: "s"
+
+    - name: "ObsValue/directionFromWhichDominantWavesAreComing"
+      source: variables/directionFromWhichDominantWavesAreComing
+      longName: "Direction from which dominant waves are coming"
+      units: "degree"
+
+    - name: "ObsValue/directionalSpreadOfDominantWave"
+      source: variables/directionalSpreadOfDominantWave
+      longName: "Directional spread of dominant wave"
+      units: "degree"
+
+    - name: "ObsValue/airPressure"
+      source: variables/airPressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/pressureReducedToMeanSeaLevel"
+      source: variables/pressureReducedToMeanSeaLevel
+      longName: "Pressure Reduced To Msl"
+      units: "Pa"
+
+    - name: "ObsValue/pressureChange3Hour"
+      source: variables/pressureChange3Hour
+      longName: "3 Hour Pressure Change"
+      units: "Pa"
+
+    - name: "ObsValue/pressureTendencyCharacteristic"
+      source: variables/pressureTendencyCharacteristic
+      longName: "Characteristic Of Pressure Tendency"
+
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/dewPointTemperature"
+      source: variables/dewPointTemperature
+      longName: "Dew Point Temperature"
+      units: "K"
+
+    - name: "ObsValue/relativeHumidity"
+      source: variables/relativeHumidity
+      longName: "Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/lagrangianDrifterDrogueStatus"
+      source: variables/lagrangianDrifterDrogueStatus
+      longName: "Lagrangian Drifter Drogue Status"
+
+    # QualityMarker
+    - name: "QualityMarker/seaSurfaceTemperature"
+      source: variables/seaSurfaceTemperature
+      longName: "SDMEDIT/QUIPS Quality Mark For Sea Surface Temperature"
+
+    - name: "QualityMarker/pressure"
+      source: variables/pressure
+      longName: "SDMEDIT/QUIPS Quality Mark For Pressure"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "SDMEDIT/QUIPS Quality Mark For Temperature"
+
+    - name: "QualityMarker/qualityOfBuoySatelliteTransmission"
+      source: variables/qualityOfBuoySatelliteTransmission
+      longName: "Quality Of Buoy Satellite Transmission"
+
+    - name: "QualityMarker/qualityOfBuoyLocation"
+      source: variables/qualityOfBuoyLocation
+      longName: "Quality Of Buoy Location"
+
+    - name: "QualityMarker/locationQualityClass"
+      source: variables/locationQualityClass
+      longName: "Location Quality Class"
+
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"

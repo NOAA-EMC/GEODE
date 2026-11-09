@@ -1,0 +1,677 @@
+bufr:
+  subsets:
+    - NC255101
+
+  variables:
+    # Not mapped: see the sequence notes in dev/ush/generate_bufr_tank_yamls.py
+    #   */FILENAME/FNSTG
+
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCPTIM{1}/RCYR"
+        month: "*/RCPTIM{1}/RCMO"
+        day: "*/RCPTIM{1}/RCDY"
+        hour: "*/RCPTIM{1}/RCHR"
+        minute: "*/RCPTIM{1}/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    receiptTimeSignificance:
+      query: "*/RCPTIM{1}/RCTS"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    providerIdentifier1:
+      query: "*/PRVID{1}/PRVSTG"
+
+    providerIdentifier2:
+      query: "*/PRVID{2}/PRVSTG"
+
+    platformType:
+      query: "*/PLTTYP"
+
+    stationElevation:
+      query: "*/SELV"
+
+    depthBelowLandSurface1:
+      query: "*/MNSOMTSQ{1}/DBLS"
+
+    depthBelowLandSurface2:
+      query: "*/MNSOMTSQ{2}/DBLS"
+
+    timePeriodHoursMntopcsq1:
+      query: "*/MNTOPCSQ{1}/TPHR"
+
+    timePeriodHoursMntopcsq2:
+      query: "*/MNTOPCSQ{2}/TPHR"
+
+    timePeriodHoursMntopcsq3:
+      query: "*/MNTOPCSQ{3}/TPHR"
+
+    timePeriodHoursMntopcsq4:
+      query: "*/MNTOPCSQ{4}/TPHR"
+
+    timePeriodHoursMndofssq1:
+      query: "*/MNDOFSSQ{1}/TPHR"
+
+    timePeriodHoursMndofssq2:
+      query: "*/MNDOFSSQ{2}/TPHR"
+
+    # ObsValue
+    airTemperatureTMDB:
+      query: "*/MNTMDBSQ/TMDB"
+
+    dewPointTemperature:
+      query: "*/MNTMDPSQ/TMDP"
+
+    windDirection:
+      query: "*/MNWDIRSQ/WDIR"
+
+    windSpeed:
+      query: "*/MNWSPDSQ/WSPD"
+
+    soilMoistureAvailability1:
+      query: "*/MNSOMTSQ{1}/WTNS"
+
+    soilMoistureAvailability2:
+      query: "*/MNSOMTSQ{2}/WTNS"
+
+    soilTemperature1:
+      query: "*/MNSOMTSQ{1}/STEMH"
+
+    soilTemperature2:
+      query: "*/MNSOMTSQ{2}/STEMH"
+
+    totalPrecipitation1:
+      query: "*/MNTOPCSQ{1}/TOPC"
+
+    totalPrecipitation2:
+      query: "*/MNTOPCSQ{2}/TOPC"
+
+    totalPrecipitation3:
+      query: "*/MNTOPCSQ{3}/TOPC"
+
+    totalPrecipitation4:
+      query: "*/MNTOPCSQ{4}/TOPC"
+
+    depthOfFreshSnow1:
+      query: "*/MNDOFSSQ{1}/DOFS"
+
+    depthOfFreshSnow2:
+      query: "*/MNDOFSSQ{2}/DOFS"
+
+    totalSnowDepth:
+      query: "*/MNTOSDSQ/TOSD"
+
+    # QualityMarker
+    fslQcDataMntmdbsq:
+      query: "*/MNTMDBSQ/QCD"
+
+    fslQcAppliedMntmdbsq:
+      query: "*/MNTMDBSQ/QCA"
+
+    fslQcResultsMntmdbsq:
+      query: "*/MNTMDBSQ/QCR"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    fslQcDataMntmdpsq:
+      query: "*/MNTMDPSQ/QCD"
+
+    fslQcAppliedMntmdpsq:
+      query: "*/MNTMDPSQ/QCA"
+
+    fslQcResultsMntmdpsq:
+      query: "*/MNTMDPSQ/QCR"
+
+    moisture:
+      query: "*/QMDD"
+
+    fslQcDataMnwdirsq:
+      query: "*/MNWDIRSQ/QCD"
+
+    fslQcAppliedMnwdirsq:
+      query: "*/MNWDIRSQ/QCA"
+
+    fslQcResultsMnwdirsq:
+      query: "*/MNWDIRSQ/QCR"
+
+    fslQcDataMnwspdsq:
+      query: "*/MNWSPDSQ/QCD"
+
+    fslQcAppliedMnwspdsq:
+      query: "*/MNWSPDSQ/QCA"
+
+    fslQcResultsMnwspdsq:
+      query: "*/MNWSPDSQ/QCR"
+
+    wind:
+      query: "*/QMWN"
+
+    fslQcData11:
+      query: "*/MNSOMTSQ{1}/QCD[1]"
+
+    fslQcData12:
+      query: "*/MNSOMTSQ{2}/QCD[1]"
+
+    fslQcApplied11:
+      query: "*/MNSOMTSQ{1}/QCA[1]"
+
+    fslQcApplied12:
+      query: "*/MNSOMTSQ{2}/QCA[1]"
+
+    fslQcResults11:
+      query: "*/MNSOMTSQ{1}/QCR[1]"
+
+    fslQcResults12:
+      query: "*/MNSOMTSQ{2}/QCR[1]"
+
+    fslQcData21:
+      query: "*/MNSOMTSQ{1}/QCD[2]"
+
+    fslQcData22:
+      query: "*/MNSOMTSQ{2}/QCD[2]"
+
+    fslQcApplied21:
+      query: "*/MNSOMTSQ{1}/QCA[2]"
+
+    fslQcApplied22:
+      query: "*/MNSOMTSQ{2}/QCA[2]"
+
+    fslQcResults21:
+      query: "*/MNSOMTSQ{1}/QCR[2]"
+
+    fslQcResults22:
+      query: "*/MNSOMTSQ{2}/QCR[2]"
+
+    fslQcDataMntopcsq1:
+      query: "*/MNTOPCSQ{1}/QCD"
+
+    fslQcDataMntopcsq2:
+      query: "*/MNTOPCSQ{2}/QCD"
+
+    fslQcDataMntopcsq3:
+      query: "*/MNTOPCSQ{3}/QCD"
+
+    fslQcDataMntopcsq4:
+      query: "*/MNTOPCSQ{4}/QCD"
+
+    fslQcAppliedMntopcsq1:
+      query: "*/MNTOPCSQ{1}/QCA"
+
+    fslQcAppliedMntopcsq2:
+      query: "*/MNTOPCSQ{2}/QCA"
+
+    fslQcAppliedMntopcsq3:
+      query: "*/MNTOPCSQ{3}/QCA"
+
+    fslQcAppliedMntopcsq4:
+      query: "*/MNTOPCSQ{4}/QCA"
+
+    fslQcResultsMntopcsq1:
+      query: "*/MNTOPCSQ{1}/QCR"
+
+    fslQcResultsMntopcsq2:
+      query: "*/MNTOPCSQ{2}/QCR"
+
+    fslQcResultsMntopcsq3:
+      query: "*/MNTOPCSQ{3}/QCR"
+
+    fslQcResultsMntopcsq4:
+      query: "*/MNTOPCSQ{4}/QCR"
+
+    fslQcDataMndofssq1:
+      query: "*/MNDOFSSQ{1}/QCD"
+
+    fslQcDataMndofssq2:
+      query: "*/MNDOFSSQ{2}/QCD"
+
+    fslQcAppliedMndofssq1:
+      query: "*/MNDOFSSQ{1}/QCA"
+
+    fslQcAppliedMndofssq2:
+      query: "*/MNDOFSSQ{2}/QCA"
+
+    fslQcResultsMndofssq1:
+      query: "*/MNDOFSSQ{1}/QCR"
+
+    fslQcResultsMndofssq2:
+      query: "*/MNDOFSSQ{2}/QCR"
+
+    fslQcDataMntosdsq:
+      query: "*/MNTOSDSQ/QCD"
+
+    fslQcAppliedMntosdsq:
+      query: "*/MNTOSDSQ/QCA"
+
+    fslQcResultsMntosdsq:
+      query: "*/MNTOSDSQ/QCR"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "MTYP 255-101 Coop from MADIS: NEPP & HCN-Modrnzd- NOA"
+
+    - name: "dataCategory"
+      type: string
+      value: "other"
+
+    - name: "dataset"
+      type: string
+      value: "surface_coop_madis_hcn-nepp"
+
+    - name: "dataFormat"
+      type: string
+      value: "netCDF"
+
+    - name: "restricted"
+      type: string
+      value: "true"
+
+    - name: "bufrCategory"
+      type: string
+      value: "255"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "101"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b255/xx101 NC255101"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/providerIdentifier1"
+      source: variables/providerIdentifier1
+      longName: "Mesonet Provider Id String (1)"
+
+    - name: "MetaData/providerIdentifier2"
+      source: variables/providerIdentifier2
+      longName: "Mesonet Provider Id String (2)"
+
+    - name: "MetaData/platformType"
+      source: variables/platformType
+      longName: "Platform Type"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurface1"
+      source: variables/depthBelowLandSurface1
+      longName: "Depth Below Land Surface (1)"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurface2"
+      source: variables/depthBelowLandSurface2
+      longName: "Depth Below Land Surface (2)"
+      units: "m"
+
+    - name: "MetaData/timePeriodHoursMntopcsq1"
+      source: variables/timePeriodHoursMntopcsq1
+      longName: "Time Period Or Displacement (1)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursMntopcsq2"
+      source: variables/timePeriodHoursMntopcsq2
+      longName: "Time Period Or Displacement (2)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursMntopcsq3"
+      source: variables/timePeriodHoursMntopcsq3
+      longName: "Time Period Or Displacement (3)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursMntopcsq4"
+      source: variables/timePeriodHoursMntopcsq4
+      longName: "Time Period Or Displacement (4)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursMndofssq1"
+      source: variables/timePeriodHoursMndofssq1
+      longName: "Time Period Or Displacement (1)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursMndofssq2"
+      source: variables/timePeriodHoursMndofssq2
+      longName: "Time Period Or Displacement (2)"
+      units: "h"
+
+    # ObsValue
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/dewPointTemperature"
+      source: variables/dewPointTemperature
+      longName: "Dew Point Temperature"
+      units: "K"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/soilMoistureAvailability1"
+      source: variables/soilMoistureAvailability1
+      longName: "Soil Moisture Availability (1)"
+      units: "%"
+
+    - name: "ObsValue/soilMoistureAvailability2"
+      source: variables/soilMoistureAvailability2
+      longName: "Soil Moisture Availability (2)"
+      units: "%"
+
+    - name: "ObsValue/soilTemperature1"
+      source: variables/soilTemperature1
+      longName: "Soil Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/soilTemperature2"
+      source: variables/soilTemperature2
+      longName: "Soil Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/totalPrecipitation1"
+      source: variables/totalPrecipitation1
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (1)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation2"
+      source: variables/totalPrecipitation2
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (2)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation3"
+      source: variables/totalPrecipitation3
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (3)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation4"
+      source: variables/totalPrecipitation4
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (4)"
+      units: "kg m-2"
+
+    - name: "ObsValue/depthOfFreshSnow1"
+      source: variables/depthOfFreshSnow1
+      longName: "Depth Of Fresh Snow (1)"
+      units: "m"
+
+    - name: "ObsValue/depthOfFreshSnow2"
+      source: variables/depthOfFreshSnow2
+      longName: "Depth Of Fresh Snow (2)"
+      units: "m"
+
+    - name: "ObsValue/totalSnowDepth"
+      source: variables/totalSnowDepth
+      longName: "Total Snow Depth"
+      units: "m"
+
+    # QualityMarker
+    - name: "QualityMarker/fslQcDataMntmdbsq"
+      source: variables/fslQcDataMntmdbsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMntmdbsq"
+      source: variables/fslQcAppliedMntmdbsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMntmdbsq"
+      source: variables/fslQcResultsMntmdbsq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "Sdmedit Quality Mark For Temperature"
+
+    - name: "QualityMarker/fslQcDataMntmdpsq"
+      source: variables/fslQcDataMntmdpsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMntmdpsq"
+      source: variables/fslQcAppliedMntmdpsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMntmdpsq"
+      source: variables/fslQcResultsMntmdpsq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "Sdmedit Quality Mark For Moisture"
+
+    - name: "QualityMarker/fslQcDataMnwdirsq"
+      source: variables/fslQcDataMnwdirsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMnwdirsq"
+      source: variables/fslQcAppliedMnwdirsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMnwdirsq"
+      source: variables/fslQcResultsMnwdirsq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataMnwspdsq"
+      source: variables/fslQcDataMnwspdsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMnwspdsq"
+      source: variables/fslQcAppliedMnwspdsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMnwspdsq"
+      source: variables/fslQcResultsMnwspdsq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "Sdmedit Quality Mark For Wind"
+
+    - name: "QualityMarker/fslQcData11"
+      source: variables/fslQcData11
+      longName: "Fsl \"QC DATA\" Flag (1)"
+
+    - name: "QualityMarker/fslQcData12"
+      source: variables/fslQcData12
+      longName: "Fsl \"QC DATA\" Flag (2)"
+
+    - name: "QualityMarker/fslQcApplied11"
+      source: variables/fslQcApplied11
+      longName: "Fsl \"QC APPLIED\" Flag (1)"
+
+    - name: "QualityMarker/fslQcApplied12"
+      source: variables/fslQcApplied12
+      longName: "Fsl \"QC APPLIED\" Flag (2)"
+
+    - name: "QualityMarker/fslQcResults11"
+      source: variables/fslQcResults11
+      longName: "Fsl \"QC RESULTS\" Flag (1)"
+
+    - name: "QualityMarker/fslQcResults12"
+      source: variables/fslQcResults12
+      longName: "Fsl \"QC RESULTS\" Flag (2)"
+
+    - name: "QualityMarker/fslQcData21"
+      source: variables/fslQcData21
+      longName: "Fsl \"QC DATA\" Flag (1)"
+
+    - name: "QualityMarker/fslQcData22"
+      source: variables/fslQcData22
+      longName: "Fsl \"QC DATA\" Flag (2)"
+
+    - name: "QualityMarker/fslQcApplied21"
+      source: variables/fslQcApplied21
+      longName: "Fsl \"QC APPLIED\" Flag (1)"
+
+    - name: "QualityMarker/fslQcApplied22"
+      source: variables/fslQcApplied22
+      longName: "Fsl \"QC APPLIED\" Flag (2)"
+
+    - name: "QualityMarker/fslQcResults21"
+      source: variables/fslQcResults21
+      longName: "Fsl \"QC RESULTS\" Flag (1)"
+
+    - name: "QualityMarker/fslQcResults22"
+      source: variables/fslQcResults22
+      longName: "Fsl \"QC RESULTS\" Flag (2)"
+
+    - name: "QualityMarker/fslQcDataMntopcsq1"
+      source: variables/fslQcDataMntopcsq1
+      longName: "Fsl \"QC DATA\" Flag (1)"
+
+    - name: "QualityMarker/fslQcDataMntopcsq2"
+      source: variables/fslQcDataMntopcsq2
+      longName: "Fsl \"QC DATA\" Flag (2)"
+
+    - name: "QualityMarker/fslQcDataMntopcsq3"
+      source: variables/fslQcDataMntopcsq3
+      longName: "Fsl \"QC DATA\" Flag (3)"
+
+    - name: "QualityMarker/fslQcDataMntopcsq4"
+      source: variables/fslQcDataMntopcsq4
+      longName: "Fsl \"QC DATA\" Flag (4)"
+
+    - name: "QualityMarker/fslQcAppliedMntopcsq1"
+      source: variables/fslQcAppliedMntopcsq1
+      longName: "Fsl \"QC APPLIED\" Flag (1)"
+
+    - name: "QualityMarker/fslQcAppliedMntopcsq2"
+      source: variables/fslQcAppliedMntopcsq2
+      longName: "Fsl \"QC APPLIED\" Flag (2)"
+
+    - name: "QualityMarker/fslQcAppliedMntopcsq3"
+      source: variables/fslQcAppliedMntopcsq3
+      longName: "Fsl \"QC APPLIED\" Flag (3)"
+
+    - name: "QualityMarker/fslQcAppliedMntopcsq4"
+      source: variables/fslQcAppliedMntopcsq4
+      longName: "Fsl \"QC APPLIED\" Flag (4)"
+
+    - name: "QualityMarker/fslQcResultsMntopcsq1"
+      source: variables/fslQcResultsMntopcsq1
+      longName: "Fsl \"QC RESULTS\" Flag (1)"
+
+    - name: "QualityMarker/fslQcResultsMntopcsq2"
+      source: variables/fslQcResultsMntopcsq2
+      longName: "Fsl \"QC RESULTS\" Flag (2)"
+
+    - name: "QualityMarker/fslQcResultsMntopcsq3"
+      source: variables/fslQcResultsMntopcsq3
+      longName: "Fsl \"QC RESULTS\" Flag (3)"
+
+    - name: "QualityMarker/fslQcResultsMntopcsq4"
+      source: variables/fslQcResultsMntopcsq4
+      longName: "Fsl \"QC RESULTS\" Flag (4)"
+
+    - name: "QualityMarker/fslQcDataMndofssq1"
+      source: variables/fslQcDataMndofssq1
+      longName: "Fsl \"QC DATA\" Flag (1)"
+
+    - name: "QualityMarker/fslQcDataMndofssq2"
+      source: variables/fslQcDataMndofssq2
+      longName: "Fsl \"QC DATA\" Flag (2)"
+
+    - name: "QualityMarker/fslQcAppliedMndofssq1"
+      source: variables/fslQcAppliedMndofssq1
+      longName: "Fsl \"QC APPLIED\" Flag (1)"
+
+    - name: "QualityMarker/fslQcAppliedMndofssq2"
+      source: variables/fslQcAppliedMndofssq2
+      longName: "Fsl \"QC APPLIED\" Flag (2)"
+
+    - name: "QualityMarker/fslQcResultsMndofssq1"
+      source: variables/fslQcResultsMndofssq1
+      longName: "Fsl \"QC RESULTS\" Flag (1)"
+
+    - name: "QualityMarker/fslQcResultsMndofssq2"
+      source: variables/fslQcResultsMndofssq2
+      longName: "Fsl \"QC RESULTS\" Flag (2)"
+
+    - name: "QualityMarker/fslQcDataMntosdsq"
+      source: variables/fslQcDataMntosdsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMntosdsq"
+      source: variables/fslQcAppliedMntosdsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMntosdsq"
+      source: variables/fslQcResultsMntosdsq
+      longName: "Fsl \"QC RESULTS\" Flag"

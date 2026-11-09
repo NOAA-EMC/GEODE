@@ -1,0 +1,2479 @@
+bufr:
+  subsets:
+    - NC000102
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    shipOrMobileStationIdentifier:
+      query: "*/SMID"
+
+    wmoRegionNumber:
+      query: "*/WMOR"
+
+    stationType:
+      query: "*/TOST"
+
+    stationElevation:
+      query: "*/HSMSL"
+
+    heightOfBarometerAboveMeanSeaLevel:
+      query: "*/HBMSL"
+
+    wigosIdentifierSeries:
+      query: "*/WGOSIDS"
+
+    wigosIssuerOfIdentifier:
+      query: "*/WGOSISID"
+
+    wigosIssueNumber:
+      query: "*/WGOSISNM"
+
+    wigosLocalIdentifierCharacter:
+      query: "*/WGOSLID"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    pressure:
+      query: "*/PRLC"
+
+    heightOfSensorAboveGround:
+      query: "*/HSALG"
+
+    heightOfSensorAboveWater:
+      query: "*/HSAWS"
+
+    heightOfSensorAboveGround1:
+      query: "*/BSYEXTM/HSALG[1]"
+
+    heightOfSensorAboveWater1:
+      query: "*/BSYEXTM/HSAWS[1]"
+
+    timePeriodHours1:
+      query: "*/BSYEXTM/TPHR[1]"
+
+    timePeriodHours2:
+      query: "*/BSYEXTM/TPHR[2]"
+
+    timePeriodHours3:
+      query: "*/BSYEXTM/TPHR[3]"
+
+    timePeriodHours4:
+      query: "*/BSYEXTM/TPHR[4]"
+
+    heightOfSensorAboveGround2:
+      query: "*/BSYEXTM/HSALG[2]"
+
+    heightOfSensorAboveWater2:
+      query: "*/BSYEXTM/HSAWS[2]"
+
+    timePeriodMinutesBsyextm:
+      query: "*/BSYEXTM/TPMI"
+
+    heightOfSensorAboveGround3:
+      query: "*/HSALG"
+
+    heightOfSensorAboveWater3:
+      query: "*/HSAWS"
+
+    heightOfSensorAboveGround4:
+      query: "*/HSALG"
+
+    heightOfSensorAboveWater4:
+      query: "*/HSAWS"
+
+    windInstrumentationType:
+      query: "*/TIWM"
+
+    timeSignificance1:
+      query: "*/TSIG[1]"
+
+    timePeriodMinutes:
+      query: "*/TPMI"
+
+    timeSignificance2:
+      query: "*/TSIG[2]"
+
+    timePeriodMinutesBsywnd21:
+      query: "*/BSYWND2{1}/TPMI"
+
+    timePeriodMinutesBsywnd22:
+      query: "*/BSYWND2{2}/TPMI"
+
+    timePeriodMinutesBsywnd23:
+      query: "*/BSYWND2{3}/TPMI"
+
+    timePeriodMinutesBsywnd24:
+      query: "*/BSYWND2{4}/TPMI"
+
+    timePeriodMinutes2:
+      query: "*/TPMI"
+
+    heightOfSensorAboveGround5:
+      query: "*/HSALG"
+
+    heightOfSensorAboveWater5:
+      query: "*/HSAWS"
+
+    methodOfPrecipitationMeasurement:
+      query: "*/MOPM"
+
+    methodOfLiquidContentMeasurementOfPrecipitation:
+      query: "*/MLMP"
+
+    timePeriodHoursBsypcp21:
+      query: "*/BSYPCP2{1}/TPHR"
+
+    timePeriodHoursBsypcp22:
+      query: "*/BSYPCP2{2}/TPHR"
+
+    timePeriodHoursBsypcp23:
+      query: "*/BSYPCP2{3}/TPHR"
+
+    timePeriodHoursBsypcp24:
+      query: "*/BSYPCP2{4}/TPHR"
+
+    timePeriodHoursBsypcp25:
+      query: "*/BSYPCP2{5}/TPHR"
+
+    timePeriodHoursBsypcp26:
+      query: "*/BSYPCP2{6}/TPHR"
+
+    timePeriodHoursBsypcp27:
+      query: "*/BSYPCP2{7}/TPHR"
+
+    timePeriodHoursBsypcp28:
+      query: "*/BSYPCP2{8}/TPHR"
+
+    timePeriodHoursBsypcp29:
+      query: "*/BSYPCP2{9}/TPHR"
+
+    timePeriodHoursBsypcp210:
+      query: "*/BSYPCP2{10}/TPHR"
+
+    heightOfSensorAboveGround6:
+      query: "*/HSALG"
+
+    heightOfSensorAboveWater6:
+      query: "*/HSAWS"
+
+    verticalSignificanceSurface:
+      query: "*/VSSO"
+
+    verticalSignificanceSurfaceBsyscld1:
+      query: "*/BSYSCLD{1}/VSSO"
+
+    verticalSignificanceSurfaceBsyscld2:
+      query: "*/BSYSCLD{2}/VSSO"
+
+    verticalSignificanceSurfaceBsyscld3:
+      query: "*/BSYSCLD{3}/VSSO"
+
+    verticalSignificanceSurfaceBsyscld4:
+      query: "*/BSYSCLD{4}/VSSO"
+
+    verticalSignificanceSurfaceBsyscld5:
+      query: "*/BSYSCLD{5}/VSSO"
+
+    verticalSignificanceSurfaceBsyscld6:
+      query: "*/BSYSCLD{6}/VSSO"
+
+    verticalSignificanceSurfaceBsyscld7:
+      query: "*/BSYSCLD{7}/VSSO"
+
+    verticalSignificanceSurfaceBsyscld8:
+      query: "*/BSYSCLD{8}/VSSO"
+
+    verticalSignificanceSurfaceBsybcld1:
+      query: "*/BSYBCLD{1}/VSSO"
+
+    verticalSignificanceSurfaceBsybcld2:
+      query: "*/BSYBCLD{2}/VSSO"
+
+    verticalSignificanceSurfaceBsybcld3:
+      query: "*/BSYBCLD{3}/VSSO"
+
+    verticalSignificanceSurfaceBsybcld4:
+      query: "*/BSYBCLD{4}/VSSO"
+
+    verticalSignificanceSurfaceBsybcld5:
+      query: "*/BSYBCLD{5}/VSSO"
+
+    verticalSignificanceSurfaceBsybcld6:
+      query: "*/BSYBCLD{6}/VSSO"
+
+    verticalSignificanceSurfaceBsydcld1:
+      query: "*/DIRCLDFT/BSYDCLD{1}/VSSO"
+
+    verticalSignificanceSurfaceBsydcld2:
+      query: "*/DIRCLDFT/BSYDCLD{2}/VSSO"
+
+    verticalSignificanceSurfaceBsydcld3:
+      query: "*/DIRCLDFT/BSYDCLD{3}/VSSO"
+
+    verticalSignificanceSurface2:
+      query: "*/VSSO"
+
+    timePeriodHoursPweather:
+      query: "*/PWEATHER/TPHR"
+
+    methodOfStateOfGroundMeasurement:
+      query: "*/STGDSNDM/MSGM"
+
+    methodOfSnowDepthMeasurement:
+      query: "*/STGDSNDM/MODM"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    # ObsValue
+    airPressure:
+      query: "*/PRES"
+
+    pressureReducedToMeanSeaLevel:
+      query: "*/PMSL"
+
+    pressureChange3Hour:
+      query: "*/3HPC"
+
+    pressureTendencyCharacteristic:
+      query: "*/CHPT"
+
+    pressureChange24Hour:
+      query: "*/24PC"
+
+    geopotentialHeight:
+      query: "*/GPH10"
+
+    airTemperatureTMDB:
+      query: "*/TMDB"
+
+    dewPointTemperature:
+      query: "*/TMDP"
+
+    relativeHumidity:
+      query: "*/REHU"
+
+    maximumTemperature:
+      query: "*/BSYEXTM/MXTM"
+
+    minimumTemperature1:
+      query: "*/BSYEXTM/MITM[1]"
+
+    minimumTemperature2:
+      query: "*/BSYEXTM/MITM[2]"
+
+    horizontalVisibility:
+      query: "*/HOVI"
+
+    windDirection:
+      query: "*/WDIR"
+
+    windSpeed:
+      query: "*/WSPD"
+
+    maximumWindGustDirection1:
+      query: "*/BSYWND2{1}/MXGD"
+
+    maximumWindGustDirection2:
+      query: "*/BSYWND2{2}/MXGD"
+
+    maximumWindGustDirection3:
+      query: "*/BSYWND2{3}/MXGD"
+
+    maximumWindGustDirection4:
+      query: "*/BSYWND2{4}/MXGD"
+
+    maximumWindGustSpeed1:
+      query: "*/BSYWND2{1}/MXGS"
+
+    maximumWindGustSpeed2:
+      query: "*/BSYWND2{2}/MXGS"
+
+    maximumWindGustSpeed3:
+      query: "*/BSYWND2{3}/MXGS"
+
+    maximumWindGustSpeed4:
+      query: "*/BSYWND2{4}/MXGS"
+
+    totalPrecipitation1:
+      query: "*/BSYPCP2{1}/TOPC"
+
+    totalPrecipitation2:
+      query: "*/BSYPCP2{2}/TOPC"
+
+    totalPrecipitation3:
+      query: "*/BSYPCP2{3}/TOPC"
+
+    totalPrecipitation4:
+      query: "*/BSYPCP2{4}/TOPC"
+
+    totalPrecipitation5:
+      query: "*/BSYPCP2{5}/TOPC"
+
+    totalPrecipitation6:
+      query: "*/BSYPCP2{6}/TOPC"
+
+    totalPrecipitation7:
+      query: "*/BSYPCP2{7}/TOPC"
+
+    totalPrecipitation8:
+      query: "*/BSYPCP2{8}/TOPC"
+
+    totalPrecipitation9:
+      query: "*/BSYPCP2{9}/TOPC"
+
+    totalPrecipitation10:
+      query: "*/BSYPCP2{10}/TOPC"
+
+    cloudCoverTotal:
+      query: "*/TOCC"
+
+    cloudAmount:
+      query: "*/CLAM"
+
+    heightbasecloud:
+      query: "*/HOCB"
+
+    cloudType1:
+      query: "*/CLTP[1]"
+
+    cloudType2:
+      query: "*/CLTP[2]"
+
+    cloudType3:
+      query: "*/CLTP[3]"
+
+    cloudAmountBsyscld1:
+      query: "*/BSYSCLD{1}/CLAM"
+
+    cloudAmountBsyscld2:
+      query: "*/BSYSCLD{2}/CLAM"
+
+    cloudAmountBsyscld3:
+      query: "*/BSYSCLD{3}/CLAM"
+
+    cloudAmountBsyscld4:
+      query: "*/BSYSCLD{4}/CLAM"
+
+    cloudAmountBsyscld5:
+      query: "*/BSYSCLD{5}/CLAM"
+
+    cloudAmountBsyscld6:
+      query: "*/BSYSCLD{6}/CLAM"
+
+    cloudAmountBsyscld7:
+      query: "*/BSYSCLD{7}/CLAM"
+
+    cloudAmountBsyscld8:
+      query: "*/BSYSCLD{8}/CLAM"
+
+    cloudTypeBsyscld1:
+      query: "*/BSYSCLD{1}/CLTP"
+
+    cloudTypeBsyscld2:
+      query: "*/BSYSCLD{2}/CLTP"
+
+    cloudTypeBsyscld3:
+      query: "*/BSYSCLD{3}/CLTP"
+
+    cloudTypeBsyscld4:
+      query: "*/BSYSCLD{4}/CLTP"
+
+    cloudTypeBsyscld5:
+      query: "*/BSYSCLD{5}/CLTP"
+
+    cloudTypeBsyscld6:
+      query: "*/BSYSCLD{6}/CLTP"
+
+    cloudTypeBsyscld7:
+      query: "*/BSYSCLD{7}/CLTP"
+
+    cloudTypeBsyscld8:
+      query: "*/BSYSCLD{8}/CLTP"
+
+    heightbasecloudBsyscld1:
+      query: "*/BSYSCLD{1}/HOCB"
+
+    heightbasecloudBsyscld2:
+      query: "*/BSYSCLD{2}/HOCB"
+
+    heightbasecloudBsyscld3:
+      query: "*/BSYSCLD{3}/HOCB"
+
+    heightbasecloudBsyscld4:
+      query: "*/BSYSCLD{4}/HOCB"
+
+    heightbasecloudBsyscld5:
+      query: "*/BSYSCLD{5}/HOCB"
+
+    heightbasecloudBsyscld6:
+      query: "*/BSYSCLD{6}/HOCB"
+
+    heightbasecloudBsyscld7:
+      query: "*/BSYSCLD{7}/HOCB"
+
+    heightbasecloudBsyscld8:
+      query: "*/BSYSCLD{8}/HOCB"
+
+    cloudAmountBsybcld1:
+      query: "*/BSYBCLD{1}/CLAM"
+
+    cloudAmountBsybcld2:
+      query: "*/BSYBCLD{2}/CLAM"
+
+    cloudAmountBsybcld3:
+      query: "*/BSYBCLD{3}/CLAM"
+
+    cloudAmountBsybcld4:
+      query: "*/BSYBCLD{4}/CLAM"
+
+    cloudAmountBsybcld5:
+      query: "*/BSYBCLD{5}/CLAM"
+
+    cloudAmountBsybcld6:
+      query: "*/BSYBCLD{6}/CLAM"
+
+    cloudTypeBsybcld1:
+      query: "*/BSYBCLD{1}/CLTP"
+
+    cloudTypeBsybcld2:
+      query: "*/BSYBCLD{2}/CLTP"
+
+    cloudTypeBsybcld3:
+      query: "*/BSYBCLD{3}/CLTP"
+
+    cloudTypeBsybcld4:
+      query: "*/BSYBCLD{4}/CLTP"
+
+    cloudTypeBsybcld5:
+      query: "*/BSYBCLD{5}/CLTP"
+
+    cloudTypeBsybcld6:
+      query: "*/BSYBCLD{6}/CLTP"
+
+    heightOfTopOfCloud1:
+      query: "*/BSYBCLD{1}/HOCT"
+
+    heightOfTopOfCloud2:
+      query: "*/BSYBCLD{2}/HOCT"
+
+    heightOfTopOfCloud3:
+      query: "*/BSYBCLD{3}/HOCT"
+
+    heightOfTopOfCloud4:
+      query: "*/BSYBCLD{4}/HOCT"
+
+    heightOfTopOfCloud5:
+      query: "*/BSYBCLD{5}/HOCT"
+
+    heightOfTopOfCloud6:
+      query: "*/BSYBCLD{6}/HOCT"
+
+    cloudTopDescription1:
+      query: "*/BSYBCLD{1}/CTDS"
+
+    cloudTopDescription2:
+      query: "*/BSYBCLD{2}/CTDS"
+
+    cloudTopDescription3:
+      query: "*/BSYBCLD{3}/CTDS"
+
+    cloudTopDescription4:
+      query: "*/BSYBCLD{4}/CTDS"
+
+    cloudTopDescription5:
+      query: "*/BSYBCLD{5}/CTDS"
+
+    cloudTopDescription6:
+      query: "*/BSYBCLD{6}/CTDS"
+
+    trueDirectionFromWhichCloudsAreMoving1:
+      query: "*/DIRCLDFT/BSYDCLD{1}/TDCM"
+
+    trueDirectionFromWhichCloudsAreMoving2:
+      query: "*/DIRCLDFT/BSYDCLD{2}/TDCM"
+
+    trueDirectionFromWhichCloudsAreMoving3:
+      query: "*/DIRCLDFT/BSYDCLD{3}/TDCM"
+
+    presentWeather:
+      query: "*/PWEATHER/PRWE"
+
+    pastWeather1:
+      query: "*/PWEATHER/PSW1"
+
+    pastWeather2:
+      query: "*/PWEATHER/PSW2"
+
+    groundState:
+      query: "*/STGDSNDM/SOGR"
+
+    totalSnowDepth:
+      query: "*/STGDSNDM/TOSD"
+
+    groundMinimumTemperaturePast12Hours:
+      query: "*/GMITH"
+
+    # QualityMarker
+    stationElevationQualityMarkForMobilStations:
+      query: "*/QCEVR"
+
+    pressureQMPR:
+      query: "*/QMPR"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    moisture:
+      query: "*/QMDD"
+
+    attributeOfFollowingValue:
+      query: "*/AOFV"
+
+    wind:
+      query: "*/QMWN"
+
+    attributeOfFollowingValueBsyscld1:
+      query: "*/BSYSCLD{1}/AOFV"
+
+    attributeOfFollowingValueBsyscld2:
+      query: "*/BSYSCLD{2}/AOFV"
+
+    attributeOfFollowingValueBsyscld3:
+      query: "*/BSYSCLD{3}/AOFV"
+
+    attributeOfFollowingValueBsyscld4:
+      query: "*/BSYSCLD{4}/AOFV"
+
+    attributeOfFollowingValueBsyscld5:
+      query: "*/BSYSCLD{5}/AOFV"
+
+    attributeOfFollowingValueBsyscld6:
+      query: "*/BSYSCLD{6}/AOFV"
+
+    attributeOfFollowingValueBsyscld7:
+      query: "*/BSYSCLD{7}/AOFV"
+
+    attributeOfFollowingValueBsyscld8:
+      query: "*/BSYSCLD{8}/AOFV"
+
+    correctedReportIndicator:
+      query: "*/CORN"
+
+    # Not in this tank: other tanks in this dataset have these
+    wmoBlockNumber:
+      query: "*/ABSENT"
+      type: int
+
+    wmoStationNumber:
+      query: "*/ABSENT"
+      type: int
+
+    indTypeOfStnOperationPastP:
+      query: "*/ABSENT"
+      type: int
+
+    methodOfSeaSurfaceTemperatureMeasurement:
+      query: "*/ABSENT"
+      type: int
+
+    methodOfWetBulbTemperatureMeasurement:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface1:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface3:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface4:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface5:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface6:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface7:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface8:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface9:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface10:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface11:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface12:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface13:
+      query: "*/ABSENT"
+      type: int
+
+    verticalSignificanceSurface14:
+      query: "*/ABSENT"
+      type: int
+
+    rawReportString:
+      query: "*/ABSENT"
+      type: string
+
+    indicInclusionOmissionOfPrec:
+      query: "*/ABSENT"
+      type: int
+
+    maximumWindGustSpeed:
+      query: "*/ABSENT"
+      type: float
+
+    seaSurfaceTemperatureSST1:
+      query: "*/ABSENT"
+      type: float
+
+    wetBulbTemperature:
+      query: "*/ABSENT"
+      type: float
+
+    minimumTemperature:
+      query: "*/ABSENT"
+      type: float
+
+    geopotential10:
+      query: "*/ABSENT"
+      type: int
+
+    totalPrecipitationPast6Hours:
+      query: "*/ABSENT"
+      type: float
+
+    totalPrecipitationPast1Hour:
+      query: "*/ABSENT"
+      type: float
+
+    totalPrecipitationPast3Hours:
+      query: "*/ABSENT"
+      type: float
+
+    totalPrecipitationPast12Hours:
+      query: "*/ABSENT"
+      type: float
+
+    totalPrecipitationPast24Hours:
+      query: "*/ABSENT"
+      type: float
+
+    totalPrecipitation:
+      query: "*/ABSENT"
+      type: float
+
+    heightAboveSurfaceOfBaseOfLowestCloudSeen:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount1:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount2:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount3:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount4:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount5:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount6:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount7:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount8:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount9:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount10:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount11:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount12:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount13:
+      query: "*/ABSENT"
+      type: int
+
+    cloudAmount14:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType4:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType5:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType6:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType7:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType8:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType9:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType10:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType11:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType12:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType13:
+      query: "*/ABSENT"
+      type: int
+
+    cloudType14:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud1:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud2:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud3:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud4:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud5:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud6:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud7:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud8:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud9:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud10:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud11:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud12:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud13:
+      query: "*/ABSENT"
+      type: int
+
+    heightbasecloud14:
+      query: "*/ABSENT"
+      type: int
+
+    heightOfTopOfCloud7:
+      query: "*/ABSENT"
+      type: int
+
+    heightOfTopOfCloud8:
+      query: "*/ABSENT"
+      type: int
+
+    heightOfTopOfCloud9:
+      query: "*/ABSENT"
+      type: int
+
+    heightOfTopOfCloud10:
+      query: "*/ABSENT"
+      type: int
+
+    heightOfTopOfCloud11:
+      query: "*/ABSENT"
+      type: int
+
+    heightOfTopOfCloud12:
+      query: "*/ABSENT"
+      type: int
+
+    heightOfTopOfCloud13:
+      query: "*/ABSENT"
+      type: int
+
+    heightOfTopOfCloud14:
+      query: "*/ABSENT"
+      type: int
+
+    cloudTopDescription7:
+      query: "*/ABSENT"
+      type: int
+
+    cloudTopDescription8:
+      query: "*/ABSENT"
+      type: int
+
+    cloudTopDescription9:
+      query: "*/ABSENT"
+      type: int
+
+    cloudTopDescription10:
+      query: "*/ABSENT"
+      type: int
+
+    cloudTopDescription11:
+      query: "*/ABSENT"
+      type: int
+
+    cloudTopDescription12:
+      query: "*/ABSENT"
+      type: int
+
+    cloudTopDescription13:
+      query: "*/ABSENT"
+      type: int
+
+    cloudTopDescription14:
+      query: "*/ABSENT"
+      type: int
+
+    wavePeriod:
+      query: "*/ABSENT"
+      type: int
+
+    waveHeight:
+      query: "*/ABSENT"
+      type: float
+
+    windWavePeriod:
+      query: "*/ABSENT"
+      type: int
+
+    windWaveHeight:
+      query: "*/ABSENT"
+      type: float
+
+    swellWaveDirection1:
+      query: "*/ABSENT"
+      type: int
+
+    swellWaveDirection2:
+      query: "*/ABSENT"
+      type: int
+
+    swellWaveDirection3:
+      query: "*/ABSENT"
+      type: int
+
+    swellWaveDirection4:
+      query: "*/ABSENT"
+      type: int
+
+    swellWavePeriod1:
+      query: "*/ABSENT"
+      type: int
+
+    swellWavePeriod2:
+      query: "*/ABSENT"
+      type: int
+
+    swellWavePeriod3:
+      query: "*/ABSENT"
+      type: int
+
+    swellWavePeriod4:
+      query: "*/ABSENT"
+      type: int
+
+    swellWaveHeight1:
+      query: "*/ABSENT"
+      type: float
+
+    swellWaveHeight2:
+      query: "*/ABSENT"
+      type: float
+
+    swellWaveHeight3:
+      query: "*/ABSENT"
+      type: float
+
+    swellWaveHeight4:
+      query: "*/ABSENT"
+      type: float
+
+    depthOfFreshSnow:
+      query: "*/ABSENT"
+      type: float
+
+    causeOfIceAccretion:
+      query: "*/ABSENT"
+      type: int
+
+    iceDepositThickness:
+      query: "*/ABSENT"
+      type: float
+
+    rateOfIceAccretion:
+      query: "*/ABSENT"
+      type: int
+
+    cityTemperature:
+      query: "*/ABSENT"
+      type: float
+
+    cityMaximumTemperature:
+      query: "*/ABSENT"
+      type: float
+
+    cityMinimumTemperature:
+      query: "*/ABSENT"
+      type: float
+
+    verticalVisibility:
+      query: "*/ABSENT"
+      type: int
+
+    seaSurfaceTemperature:
+      query: "*/ABSENT"
+      type: int
+
+    stationName:
+      query: "*/ABSENT"
+      type: string
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Mtyp 000-102 Synoptic - Mobil Land (BUFR)"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface land"
+
+    - name: "dataset"
+      type: string
+      value: "surface_synop"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "000"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "102"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b000/xx102 NC000102"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/shipOrMobileStationIdentifier"
+      source: variables/shipOrMobileStationIdentifier
+      longName: "Ship Or Mobile Land Station Identifier"
+
+    - name: "MetaData/wmoRegionNumber"
+      source: variables/wmoRegionNumber
+      longName: "Wmo Region NUMBER/GEOGRAPHICAL Area"
+
+    - name: "MetaData/stationType"
+      source: variables/stationType
+      longName: "Type Of Station"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station Ground Above Msl"
+      units: "m"
+
+    - name: "MetaData/heightOfBarometerAboveMeanSeaLevel"
+      source: variables/heightOfBarometerAboveMeanSeaLevel
+      longName: "Height Of Barometer Above Mean Sea Level"
+      units: "m"
+
+    - name: "MetaData/wigosIdentifierSeries"
+      source: variables/wigosIdentifierSeries
+      longName: "Wigos Identifier Series"
+
+    - name: "MetaData/wigosIssuerOfIdentifier"
+      source: variables/wigosIssuerOfIdentifier
+      longName: "Wigos Issuer Of Identifier"
+
+    - name: "MetaData/wigosIssueNumber"
+      source: variables/wigosIssueNumber
+      longName: "Wigos Issue Number"
+
+    - name: "MetaData/wigosLocalIdentifierCharacter"
+      source: variables/wigosLocalIdentifierCharacter
+      longName: "Wigos Local Identifier (CHARACTER)"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/pressure"
+      source: variables/pressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/heightOfSensorAboveGround"
+      source: variables/heightOfSensorAboveGround
+      longName: "Height Of Sensor Above Local Ground"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveWater"
+      source: variables/heightOfSensorAboveWater
+      longName: "Height Of Sensor Above Water Surface"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveGround1"
+      source: variables/heightOfSensorAboveGround1
+      longName: "Height Of Sensor Above Local Ground"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveWater1"
+      source: variables/heightOfSensorAboveWater1
+      longName: "Height Of Sensor Above Water Surface"
+      units: "m"
+
+    - name: "MetaData/timePeriodHours1"
+      source: variables/timePeriodHours1
+      longName: "Time Period Or Displacement"
+      units: "h"
+
+    - name: "MetaData/timePeriodHours2"
+      source: variables/timePeriodHours2
+      longName: "Time Period Or Displacement"
+      units: "h"
+
+    - name: "MetaData/timePeriodHours3"
+      source: variables/timePeriodHours3
+      longName: "Time Period Or Displacement"
+      units: "h"
+
+    - name: "MetaData/timePeriodHours4"
+      source: variables/timePeriodHours4
+      longName: "Time Period Or Displacement"
+      units: "h"
+
+    - name: "MetaData/heightOfSensorAboveGround2"
+      source: variables/heightOfSensorAboveGround2
+      longName: "Height Of Sensor Above Local Ground"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveWater2"
+      source: variables/heightOfSensorAboveWater2
+      longName: "Height Of Sensor Above Water Surface"
+      units: "m"
+
+    - name: "MetaData/timePeriodMinutesBsyextm"
+      source: variables/timePeriodMinutesBsyextm
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/heightOfSensorAboveGround3"
+      source: variables/heightOfSensorAboveGround3
+      longName: "Height Of Sensor Above Local Ground"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveWater3"
+      source: variables/heightOfSensorAboveWater3
+      longName: "Height Of Sensor Above Water Surface"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveGround4"
+      source: variables/heightOfSensorAboveGround4
+      longName: "Height Of Sensor Above Local Ground"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveWater4"
+      source: variables/heightOfSensorAboveWater4
+      longName: "Height Of Sensor Above Water Surface"
+      units: "m"
+
+    - name: "MetaData/windInstrumentationType"
+      source: variables/windInstrumentationType
+      longName: "Type Of Instrumentation For Wind Measurement"
+
+    - name: "MetaData/timeSignificance1"
+      source: variables/timeSignificance1
+      longName: "Time Significance"
+
+    - name: "MetaData/timePeriodMinutes"
+      source: variables/timePeriodMinutes
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/timeSignificance2"
+      source: variables/timeSignificance2
+      longName: "Time Significance"
+
+    - name: "MetaData/timePeriodMinutesBsywnd21"
+      source: variables/timePeriodMinutesBsywnd21
+      longName: "Time Period Or Displacement (1)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutesBsywnd22"
+      source: variables/timePeriodMinutesBsywnd22
+      longName: "Time Period Or Displacement (2)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutesBsywnd23"
+      source: variables/timePeriodMinutesBsywnd23
+      longName: "Time Period Or Displacement (3)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutesBsywnd24"
+      source: variables/timePeriodMinutesBsywnd24
+      longName: "Time Period Or Displacement (4)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes2"
+      source: variables/timePeriodMinutes2
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/heightOfSensorAboveGround5"
+      source: variables/heightOfSensorAboveGround5
+      longName: "Height Of Sensor Above Local Ground"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveWater5"
+      source: variables/heightOfSensorAboveWater5
+      longName: "Height Of Sensor Above Water Surface"
+      units: "m"
+
+    - name: "MetaData/methodOfPrecipitationMeasurement"
+      source: variables/methodOfPrecipitationMeasurement
+      longName: "Method Of Precipitation Measurement"
+
+    - name: "MetaData/methodOfLiquidContentMeasurementOfPrecipitation"
+      source: variables/methodOfLiquidContentMeasurementOfPrecipitation
+      longName: "Method Of Liquid Content Measurement Of Precipitation"
+
+    - name: "MetaData/timePeriodHoursBsypcp21"
+      source: variables/timePeriodHoursBsypcp21
+      longName: "Time Period Or Displacement (1)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursBsypcp22"
+      source: variables/timePeriodHoursBsypcp22
+      longName: "Time Period Or Displacement (2)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursBsypcp23"
+      source: variables/timePeriodHoursBsypcp23
+      longName: "Time Period Or Displacement (3)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursBsypcp24"
+      source: variables/timePeriodHoursBsypcp24
+      longName: "Time Period Or Displacement (4)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursBsypcp25"
+      source: variables/timePeriodHoursBsypcp25
+      longName: "Time Period Or Displacement (5)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursBsypcp26"
+      source: variables/timePeriodHoursBsypcp26
+      longName: "Time Period Or Displacement (6)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursBsypcp27"
+      source: variables/timePeriodHoursBsypcp27
+      longName: "Time Period Or Displacement (7)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursBsypcp28"
+      source: variables/timePeriodHoursBsypcp28
+      longName: "Time Period Or Displacement (8)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursBsypcp29"
+      source: variables/timePeriodHoursBsypcp29
+      longName: "Time Period Or Displacement (9)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHoursBsypcp210"
+      source: variables/timePeriodHoursBsypcp210
+      longName: "Time Period Or Displacement (10)"
+      units: "h"
+
+    - name: "MetaData/heightOfSensorAboveGround6"
+      source: variables/heightOfSensorAboveGround6
+      longName: "Height Of Sensor Above Local Ground"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveWater6"
+      source: variables/heightOfSensorAboveWater6
+      longName: "Height Of Sensor Above Water Surface"
+      units: "m"
+
+    - name: "MetaData/verticalSignificanceSurface"
+      source: variables/verticalSignificanceSurface
+      longName: "VERT. Significance (SFC OBSERVATION)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsyscld1"
+      source: variables/verticalSignificanceSurfaceBsyscld1
+      longName: "VERT. Significance (SFC OBSERVATION) (1)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsyscld2"
+      source: variables/verticalSignificanceSurfaceBsyscld2
+      longName: "VERT. Significance (SFC OBSERVATION) (2)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsyscld3"
+      source: variables/verticalSignificanceSurfaceBsyscld3
+      longName: "VERT. Significance (SFC OBSERVATION) (3)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsyscld4"
+      source: variables/verticalSignificanceSurfaceBsyscld4
+      longName: "VERT. Significance (SFC OBSERVATION) (4)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsyscld5"
+      source: variables/verticalSignificanceSurfaceBsyscld5
+      longName: "VERT. Significance (SFC OBSERVATION) (5)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsyscld6"
+      source: variables/verticalSignificanceSurfaceBsyscld6
+      longName: "VERT. Significance (SFC OBSERVATION) (6)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsyscld7"
+      source: variables/verticalSignificanceSurfaceBsyscld7
+      longName: "VERT. Significance (SFC OBSERVATION) (7)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsyscld8"
+      source: variables/verticalSignificanceSurfaceBsyscld8
+      longName: "VERT. Significance (SFC OBSERVATION) (8)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsybcld1"
+      source: variables/verticalSignificanceSurfaceBsybcld1
+      longName: "VERT. Significance (SFC OBSERVATION) (1)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsybcld2"
+      source: variables/verticalSignificanceSurfaceBsybcld2
+      longName: "VERT. Significance (SFC OBSERVATION) (2)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsybcld3"
+      source: variables/verticalSignificanceSurfaceBsybcld3
+      longName: "VERT. Significance (SFC OBSERVATION) (3)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsybcld4"
+      source: variables/verticalSignificanceSurfaceBsybcld4
+      longName: "VERT. Significance (SFC OBSERVATION) (4)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsybcld5"
+      source: variables/verticalSignificanceSurfaceBsybcld5
+      longName: "VERT. Significance (SFC OBSERVATION) (5)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsybcld6"
+      source: variables/verticalSignificanceSurfaceBsybcld6
+      longName: "VERT. Significance (SFC OBSERVATION) (6)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsydcld1"
+      source: variables/verticalSignificanceSurfaceBsydcld1
+      longName: "VERT. Significance (SFC OBSERVATION) (1)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsydcld2"
+      source: variables/verticalSignificanceSurfaceBsydcld2
+      longName: "VERT. Significance (SFC OBSERVATION) (2)"
+
+    - name: "MetaData/verticalSignificanceSurfaceBsydcld3"
+      source: variables/verticalSignificanceSurfaceBsydcld3
+      longName: "VERT. Significance (SFC OBSERVATION) (3)"
+
+    - name: "MetaData/verticalSignificanceSurface2"
+      source: variables/verticalSignificanceSurface2
+      longName: "VERT. Significance (SFC OBSERVATION)"
+
+    - name: "MetaData/timePeriodHoursPweather"
+      source: variables/timePeriodHoursPweather
+      longName: "Time Period Or Displacement"
+      units: "h"
+
+    - name: "MetaData/methodOfStateOfGroundMeasurement"
+      source: variables/methodOfStateOfGroundMeasurement
+      longName: "Method Of State Of Ground Measurement"
+
+    - name: "MetaData/methodOfSnowDepthMeasurement"
+      source: variables/methodOfSnowDepthMeasurement
+      longName: "Method Of Snow Depth Measurement"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    # ObsValue
+    - name: "ObsValue/airPressure"
+      source: variables/airPressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/pressureReducedToMeanSeaLevel"
+      source: variables/pressureReducedToMeanSeaLevel
+      longName: "Pressure Reduced To Msl"
+      units: "Pa"
+
+    - name: "ObsValue/pressureChange3Hour"
+      source: variables/pressureChange3Hour
+      longName: "3 Hour Pressure Change"
+      units: "Pa"
+
+    - name: "ObsValue/pressureTendencyCharacteristic"
+      source: variables/pressureTendencyCharacteristic
+      longName: "Characteristic Of Pressure Tendency"
+
+    - name: "ObsValue/pressureChange24Hour"
+      source: variables/pressureChange24Hour
+      longName: "24 Hour Pressure Change"
+      units: "Pa"
+
+    - name: "ObsValue/geopotentialHeight"
+      source: variables/geopotentialHeight
+      longName: "Geopotential Height"
+      units: "gpm"
+
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/dewPointTemperature"
+      source: variables/dewPointTemperature
+      longName: "Dew Point Temperature"
+      units: "K"
+
+    - name: "ObsValue/relativeHumidity"
+      source: variables/relativeHumidity
+      longName: "Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/maximumTemperature"
+      source: variables/maximumTemperature
+      longName: "Maximum Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature1"
+      source: variables/minimumTemperature1
+      longName: "Minimum Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature2"
+      source: variables/minimumTemperature2
+      longName: "Minimum Temperature"
+      units: "K"
+
+    - name: "ObsValue/horizontalVisibility"
+      source: variables/horizontalVisibility
+      longName: "Horizontal Visibility"
+      units: "m"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/maximumWindGustDirection1"
+      source: variables/maximumWindGustDirection1
+      longName: "Maximum Wind Gust Direction (1)"
+      units: "degree"
+
+    - name: "ObsValue/maximumWindGustDirection2"
+      source: variables/maximumWindGustDirection2
+      longName: "Maximum Wind Gust Direction (2)"
+      units: "degree"
+
+    - name: "ObsValue/maximumWindGustDirection3"
+      source: variables/maximumWindGustDirection3
+      longName: "Maximum Wind Gust Direction (3)"
+      units: "degree"
+
+    - name: "ObsValue/maximumWindGustDirection4"
+      source: variables/maximumWindGustDirection4
+      longName: "Maximum Wind Gust Direction (4)"
+      units: "degree"
+
+    - name: "ObsValue/maximumWindGustSpeed1"
+      source: variables/maximumWindGustSpeed1
+      longName: "Maximum Wind Gust Speed (1)"
+      units: "m s-1"
+
+    - name: "ObsValue/maximumWindGustSpeed2"
+      source: variables/maximumWindGustSpeed2
+      longName: "Maximum Wind Gust Speed (2)"
+      units: "m s-1"
+
+    - name: "ObsValue/maximumWindGustSpeed3"
+      source: variables/maximumWindGustSpeed3
+      longName: "Maximum Wind Gust Speed (3)"
+      units: "m s-1"
+
+    - name: "ObsValue/maximumWindGustSpeed4"
+      source: variables/maximumWindGustSpeed4
+      longName: "Maximum Wind Gust Speed (4)"
+      units: "m s-1"
+
+    - name: "ObsValue/totalPrecipitation1"
+      source: variables/totalPrecipitation1
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (1)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation2"
+      source: variables/totalPrecipitation2
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (2)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation3"
+      source: variables/totalPrecipitation3
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (3)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation4"
+      source: variables/totalPrecipitation4
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (4)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation5"
+      source: variables/totalPrecipitation5
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (5)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation6"
+      source: variables/totalPrecipitation6
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (6)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation7"
+      source: variables/totalPrecipitation7
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (7)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation8"
+      source: variables/totalPrecipitation8
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (8)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation9"
+      source: variables/totalPrecipitation9
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (9)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation10"
+      source: variables/totalPrecipitation10
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (10)"
+      units: "kg m-2"
+
+    - name: "ObsValue/cloudCoverTotal"
+      source: variables/cloudCoverTotal
+      longName: "Cloud Cover (TOTAL)"
+      units: "%"
+
+    - name: "ObsValue/cloudAmount"
+      source: variables/cloudAmount
+      longName: "Cloud Amount"
+
+    - name: "ObsValue/heightbasecloud"
+      source: variables/heightbasecloud
+      longName: "Height Of Base Of Cloud"
+      units: "m"
+
+    - name: "ObsValue/cloudType1"
+      source: variables/cloudType1
+      longName: "Cloud Type"
+
+    - name: "ObsValue/cloudType2"
+      source: variables/cloudType2
+      longName: "Cloud Type"
+
+    - name: "ObsValue/cloudType3"
+      source: variables/cloudType3
+      longName: "Cloud Type"
+
+    - name: "ObsValue/cloudAmountBsyscld1"
+      source: variables/cloudAmountBsyscld1
+      longName: "Cloud Amount (1)"
+
+    - name: "ObsValue/cloudAmountBsyscld2"
+      source: variables/cloudAmountBsyscld2
+      longName: "Cloud Amount (2)"
+
+    - name: "ObsValue/cloudAmountBsyscld3"
+      source: variables/cloudAmountBsyscld3
+      longName: "Cloud Amount (3)"
+
+    - name: "ObsValue/cloudAmountBsyscld4"
+      source: variables/cloudAmountBsyscld4
+      longName: "Cloud Amount (4)"
+
+    - name: "ObsValue/cloudAmountBsyscld5"
+      source: variables/cloudAmountBsyscld5
+      longName: "Cloud Amount (5)"
+
+    - name: "ObsValue/cloudAmountBsyscld6"
+      source: variables/cloudAmountBsyscld6
+      longName: "Cloud Amount (6)"
+
+    - name: "ObsValue/cloudAmountBsyscld7"
+      source: variables/cloudAmountBsyscld7
+      longName: "Cloud Amount (7)"
+
+    - name: "ObsValue/cloudAmountBsyscld8"
+      source: variables/cloudAmountBsyscld8
+      longName: "Cloud Amount (8)"
+
+    - name: "ObsValue/cloudTypeBsyscld1"
+      source: variables/cloudTypeBsyscld1
+      longName: "Cloud Type (1)"
+
+    - name: "ObsValue/cloudTypeBsyscld2"
+      source: variables/cloudTypeBsyscld2
+      longName: "Cloud Type (2)"
+
+    - name: "ObsValue/cloudTypeBsyscld3"
+      source: variables/cloudTypeBsyscld3
+      longName: "Cloud Type (3)"
+
+    - name: "ObsValue/cloudTypeBsyscld4"
+      source: variables/cloudTypeBsyscld4
+      longName: "Cloud Type (4)"
+
+    - name: "ObsValue/cloudTypeBsyscld5"
+      source: variables/cloudTypeBsyscld5
+      longName: "Cloud Type (5)"
+
+    - name: "ObsValue/cloudTypeBsyscld6"
+      source: variables/cloudTypeBsyscld6
+      longName: "Cloud Type (6)"
+
+    - name: "ObsValue/cloudTypeBsyscld7"
+      source: variables/cloudTypeBsyscld7
+      longName: "Cloud Type (7)"
+
+    - name: "ObsValue/cloudTypeBsyscld8"
+      source: variables/cloudTypeBsyscld8
+      longName: "Cloud Type (8)"
+
+    - name: "ObsValue/heightbasecloudBsyscld1"
+      source: variables/heightbasecloudBsyscld1
+      longName: "Height Of Base Of Cloud (1)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloudBsyscld2"
+      source: variables/heightbasecloudBsyscld2
+      longName: "Height Of Base Of Cloud (2)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloudBsyscld3"
+      source: variables/heightbasecloudBsyscld3
+      longName: "Height Of Base Of Cloud (3)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloudBsyscld4"
+      source: variables/heightbasecloudBsyscld4
+      longName: "Height Of Base Of Cloud (4)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloudBsyscld5"
+      source: variables/heightbasecloudBsyscld5
+      longName: "Height Of Base Of Cloud (5)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloudBsyscld6"
+      source: variables/heightbasecloudBsyscld6
+      longName: "Height Of Base Of Cloud (6)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloudBsyscld7"
+      source: variables/heightbasecloudBsyscld7
+      longName: "Height Of Base Of Cloud (7)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloudBsyscld8"
+      source: variables/heightbasecloudBsyscld8
+      longName: "Height Of Base Of Cloud (8)"
+      units: "m"
+
+    - name: "ObsValue/cloudAmountBsybcld1"
+      source: variables/cloudAmountBsybcld1
+      longName: "Cloud Amount (1)"
+
+    - name: "ObsValue/cloudAmountBsybcld2"
+      source: variables/cloudAmountBsybcld2
+      longName: "Cloud Amount (2)"
+
+    - name: "ObsValue/cloudAmountBsybcld3"
+      source: variables/cloudAmountBsybcld3
+      longName: "Cloud Amount (3)"
+
+    - name: "ObsValue/cloudAmountBsybcld4"
+      source: variables/cloudAmountBsybcld4
+      longName: "Cloud Amount (4)"
+
+    - name: "ObsValue/cloudAmountBsybcld5"
+      source: variables/cloudAmountBsybcld5
+      longName: "Cloud Amount (5)"
+
+    - name: "ObsValue/cloudAmountBsybcld6"
+      source: variables/cloudAmountBsybcld6
+      longName: "Cloud Amount (6)"
+
+    - name: "ObsValue/cloudTypeBsybcld1"
+      source: variables/cloudTypeBsybcld1
+      longName: "Cloud Type (1)"
+
+    - name: "ObsValue/cloudTypeBsybcld2"
+      source: variables/cloudTypeBsybcld2
+      longName: "Cloud Type (2)"
+
+    - name: "ObsValue/cloudTypeBsybcld3"
+      source: variables/cloudTypeBsybcld3
+      longName: "Cloud Type (3)"
+
+    - name: "ObsValue/cloudTypeBsybcld4"
+      source: variables/cloudTypeBsybcld4
+      longName: "Cloud Type (4)"
+
+    - name: "ObsValue/cloudTypeBsybcld5"
+      source: variables/cloudTypeBsybcld5
+      longName: "Cloud Type (5)"
+
+    - name: "ObsValue/cloudTypeBsybcld6"
+      source: variables/cloudTypeBsybcld6
+      longName: "Cloud Type (6)"
+
+    - name: "ObsValue/heightOfTopOfCloud1"
+      source: variables/heightOfTopOfCloud1
+      longName: "Height Of Top Of Cloud (1)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud2"
+      source: variables/heightOfTopOfCloud2
+      longName: "Height Of Top Of Cloud (2)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud3"
+      source: variables/heightOfTopOfCloud3
+      longName: "Height Of Top Of Cloud (3)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud4"
+      source: variables/heightOfTopOfCloud4
+      longName: "Height Of Top Of Cloud (4)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud5"
+      source: variables/heightOfTopOfCloud5
+      longName: "Height Of Top Of Cloud (5)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud6"
+      source: variables/heightOfTopOfCloud6
+      longName: "Height Of Top Of Cloud (6)"
+      units: "m"
+
+    - name: "ObsValue/cloudTopDescription1"
+      source: variables/cloudTopDescription1
+      longName: "Cloud Top Description (1)"
+
+    - name: "ObsValue/cloudTopDescription2"
+      source: variables/cloudTopDescription2
+      longName: "Cloud Top Description (2)"
+
+    - name: "ObsValue/cloudTopDescription3"
+      source: variables/cloudTopDescription3
+      longName: "Cloud Top Description (3)"
+
+    - name: "ObsValue/cloudTopDescription4"
+      source: variables/cloudTopDescription4
+      longName: "Cloud Top Description (4)"
+
+    - name: "ObsValue/cloudTopDescription5"
+      source: variables/cloudTopDescription5
+      longName: "Cloud Top Description (5)"
+
+    - name: "ObsValue/cloudTopDescription6"
+      source: variables/cloudTopDescription6
+      longName: "Cloud Top Description (6)"
+
+    - name: "ObsValue/trueDirectionFromWhichCloudsAreMoving1"
+      source: variables/trueDirectionFromWhichCloudsAreMoving1
+      longName: "True Direction From Which Clouds Are Moving (1)"
+      units: "degree"
+
+    - name: "ObsValue/trueDirectionFromWhichCloudsAreMoving2"
+      source: variables/trueDirectionFromWhichCloudsAreMoving2
+      longName: "True Direction From Which Clouds Are Moving (2)"
+      units: "degree"
+
+    - name: "ObsValue/trueDirectionFromWhichCloudsAreMoving3"
+      source: variables/trueDirectionFromWhichCloudsAreMoving3
+      longName: "True Direction From Which Clouds Are Moving (3)"
+      units: "degree"
+
+    - name: "ObsValue/presentWeather"
+      source: variables/presentWeather
+      longName: "Present Weather"
+
+    - name: "ObsValue/pastWeather1"
+      source: variables/pastWeather1
+      longName: "Past Weather (1)"
+
+    - name: "ObsValue/pastWeather2"
+      source: variables/pastWeather2
+      longName: "Past Weather (2)"
+
+    - name: "ObsValue/groundState"
+      source: variables/groundState
+      longName: "State Of The Ground"
+
+    - name: "ObsValue/totalSnowDepth"
+      source: variables/totalSnowDepth
+      longName: "Total Snow Depth"
+      units: "m"
+
+    - name: "ObsValue/groundMinimumTemperaturePast12Hours"
+      source: variables/groundMinimumTemperaturePast12Hours
+      longName: "Ground Minimum TEMPERATURE, Past 12 Hours"
+      units: "K"
+
+    # QualityMarker
+    - name: "QualityMarker/stationElevationQualityMarkForMobilStations"
+      source: variables/stationElevationQualityMarkForMobilStations
+      longName: "Station Elevation Quality Mark (FOR Mobil STATIONS)"
+
+    - name: "QualityMarker/pressureQMPR"
+      source: variables/pressureQMPR
+      longName: "Sdmedit Quality Mark For Pressure"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "Sdmedit Quality Mark For Temperature"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "Sdmedit Quality Mark For Moisture"
+
+    - name: "QualityMarker/attributeOfFollowingValue"
+      source: variables/attributeOfFollowingValue
+      longName: "Attribute Of Following Value"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "Sdmedit Quality Mark For Wind"
+
+    - name: "QualityMarker/attributeOfFollowingValueBsyscld1"
+      source: variables/attributeOfFollowingValueBsyscld1
+      longName: "Attribute Of Following Value (1)"
+
+    - name: "QualityMarker/attributeOfFollowingValueBsyscld2"
+      source: variables/attributeOfFollowingValueBsyscld2
+      longName: "Attribute Of Following Value (2)"
+
+    - name: "QualityMarker/attributeOfFollowingValueBsyscld3"
+      source: variables/attributeOfFollowingValueBsyscld3
+      longName: "Attribute Of Following Value (3)"
+
+    - name: "QualityMarker/attributeOfFollowingValueBsyscld4"
+      source: variables/attributeOfFollowingValueBsyscld4
+      longName: "Attribute Of Following Value (4)"
+
+    - name: "QualityMarker/attributeOfFollowingValueBsyscld5"
+      source: variables/attributeOfFollowingValueBsyscld5
+      longName: "Attribute Of Following Value (5)"
+
+    - name: "QualityMarker/attributeOfFollowingValueBsyscld6"
+      source: variables/attributeOfFollowingValueBsyscld6
+      longName: "Attribute Of Following Value (6)"
+
+    - name: "QualityMarker/attributeOfFollowingValueBsyscld7"
+      source: variables/attributeOfFollowingValueBsyscld7
+      longName: "Attribute Of Following Value (7)"
+
+    - name: "QualityMarker/attributeOfFollowingValueBsyscld8"
+      source: variables/attributeOfFollowingValueBsyscld8
+      longName: "Attribute Of Following Value (8)"
+
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"
+
+    # Not in this tank: read as missing so the dataset has one set of variables
+    - name: "MetaData/wmoBlockNumber"
+      source: variables/wmoBlockNumber
+      longName: "Wmo Block Number"
+
+    - name: "MetaData/wmoStationNumber"
+      source: variables/wmoStationNumber
+      longName: "Wmo Station Number"
+
+    - name: "MetaData/indTypeOfStnOperationPastP"
+      source: variables/indTypeOfStnOperationPastP
+      longName: "Ind Type Of Stn Operation PAST/P"
+
+    - name: "MetaData/methodOfSeaSurfaceTemperatureMeasurement"
+      source: variables/methodOfSeaSurfaceTemperatureMeasurement
+      longName: "Method Of Sea Surface Temperature Measurement"
+
+    - name: "MetaData/methodOfWetBulbTemperatureMeasurement"
+      source: variables/methodOfWetBulbTemperatureMeasurement
+      longName: "Method Of Wet Bulb Temperature Measurement"
+
+    - name: "MetaData/verticalSignificanceSurface1"
+      source: variables/verticalSignificanceSurface1
+      longName: "VERT. Significance (SFC OBSERVATION) (1)"
+
+    - name: "MetaData/verticalSignificanceSurface3"
+      source: variables/verticalSignificanceSurface3
+      longName: "VERT. Significance (SFC OBSERVATION) (3)"
+
+    - name: "MetaData/verticalSignificanceSurface4"
+      source: variables/verticalSignificanceSurface4
+      longName: "VERT. Significance (SFC OBSERVATION) (4)"
+
+    - name: "MetaData/verticalSignificanceSurface5"
+      source: variables/verticalSignificanceSurface5
+      longName: "VERT. Significance (SFC OBSERVATION) (5)"
+
+    - name: "MetaData/verticalSignificanceSurface6"
+      source: variables/verticalSignificanceSurface6
+      longName: "VERT. Significance (SFC OBSERVATION) (6)"
+
+    - name: "MetaData/verticalSignificanceSurface7"
+      source: variables/verticalSignificanceSurface7
+      longName: "VERT. Significance (SFC OBSERVATION) (7)"
+
+    - name: "MetaData/verticalSignificanceSurface8"
+      source: variables/verticalSignificanceSurface8
+      longName: "VERT. Significance (SFC OBSERVATION) (8)"
+
+    - name: "MetaData/verticalSignificanceSurface9"
+      source: variables/verticalSignificanceSurface9
+      longName: "VERT. Significance (SFC OBSERVATION) (9)"
+
+    - name: "MetaData/verticalSignificanceSurface10"
+      source: variables/verticalSignificanceSurface10
+      longName: "VERT. Significance (SFC OBSERVATION) (10)"
+
+    - name: "MetaData/verticalSignificanceSurface11"
+      source: variables/verticalSignificanceSurface11
+      longName: "VERT. Significance (SFC OBSERVATION) (11)"
+
+    - name: "MetaData/verticalSignificanceSurface12"
+      source: variables/verticalSignificanceSurface12
+      longName: "VERT. Significance (SFC OBSERVATION) (12)"
+
+    - name: "MetaData/verticalSignificanceSurface13"
+      source: variables/verticalSignificanceSurface13
+      longName: "VERT. Significance (SFC OBSERVATION) (13)"
+
+    - name: "MetaData/verticalSignificanceSurface14"
+      source: variables/verticalSignificanceSurface14
+      longName: "VERT. Significance (SFC OBSERVATION) (14)"
+
+    - name: "MetaData/rawReportString"
+      source: variables/rawReportString
+      longName: "Raw Report String"
+
+    - name: "ObsValue/indicInclusionOmissionOfPrec"
+      source: variables/indicInclusionOmissionOfPrec
+      longName: "Indic INCLUSION/OMISSION Of Prec"
+
+    - name: "ObsValue/maximumWindGustSpeed"
+      source: variables/maximumWindGustSpeed
+      longName: "Maximum Wind Gust Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST1"
+      source: variables/seaSurfaceTemperatureSST1
+      longName: "Sea Temperature"
+      units: "K"
+
+    - name: "ObsValue/wetBulbTemperature"
+      source: variables/wetBulbTemperature
+      longName: "Wet Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature"
+      source: variables/minimumTemperature
+      longName: "Minimum Temperature"
+      units: "K"
+
+    - name: "ObsValue/geopotential10"
+      source: variables/geopotential10
+      longName: "Geopotential"
+      units: "m2 s-2"
+
+    - name: "ObsValue/totalPrecipitationPast6Hours"
+      source: variables/totalPrecipitationPast6Hours
+      longName: "Total Precipitation Past 6 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast1Hour"
+      source: variables/totalPrecipitationPast1Hour
+      longName: "Total Precipitation Past 1 Hour"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast3Hours"
+      source: variables/totalPrecipitationPast3Hours
+      longName: "Total Precipitation Past 3 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast12Hours"
+      source: variables/totalPrecipitationPast12Hours
+      longName: "Total Precipitation Past 12 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast24Hours"
+      source: variables/totalPrecipitationPast24Hours
+      longName: "Total Precipitation Past 24 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation"
+      source: variables/totalPrecipitation
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent"
+      units: "kg m-2"
+
+    - name: "ObsValue/heightAboveSurfaceOfBaseOfLowestCloudSeen"
+      source: variables/heightAboveSurfaceOfBaseOfLowestCloudSeen
+      longName: "Height Above Surface Of Base Of Lowest Cloud Seen"
+
+    - name: "ObsValue/cloudAmount1"
+      source: variables/cloudAmount1
+      longName: "Cloud Amount (1)"
+
+    - name: "ObsValue/cloudAmount2"
+      source: variables/cloudAmount2
+      longName: "Cloud Amount (2)"
+
+    - name: "ObsValue/cloudAmount3"
+      source: variables/cloudAmount3
+      longName: "Cloud Amount (3)"
+
+    - name: "ObsValue/cloudAmount4"
+      source: variables/cloudAmount4
+      longName: "Cloud Amount (4)"
+
+    - name: "ObsValue/cloudAmount5"
+      source: variables/cloudAmount5
+      longName: "Cloud Amount (5)"
+
+    - name: "ObsValue/cloudAmount6"
+      source: variables/cloudAmount6
+      longName: "Cloud Amount (6)"
+
+    - name: "ObsValue/cloudAmount7"
+      source: variables/cloudAmount7
+      longName: "Cloud Amount (7)"
+
+    - name: "ObsValue/cloudAmount8"
+      source: variables/cloudAmount8
+      longName: "Cloud Amount (8)"
+
+    - name: "ObsValue/cloudAmount9"
+      source: variables/cloudAmount9
+      longName: "Cloud Amount (9)"
+
+    - name: "ObsValue/cloudAmount10"
+      source: variables/cloudAmount10
+      longName: "Cloud Amount (10)"
+
+    - name: "ObsValue/cloudAmount11"
+      source: variables/cloudAmount11
+      longName: "Cloud Amount (11)"
+
+    - name: "ObsValue/cloudAmount12"
+      source: variables/cloudAmount12
+      longName: "Cloud Amount (12)"
+
+    - name: "ObsValue/cloudAmount13"
+      source: variables/cloudAmount13
+      longName: "Cloud Amount (13)"
+
+    - name: "ObsValue/cloudAmount14"
+      source: variables/cloudAmount14
+      longName: "Cloud Amount (14)"
+
+    - name: "ObsValue/cloudType4"
+      source: variables/cloudType4
+      longName: "Cloud Type (4)"
+
+    - name: "ObsValue/cloudType5"
+      source: variables/cloudType5
+      longName: "Cloud Type (5)"
+
+    - name: "ObsValue/cloudType6"
+      source: variables/cloudType6
+      longName: "Cloud Type (6)"
+
+    - name: "ObsValue/cloudType7"
+      source: variables/cloudType7
+      longName: "Cloud Type (7)"
+
+    - name: "ObsValue/cloudType8"
+      source: variables/cloudType8
+      longName: "Cloud Type (8)"
+
+    - name: "ObsValue/cloudType9"
+      source: variables/cloudType9
+      longName: "Cloud Type (9)"
+
+    - name: "ObsValue/cloudType10"
+      source: variables/cloudType10
+      longName: "Cloud Type (10)"
+
+    - name: "ObsValue/cloudType11"
+      source: variables/cloudType11
+      longName: "Cloud Type (11)"
+
+    - name: "ObsValue/cloudType12"
+      source: variables/cloudType12
+      longName: "Cloud Type (12)"
+
+    - name: "ObsValue/cloudType13"
+      source: variables/cloudType13
+      longName: "Cloud Type (13)"
+
+    - name: "ObsValue/cloudType14"
+      source: variables/cloudType14
+      longName: "Cloud Type (14)"
+
+    - name: "ObsValue/heightbasecloud1"
+      source: variables/heightbasecloud1
+      longName: "Height Of Base Of Cloud (1)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud2"
+      source: variables/heightbasecloud2
+      longName: "Height Of Base Of Cloud (2)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud3"
+      source: variables/heightbasecloud3
+      longName: "Height Of Base Of Cloud (3)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud4"
+      source: variables/heightbasecloud4
+      longName: "Height Of Base Of Cloud (4)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud5"
+      source: variables/heightbasecloud5
+      longName: "Height Of Base Of Cloud (5)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud6"
+      source: variables/heightbasecloud6
+      longName: "Height Of Base Of Cloud (6)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud7"
+      source: variables/heightbasecloud7
+      longName: "Height Of Base Of Cloud (7)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud8"
+      source: variables/heightbasecloud8
+      longName: "Height Of Base Of Cloud (8)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud9"
+      source: variables/heightbasecloud9
+      longName: "Height Of Base Of Cloud (9)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud10"
+      source: variables/heightbasecloud10
+      longName: "Height Of Base Of Cloud (10)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud11"
+      source: variables/heightbasecloud11
+      longName: "Height Of Base Of Cloud (11)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud12"
+      source: variables/heightbasecloud12
+      longName: "Height Of Base Of Cloud (12)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud13"
+      source: variables/heightbasecloud13
+      longName: "Height Of Base Of Cloud (13)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud14"
+      source: variables/heightbasecloud14
+      longName: "Height Of Base Of Cloud (14)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud7"
+      source: variables/heightOfTopOfCloud7
+      longName: "Height Of Top Of Cloud (7)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud8"
+      source: variables/heightOfTopOfCloud8
+      longName: "Height Of Top Of Cloud (8)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud9"
+      source: variables/heightOfTopOfCloud9
+      longName: "Height Of Top Of Cloud (9)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud10"
+      source: variables/heightOfTopOfCloud10
+      longName: "Height Of Top Of Cloud (10)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud11"
+      source: variables/heightOfTopOfCloud11
+      longName: "Height Of Top Of Cloud (11)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud12"
+      source: variables/heightOfTopOfCloud12
+      longName: "Height Of Top Of Cloud (12)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud13"
+      source: variables/heightOfTopOfCloud13
+      longName: "Height Of Top Of Cloud (13)"
+      units: "m"
+
+    - name: "ObsValue/heightOfTopOfCloud14"
+      source: variables/heightOfTopOfCloud14
+      longName: "Height Of Top Of Cloud (14)"
+      units: "m"
+
+    - name: "ObsValue/cloudTopDescription7"
+      source: variables/cloudTopDescription7
+      longName: "Cloud Top Description (7)"
+
+    - name: "ObsValue/cloudTopDescription8"
+      source: variables/cloudTopDescription8
+      longName: "Cloud Top Description (8)"
+
+    - name: "ObsValue/cloudTopDescription9"
+      source: variables/cloudTopDescription9
+      longName: "Cloud Top Description (9)"
+
+    - name: "ObsValue/cloudTopDescription10"
+      source: variables/cloudTopDescription10
+      longName: "Cloud Top Description (10)"
+
+    - name: "ObsValue/cloudTopDescription11"
+      source: variables/cloudTopDescription11
+      longName: "Cloud Top Description (11)"
+
+    - name: "ObsValue/cloudTopDescription12"
+      source: variables/cloudTopDescription12
+      longName: "Cloud Top Description (12)"
+
+    - name: "ObsValue/cloudTopDescription13"
+      source: variables/cloudTopDescription13
+      longName: "Cloud Top Description (13)"
+
+    - name: "ObsValue/cloudTopDescription14"
+      source: variables/cloudTopDescription14
+      longName: "Cloud Top Description (14)"
+
+    - name: "ObsValue/wavePeriod"
+      source: variables/wavePeriod
+      longName: "Period Of Waves"
+      units: "s"
+
+    - name: "ObsValue/waveHeight"
+      source: variables/waveHeight
+      longName: "Height Of Waves"
+      units: "m"
+
+    - name: "ObsValue/windWavePeriod"
+      source: variables/windWavePeriod
+      longName: "Period Of Wind Waves"
+      units: "s"
+
+    - name: "ObsValue/windWaveHeight"
+      source: variables/windWaveHeight
+      longName: "Height Of Wind Waves"
+      units: "m"
+
+    - name: "ObsValue/swellWaveDirection1"
+      source: variables/swellWaveDirection1
+      longName: "Direction Of Swell Waves (1)"
+      units: "degree"
+
+    - name: "ObsValue/swellWaveDirection2"
+      source: variables/swellWaveDirection2
+      longName: "Direction Of Swell Waves (2)"
+      units: "degree"
+
+    - name: "ObsValue/swellWaveDirection3"
+      source: variables/swellWaveDirection3
+      longName: "Direction Of Swell Waves (3)"
+      units: "degree"
+
+    - name: "ObsValue/swellWaveDirection4"
+      source: variables/swellWaveDirection4
+      longName: "Direction Of Swell Waves (4)"
+      units: "degree"
+
+    - name: "ObsValue/swellWavePeriod1"
+      source: variables/swellWavePeriod1
+      longName: "Period Of Swell Waves (1)"
+      units: "s"
+
+    - name: "ObsValue/swellWavePeriod2"
+      source: variables/swellWavePeriod2
+      longName: "Period Of Swell Waves (2)"
+      units: "s"
+
+    - name: "ObsValue/swellWavePeriod3"
+      source: variables/swellWavePeriod3
+      longName: "Period Of Swell Waves (3)"
+      units: "s"
+
+    - name: "ObsValue/swellWavePeriod4"
+      source: variables/swellWavePeriod4
+      longName: "Period Of Swell Waves (4)"
+      units: "s"
+
+    - name: "ObsValue/swellWaveHeight1"
+      source: variables/swellWaveHeight1
+      longName: "Height Of Swell Waves (1)"
+      units: "m"
+
+    - name: "ObsValue/swellWaveHeight2"
+      source: variables/swellWaveHeight2
+      longName: "Height Of Swell Waves (2)"
+      units: "m"
+
+    - name: "ObsValue/swellWaveHeight3"
+      source: variables/swellWaveHeight3
+      longName: "Height Of Swell Waves (3)"
+      units: "m"
+
+    - name: "ObsValue/swellWaveHeight4"
+      source: variables/swellWaveHeight4
+      longName: "Height Of Swell Waves (4)"
+      units: "m"
+
+    - name: "ObsValue/depthOfFreshSnow"
+      source: variables/depthOfFreshSnow
+      longName: "Depth Of Fresh Snow"
+      units: "m"
+
+    - name: "ObsValue/causeOfIceAccretion"
+      source: variables/causeOfIceAccretion
+      longName: "Cause Of Ice Accretion"
+
+    - name: "ObsValue/iceDepositThickness"
+      source: variables/iceDepositThickness
+      longName: "Ice Deposit (THICKNESS)"
+      units: "m"
+
+    - name: "ObsValue/rateOfIceAccretion"
+      source: variables/rateOfIceAccretion
+      longName: "Rate Of Ice Accretion"
+
+    - name: "ObsValue/cityTemperature"
+      source: variables/cityTemperature
+      longName: "City Temperature"
+      units: "K"
+
+    - name: "ObsValue/cityMaximumTemperature"
+      source: variables/cityMaximumTemperature
+      longName: "City Maximum Temperature"
+      units: "K"
+
+    - name: "ObsValue/cityMinimumTemperature"
+      source: variables/cityMinimumTemperature
+      longName: "City Minimum Temperature"
+      units: "K"
+
+    - name: "ObsValue/verticalVisibility"
+      source: variables/verticalVisibility
+      longName: "Vertical Visibility"
+      units: "m"
+
+    - name: "QualityMarker/seaSurfaceTemperature"
+      source: variables/seaSurfaceTemperature
+      longName: "Sdmedit Quality Mark For Sea Surface Temperature"
+
+    - name: "MetaData/stationName"
+      source: variables/stationName
+      longName: "Station Or Site Name"

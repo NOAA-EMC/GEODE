@@ -122,6 +122,10 @@ def test_prefers_tank_specific_ingestor(tank_root, monkeypatch):
 
             return _Ingestor()
 
+    # Real mappings are registered per tank; this test needs xx001 to have none
+    monkeypatch.delitem(
+        factory.RegisteredIngestors, "bufr_tank/b000/xx001", raising=False
+    )
     monkeypatch.setitem(
         factory.RegisteredIngestors, "bufr_tank/surface_synop", _Recorder("dataset")
     )

@@ -1,0 +1,762 @@
+bufr:
+  subsets:
+    - NC021239
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    generatingCenterLong:
+      query: "*/GCLONG"
+
+    instrumentIdentifier1:
+      query: "*/SIID[1]"
+
+    satelliteConstellationRO:
+      query: "*/SCLF"
+
+    satelliteZenithAngle:
+      query: "*/SAZA"
+
+    sensorAzimuthAngle:
+      query: "*/BEARAZ"
+
+    solarZenithAngle:
+      query: "*/SOZA"
+
+    solarAzimuthAngle:
+      query: "*/SOLAZI"
+
+    sensorScanPosition:
+      query: "*/FOVN"
+
+    orbitNumber:
+      query: "*/ORBN"
+
+    scanLineNumber:
+      query: "*/SLNM"
+
+    majorFrameCount:
+      query: "*/MJFC"
+
+    stationElevation:
+      query: "*/SELV"
+
+    startChannelIasiqf1:
+      query: "*/IASIQF{1}/STCH"
+
+    startChannelIasiqf2:
+      query: "*/IASIQF{2}/STCH"
+
+    startChannelIasiqf3:
+      query: "*/IASIQF{3}/STCH"
+
+    endChannelIasiqf1:
+      query: "*/IASIQF{1}/ENCH"
+
+    endChannelIasiqf2:
+      query: "*/IASIQF{2}/ENCH"
+
+    endChannelIasiqf3:
+      query: "*/IASIQF{3}/ENCH"
+
+    qualityFlags1:
+      query: "*/IASIQF{1}/QGFQ"
+
+    qualityFlags2:
+      query: "*/IASIQF{2}/QGFQ"
+
+    qualityFlags3:
+      query: "*/IASIQF{3}/QGFQ"
+
+    startChannelIasil1cb1:
+      query: "*/IASIL1CB{1}/STCH"
+
+    startChannelIasil1cb2:
+      query: "*/IASIL1CB{2}/STCH"
+
+    startChannelIasil1cb3:
+      query: "*/IASIL1CB{3}/STCH"
+
+    startChannelIasil1cb4:
+      query: "*/IASIL1CB{4}/STCH"
+
+    startChannelIasil1cb5:
+      query: "*/IASIL1CB{5}/STCH"
+
+    startChannelIasil1cb6:
+      query: "*/IASIL1CB{6}/STCH"
+
+    startChannelIasil1cb7:
+      query: "*/IASIL1CB{7}/STCH"
+
+    startChannelIasil1cb8:
+      query: "*/IASIL1CB{8}/STCH"
+
+    startChannelIasil1cb9:
+      query: "*/IASIL1CB{9}/STCH"
+
+    startChannelIasil1cb10:
+      query: "*/IASIL1CB{10}/STCH"
+
+    endChannelIasil1cb1:
+      query: "*/IASIL1CB{1}/ENCH"
+
+    endChannelIasil1cb2:
+      query: "*/IASIL1CB{2}/ENCH"
+
+    endChannelIasil1cb3:
+      query: "*/IASIL1CB{3}/ENCH"
+
+    endChannelIasil1cb4:
+      query: "*/IASIL1CB{4}/ENCH"
+
+    endChannelIasil1cb5:
+      query: "*/IASIL1CB{5}/ENCH"
+
+    endChannelIasil1cb6:
+      query: "*/IASIL1CB{6}/ENCH"
+
+    endChannelIasil1cb7:
+      query: "*/IASIL1CB{7}/ENCH"
+
+    endChannelIasil1cb8:
+      query: "*/IASIL1CB{8}/ENCH"
+
+    endChannelIasil1cb9:
+      query: "*/IASIL1CB{9}/ENCH"
+
+    endChannelIasil1cb10:
+      query: "*/IASIL1CB{10}/ENCH"
+
+    channelScaleFactor1:
+      query: "*/IASIL1CB{1}/CHSF"
+
+    channelScaleFactor2:
+      query: "*/IASIL1CB{2}/CHSF"
+
+    channelScaleFactor3:
+      query: "*/IASIL1CB{3}/CHSF"
+
+    channelScaleFactor4:
+      query: "*/IASIL1CB{4}/CHSF"
+
+    channelScaleFactor5:
+      query: "*/IASIL1CB{5}/CHSF"
+
+    channelScaleFactor6:
+      query: "*/IASIL1CB{6}/CHSF"
+
+    channelScaleFactor7:
+      query: "*/IASIL1CB{7}/CHSF"
+
+    channelScaleFactor8:
+      query: "*/IASIL1CB{8}/CHSF"
+
+    channelScaleFactor9:
+      query: "*/IASIL1CB{9}/CHSF"
+
+    channelScaleFactor10:
+      query: "*/IASIL1CB{10}/CHSF"
+
+    sensorChannelNumberIasichn:
+      query: "*/IASICHN/CHNM"
+
+    startChannelIasisc:
+      query: "*/IASISC{1}/STCH"
+
+    endChannelIasisc:
+      query: "*/IASISC{1}/ENCH"
+
+    databaseIdentification:
+      query: "*/IASISC{1}/DBID"
+
+    instrumentIdentifier2:
+      query: "*/SIID[2]"
+
+    avhrrChannelCombination:
+      query: "*/AVHCST"
+
+    yAngularPositionFromCentreOfGravity:
+      query: "*/IASIL1CS{1}/YAPCG"
+
+    zAngularPositionFromCentreOfGravity:
+      query: "*/IASIL1CS{1}/ZAPCG"
+
+    sensorChannelNumberAvhrchn:
+      query: "*/IASIL1CS{1}/AVHRCHN/CHNM"
+
+    channelScaleFactor1_2:
+      query: "*/IASIL1CS{1}/AVHRCHN/CHSF[1]"
+
+    channelScaleFactor2_2:
+      query: "*/IASIL1CS{1}/AVHRCHN/CHSF[2]"
+
+    surfaceType1:
+      query: "*/RSST[1]"
+
+    surfaceType2:
+      query: "*/RSST[2]"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    # ObsValue
+    gqisflagqualdetailedQualityFlagForTheSystem:
+      query: "*/QFFS"
+
+    scaledIasiRadiance:
+      query: "*/IASICHN/SCRA"
+
+    scoreQuantizationFactor:
+      query: "*/IASISC{1}/SQFA"
+
+    residualRmsInBand:
+      query: "*/IASISC{1}/RRIB"
+
+    nonNormalisedPrincipalComponentScore:
+      query: "*/IASISC{1}/IASIPCS/NNPCS"
+
+    cloudFree:
+      query: "*/IASIL1CS{1}/FCPH"
+
+    scaledMeanAvhrrRadiance:
+      query: "*/IASIL1CS{1}/AVHRCHN/SMRA"
+
+    scaledStandardDeviationAvhrrRadiance:
+      query: "*/IASIL1CS{1}/AVHRCHN/SSDR"
+
+    cloudAmount:
+      query: "*/CLDMNT"
+
+    amountOfSegmentCoveredByScene:
+      query: "*/ASCS"
+
+    giacavgimagiisAverageOfImagerMeasurements:
+      query: "*/AOIM"
+
+    giacvarimagiisVarianceOfImagerMeasurements:
+      query: "*/VOIM"
+
+    fractionOfWeightedAvhrrPixelInIasiFovCovered:
+      query: "*/FICSI"
+
+    numberOfMissingBadOrFailedAvhrrPixels:
+      query: "*/NMBFA"
+
+    # QualityMarker
+    gqisqualindexIndicatorForInstrumentNoise:
+      query: "*/QGQI"
+
+    gqisqualindexlocIndicatorForGeometricQuality:
+      query: "*/QGQIL"
+
+    gqisqualindexradIndicatorForInstrumentNoise:
+      query: "*/QGQIR"
+
+    gqisqualindexspectIndicatorForInstrumentNoise:
+      query: "*/QGQIS"
+
+    gqissystecsondqualOutputOfSystemTecTechnical:
+      query: "*/QGSSQ"
+
+  splits:
+    satId:
+      category:
+        variable: satelliteIdentifier
+
+encoder:
+  dimensions:
+    - name: Channel
+      source: variables/sensorChannelNumberIasichn
+      path: "*/IASICHN"
+    - name: Avhrchn
+      source: variables/sensorChannelNumberAvhrchn
+      path: "*/IASIL1CS{1}/AVHRCHN"
+    # Variable length: appending can fail if the size changes
+    - name: Iasipcs
+      path: "*/IASISC{1}/IASIPCS"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "MTYP 021-239 IASI 1C RAD.(VBL CHNS)(dir. b-cst)(M)"
+
+    - name: "dataCategory"
+      type: string
+      value: "radiances from satellite"
+
+    - name: "dataset"
+      type: string
+      value: "radiance_iasi_db"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "021"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "239"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b021/xx239 NC021239"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier"
+
+    - name: "MetaData/generatingCenterLong"
+      source: variables/generatingCenterLong
+      longName: "ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/instrumentIdentifier1"
+      source: variables/instrumentIdentifier1
+      longName: "Satellite Instruments"
+
+    - name: "MetaData/satelliteConstellationRO"
+      source: variables/satelliteConstellationRO
+      longName: "Satellite Classification"
+
+    - name: "MetaData/satelliteZenithAngle"
+      source: variables/satelliteZenithAngle
+      longName: "Satellite Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/sensorAzimuthAngle"
+      source: variables/sensorAzimuthAngle
+      longName: "Bearing Or Azimuth"
+      units: "degree"
+
+    - name: "MetaData/solarZenithAngle"
+      source: variables/solarZenithAngle
+      longName: "Solar Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/solarAzimuthAngle"
+      source: variables/solarAzimuthAngle
+      longName: "Solar Azimuth"
+      units: "degree"
+
+    - name: "MetaData/sensorScanPosition"
+      source: variables/sensorScanPosition
+      longName: "Field Of View Number"
+
+    - name: "MetaData/orbitNumber"
+      source: variables/orbitNumber
+      longName: "Orbit Number"
+
+    - name: "MetaData/scanLineNumber"
+      source: variables/scanLineNumber
+      longName: "Scan Line Number"
+
+    - name: "MetaData/majorFrameCount"
+      source: variables/majorFrameCount
+      longName: "Major Frame Count"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station"
+      units: "m"
+
+    - name: "MetaData/startChannelIasiqf1"
+      source: variables/startChannelIasiqf1
+      longName: "Start Channel (1)"
+
+    - name: "MetaData/startChannelIasiqf2"
+      source: variables/startChannelIasiqf2
+      longName: "Start Channel (2)"
+
+    - name: "MetaData/startChannelIasiqf3"
+      source: variables/startChannelIasiqf3
+      longName: "Start Channel (3)"
+
+    - name: "MetaData/endChannelIasiqf1"
+      source: variables/endChannelIasiqf1
+      longName: "End Channel (1)"
+
+    - name: "MetaData/endChannelIasiqf2"
+      source: variables/endChannelIasiqf2
+      longName: "End Channel (2)"
+
+    - name: "MetaData/endChannelIasiqf3"
+      source: variables/endChannelIasiqf3
+      longName: "End Channel (3)"
+
+    - name: "MetaData/qualityFlags1"
+      source: variables/qualityFlags1
+      longName: "GqisFlagQual - individual IASI-System quality flag (1)"
+
+    - name: "MetaData/qualityFlags2"
+      source: variables/qualityFlags2
+      longName: "GqisFlagQual - individual IASI-System quality flag (2)"
+
+    - name: "MetaData/qualityFlags3"
+      source: variables/qualityFlags3
+      longName: "GqisFlagQual - individual IASI-System quality flag (3)"
+
+    - name: "MetaData/startChannelIasil1cb1"
+      source: variables/startChannelIasil1cb1
+      longName: "Start Channel (1)"
+
+    - name: "MetaData/startChannelIasil1cb2"
+      source: variables/startChannelIasil1cb2
+      longName: "Start Channel (2)"
+
+    - name: "MetaData/startChannelIasil1cb3"
+      source: variables/startChannelIasil1cb3
+      longName: "Start Channel (3)"
+
+    - name: "MetaData/startChannelIasil1cb4"
+      source: variables/startChannelIasil1cb4
+      longName: "Start Channel (4)"
+
+    - name: "MetaData/startChannelIasil1cb5"
+      source: variables/startChannelIasil1cb5
+      longName: "Start Channel (5)"
+
+    - name: "MetaData/startChannelIasil1cb6"
+      source: variables/startChannelIasil1cb6
+      longName: "Start Channel (6)"
+
+    - name: "MetaData/startChannelIasil1cb7"
+      source: variables/startChannelIasil1cb7
+      longName: "Start Channel (7)"
+
+    - name: "MetaData/startChannelIasil1cb8"
+      source: variables/startChannelIasil1cb8
+      longName: "Start Channel (8)"
+
+    - name: "MetaData/startChannelIasil1cb9"
+      source: variables/startChannelIasil1cb9
+      longName: "Start Channel (9)"
+
+    - name: "MetaData/startChannelIasil1cb10"
+      source: variables/startChannelIasil1cb10
+      longName: "Start Channel (10)"
+
+    - name: "MetaData/endChannelIasil1cb1"
+      source: variables/endChannelIasil1cb1
+      longName: "End Channel (1)"
+
+    - name: "MetaData/endChannelIasil1cb2"
+      source: variables/endChannelIasil1cb2
+      longName: "End Channel (2)"
+
+    - name: "MetaData/endChannelIasil1cb3"
+      source: variables/endChannelIasil1cb3
+      longName: "End Channel (3)"
+
+    - name: "MetaData/endChannelIasil1cb4"
+      source: variables/endChannelIasil1cb4
+      longName: "End Channel (4)"
+
+    - name: "MetaData/endChannelIasil1cb5"
+      source: variables/endChannelIasil1cb5
+      longName: "End Channel (5)"
+
+    - name: "MetaData/endChannelIasil1cb6"
+      source: variables/endChannelIasil1cb6
+      longName: "End Channel (6)"
+
+    - name: "MetaData/endChannelIasil1cb7"
+      source: variables/endChannelIasil1cb7
+      longName: "End Channel (7)"
+
+    - name: "MetaData/endChannelIasil1cb8"
+      source: variables/endChannelIasil1cb8
+      longName: "End Channel (8)"
+
+    - name: "MetaData/endChannelIasil1cb9"
+      source: variables/endChannelIasil1cb9
+      longName: "End Channel (9)"
+
+    - name: "MetaData/endChannelIasil1cb10"
+      source: variables/endChannelIasil1cb10
+      longName: "End Channel (10)"
+
+    - name: "MetaData/channelScaleFactor1"
+      source: variables/channelScaleFactor1
+      longName: "Channel Scale Factor (1)"
+
+    - name: "MetaData/channelScaleFactor2"
+      source: variables/channelScaleFactor2
+      longName: "Channel Scale Factor (2)"
+
+    - name: "MetaData/channelScaleFactor3"
+      source: variables/channelScaleFactor3
+      longName: "Channel Scale Factor (3)"
+
+    - name: "MetaData/channelScaleFactor4"
+      source: variables/channelScaleFactor4
+      longName: "Channel Scale Factor (4)"
+
+    - name: "MetaData/channelScaleFactor5"
+      source: variables/channelScaleFactor5
+      longName: "Channel Scale Factor (5)"
+
+    - name: "MetaData/channelScaleFactor6"
+      source: variables/channelScaleFactor6
+      longName: "Channel Scale Factor (6)"
+
+    - name: "MetaData/channelScaleFactor7"
+      source: variables/channelScaleFactor7
+      longName: "Channel Scale Factor (7)"
+
+    - name: "MetaData/channelScaleFactor8"
+      source: variables/channelScaleFactor8
+      longName: "Channel Scale Factor (8)"
+
+    - name: "MetaData/channelScaleFactor9"
+      source: variables/channelScaleFactor9
+      longName: "Channel Scale Factor (9)"
+
+    - name: "MetaData/channelScaleFactor10"
+      source: variables/channelScaleFactor10
+      longName: "Channel Scale Factor (10)"
+
+    - name: "MetaData/sensorChannelNumberIasichn"
+      source: variables/sensorChannelNumberIasichn
+      longName: "Channel Number"
+
+    - name: "MetaData/startChannelIasisc"
+      source: variables/startChannelIasisc
+      longName: "Start Channel"
+
+    - name: "MetaData/endChannelIasisc"
+      source: variables/endChannelIasisc
+      longName: "End Channel"
+
+    - name: "MetaData/databaseIdentification"
+      source: variables/databaseIdentification
+      longName: "Database Identification"
+
+    - name: "MetaData/instrumentIdentifier2"
+      source: variables/instrumentIdentifier2
+      longName: "Satellite Instruments"
+
+    - name: "MetaData/avhrrChannelCombination"
+      source: variables/avhrrChannelCombination
+      longName: "Avhrr Channel Combination"
+
+    - name: "MetaData/yAngularPositionFromCentreOfGravity"
+      source: variables/yAngularPositionFromCentreOfGravity
+      longName: "Y Angular Position From Centre Of Gravity"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity"
+      source: variables/zAngularPositionFromCentreOfGravity
+      longName: "Z Angular Position From Centre Of Gravity"
+      units: "degree"
+
+    - name: "MetaData/sensorChannelNumberAvhrchn"
+      source: variables/sensorChannelNumberAvhrchn
+      longName: "Channel Number"
+
+    - name: "MetaData/channelScaleFactor1_2"
+      source: variables/channelScaleFactor1_2
+      longName: "Channel Scale Factor"
+
+    - name: "MetaData/channelScaleFactor2_2"
+      source: variables/channelScaleFactor2_2
+      longName: "Channel Scale Factor"
+
+    - name: "MetaData/surfaceType1"
+      source: variables/surfaceType1
+      longName: "Surface Type"
+
+    - name: "MetaData/surfaceType2"
+      source: variables/surfaceType2
+      longName: "Surface Type"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    # ObsValue
+    - name: "ObsValue/gqisflagqualdetailedQualityFlagForTheSystem"
+      source: variables/gqisflagqualdetailedQualityFlagForTheSystem
+      longName: "GqisFlagQualDetailed - quality flag for the system"
+
+    - name: "ObsValue/scaledIasiRadiance"
+      source: variables/scaledIasiRadiance
+      longName: "Scaled Iasi Radiance"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scoreQuantizationFactor"
+      source: variables/scoreQuantizationFactor
+      longName: "Score Quantization Factor"
+
+    - name: "ObsValue/residualRmsInBand"
+      source: variables/residualRmsInBand
+      longName: "Residual Rms In Band"
+
+    - name: "ObsValue/nonNormalisedPrincipalComponentScore"
+      source: variables/nonNormalisedPrincipalComponentScore
+      longName: "NON-NORMALISED Principal Component Score"
+
+    - name: "ObsValue/cloudFree"
+      source: variables/cloudFree
+      longName: "Fraction Of Clear Pixels In Hirs Fov"
+
+    - name: "ObsValue/scaledMeanAvhrrRadiance"
+      source: variables/scaledMeanAvhrrRadiance
+      longName: "Scaled Mean Avhrr Radiance"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledStandardDeviationAvhrrRadiance"
+      source: variables/scaledStandardDeviationAvhrrRadiance
+      longName: "Scaled Standard Deviation Avhrr Radiance"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/cloudAmount"
+      source: variables/cloudAmount
+      longName: "Cloud Amount In Segment"
+      units: "%"
+
+    - name: "ObsValue/amountOfSegmentCoveredByScene"
+      source: variables/amountOfSegmentCoveredByScene
+      longName: "Amount Of Segment Covered By Scene"
+      units: "%"
+
+    - name: "ObsValue/giacavgimagiisAverageOfImagerMeasurements"
+      source: variables/giacavgimagiisAverageOfImagerMeasurements
+      longName: "GIacAvgImagIIS - average of imager measurements"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/giacvarimagiisVarianceOfImagerMeasurements"
+      source: variables/giacvarimagiisVarianceOfImagerMeasurements
+      longName: "GIacVarImagIIS - variance of imager measurements"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/fractionOfWeightedAvhrrPixelInIasiFovCovered"
+      source: variables/fractionOfWeightedAvhrrPixelInIasiFovCovered
+      longName: "Fraction Of Weighted Avhrr Pixel In Iasi Fov Covered"
+      units: "%"
+
+    - name: "ObsValue/numberOfMissingBadOrFailedAvhrrPixels"
+      source: variables/numberOfMissingBadOrFailedAvhrrPixels
+      longName: "Number Of MISSING, Bad Or Failed Avhrr Pixels"
+
+    # QualityMarker
+    - name: "QualityMarker/gqisqualindexIndicatorForInstrumentNoise"
+      source: variables/gqisqualindexIndicatorForInstrumentNoise
+      longName: "GqisQualIndex - indicator for instrument noise perform"
+      units: "%"
+
+    - name: "QualityMarker/gqisqualindexlocIndicatorForGeometricQuality"
+      source: variables/gqisqualindexlocIndicatorForGeometricQuality
+      longName: "GqisQualIndexLoc - indicator for geometric quality ind"
+      units: "%"
+
+    - name: "QualityMarker/gqisqualindexradIndicatorForInstrumentNoise"
+      source: variables/gqisqualindexradIndicatorForInstrumentNoise
+      longName: "GqisQualIndexRad - indicator for instrument noise perf"
+      units: "%"
+
+    - name: "QualityMarker/gqisqualindexspectIndicatorForInstrumentNoise"
+      source: variables/gqisqualindexspectIndicatorForInstrumentNoise
+      longName: "GqisQualIndexSpect - indicator for instrument noise pe"
+      units: "%"
+
+    - name: "QualityMarker/gqissystecsondqualOutputOfSystemTecTechnical"
+      source: variables/gqissystecsondqualOutputOfSystemTecTechnical
+      longName: "GqisSysTecSondQual - output of system TEC (Technical E"

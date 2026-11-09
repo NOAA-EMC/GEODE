@@ -1,0 +1,1062 @@
+bufr:
+  subsets:
+    - NC255102
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    timePeriodMonths:
+      query: "*/SHTPMOSQ/TPMO"
+
+    timePeriodHours:
+      query: "*/SHTPHRSQ/TPHR"
+
+    timePeriodMinutes:
+      query: "*/SHTPMISQ/TPMI"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    stationElevation:
+      query: "*/HSMSL"
+
+    albedo:
+      query: "*/SHALBDSQ/ALBD"
+
+    riverStageHeightGageHeight:
+      query: "*/SHRSHMSQ/RSHM"
+
+    depthBelowLandSurfaceShstm1sq:
+      query: "*/SHSTM1SQ/DBLS"
+
+    depthBelowLandSurfaceShstm2sq:
+      query: "*/SHSTM2SQ/DBLS"
+
+    depthBelowLandSurfaceShxst1sq:
+      query: "*/SHXST1SQ/DBLS"
+
+    depthBelowLandSurfaceShxst2sq:
+      query: "*/SHXST2SQ/DBLS"
+
+    depthBelowLandSurfaceShist1sq:
+      query: "*/SHIST1SQ/DBLS"
+
+    depthBelowLandSurfaceShist2sq:
+      query: "*/SHIST2SQ/DBLS"
+
+    # ObsValue
+    airPressure:
+      query: "*/SHPRESSQ/PRES"
+
+    pressureReducedToMeanSeaLevel:
+      query: "*/SHPMSLSQ/PMSL"
+
+    totalPrecipitation:
+      query: "*/SHTOPCSQ/TOPC"
+
+    typeOfPrecipitation:
+      query: "*/SHPRTPSQ/PRTP"
+
+    depthOfFreshSnow:
+      query: "*/SHDOFSSQ/DOFS"
+
+    totalSnowDepth:
+      query: "*/SHTOSDSQ/TOSD"
+
+    snowWaterEquivalent:
+      query: "*/SHSWEMSQ/SWEM"
+
+    airTemperatureTMDB:
+      query: "*/SHTMDBSQ/TMDB"
+
+    maximumTemperature:
+      query: "*/SHMXTMSQ/MXTM"
+
+    minimumTemperature:
+      query: "*/SHMITMSQ/MITM"
+
+    waterTemperature:
+      query: "*/SHWATMSQ/WATM"
+
+    wetBulbTemperature:
+      query: "*/SHTMWBSQ/TMWB"
+
+    relativeHumidity:
+      query: "*/SHREHUSQ/REHU"
+
+    maximumRelativeHumidity:
+      query: "*/SHMXRHSQ/MXRH"
+
+    minimumRelativeHumidity:
+      query: "*/SHMIRHSQ/MIRH"
+
+    dewPointTemperature:
+      query: "*/SHTMDPSQ/TMDP"
+
+    waterConductivity:
+      query: "*/SHWACNSQ/WACN"
+
+    windDirection:
+      query: "*/SHWDIRSQ/WDIR"
+
+    windSpeed:
+      query: "*/SHWSPDSQ/WSPD"
+
+    maximumWindGustSpeed:
+      query: "*/SHMXGSSQ/MXGS"
+
+    peakWindDirection:
+      query: "*/SHPKWDSQ/PKWDDR"
+
+    peakWindSpeed:
+      query: "*/SHPKWSSQ/PKWDSP"
+
+    presentWeather:
+      query: "*/SHPRWESQ/PRWE"
+
+    pastWeather1:
+      query: "*/SHPSW1SQ/PSW1"
+
+    cloudAmount:
+      query: "*/SHCLAMSQ/CLAM"
+
+    horizontalVisibility:
+      query: "*/SHHOVISQ/HOVI"
+
+    totalSunshine:
+      query: "*/SHTOSHSQ/TOSH"
+
+    groundState:
+      query: "*/SHSOGRSQ/SOGR"
+
+    tideElevWithRespectToMeanLowerLowWater:
+      query: "*/SHTLLWSQ/TLLW"
+
+    soilTemperatureShstm1sq:
+      query: "*/SHSTM1SQ/STEMH"
+
+    soilTemperatureShstm2sq:
+      query: "*/SHSTM2SQ/STEMH"
+
+    maximumSoilTemperatureShxst1sq:
+      query: "*/SHXST1SQ/MXSTH"
+
+    maximumSoilTemperatureShxst2sq:
+      query: "*/SHXST2SQ/MXSTH"
+
+    minimumSoilTemperatureShist1sq:
+      query: "*/SHIST1SQ/MISTH"
+
+    minimumSoilTemperatureShist2sq:
+      query: "*/SHIST2SQ/MISTH"
+
+    # QualityMarker
+    shefRevisionFlagShpressq:
+      query: "*/SHPRESSQ/SHRV"
+
+    shefQualifierFlagShpressq:
+      query: "*/SHPRESSQ/SHQL"
+
+    pressure:
+      query: "*/QMPR"
+
+    shefRevisionFlagShpmslsq:
+      query: "*/SHPMSLSQ/SHRV"
+
+    shefQualifierFlagShpmslsq:
+      query: "*/SHPMSLSQ/SHQL"
+
+    shefRevisionFlagShtopcsq:
+      query: "*/SHTOPCSQ/SHRV"
+
+    shefQualifierFlagShtopcsq:
+      query: "*/SHTOPCSQ/SHQL"
+
+    shefRevisionFlagShprtpsq:
+      query: "*/SHPRTPSQ/SHRV"
+
+    shefQualifierFlagShprtpsq:
+      query: "*/SHPRTPSQ/SHQL"
+
+    shefRevisionFlagShdofssq:
+      query: "*/SHDOFSSQ/SHRV"
+
+    shefQualifierFlagShdofssq:
+      query: "*/SHDOFSSQ/SHQL"
+
+    shefRevisionFlagShtosdsq:
+      query: "*/SHTOSDSQ/SHRV"
+
+    shefQualifierFlagShtosdsq:
+      query: "*/SHTOSDSQ/SHQL"
+
+    shefRevisionFlagShswemsq:
+      query: "*/SHSWEMSQ/SHRV"
+
+    shefQualifierFlagShswemsq:
+      query: "*/SHSWEMSQ/SHQL"
+
+    shefRevisionFlagShtmdbsq:
+      query: "*/SHTMDBSQ/SHRV"
+
+    shefQualifierFlagShtmdbsq:
+      query: "*/SHTMDBSQ/SHQL"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    shefRevisionFlagShmxtmsq:
+      query: "*/SHMXTMSQ/SHRV"
+
+    shefQualifierFlagShmxtmsq:
+      query: "*/SHMXTMSQ/SHQL"
+
+    shefRevisionFlagShmitmsq:
+      query: "*/SHMITMSQ/SHRV"
+
+    shefQualifierFlagShmitmsq:
+      query: "*/SHMITMSQ/SHQL"
+
+    shefRevisionFlagShwatmsq:
+      query: "*/SHWATMSQ/SHRV"
+
+    shefQualifierFlagShwatmsq:
+      query: "*/SHWATMSQ/SHQL"
+
+    shefRevisionFlagShtmwbsq:
+      query: "*/SHTMWBSQ/SHRV"
+
+    shefQualifierFlagShtmwbsq:
+      query: "*/SHTMWBSQ/SHQL"
+
+    shefRevisionFlagShrehusq:
+      query: "*/SHREHUSQ/SHRV"
+
+    shefQualifierFlagShrehusq:
+      query: "*/SHREHUSQ/SHQL"
+
+    shefRevisionFlagShmxrhsq:
+      query: "*/SHMXRHSQ/SHRV"
+
+    shefQualifierFlagShmxrhsq:
+      query: "*/SHMXRHSQ/SHQL"
+
+    shefRevisionFlagShmirhsq:
+      query: "*/SHMIRHSQ/SHRV"
+
+    shefQualifierFlagShmirhsq:
+      query: "*/SHMIRHSQ/SHQL"
+
+    shefRevisionFlagShtmdpsq:
+      query: "*/SHTMDPSQ/SHRV"
+
+    shefQualifierFlagShtmdpsq:
+      query: "*/SHTMDPSQ/SHQL"
+
+    moisture:
+      query: "*/QMDD"
+
+    shefRevisionFlagShwacnsq:
+      query: "*/SHWACNSQ/SHRV"
+
+    shefQualifierFlagShwacnsq:
+      query: "*/SHWACNSQ/SHQL"
+
+    shefRevisionFlagShwdirsq:
+      query: "*/SHWDIRSQ/SHRV"
+
+    shefQualifierFlagShwdirsq:
+      query: "*/SHWDIRSQ/SHQL"
+
+    shefRevisionFlagShwspdsq:
+      query: "*/SHWSPDSQ/SHRV"
+
+    shefQualifierFlagShwspdsq:
+      query: "*/SHWSPDSQ/SHQL"
+
+    wind:
+      query: "*/QMWN"
+
+    shefRevisionFlagShmxgssq:
+      query: "*/SHMXGSSQ/SHRV"
+
+    shefQualifierFlagShmxgssq:
+      query: "*/SHMXGSSQ/SHQL"
+
+    shefRevisionFlagShpkwdsq:
+      query: "*/SHPKWDSQ/SHRV"
+
+    shefQualifierFlagShpkwdsq:
+      query: "*/SHPKWDSQ/SHQL"
+
+    shefRevisionFlagShpkwssq:
+      query: "*/SHPKWSSQ/SHRV"
+
+    shefQualifierFlagShpkwssq:
+      query: "*/SHPKWSSQ/SHQL"
+
+    shefRevisionFlagShprwesq:
+      query: "*/SHPRWESQ/SHRV"
+
+    shefQualifierFlagShprwesq:
+      query: "*/SHPRWESQ/SHQL"
+
+    shefRevisionFlagShpsw1sq:
+      query: "*/SHPSW1SQ/SHRV"
+
+    shefQualifierFlagShpsw1sq:
+      query: "*/SHPSW1SQ/SHQL"
+
+    shefRevisionFlagShclamsq:
+      query: "*/SHCLAMSQ/SHRV"
+
+    shefQualifierFlagShclamsq:
+      query: "*/SHCLAMSQ/SHQL"
+
+    shefRevisionFlagShhovisq:
+      query: "*/SHHOVISQ/SHRV"
+
+    shefQualifierFlagShhovisq:
+      query: "*/SHHOVISQ/SHQL"
+
+    shefRevisionFlagShalbdsq:
+      query: "*/SHALBDSQ/SHRV"
+
+    shefQualifierFlagShalbdsq:
+      query: "*/SHALBDSQ/SHQL"
+
+    shefRevisionFlagShtoshsq:
+      query: "*/SHTOSHSQ/SHRV"
+
+    shefQualifierFlagShtoshsq:
+      query: "*/SHTOSHSQ/SHQL"
+
+    shefRevisionFlagShsogrsq:
+      query: "*/SHSOGRSQ/SHRV"
+
+    shefQualifierFlagShsogrsq:
+      query: "*/SHSOGRSQ/SHQL"
+
+    shefRevisionFlagShrshmsq:
+      query: "*/SHRSHMSQ/SHRV"
+
+    shefQualifierFlagShrshmsq:
+      query: "*/SHRSHMSQ/SHQL"
+
+    shefRevisionFlagShtllwsq:
+      query: "*/SHTLLWSQ/SHRV"
+
+    shefQualifierFlagShtllwsq:
+      query: "*/SHTLLWSQ/SHQL"
+
+    shefRevisionFlagShstm1sq:
+      query: "*/SHSTM1SQ/SHRV"
+
+    shefQualifierFlagShstm1sq:
+      query: "*/SHSTM1SQ/SHQL"
+
+    shefRevisionFlagShstm2sq:
+      query: "*/SHSTM2SQ/SHRV"
+
+    shefQualifierFlagShstm2sq:
+      query: "*/SHSTM2SQ/SHQL"
+
+    shefRevisionFlagShxst1sq:
+      query: "*/SHXST1SQ/SHRV"
+
+    shefQualifierFlagShxst1sq:
+      query: "*/SHXST1SQ/SHQL"
+
+    shefRevisionFlagShxst2sq:
+      query: "*/SHXST2SQ/SHRV"
+
+    shefQualifierFlagShxst2sq:
+      query: "*/SHXST2SQ/SHQL"
+
+    shefRevisionFlagShist1sq:
+      query: "*/SHIST1SQ/SHRV"
+
+    shefQualifierFlagShist1sq:
+      query: "*/SHIST1SQ/SHQL"
+
+    shefRevisionFlagShist2sq:
+      query: "*/SHIST2SQ/SHRV"
+
+    shefQualifierFlagShist2sq:
+      query: "*/SHIST2SQ/SHQL"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "MTYP 255-102 Coop from SHEF fmt: All NWS Coop Obs"
+
+    - name: "dataCategory"
+      type: string
+      value: "other"
+
+    - name: "dataset"
+      type: string
+      value: "surface_coop"
+
+    - name: "dataFormat"
+      type: string
+      value: "SHEF"
+
+    - name: "restricted"
+      type: string
+      value: "true"
+
+    - name: "bufrCategory"
+      type: string
+      value: "255"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "102"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b255/xx102 NC255102"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/timePeriodMonths"
+      source: variables/timePeriodMonths
+      longName: "Time Period Or Displacement"
+      units: "month"
+
+    - name: "MetaData/timePeriodHours"
+      source: variables/timePeriodHours
+      longName: "Time Period Or Displacement"
+      units: "h"
+
+    - name: "MetaData/timePeriodMinutes"
+      source: variables/timePeriodMinutes
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station Ground Above Msl"
+      units: "m"
+
+    - name: "MetaData/albedo"
+      source: variables/albedo
+      longName: "Albedo"
+      units: "%"
+
+    - name: "MetaData/riverStageHeightGageHeight"
+      source: variables/riverStageHeightGageHeight
+      longName: "River Stage Height (GAGE HEIGHT)"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShstm1sq"
+      source: variables/depthBelowLandSurfaceShstm1sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShstm2sq"
+      source: variables/depthBelowLandSurfaceShstm2sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShxst1sq"
+      source: variables/depthBelowLandSurfaceShxst1sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShxst2sq"
+      source: variables/depthBelowLandSurfaceShxst2sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShist1sq"
+      source: variables/depthBelowLandSurfaceShist1sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShist2sq"
+      source: variables/depthBelowLandSurfaceShist2sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    # ObsValue
+    - name: "ObsValue/airPressure"
+      source: variables/airPressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/pressureReducedToMeanSeaLevel"
+      source: variables/pressureReducedToMeanSeaLevel
+      longName: "Pressure Reduced To Msl"
+      units: "Pa"
+
+    - name: "ObsValue/totalPrecipitation"
+      source: variables/totalPrecipitation
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent"
+      units: "kg m-2"
+
+    - name: "ObsValue/typeOfPrecipitation"
+      source: variables/typeOfPrecipitation
+      longName: "Type Of Precipitation"
+
+    - name: "ObsValue/depthOfFreshSnow"
+      source: variables/depthOfFreshSnow
+      longName: "Depth Of Fresh Snow"
+      units: "m"
+
+    - name: "ObsValue/totalSnowDepth"
+      source: variables/totalSnowDepth
+      longName: "Total Snow Depth"
+      units: "m"
+
+    - name: "ObsValue/snowWaterEquivalent"
+      source: variables/snowWaterEquivalent
+      longName: "Snow Water Equivalent"
+      units: "kg m-2"
+
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/maximumTemperature"
+      source: variables/maximumTemperature
+      longName: "Maximum Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature"
+      source: variables/minimumTemperature
+      longName: "Minimum Temperature"
+      units: "K"
+
+    - name: "ObsValue/waterTemperature"
+      source: variables/waterTemperature
+      longName: "Water Temperature"
+      units: "K"
+
+    - name: "ObsValue/wetBulbTemperature"
+      source: variables/wetBulbTemperature
+      longName: "Wet Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/relativeHumidity"
+      source: variables/relativeHumidity
+      longName: "Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/maximumRelativeHumidity"
+      source: variables/maximumRelativeHumidity
+      longName: "Maximum Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/minimumRelativeHumidity"
+      source: variables/minimumRelativeHumidity
+      longName: "Minimum Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/dewPointTemperature"
+      source: variables/dewPointTemperature
+      longName: "Dew Point Temperature"
+      units: "K"
+
+    - name: "ObsValue/waterConductivity"
+      source: variables/waterConductivity
+      longName: "Water Conductivity"
+      units: "S m-1"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/maximumWindGustSpeed"
+      source: variables/maximumWindGustSpeed
+      longName: "Max Wind Speed (GUSTS)"
+      units: "m s-1"
+
+    - name: "ObsValue/peakWindDirection"
+      source: variables/peakWindDirection
+      longName: "Peak Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/peakWindSpeed"
+      source: variables/peakWindSpeed
+      longName: "Peak Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/presentWeather"
+      source: variables/presentWeather
+      longName: "Present Weather"
+
+    - name: "ObsValue/pastWeather1"
+      source: variables/pastWeather1
+      longName: "Past Weather (1)"
+
+    - name: "ObsValue/cloudAmount"
+      source: variables/cloudAmount
+      longName: "Cloud Amount"
+
+    - name: "ObsValue/horizontalVisibility"
+      source: variables/horizontalVisibility
+      longName: "Horizontal Visibility"
+      units: "m"
+
+    - name: "ObsValue/totalSunshine"
+      source: variables/totalSunshine
+      longName: "Total Sunshine"
+      units: "h"
+
+    - name: "ObsValue/groundState"
+      source: variables/groundState
+      longName: "State Of The Ground"
+
+    - name: "ObsValue/tideElevWithRespectToMeanLowerLowWater"
+      source: variables/tideElevWithRespectToMeanLowerLowWater
+      longName: "Tide ELEV. With Respect To Mean Lower Low Water"
+      units: "m"
+
+    - name: "ObsValue/soilTemperatureShstm1sq"
+      source: variables/soilTemperatureShstm1sq
+      longName: "Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/soilTemperatureShstm2sq"
+      source: variables/soilTemperatureShstm2sq
+      longName: "Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/maximumSoilTemperatureShxst1sq"
+      source: variables/maximumSoilTemperatureShxst1sq
+      longName: "Maximum Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/maximumSoilTemperatureShxst2sq"
+      source: variables/maximumSoilTemperatureShxst2sq
+      longName: "Maximum Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumSoilTemperatureShist1sq"
+      source: variables/minimumSoilTemperatureShist1sq
+      longName: "Minimum Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumSoilTemperatureShist2sq"
+      source: variables/minimumSoilTemperatureShist2sq
+      longName: "Minimum Soil Temperature"
+      units: "K"
+
+    # QualityMarker
+    - name: "QualityMarker/shefRevisionFlagShpressq"
+      source: variables/shefRevisionFlagShpressq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpressq"
+      source: variables/shefQualifierFlagShpressq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/pressure"
+      source: variables/pressure
+      longName: "Sdmedit Quality Mark For Pressure"
+
+    - name: "QualityMarker/shefRevisionFlagShpmslsq"
+      source: variables/shefRevisionFlagShpmslsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpmslsq"
+      source: variables/shefQualifierFlagShpmslsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtopcsq"
+      source: variables/shefRevisionFlagShtopcsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtopcsq"
+      source: variables/shefQualifierFlagShtopcsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShprtpsq"
+      source: variables/shefRevisionFlagShprtpsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShprtpsq"
+      source: variables/shefQualifierFlagShprtpsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShdofssq"
+      source: variables/shefRevisionFlagShdofssq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShdofssq"
+      source: variables/shefQualifierFlagShdofssq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtosdsq"
+      source: variables/shefRevisionFlagShtosdsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtosdsq"
+      source: variables/shefQualifierFlagShtosdsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShswemsq"
+      source: variables/shefRevisionFlagShswemsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShswemsq"
+      source: variables/shefQualifierFlagShswemsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtmdbsq"
+      source: variables/shefRevisionFlagShtmdbsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtmdbsq"
+      source: variables/shefQualifierFlagShtmdbsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "Sdmedit Quality Mark For Temperature"
+
+    - name: "QualityMarker/shefRevisionFlagShmxtmsq"
+      source: variables/shefRevisionFlagShmxtmsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmxtmsq"
+      source: variables/shefQualifierFlagShmxtmsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShmitmsq"
+      source: variables/shefRevisionFlagShmitmsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmitmsq"
+      source: variables/shefQualifierFlagShmitmsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShwatmsq"
+      source: variables/shefRevisionFlagShwatmsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShwatmsq"
+      source: variables/shefQualifierFlagShwatmsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtmwbsq"
+      source: variables/shefRevisionFlagShtmwbsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtmwbsq"
+      source: variables/shefQualifierFlagShtmwbsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShrehusq"
+      source: variables/shefRevisionFlagShrehusq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShrehusq"
+      source: variables/shefQualifierFlagShrehusq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShmxrhsq"
+      source: variables/shefRevisionFlagShmxrhsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmxrhsq"
+      source: variables/shefQualifierFlagShmxrhsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShmirhsq"
+      source: variables/shefRevisionFlagShmirhsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmirhsq"
+      source: variables/shefQualifierFlagShmirhsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtmdpsq"
+      source: variables/shefRevisionFlagShtmdpsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtmdpsq"
+      source: variables/shefQualifierFlagShtmdpsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "Sdmedit Quality Mark For Moisture"
+
+    - name: "QualityMarker/shefRevisionFlagShwacnsq"
+      source: variables/shefRevisionFlagShwacnsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShwacnsq"
+      source: variables/shefQualifierFlagShwacnsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShwdirsq"
+      source: variables/shefRevisionFlagShwdirsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShwdirsq"
+      source: variables/shefQualifierFlagShwdirsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShwspdsq"
+      source: variables/shefRevisionFlagShwspdsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShwspdsq"
+      source: variables/shefQualifierFlagShwspdsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "Sdmedit Quality Mark For Wind"
+
+    - name: "QualityMarker/shefRevisionFlagShmxgssq"
+      source: variables/shefRevisionFlagShmxgssq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmxgssq"
+      source: variables/shefQualifierFlagShmxgssq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShpkwdsq"
+      source: variables/shefRevisionFlagShpkwdsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpkwdsq"
+      source: variables/shefQualifierFlagShpkwdsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShpkwssq"
+      source: variables/shefRevisionFlagShpkwssq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpkwssq"
+      source: variables/shefQualifierFlagShpkwssq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShprwesq"
+      source: variables/shefRevisionFlagShprwesq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShprwesq"
+      source: variables/shefQualifierFlagShprwesq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShpsw1sq"
+      source: variables/shefRevisionFlagShpsw1sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpsw1sq"
+      source: variables/shefQualifierFlagShpsw1sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShclamsq"
+      source: variables/shefRevisionFlagShclamsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShclamsq"
+      source: variables/shefQualifierFlagShclamsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShhovisq"
+      source: variables/shefRevisionFlagShhovisq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShhovisq"
+      source: variables/shefQualifierFlagShhovisq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShalbdsq"
+      source: variables/shefRevisionFlagShalbdsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShalbdsq"
+      source: variables/shefQualifierFlagShalbdsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtoshsq"
+      source: variables/shefRevisionFlagShtoshsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtoshsq"
+      source: variables/shefQualifierFlagShtoshsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShsogrsq"
+      source: variables/shefRevisionFlagShsogrsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShsogrsq"
+      source: variables/shefQualifierFlagShsogrsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShrshmsq"
+      source: variables/shefRevisionFlagShrshmsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShrshmsq"
+      source: variables/shefQualifierFlagShrshmsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtllwsq"
+      source: variables/shefRevisionFlagShtllwsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtllwsq"
+      source: variables/shefQualifierFlagShtllwsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShstm1sq"
+      source: variables/shefRevisionFlagShstm1sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShstm1sq"
+      source: variables/shefQualifierFlagShstm1sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShstm2sq"
+      source: variables/shefRevisionFlagShstm2sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShstm2sq"
+      source: variables/shefQualifierFlagShstm2sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShxst1sq"
+      source: variables/shefRevisionFlagShxst1sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShxst1sq"
+      source: variables/shefQualifierFlagShxst1sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShxst2sq"
+      source: variables/shefRevisionFlagShxst2sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShxst2sq"
+      source: variables/shefQualifierFlagShxst2sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShist1sq"
+      source: variables/shefRevisionFlagShist1sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShist1sq"
+      source: variables/shefQualifierFlagShist1sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShist2sq"
+      source: variables/shefRevisionFlagShist2sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShist2sq"
+      source: variables/shefQualifierFlagShist2sq
+      longName: "Shef Data Qualifier Flag"

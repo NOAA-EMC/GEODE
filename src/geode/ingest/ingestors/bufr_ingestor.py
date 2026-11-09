@@ -1,3 +1,4 @@
+import gc
 import os
 import tempfile
 
@@ -18,6 +19,9 @@ def container_to_xarray(
     if len(cat_map) == 0:
         with tempfile.NamedTemporaryFile(delete=True) as named_temp:
             encoder.encode(container, named_temp.name)
+            # Without this, opening the file can segfault in HDF5 while reading string
+            # fill values. The underlying cause is not known.
+            gc.collect()
             datatree = xr.open_datatree(named_temp.name)
     else:
         datatree = {}
@@ -31,6 +35,7 @@ def container_to_xarray(
             for file_name in os.listdir(temp_dir):
                 if file_name.endswith(".nc"):
                     sub_type = file_name.replace("data_", "").replace(".nc", "")
+                    gc.collect()  # see the note above
                     datatree[sub_type] = xr.open_datatree(
                         os.path.join(temp_dir, file_name)
                     )

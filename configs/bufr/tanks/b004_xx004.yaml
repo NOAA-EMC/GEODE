@@ -1,0 +1,432 @@
+bufr:
+  subsets:
+    - NC004004
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    originationAirport:
+      query: "*/OAPT"
+
+    destinationAirport:
+      query: "*/DAPT"
+
+    wigosIdentifierSeries:
+      query: "*/WGOSIDS"
+
+    wigosIssuerOfIdentifier:
+      query: "*/WGOSISID"
+
+    wigosIssueNumber:
+      query: "*/WGOSISNM"
+
+    wigosLocalIdentifierCharacter:
+      query: "*/WGOSLID"
+
+    aircraftFlightNumber:
+      query: "*/ACID"
+
+    aircraftTailNumber:
+      query: "*/ACRN"
+
+    arincGroundReceivingStation:
+      query: "*/ARST"
+
+    pressure:
+      query: "*/PRLC"
+
+    originalSpecificationOfLatLon:
+      query: "*/OSLL"
+
+    precisionOfTemperatureObservation:
+      query: "*/PCAT"
+
+    windInstrumentationType:
+      query: "*/TIWM"
+
+    detailedPhaseOfFlight:
+      query: "*/DPOF"
+
+    phaseOfAircraftFlight:
+      query: "*/POAF"
+
+    typeOfAircraftDataRelaySystem:
+      query: "*/TADR"
+
+    stationType:
+      query: "*/TOST"
+
+    aircraftRollAngleQuality:
+      query: "*/ROLQ"
+
+    # ObsValue
+    indicatedAircraftAltitude:
+      query: "*/IALT"
+
+    mixingRatio:
+      query: "*/ACMST2/MIXR"
+
+    relativeHumidity:
+      query: "*/ACMST2/REHU"
+
+    turbulenceIndexForPeriodTob1MinTob:
+      query: "*/ACTRB/TRBX10"
+
+    turbulenceIndexForPeriodTob2MinTob1Min:
+      query: "*/ACTRB/TRBX21"
+
+    turbulenceIndexForPeriodTob3MinTob2Min:
+      query: "*/ACTRB/TRBX32"
+
+    turbulenceIndexForPeriodTob4MinTob3Min:
+      query: "*/ACTRB/TRBX43"
+
+    airTemperatureTMDB:
+      query: "*/TMDB"
+
+    windDirection:
+      query: "*/WDIR"
+
+    windSpeed:
+      query: "*/WSPD"
+
+    aircraftTrueAirspeed:
+      query: "*/TASP"
+
+    aircraftGroundSpeedUComponent:
+      query: "*/AVLU"
+
+    aircraftGroundSpeedVComponent:
+      query: "*/AVLV"
+
+    trueHeadingOfAircraftShipOrOtherMobile:
+      query: "*/ACTH"
+
+    # QualityMarker
+    correctedReportIndicator:
+      query: "*/CORN"
+
+    moisture:
+      query: "*/ACMST2/QMDD"
+
+    moistureQuality:
+      query: "*/MSTQ"
+
+    acarsInterpolatedValues:
+      query: "*/INTV"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    wind:
+      query: "*/QMWN"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "MTYP 004-004 Automated MDCRS (ARINC to NCEP) (BUFR)"
+
+    - name: "dataCategory"
+      type: string
+      value: "single level upper-air data other than satellite"
+
+    - name: "dataset"
+      type: string
+      value: "aircraft_amdar_us"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "true"
+
+    - name: "bufrCategory"
+      type: string
+      value: "004"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "004"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b004/xx004 NC004004"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/originationAirport"
+      source: variables/originationAirport
+      longName: "Origination Airport"
+
+    - name: "MetaData/destinationAirport"
+      source: variables/destinationAirport
+      longName: "Destination Airport"
+
+    - name: "MetaData/wigosIdentifierSeries"
+      source: variables/wigosIdentifierSeries
+      longName: "Wigos Identifier Series"
+
+    - name: "MetaData/wigosIssuerOfIdentifier"
+      source: variables/wigosIssuerOfIdentifier
+      longName: "Wigos Issuer Of Identifier"
+
+    - name: "MetaData/wigosIssueNumber"
+      source: variables/wigosIssueNumber
+      longName: "Wigos Issue Number"
+
+    - name: "MetaData/wigosLocalIdentifierCharacter"
+      source: variables/wigosLocalIdentifierCharacter
+      longName: "Wigos Local Identifier (CHARACTER)"
+
+    - name: "MetaData/aircraftFlightNumber"
+      source: variables/aircraftFlightNumber
+      longName: "Aircraft Flight Number"
+
+    - name: "MetaData/aircraftTailNumber"
+      source: variables/aircraftTailNumber
+      longName: "Aircraft Registration Number (TAIL NUMBER)"
+
+    - name: "MetaData/arincGroundReceivingStation"
+      source: variables/arincGroundReceivingStation
+      longName: "Arinc Ground Receiving Station"
+
+    - name: "MetaData/pressure"
+      source: variables/pressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/originalSpecificationOfLatLon"
+      source: variables/originalSpecificationOfLatLon
+      longName: "Original Specification Of LAT/LON"
+
+    - name: "MetaData/precisionOfTemperatureObservation"
+      source: variables/precisionOfTemperatureObservation
+      longName: "Precision Of Temperature Observation"
+      units: "K"
+
+    - name: "MetaData/windInstrumentationType"
+      source: variables/windInstrumentationType
+      longName: "Type Of Instrumentation For Wind Measurement"
+
+    - name: "MetaData/detailedPhaseOfFlight"
+      source: variables/detailedPhaseOfFlight
+      longName: "Detailed Phase Of Flight"
+
+    - name: "MetaData/phaseOfAircraftFlight"
+      source: variables/phaseOfAircraftFlight
+      longName: "Phase Of Aircraft Flight"
+
+    - name: "MetaData/typeOfAircraftDataRelaySystem"
+      source: variables/typeOfAircraftDataRelaySystem
+      longName: "Type Of Aircraft Data Relay System"
+
+    - name: "MetaData/stationType"
+      source: variables/stationType
+      longName: "Type Of Station"
+
+    - name: "MetaData/aircraftRollAngleQuality"
+      source: variables/aircraftRollAngleQuality
+      longName: "Aircraft Roll Angle Quality"
+
+    # ObsValue
+    - name: "ObsValue/indicatedAircraftAltitude"
+      source: variables/indicatedAircraftAltitude
+      longName: "Indicated Aircraft Altitude"
+      units: "m"
+
+    - name: "ObsValue/mixingRatio"
+      source: variables/mixingRatio
+      longName: "Mixing Ratio"
+      units: "kg kg-1"
+
+    - name: "ObsValue/relativeHumidity"
+      source: variables/relativeHumidity
+      longName: "Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/turbulenceIndexForPeriodTob1MinTob"
+      source: variables/turbulenceIndexForPeriodTob1MinTob
+      longName: "Turbulence Index For Period (TOB-1 MIN) -> Tob"
+
+    - name: "ObsValue/turbulenceIndexForPeriodTob2MinTob1Min"
+      source: variables/turbulenceIndexForPeriodTob2MinTob1Min
+      longName: "Turbulence Index For Period (TOB-2 MIN) -> (TOB-1 MIN)"
+
+    - name: "ObsValue/turbulenceIndexForPeriodTob3MinTob2Min"
+      source: variables/turbulenceIndexForPeriodTob3MinTob2Min
+      longName: "Turbulence Index For Period (TOB-3 MIN) -> (TOB-2 MIN)"
+
+    - name: "ObsValue/turbulenceIndexForPeriodTob4MinTob3Min"
+      source: variables/turbulenceIndexForPeriodTob4MinTob3Min
+      longName: "Turbulence Index For Period (TOB-4 MIN) -> (TOB-3 MIN)"
+
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/aircraftTrueAirspeed"
+      source: variables/aircraftTrueAirspeed
+      longName: "Aircraft True Airspeed"
+      units: "m s-1"
+
+    - name: "ObsValue/aircraftGroundSpeedUComponent"
+      source: variables/aircraftGroundSpeedUComponent
+      longName: "Aircraft Ground Speed U-COMPONENT"
+      units: "m s-1"
+
+    - name: "ObsValue/aircraftGroundSpeedVComponent"
+      source: variables/aircraftGroundSpeedVComponent
+      longName: "Aircraft Ground Speed V-COMPONENT"
+      units: "m s-1"
+
+    - name: "ObsValue/trueHeadingOfAircraftShipOrOtherMobile"
+      source: variables/trueHeadingOfAircraftShipOrOtherMobile
+      longName: "True Heading Of AIRCRAFT, Ship Or Other Mobile Platfor"
+      units: "degree"
+
+    # QualityMarker
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "Sdmedit Quality Mark For Moisture"
+
+    - name: "QualityMarker/moistureQuality"
+      source: variables/moistureQuality
+      longName: "Moisture Quality"
+
+    - name: "QualityMarker/acarsInterpolatedValues"
+      source: variables/acarsInterpolatedValues
+      longName: "Acars Interpolated Values"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "Sdmedit Quality Mark For Temperature"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "Sdmedit Quality Mark For Wind"

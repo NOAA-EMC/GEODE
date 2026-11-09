@@ -1,0 +1,1408 @@
+bufr:
+  subsets:
+    - NC021045
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    generatingCenterLong:
+      query: "*/GCLONG"
+
+    satelliteConstellationRO:
+      query: "*/SCLF"
+
+    segmentSizeAtNadirInXDirection:
+      query: "*/SSNX"
+
+    segmentSizeAtNadirInYDirection:
+      query: "*/SSNY"
+
+    numberOfPixelsPerRow:
+      query: "*/NPPR"
+
+    numberOfPixelsPerColumn:
+      query: "*/NPPC"
+
+    satelliteZenithAngle:
+      query: "*/SAZA"
+
+    sensorAzimuthAngle:
+      query: "*/BEARAZ"
+
+    solarZenithAngle:
+      query: "*/SOZA"
+
+    solarAzimuthAngle:
+      query: "*/SOLAZI"
+
+    geopotentialHeight:
+      query: "*/HITE"
+
+    landOrSeaQualifier1:
+      query: "*/LSQL[1]"
+
+    landOrSeaQualifier2:
+      query: "*/LSQL[2]"
+
+    verticalSignificanceSatellite1:
+      query: "*/VSAT[1]"
+
+    verticalSignificanceSatellite2:
+      query: "*/VSAT[2]"
+
+    verticalSignificanceSatellite3:
+      query: "*/VSAT[3]"
+
+    verticalSignificanceSatellite4:
+      query: "*/VSAT[4]"
+
+    satelliteInstrumentData:
+      query: "*/SIDP"
+
+    radianceComputationalMethod:
+      query: "*/RDCM"
+
+    sensorCentralFrequency1:
+      query: "*/ALLSKYRC{1}/SCCF"
+
+    sensorCentralFrequency2:
+      query: "*/ALLSKYRC{2}/SCCF"
+
+    sensorCentralFrequency3:
+      query: "*/ALLSKYRC{3}/SCCF"
+
+    sensorCentralFrequency4:
+      query: "*/ALLSKYRC{4}/SCCF"
+
+    sensorCentralFrequency5:
+      query: "*/ALLSKYRC{5}/SCCF"
+
+    sensorCentralFrequency6:
+      query: "*/ALLSKYRC{6}/SCCF"
+
+    sensorCentralFrequency7:
+      query: "*/ALLSKYRC{7}/SCCF"
+
+    sensorCentralFrequency8:
+      query: "*/ALLSKYRC{8}/SCCF"
+
+    sensorCentralFrequency9:
+      query: "*/ALLSKYRC{9}/SCCF"
+
+    sensorCentralFrequency10:
+      query: "*/ALLSKYRC{10}/SCCF"
+
+    sensorBandWidth1:
+      query: "*/ALLSKYRC{1}/SCBW"
+
+    sensorBandWidth2:
+      query: "*/ALLSKYRC{2}/SCBW"
+
+    sensorBandWidth3:
+      query: "*/ALLSKYRC{3}/SCBW"
+
+    sensorBandWidth4:
+      query: "*/ALLSKYRC{4}/SCBW"
+
+    sensorBandWidth5:
+      query: "*/ALLSKYRC{5}/SCBW"
+
+    sensorBandWidth6:
+      query: "*/ALLSKYRC{6}/SCBW"
+
+    sensorBandWidth7:
+      query: "*/ALLSKYRC{7}/SCBW"
+
+    sensorBandWidth8:
+      query: "*/ALLSKYRC{8}/SCBW"
+
+    sensorBandWidth9:
+      query: "*/ALLSKYRC{9}/SCBW"
+
+    sensorBandWidth10:
+      query: "*/ALLSKYRC{10}/SCBW"
+
+    meteorologicalFeature11:
+      query: "*/ALLSKYRC{1}/METFET[1]"
+
+    meteorologicalFeature12:
+      query: "*/ALLSKYRC{2}/METFET[1]"
+
+    meteorologicalFeature13:
+      query: "*/ALLSKYRC{3}/METFET[1]"
+
+    meteorologicalFeature14:
+      query: "*/ALLSKYRC{4}/METFET[1]"
+
+    meteorologicalFeature15:
+      query: "*/ALLSKYRC{5}/METFET[1]"
+
+    meteorologicalFeature16:
+      query: "*/ALLSKYRC{6}/METFET[1]"
+
+    meteorologicalFeature17:
+      query: "*/ALLSKYRC{7}/METFET[1]"
+
+    meteorologicalFeature18:
+      query: "*/ALLSKYRC{8}/METFET[1]"
+
+    meteorologicalFeature19:
+      query: "*/ALLSKYRC{9}/METFET[1]"
+
+    meteorologicalFeature110:
+      query: "*/ALLSKYRC{10}/METFET[1]"
+
+    meteorologicalFeature21:
+      query: "*/ALLSKYRC{1}/METFET[2]"
+
+    meteorologicalFeature22:
+      query: "*/ALLSKYRC{2}/METFET[2]"
+
+    meteorologicalFeature23:
+      query: "*/ALLSKYRC{3}/METFET[2]"
+
+    meteorologicalFeature24:
+      query: "*/ALLSKYRC{4}/METFET[2]"
+
+    meteorologicalFeature25:
+      query: "*/ALLSKYRC{5}/METFET[2]"
+
+    meteorologicalFeature26:
+      query: "*/ALLSKYRC{6}/METFET[2]"
+
+    meteorologicalFeature27:
+      query: "*/ALLSKYRC{7}/METFET[2]"
+
+    meteorologicalFeature28:
+      query: "*/ALLSKYRC{8}/METFET[2]"
+
+    meteorologicalFeature29:
+      query: "*/ALLSKYRC{9}/METFET[2]"
+
+    meteorologicalFeature210:
+      query: "*/ALLSKYRC{10}/METFET[2]"
+
+    meteorologicalFeature31:
+      query: "*/ALLSKYRC{1}/METFET[3]"
+
+    meteorologicalFeature32:
+      query: "*/ALLSKYRC{2}/METFET[3]"
+
+    meteorologicalFeature33:
+      query: "*/ALLSKYRC{3}/METFET[3]"
+
+    meteorologicalFeature34:
+      query: "*/ALLSKYRC{4}/METFET[3]"
+
+    meteorologicalFeature35:
+      query: "*/ALLSKYRC{5}/METFET[3]"
+
+    meteorologicalFeature36:
+      query: "*/ALLSKYRC{6}/METFET[3]"
+
+    meteorologicalFeature37:
+      query: "*/ALLSKYRC{7}/METFET[3]"
+
+    meteorologicalFeature38:
+      query: "*/ALLSKYRC{8}/METFET[3]"
+
+    meteorologicalFeature39:
+      query: "*/ALLSKYRC{9}/METFET[3]"
+
+    meteorologicalFeature310:
+      query: "*/ALLSKYRC{10}/METFET[3]"
+
+    verticalSignificanceSatellite1Allskyrc1:
+      query: "*/ALLSKYRC{1}/VSAT[1]"
+
+    verticalSignificanceSatellite1Allskyrc2:
+      query: "*/ALLSKYRC{2}/VSAT[1]"
+
+    verticalSignificanceSatellite1Allskyrc3:
+      query: "*/ALLSKYRC{3}/VSAT[1]"
+
+    verticalSignificanceSatellite1Allskyrc4:
+      query: "*/ALLSKYRC{4}/VSAT[1]"
+
+    verticalSignificanceSatellite1Allskyrc5:
+      query: "*/ALLSKYRC{5}/VSAT[1]"
+
+    verticalSignificanceSatellite1Allskyrc6:
+      query: "*/ALLSKYRC{6}/VSAT[1]"
+
+    verticalSignificanceSatellite1Allskyrc7:
+      query: "*/ALLSKYRC{7}/VSAT[1]"
+
+    verticalSignificanceSatellite1Allskyrc8:
+      query: "*/ALLSKYRC{8}/VSAT[1]"
+
+    verticalSignificanceSatellite1Allskyrc9:
+      query: "*/ALLSKYRC{9}/VSAT[1]"
+
+    verticalSignificanceSatellite1Allskyrc10:
+      query: "*/ALLSKYRC{10}/VSAT[1]"
+
+    verticalSignificanceSatellite2Allskyrc1:
+      query: "*/ALLSKYRC{1}/VSAT[2]"
+
+    verticalSignificanceSatellite2Allskyrc2:
+      query: "*/ALLSKYRC{2}/VSAT[2]"
+
+    verticalSignificanceSatellite2Allskyrc3:
+      query: "*/ALLSKYRC{3}/VSAT[2]"
+
+    verticalSignificanceSatellite2Allskyrc4:
+      query: "*/ALLSKYRC{4}/VSAT[2]"
+
+    verticalSignificanceSatellite2Allskyrc5:
+      query: "*/ALLSKYRC{5}/VSAT[2]"
+
+    verticalSignificanceSatellite2Allskyrc6:
+      query: "*/ALLSKYRC{6}/VSAT[2]"
+
+    verticalSignificanceSatellite2Allskyrc7:
+      query: "*/ALLSKYRC{7}/VSAT[2]"
+
+    verticalSignificanceSatellite2Allskyrc8:
+      query: "*/ALLSKYRC{8}/VSAT[2]"
+
+    verticalSignificanceSatellite2Allskyrc9:
+      query: "*/ALLSKYRC{9}/VSAT[2]"
+
+    verticalSignificanceSatellite2Allskyrc10:
+      query: "*/ALLSKYRC{10}/VSAT[2]"
+
+    verticalSignificanceSatellite3Allskyrc1:
+      query: "*/ALLSKYRC{1}/VSAT[3]"
+
+    verticalSignificanceSatellite3Allskyrc2:
+      query: "*/ALLSKYRC{2}/VSAT[3]"
+
+    verticalSignificanceSatellite3Allskyrc3:
+      query: "*/ALLSKYRC{3}/VSAT[3]"
+
+    verticalSignificanceSatellite3Allskyrc4:
+      query: "*/ALLSKYRC{4}/VSAT[3]"
+
+    verticalSignificanceSatellite3Allskyrc5:
+      query: "*/ALLSKYRC{5}/VSAT[3]"
+
+    verticalSignificanceSatellite3Allskyrc6:
+      query: "*/ALLSKYRC{6}/VSAT[3]"
+
+    verticalSignificanceSatellite3Allskyrc7:
+      query: "*/ALLSKYRC{7}/VSAT[3]"
+
+    verticalSignificanceSatellite3Allskyrc8:
+      query: "*/ALLSKYRC{8}/VSAT[3]"
+
+    verticalSignificanceSatellite3Allskyrc9:
+      query: "*/ALLSKYRC{9}/VSAT[3]"
+
+    verticalSignificanceSatellite3Allskyrc10:
+      query: "*/ALLSKYRC{10}/VSAT[3]"
+
+    dataPresentIndicator:
+      query: "*/RPSEQ3/DPRI"
+
+    generatingCenterLong1:
+      query: "*/GCLONG[1]"
+
+    windGeneratingApplication1:
+      query: "*/GNAP[1]"
+
+    qiWithoutForecast:
+      query: "*/RPSEQ4/PCCF"
+
+    generatingCenterLong2:
+      query: "*/GCLONG[2]"
+
+    windGeneratingApplication2:
+      query: "*/GNAP[2]"
+
+    firstOrderStatistics:
+      query: "*/FOST"
+
+    # ObsValue
+    cloudFree1:
+      query: "*/NCLDMNT[1]"
+
+    cloudFree2:
+      query: "*/NCLDMNT[2]"
+
+    cloudAmount1:
+      query: "*/CLDMNT[1]"
+
+    cloudAmount2:
+      query: "*/CLDMNT[2]"
+
+    cloudAmount3:
+      query: "*/CLDMNT[3]"
+
+    cloudAmount4:
+      query: "*/CLDMNT[4]"
+
+    brightnessTemperature11:
+      query: "*/ALLSKYRC{1}/TMBRST[1]"
+
+    brightnessTemperature12:
+      query: "*/ALLSKYRC{2}/TMBRST[1]"
+
+    brightnessTemperature13:
+      query: "*/ALLSKYRC{3}/TMBRST[1]"
+
+    brightnessTemperature14:
+      query: "*/ALLSKYRC{4}/TMBRST[1]"
+
+    brightnessTemperature15:
+      query: "*/ALLSKYRC{5}/TMBRST[1]"
+
+    brightnessTemperature16:
+      query: "*/ALLSKYRC{6}/TMBRST[1]"
+
+    brightnessTemperature17:
+      query: "*/ALLSKYRC{7}/TMBRST[1]"
+
+    brightnessTemperature18:
+      query: "*/ALLSKYRC{8}/TMBRST[1]"
+
+    brightnessTemperature19:
+      query: "*/ALLSKYRC{9}/TMBRST[1]"
+
+    brightnessTemperature110:
+      query: "*/ALLSKYRC{10}/TMBRST[1]"
+
+    brightnessTemperature21:
+      query: "*/ALLSKYRC{1}/TMBRST[2]"
+
+    brightnessTemperature22:
+      query: "*/ALLSKYRC{2}/TMBRST[2]"
+
+    brightnessTemperature23:
+      query: "*/ALLSKYRC{3}/TMBRST[2]"
+
+    brightnessTemperature24:
+      query: "*/ALLSKYRC{4}/TMBRST[2]"
+
+    brightnessTemperature25:
+      query: "*/ALLSKYRC{5}/TMBRST[2]"
+
+    brightnessTemperature26:
+      query: "*/ALLSKYRC{6}/TMBRST[2]"
+
+    brightnessTemperature27:
+      query: "*/ALLSKYRC{7}/TMBRST[2]"
+
+    brightnessTemperature28:
+      query: "*/ALLSKYRC{8}/TMBRST[2]"
+
+    brightnessTemperature29:
+      query: "*/ALLSKYRC{9}/TMBRST[2]"
+
+    brightnessTemperature210:
+      query: "*/ALLSKYRC{10}/TMBRST[2]"
+
+    brightnessTemperature31:
+      query: "*/ALLSKYRC{1}/TMBRST[3]"
+
+    brightnessTemperature32:
+      query: "*/ALLSKYRC{2}/TMBRST[3]"
+
+    brightnessTemperature33:
+      query: "*/ALLSKYRC{3}/TMBRST[3]"
+
+    brightnessTemperature34:
+      query: "*/ALLSKYRC{4}/TMBRST[3]"
+
+    brightnessTemperature35:
+      query: "*/ALLSKYRC{5}/TMBRST[3]"
+
+    brightnessTemperature36:
+      query: "*/ALLSKYRC{6}/TMBRST[3]"
+
+    brightnessTemperature37:
+      query: "*/ALLSKYRC{7}/TMBRST[3]"
+
+    brightnessTemperature38:
+      query: "*/ALLSKYRC{8}/TMBRST[3]"
+
+    brightnessTemperature39:
+      query: "*/ALLSKYRC{9}/TMBRST[3]"
+
+    brightnessTemperature310:
+      query: "*/ALLSKYRC{10}/TMBRST[3]"
+
+    brightnessTemperature41:
+      query: "*/ALLSKYRC{1}/TMBRST[4]"
+
+    brightnessTemperature42:
+      query: "*/ALLSKYRC{2}/TMBRST[4]"
+
+    brightnessTemperature43:
+      query: "*/ALLSKYRC{3}/TMBRST[4]"
+
+    brightnessTemperature44:
+      query: "*/ALLSKYRC{4}/TMBRST[4]"
+
+    brightnessTemperature45:
+      query: "*/ALLSKYRC{5}/TMBRST[4]"
+
+    brightnessTemperature46:
+      query: "*/ALLSKYRC{6}/TMBRST[4]"
+
+    brightnessTemperature47:
+      query: "*/ALLSKYRC{7}/TMBRST[4]"
+
+    brightnessTemperature48:
+      query: "*/ALLSKYRC{8}/TMBRST[4]"
+
+    brightnessTemperature49:
+      query: "*/ALLSKYRC{9}/TMBRST[4]"
+
+    brightnessTemperature410:
+      query: "*/ALLSKYRC{10}/TMBRST[4]"
+
+    brightnessTemperature51:
+      query: "*/ALLSKYRC{1}/TMBRST[5]"
+
+    brightnessTemperature52:
+      query: "*/ALLSKYRC{2}/TMBRST[5]"
+
+    brightnessTemperature53:
+      query: "*/ALLSKYRC{3}/TMBRST[5]"
+
+    brightnessTemperature54:
+      query: "*/ALLSKYRC{4}/TMBRST[5]"
+
+    brightnessTemperature55:
+      query: "*/ALLSKYRC{5}/TMBRST[5]"
+
+    brightnessTemperature56:
+      query: "*/ALLSKYRC{6}/TMBRST[5]"
+
+    brightnessTemperature57:
+      query: "*/ALLSKYRC{7}/TMBRST[5]"
+
+    brightnessTemperature58:
+      query: "*/ALLSKYRC{8}/TMBRST[5]"
+
+    brightnessTemperature59:
+      query: "*/ALLSKYRC{9}/TMBRST[5]"
+
+    brightnessTemperature510:
+      query: "*/ALLSKYRC{10}/TMBRST[5]"
+
+    brightnessTemperature61:
+      query: "*/ALLSKYRC{1}/TMBRST[6]"
+
+    brightnessTemperature62:
+      query: "*/ALLSKYRC{2}/TMBRST[6]"
+
+    brightnessTemperature63:
+      query: "*/ALLSKYRC{3}/TMBRST[6]"
+
+    brightnessTemperature64:
+      query: "*/ALLSKYRC{4}/TMBRST[6]"
+
+    brightnessTemperature65:
+      query: "*/ALLSKYRC{5}/TMBRST[6]"
+
+    brightnessTemperature66:
+      query: "*/ALLSKYRC{6}/TMBRST[6]"
+
+    brightnessTemperature67:
+      query: "*/ALLSKYRC{7}/TMBRST[6]"
+
+    brightnessTemperature68:
+      query: "*/ALLSKYRC{8}/TMBRST[6]"
+
+    brightnessTemperature69:
+      query: "*/ALLSKYRC{9}/TMBRST[6]"
+
+    brightnessTemperature610:
+      query: "*/ALLSKYRC{10}/TMBRST[6]"
+
+    clearSkyStandardDeviation:
+      query: "*/RPSEQ9/SDTB"
+
+  splits:
+    satId:
+      category:
+        variable: satelliteIdentifier
+
+encoder:
+  dimensions:
+    - name: Rpseq3
+      path: "*/RPSEQ3"
+    - name: Rpseq4
+      path: "*/RPSEQ4"
+    - name: Rpseq9
+      path: "*/RPSEQ9"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "Msg Type 021-045 PROC. GOES-16 All Sky Radiances (ASR)"
+
+    - name: "dataCategory"
+      type: string
+      value: "radiances from satellite"
+
+    - name: "dataset"
+      type: string
+      value: "radiance_abi_asr"
+
+    - name: "dataFormat"
+      type: string
+      value: "binary"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "021"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "045"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b021/xx045 NC021045"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier"
+
+    - name: "MetaData/generatingCenterLong"
+      source: variables/generatingCenterLong
+      longName: "ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/satelliteConstellationRO"
+      source: variables/satelliteConstellationRO
+      longName: "Satellite Classification"
+
+    - name: "MetaData/segmentSizeAtNadirInXDirection"
+      source: variables/segmentSizeAtNadirInXDirection
+      longName: "Segment Size At Nadir In X Direction"
+      units: "m"
+
+    - name: "MetaData/segmentSizeAtNadirInYDirection"
+      source: variables/segmentSizeAtNadirInYDirection
+      longName: "Segment Size At Nadir In Y Direction"
+      units: "m"
+
+    - name: "MetaData/numberOfPixelsPerRow"
+      source: variables/numberOfPixelsPerRow
+      longName: "Number Of Pixels Per Row"
+
+    - name: "MetaData/numberOfPixelsPerColumn"
+      source: variables/numberOfPixelsPerColumn
+      longName: "Number Of Pixels Per Column"
+
+    - name: "MetaData/satelliteZenithAngle"
+      source: variables/satelliteZenithAngle
+      longName: "Satellite Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/sensorAzimuthAngle"
+      source: variables/sensorAzimuthAngle
+      longName: "Bearing Or Azimuth"
+      units: "degree"
+
+    - name: "MetaData/solarZenithAngle"
+      source: variables/solarZenithAngle
+      longName: "Solar Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/solarAzimuthAngle"
+      source: variables/solarAzimuthAngle
+      longName: "Solar Azimuth"
+      units: "degree"
+
+    - name: "MetaData/geopotentialHeight"
+      source: variables/geopotentialHeight
+      longName: "Geopotential Height"
+      units: "m"
+
+    - name: "MetaData/landOrSeaQualifier1"
+      source: variables/landOrSeaQualifier1
+      longName: "LAND/SEA Qualifier"
+
+    - name: "MetaData/landOrSeaQualifier2"
+      source: variables/landOrSeaQualifier2
+      longName: "LAND/SEA Qualifier"
+
+    - name: "MetaData/verticalSignificanceSatellite1"
+      source: variables/verticalSignificanceSatellite1
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/verticalSignificanceSatellite2"
+      source: variables/verticalSignificanceSatellite2
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/verticalSignificanceSatellite3"
+      source: variables/verticalSignificanceSatellite3
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/verticalSignificanceSatellite4"
+      source: variables/verticalSignificanceSatellite4
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/satelliteInstrumentData"
+      source: variables/satelliteInstrumentData
+      longName: "Satellite Instrument Data Used In Processing"
+
+    - name: "MetaData/radianceComputationalMethod"
+      source: variables/radianceComputationalMethod
+      longName: "Radiance Computational Method"
+
+    - name: "MetaData/sensorCentralFrequency1"
+      source: variables/sensorCentralFrequency1
+      longName: "Satellite Channel Center Frequency (1)"
+      units: "Hz"
+
+    - name: "MetaData/sensorCentralFrequency2"
+      source: variables/sensorCentralFrequency2
+      longName: "Satellite Channel Center Frequency (2)"
+      units: "Hz"
+
+    - name: "MetaData/sensorCentralFrequency3"
+      source: variables/sensorCentralFrequency3
+      longName: "Satellite Channel Center Frequency (3)"
+      units: "Hz"
+
+    - name: "MetaData/sensorCentralFrequency4"
+      source: variables/sensorCentralFrequency4
+      longName: "Satellite Channel Center Frequency (4)"
+      units: "Hz"
+
+    - name: "MetaData/sensorCentralFrequency5"
+      source: variables/sensorCentralFrequency5
+      longName: "Satellite Channel Center Frequency (5)"
+      units: "Hz"
+
+    - name: "MetaData/sensorCentralFrequency6"
+      source: variables/sensorCentralFrequency6
+      longName: "Satellite Channel Center Frequency (6)"
+      units: "Hz"
+
+    - name: "MetaData/sensorCentralFrequency7"
+      source: variables/sensorCentralFrequency7
+      longName: "Satellite Channel Center Frequency (7)"
+      units: "Hz"
+
+    - name: "MetaData/sensorCentralFrequency8"
+      source: variables/sensorCentralFrequency8
+      longName: "Satellite Channel Center Frequency (8)"
+      units: "Hz"
+
+    - name: "MetaData/sensorCentralFrequency9"
+      source: variables/sensorCentralFrequency9
+      longName: "Satellite Channel Center Frequency (9)"
+      units: "Hz"
+
+    - name: "MetaData/sensorCentralFrequency10"
+      source: variables/sensorCentralFrequency10
+      longName: "Satellite Channel Center Frequency (10)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth1"
+      source: variables/sensorBandWidth1
+      longName: "Satellite Channel Band Width (1)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth2"
+      source: variables/sensorBandWidth2
+      longName: "Satellite Channel Band Width (2)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth3"
+      source: variables/sensorBandWidth3
+      longName: "Satellite Channel Band Width (3)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth4"
+      source: variables/sensorBandWidth4
+      longName: "Satellite Channel Band Width (4)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth5"
+      source: variables/sensorBandWidth5
+      longName: "Satellite Channel Band Width (5)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth6"
+      source: variables/sensorBandWidth6
+      longName: "Satellite Channel Band Width (6)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth7"
+      source: variables/sensorBandWidth7
+      longName: "Satellite Channel Band Width (7)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth8"
+      source: variables/sensorBandWidth8
+      longName: "Satellite Channel Band Width (8)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth9"
+      source: variables/sensorBandWidth9
+      longName: "Satellite Channel Band Width (9)"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth10"
+      source: variables/sensorBandWidth10
+      longName: "Satellite Channel Band Width (10)"
+      units: "Hz"
+
+    - name: "MetaData/meteorologicalFeature11"
+      source: variables/meteorologicalFeature11
+      longName: "Meteorological Feature (1)"
+
+    - name: "MetaData/meteorologicalFeature12"
+      source: variables/meteorologicalFeature12
+      longName: "Meteorological Feature (2)"
+
+    - name: "MetaData/meteorologicalFeature13"
+      source: variables/meteorologicalFeature13
+      longName: "Meteorological Feature (3)"
+
+    - name: "MetaData/meteorologicalFeature14"
+      source: variables/meteorologicalFeature14
+      longName: "Meteorological Feature (4)"
+
+    - name: "MetaData/meteorologicalFeature15"
+      source: variables/meteorologicalFeature15
+      longName: "Meteorological Feature (5)"
+
+    - name: "MetaData/meteorologicalFeature16"
+      source: variables/meteorologicalFeature16
+      longName: "Meteorological Feature (6)"
+
+    - name: "MetaData/meteorologicalFeature17"
+      source: variables/meteorologicalFeature17
+      longName: "Meteorological Feature (7)"
+
+    - name: "MetaData/meteorologicalFeature18"
+      source: variables/meteorologicalFeature18
+      longName: "Meteorological Feature (8)"
+
+    - name: "MetaData/meteorologicalFeature19"
+      source: variables/meteorologicalFeature19
+      longName: "Meteorological Feature (9)"
+
+    - name: "MetaData/meteorologicalFeature110"
+      source: variables/meteorologicalFeature110
+      longName: "Meteorological Feature (10)"
+
+    - name: "MetaData/meteorologicalFeature21"
+      source: variables/meteorologicalFeature21
+      longName: "Meteorological Feature (1)"
+
+    - name: "MetaData/meteorologicalFeature22"
+      source: variables/meteorologicalFeature22
+      longName: "Meteorological Feature (2)"
+
+    - name: "MetaData/meteorologicalFeature23"
+      source: variables/meteorologicalFeature23
+      longName: "Meteorological Feature (3)"
+
+    - name: "MetaData/meteorologicalFeature24"
+      source: variables/meteorologicalFeature24
+      longName: "Meteorological Feature (4)"
+
+    - name: "MetaData/meteorologicalFeature25"
+      source: variables/meteorologicalFeature25
+      longName: "Meteorological Feature (5)"
+
+    - name: "MetaData/meteorologicalFeature26"
+      source: variables/meteorologicalFeature26
+      longName: "Meteorological Feature (6)"
+
+    - name: "MetaData/meteorologicalFeature27"
+      source: variables/meteorologicalFeature27
+      longName: "Meteorological Feature (7)"
+
+    - name: "MetaData/meteorologicalFeature28"
+      source: variables/meteorologicalFeature28
+      longName: "Meteorological Feature (8)"
+
+    - name: "MetaData/meteorologicalFeature29"
+      source: variables/meteorologicalFeature29
+      longName: "Meteorological Feature (9)"
+
+    - name: "MetaData/meteorologicalFeature210"
+      source: variables/meteorologicalFeature210
+      longName: "Meteorological Feature (10)"
+
+    - name: "MetaData/meteorologicalFeature31"
+      source: variables/meteorologicalFeature31
+      longName: "Meteorological Feature (1)"
+
+    - name: "MetaData/meteorologicalFeature32"
+      source: variables/meteorologicalFeature32
+      longName: "Meteorological Feature (2)"
+
+    - name: "MetaData/meteorologicalFeature33"
+      source: variables/meteorologicalFeature33
+      longName: "Meteorological Feature (3)"
+
+    - name: "MetaData/meteorologicalFeature34"
+      source: variables/meteorologicalFeature34
+      longName: "Meteorological Feature (4)"
+
+    - name: "MetaData/meteorologicalFeature35"
+      source: variables/meteorologicalFeature35
+      longName: "Meteorological Feature (5)"
+
+    - name: "MetaData/meteorologicalFeature36"
+      source: variables/meteorologicalFeature36
+      longName: "Meteorological Feature (6)"
+
+    - name: "MetaData/meteorologicalFeature37"
+      source: variables/meteorologicalFeature37
+      longName: "Meteorological Feature (7)"
+
+    - name: "MetaData/meteorologicalFeature38"
+      source: variables/meteorologicalFeature38
+      longName: "Meteorological Feature (8)"
+
+    - name: "MetaData/meteorologicalFeature39"
+      source: variables/meteorologicalFeature39
+      longName: "Meteorological Feature (9)"
+
+    - name: "MetaData/meteorologicalFeature310"
+      source: variables/meteorologicalFeature310
+      longName: "Meteorological Feature (10)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc1"
+      source: variables/verticalSignificanceSatellite1Allskyrc1
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (1)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc2"
+      source: variables/verticalSignificanceSatellite1Allskyrc2
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (2)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc3"
+      source: variables/verticalSignificanceSatellite1Allskyrc3
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (3)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc4"
+      source: variables/verticalSignificanceSatellite1Allskyrc4
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (4)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc5"
+      source: variables/verticalSignificanceSatellite1Allskyrc5
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (5)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc6"
+      source: variables/verticalSignificanceSatellite1Allskyrc6
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (6)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc7"
+      source: variables/verticalSignificanceSatellite1Allskyrc7
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (7)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc8"
+      source: variables/verticalSignificanceSatellite1Allskyrc8
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (8)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc9"
+      source: variables/verticalSignificanceSatellite1Allskyrc9
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (9)"
+
+    - name: "MetaData/verticalSignificanceSatellite1Allskyrc10"
+      source: variables/verticalSignificanceSatellite1Allskyrc10
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (10)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc1"
+      source: variables/verticalSignificanceSatellite2Allskyrc1
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (1)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc2"
+      source: variables/verticalSignificanceSatellite2Allskyrc2
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (2)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc3"
+      source: variables/verticalSignificanceSatellite2Allskyrc3
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (3)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc4"
+      source: variables/verticalSignificanceSatellite2Allskyrc4
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (4)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc5"
+      source: variables/verticalSignificanceSatellite2Allskyrc5
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (5)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc6"
+      source: variables/verticalSignificanceSatellite2Allskyrc6
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (6)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc7"
+      source: variables/verticalSignificanceSatellite2Allskyrc7
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (7)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc8"
+      source: variables/verticalSignificanceSatellite2Allskyrc8
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (8)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc9"
+      source: variables/verticalSignificanceSatellite2Allskyrc9
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (9)"
+
+    - name: "MetaData/verticalSignificanceSatellite2Allskyrc10"
+      source: variables/verticalSignificanceSatellite2Allskyrc10
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (10)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc1"
+      source: variables/verticalSignificanceSatellite3Allskyrc1
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (1)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc2"
+      source: variables/verticalSignificanceSatellite3Allskyrc2
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (2)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc3"
+      source: variables/verticalSignificanceSatellite3Allskyrc3
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (3)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc4"
+      source: variables/verticalSignificanceSatellite3Allskyrc4
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (4)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc5"
+      source: variables/verticalSignificanceSatellite3Allskyrc5
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (5)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc6"
+      source: variables/verticalSignificanceSatellite3Allskyrc6
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (6)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc7"
+      source: variables/verticalSignificanceSatellite3Allskyrc7
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (7)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc8"
+      source: variables/verticalSignificanceSatellite3Allskyrc8
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (8)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc9"
+      source: variables/verticalSignificanceSatellite3Allskyrc9
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (9)"
+
+    - name: "MetaData/verticalSignificanceSatellite3Allskyrc10"
+      source: variables/verticalSignificanceSatellite3Allskyrc10
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS) (10)"
+
+    - name: "MetaData/dataPresentIndicator"
+      source: variables/dataPresentIndicator
+      longName: "Data Present Indicator"
+
+    - name: "MetaData/generatingCenterLong1"
+      source: variables/generatingCenterLong1
+      longName: "ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/windGeneratingApplication1"
+      source: variables/windGeneratingApplication1
+      longName: "Generating Application"
+
+    - name: "MetaData/qiWithoutForecast"
+      source: variables/qiWithoutForecast
+      longName: "Percent Confidence"
+      units: "%"
+
+    - name: "MetaData/generatingCenterLong2"
+      source: variables/generatingCenterLong2
+      longName: "ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/windGeneratingApplication2"
+      source: variables/windGeneratingApplication2
+      longName: "Generating Application"
+
+    - name: "MetaData/firstOrderStatistics"
+      source: variables/firstOrderStatistics
+      longName: "First Order Statistics"
+
+    # ObsValue
+    - name: "ObsValue/cloudFree1"
+      source: variables/cloudFree1
+      longName: "Amount Segment Cloud Free"
+      units: "%"
+
+    - name: "ObsValue/cloudFree2"
+      source: variables/cloudFree2
+      longName: "Amount Segment Cloud Free"
+      units: "%"
+
+    - name: "ObsValue/cloudAmount1"
+      source: variables/cloudAmount1
+      longName: "Cloud Amount In Segment"
+      units: "%"
+
+    - name: "ObsValue/cloudAmount2"
+      source: variables/cloudAmount2
+      longName: "Cloud Amount In Segment"
+      units: "%"
+
+    - name: "ObsValue/cloudAmount3"
+      source: variables/cloudAmount3
+      longName: "Cloud Amount In Segment"
+      units: "%"
+
+    - name: "ObsValue/cloudAmount4"
+      source: variables/cloudAmount4
+      longName: "Cloud Amount In Segment"
+      units: "%"
+
+    - name: "ObsValue/brightnessTemperature11"
+      source: variables/brightnessTemperature11
+      longName: "Brightness Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature12"
+      source: variables/brightnessTemperature12
+      longName: "Brightness Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature13"
+      source: variables/brightnessTemperature13
+      longName: "Brightness Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature14"
+      source: variables/brightnessTemperature14
+      longName: "Brightness Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature15"
+      source: variables/brightnessTemperature15
+      longName: "Brightness Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature16"
+      source: variables/brightnessTemperature16
+      longName: "Brightness Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature17"
+      source: variables/brightnessTemperature17
+      longName: "Brightness Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature18"
+      source: variables/brightnessTemperature18
+      longName: "Brightness Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature19"
+      source: variables/brightnessTemperature19
+      longName: "Brightness Temperature (9)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature110"
+      source: variables/brightnessTemperature110
+      longName: "Brightness Temperature (10)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature21"
+      source: variables/brightnessTemperature21
+      longName: "Brightness Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature22"
+      source: variables/brightnessTemperature22
+      longName: "Brightness Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature23"
+      source: variables/brightnessTemperature23
+      longName: "Brightness Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature24"
+      source: variables/brightnessTemperature24
+      longName: "Brightness Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature25"
+      source: variables/brightnessTemperature25
+      longName: "Brightness Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature26"
+      source: variables/brightnessTemperature26
+      longName: "Brightness Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature27"
+      source: variables/brightnessTemperature27
+      longName: "Brightness Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature28"
+      source: variables/brightnessTemperature28
+      longName: "Brightness Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature29"
+      source: variables/brightnessTemperature29
+      longName: "Brightness Temperature (9)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature210"
+      source: variables/brightnessTemperature210
+      longName: "Brightness Temperature (10)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature31"
+      source: variables/brightnessTemperature31
+      longName: "Brightness Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature32"
+      source: variables/brightnessTemperature32
+      longName: "Brightness Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature33"
+      source: variables/brightnessTemperature33
+      longName: "Brightness Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature34"
+      source: variables/brightnessTemperature34
+      longName: "Brightness Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature35"
+      source: variables/brightnessTemperature35
+      longName: "Brightness Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature36"
+      source: variables/brightnessTemperature36
+      longName: "Brightness Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature37"
+      source: variables/brightnessTemperature37
+      longName: "Brightness Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature38"
+      source: variables/brightnessTemperature38
+      longName: "Brightness Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature39"
+      source: variables/brightnessTemperature39
+      longName: "Brightness Temperature (9)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature310"
+      source: variables/brightnessTemperature310
+      longName: "Brightness Temperature (10)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature41"
+      source: variables/brightnessTemperature41
+      longName: "Brightness Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature42"
+      source: variables/brightnessTemperature42
+      longName: "Brightness Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature43"
+      source: variables/brightnessTemperature43
+      longName: "Brightness Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature44"
+      source: variables/brightnessTemperature44
+      longName: "Brightness Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature45"
+      source: variables/brightnessTemperature45
+      longName: "Brightness Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature46"
+      source: variables/brightnessTemperature46
+      longName: "Brightness Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature47"
+      source: variables/brightnessTemperature47
+      longName: "Brightness Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature48"
+      source: variables/brightnessTemperature48
+      longName: "Brightness Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature49"
+      source: variables/brightnessTemperature49
+      longName: "Brightness Temperature (9)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature410"
+      source: variables/brightnessTemperature410
+      longName: "Brightness Temperature (10)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature51"
+      source: variables/brightnessTemperature51
+      longName: "Brightness Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature52"
+      source: variables/brightnessTemperature52
+      longName: "Brightness Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature53"
+      source: variables/brightnessTemperature53
+      longName: "Brightness Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature54"
+      source: variables/brightnessTemperature54
+      longName: "Brightness Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature55"
+      source: variables/brightnessTemperature55
+      longName: "Brightness Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature56"
+      source: variables/brightnessTemperature56
+      longName: "Brightness Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature57"
+      source: variables/brightnessTemperature57
+      longName: "Brightness Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature58"
+      source: variables/brightnessTemperature58
+      longName: "Brightness Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature59"
+      source: variables/brightnessTemperature59
+      longName: "Brightness Temperature (9)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature510"
+      source: variables/brightnessTemperature510
+      longName: "Brightness Temperature (10)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature61"
+      source: variables/brightnessTemperature61
+      longName: "Brightness Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature62"
+      source: variables/brightnessTemperature62
+      longName: "Brightness Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature63"
+      source: variables/brightnessTemperature63
+      longName: "Brightness Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature64"
+      source: variables/brightnessTemperature64
+      longName: "Brightness Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature65"
+      source: variables/brightnessTemperature65
+      longName: "Brightness Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature66"
+      source: variables/brightnessTemperature66
+      longName: "Brightness Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature67"
+      source: variables/brightnessTemperature67
+      longName: "Brightness Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature68"
+      source: variables/brightnessTemperature68
+      longName: "Brightness Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature69"
+      source: variables/brightnessTemperature69
+      longName: "Brightness Temperature (9)"
+      units: "K"
+
+    - name: "ObsValue/brightnessTemperature610"
+      source: variables/brightnessTemperature610
+      longName: "Brightness Temperature (10)"
+      units: "K"
+
+    - name: "ObsValue/clearSkyStandardDeviation"
+      source: variables/clearSkyStandardDeviation
+      longName: "Standard Deviation Brightness Temperature"
+      units: "K"

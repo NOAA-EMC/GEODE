@@ -1,0 +1,892 @@
+bufr:
+  subsets:
+    - NC003010
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    satelliteSubIdentifier:
+      query: "*/SASBID"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    instrumentIdentifier:
+      query: "*/SIID"
+
+    dataProviderOrigin:
+      query: "*/OGCE"
+
+    productTypeForRetrievedAtmosphericGases:
+      query: "*/PTAG"
+
+    softwareIdentification:
+      query: "*/SWID"
+
+    timeSignificance:
+      query: "*/TSIG"
+
+    qfro:
+      query: "*/QFRO"
+
+    qiWithoutForecast1:
+      query: "*/PCCF[1]"
+
+    inDirectionOf0DegLongDistanceFromEarths:
+      query: "*/PD00"
+
+    inDirectionOf90DegEDistanceFromEarthsCenter:
+      query: "*/PD90"
+
+    absolutePlatformVelocityFirstComponent:
+      query: "*/PS00"
+
+    absolutePlatformVelocitySecondComponent:
+      query: "*/PS90"
+
+    absolutePlatformVelocityThirdComponent:
+      query: "*/PSNP"
+
+    satelliteConstellationRO:
+      query: "*/SCLF"
+
+    satelliteTransmitterId:
+      query: "*/PTID"
+
+    inDirectionOf0DegLongDistanceFromEarths2:
+      query: "*/PD00"
+
+    inDirectionOf90DegEDistanceFromEarthsCenter2:
+      query: "*/PD90"
+
+    absolutePlatformVelocityFirstComponent2:
+      query: "*/PS00"
+
+    absolutePlatformVelocitySecondComponent2:
+      query: "*/PS90"
+
+    absolutePlatformVelocityThirdComponent2:
+      query: "*/PSNP"
+
+    timeIncrement:
+      query: "*/TISE"
+
+    inDirectionOf0DegLongDistanceFromEarths3:
+      query: "*/PD00"
+
+    inDirectionOf90DegEDistanceFromEarthsCenter3:
+      query: "*/PD90"
+
+    earthRadiusCurvature:
+      query: "*/ELRC"
+
+    sensorAzimuthAngle:
+      query: "*/BEARAZ"
+
+    geoidUndulation:
+      query: "*/GEODU"
+
+    latitude2:
+      query: "*/ROSEQ1/CLATH"
+
+    longitude2:
+      query: "*/ROSEQ1/CLONH"
+
+    sensorAzimuthAngleRoseq1:
+      query: "*/ROSEQ1/BEARAZ"
+
+    frequency1:
+      query: "*/ROSEQ1/ROSEQ2{1}/MEFR"
+
+    frequency2:
+      query: "*/ROSEQ1/ROSEQ2{2}/MEFR"
+
+    frequency3:
+      query: "*/ROSEQ1/ROSEQ2{3}/MEFR"
+
+    frequency4:
+      query: "*/ROSEQ1/ROSEQ2{4}/MEFR"
+
+    frequency5:
+      query: "*/ROSEQ1/ROSEQ2{5}/MEFR"
+
+    frequency6:
+      query: "*/ROSEQ1/ROSEQ2{6}/MEFR"
+
+    impactParameterRO1:
+      query: "*/ROSEQ1/ROSEQ2{1}/IMPP"
+
+    impactParameterRO2:
+      query: "*/ROSEQ1/ROSEQ2{2}/IMPP"
+
+    impactParameterRO3:
+      query: "*/ROSEQ1/ROSEQ2{3}/IMPP"
+
+    impactParameterRO4:
+      query: "*/ROSEQ1/ROSEQ2{4}/IMPP"
+
+    impactParameterRO5:
+      query: "*/ROSEQ1/ROSEQ2{5}/IMPP"
+
+    impactParameterRO6:
+      query: "*/ROSEQ1/ROSEQ2{6}/IMPP"
+
+    firstOrderStatistics1Roseq21:
+      query: "*/ROSEQ1/ROSEQ2{1}/FOST[1]"
+
+    firstOrderStatistics1Roseq22:
+      query: "*/ROSEQ1/ROSEQ2{2}/FOST[1]"
+
+    firstOrderStatistics1Roseq23:
+      query: "*/ROSEQ1/ROSEQ2{3}/FOST[1]"
+
+    firstOrderStatistics1Roseq24:
+      query: "*/ROSEQ1/ROSEQ2{4}/FOST[1]"
+
+    firstOrderStatistics1Roseq25:
+      query: "*/ROSEQ1/ROSEQ2{5}/FOST[1]"
+
+    firstOrderStatistics1Roseq26:
+      query: "*/ROSEQ1/ROSEQ2{6}/FOST[1]"
+
+    firstOrderStatistics2Roseq21:
+      query: "*/ROSEQ1/ROSEQ2{1}/FOST[2]"
+
+    firstOrderStatistics2Roseq22:
+      query: "*/ROSEQ1/ROSEQ2{2}/FOST[2]"
+
+    firstOrderStatistics2Roseq23:
+      query: "*/ROSEQ1/ROSEQ2{3}/FOST[2]"
+
+    firstOrderStatistics2Roseq24:
+      query: "*/ROSEQ1/ROSEQ2{4}/FOST[2]"
+
+    firstOrderStatistics2Roseq25:
+      query: "*/ROSEQ1/ROSEQ2{5}/FOST[2]"
+
+    firstOrderStatistics2Roseq26:
+      query: "*/ROSEQ1/ROSEQ2{6}/FOST[2]"
+
+    qiWithoutForecastRoseq1:
+      query: "*/ROSEQ1/PCCF"
+
+    height:
+      query: "*/ROSEQ3/HEIT"
+
+    firstOrderStatistics1Roseq3:
+      query: "*/ROSEQ3/FOST[1]"
+
+    firstOrderStatistics2Roseq3:
+      query: "*/ROSEQ3/FOST[2]"
+
+    qiWithoutForecastRoseq3:
+      query: "*/ROSEQ3/PCCF"
+
+    geopotentialHeightRoseq4:
+      query: "*/ROSEQ4/GPHTST"
+
+    firstOrderStatistics1Roseq4:
+      query: "*/ROSEQ4/FOST[1]"
+
+    firstOrderStatistics2Roseq4:
+      query: "*/ROSEQ4/FOST[2]"
+
+    qiWithoutForecastRoseq4:
+      query: "*/ROSEQ4/PCCF"
+
+    verticalSignificanceSatellite:
+      query: "*/VSAT"
+
+    geopotentialHeight:
+      query: "*/GPHTST"
+
+    firstOrderStatistics1:
+      query: "*/FOST[1]"
+
+    firstOrderStatistics2:
+      query: "*/FOST[2]"
+
+    qiWithoutForecast2:
+      query: "*/PCCF[2]"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    # ObsValue
+    inDirOfNorthPoleDistanceFromTheEarthsCenter:
+      query: "*/PDNP"
+
+    inDirOfNorthPoleDistanceFromTheEarthsCenter2:
+      query: "*/PDNP"
+
+    inDirOfNorthPoleDistanceFromTheEarthsCenter3:
+      query: "*/PDNP"
+
+    bendingAngle11:
+      query: "*/ROSEQ1/ROSEQ2{1}/BNDA[1]"
+
+    bendingAngle12:
+      query: "*/ROSEQ1/ROSEQ2{2}/BNDA[1]"
+
+    bendingAngle13:
+      query: "*/ROSEQ1/ROSEQ2{3}/BNDA[1]"
+
+    bendingAngle14:
+      query: "*/ROSEQ1/ROSEQ2{4}/BNDA[1]"
+
+    bendingAngle15:
+      query: "*/ROSEQ1/ROSEQ2{5}/BNDA[1]"
+
+    bendingAngle16:
+      query: "*/ROSEQ1/ROSEQ2{6}/BNDA[1]"
+
+    bendingAngle21:
+      query: "*/ROSEQ1/ROSEQ2{1}/BNDA[2]"
+
+    bendingAngle22:
+      query: "*/ROSEQ1/ROSEQ2{2}/BNDA[2]"
+
+    bendingAngle23:
+      query: "*/ROSEQ1/ROSEQ2{3}/BNDA[2]"
+
+    bendingAngle24:
+      query: "*/ROSEQ1/ROSEQ2{4}/BNDA[2]"
+
+    bendingAngle25:
+      query: "*/ROSEQ1/ROSEQ2{5}/BNDA[2]"
+
+    bendingAngle26:
+      query: "*/ROSEQ1/ROSEQ2{6}/BNDA[2]"
+
+    atmosphericRefractivity1:
+      query: "*/ROSEQ3/ARFR[1]"
+
+    atmosphericRefractivity2:
+      query: "*/ROSEQ3/ARFR[2]"
+
+    airPressure1Roseq4:
+      query: "*/ROSEQ4/PRES[1]"
+
+    airTemperature1:
+      query: "*/ROSEQ4/TMDBST[1]"
+
+    specificHumidity1:
+      query: "*/ROSEQ4/SPFH[1]"
+
+    airPressure2Roseq4:
+      query: "*/ROSEQ4/PRES[2]"
+
+    airTemperature2:
+      query: "*/ROSEQ4/TMDBST[2]"
+
+    specificHumidity2:
+      query: "*/ROSEQ4/SPFH[2]"
+
+    airPressure1:
+      query: "*/PRES[1]"
+
+    airPressure2:
+      query: "*/PRES[2]"
+
+    # QualityMarker
+    correctedReportIndicator:
+      query: "*/CORN"
+
+  splits:
+    satId:
+      category:
+        variable: satelliteIdentifier
+
+encoder:
+  dimensions:
+    # Variable length: appending can fail if the size changes
+    - name: Roseq1
+      path: "*/ROSEQ1"
+    # Variable length: appending can fail if the size changes
+    - name: Roseq3
+      path: "*/ROSEQ3"
+    # Variable length: appending can fail if the size changes
+    - name: Roseq4
+      path: "*/ROSEQ4"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "Mtyp 003-010 Gps Radio Occultn -CHAMP,COSMIC,GRACE,GRAS"
+
+    - name: "dataCategory"
+      type: string
+      value: "vertical soundings from satellite"
+
+    - name: "dataset"
+      type: string
+      value: "gnssro"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "003"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "010"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b003/xx010 NC003010"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/satelliteSubIdentifier"
+      source: variables/satelliteSubIdentifier
+      longName: "Satellite SUB-IDENTIFIER"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier"
+
+    - name: "MetaData/instrumentIdentifier"
+      source: variables/instrumentIdentifier
+      longName: "Satellite Instruments"
+
+    - name: "MetaData/dataProviderOrigin"
+      source: variables/dataProviderOrigin
+      longName: "Identification Of ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/productTypeForRetrievedAtmosphericGases"
+      source: variables/productTypeForRetrievedAtmosphericGases
+      longName: "Product Type For Retrieved Atmospheric Gases"
+
+    - name: "MetaData/softwareIdentification"
+      source: variables/softwareIdentification
+      longName: "Software Identification"
+
+    - name: "MetaData/timeSignificance"
+      source: variables/timeSignificance
+      longName: "Time Significance"
+
+    - name: "MetaData/qfro"
+      source: variables/qfro
+      longName: "Quality Flags For Radio Occultation Data"
+
+    - name: "MetaData/qiWithoutForecast1"
+      source: variables/qiWithoutForecast1
+      longName: "Per Cent Confidence"
+      units: "%"
+
+    - name: "MetaData/inDirectionOf0DegLongDistanceFromEarths"
+      source: variables/inDirectionOf0DegLongDistanceFromEarths
+      longName: "In Direction Of 0 Deg LONG, Distance From EARTH'S Cent"
+      units: "m"
+
+    - name: "MetaData/inDirectionOf90DegEDistanceFromEarthsCenter"
+      source: variables/inDirectionOf90DegEDistanceFromEarthsCenter
+      longName: "In Direction Of 90 Deg E, Distance From EARTH'S Center"
+      units: "m"
+
+    - name: "MetaData/absolutePlatformVelocityFirstComponent"
+      source: variables/absolutePlatformVelocityFirstComponent
+      longName: "Absolute Platform Velocity - First Component"
+      units: "m s-1"
+
+    - name: "MetaData/absolutePlatformVelocitySecondComponent"
+      source: variables/absolutePlatformVelocitySecondComponent
+      longName: "Absolute Platform Velocity - Second Component"
+      units: "m s-1"
+
+    - name: "MetaData/absolutePlatformVelocityThirdComponent"
+      source: variables/absolutePlatformVelocityThirdComponent
+      longName: "Absolute Platform Velocity - Third Component"
+      units: "m s-1"
+
+    - name: "MetaData/satelliteConstellationRO"
+      source: variables/satelliteConstellationRO
+      longName: "Satellite Classification"
+
+    - name: "MetaData/satelliteTransmitterId"
+      source: variables/satelliteTransmitterId
+      longName: "Platform Transmitter Id Number"
+
+    - name: "MetaData/inDirectionOf0DegLongDistanceFromEarths2"
+      source: variables/inDirectionOf0DegLongDistanceFromEarths2
+      longName: "In Direction Of 0 Deg LONG, Distance From EARTH'S Cent"
+      units: "m"
+
+    - name: "MetaData/inDirectionOf90DegEDistanceFromEarthsCenter2"
+      source: variables/inDirectionOf90DegEDistanceFromEarthsCenter2
+      longName: "In Direction Of 90 Deg E, Distance From EARTH'S Center"
+      units: "m"
+
+    - name: "MetaData/absolutePlatformVelocityFirstComponent2"
+      source: variables/absolutePlatformVelocityFirstComponent2
+      longName: "Absolute Platform Velocity - First Component"
+      units: "m s-1"
+
+    - name: "MetaData/absolutePlatformVelocitySecondComponent2"
+      source: variables/absolutePlatformVelocitySecondComponent2
+      longName: "Absolute Platform Velocity - Second Component"
+      units: "m s-1"
+
+    - name: "MetaData/absolutePlatformVelocityThirdComponent2"
+      source: variables/absolutePlatformVelocityThirdComponent2
+      longName: "Absolute Platform Velocity - Third Component"
+      units: "m s-1"
+
+    - name: "MetaData/timeIncrement"
+      source: variables/timeIncrement
+      longName: "Time Increment"
+      units: "s"
+
+    - name: "MetaData/inDirectionOf0DegLongDistanceFromEarths3"
+      source: variables/inDirectionOf0DegLongDistanceFromEarths3
+      longName: "In Direction Of 0 Deg LONG, Distance From EARTH'S Cent"
+      units: "m"
+
+    - name: "MetaData/inDirectionOf90DegEDistanceFromEarthsCenter3"
+      source: variables/inDirectionOf90DegEDistanceFromEarthsCenter3
+      longName: "In Direction Of 90 Deg E, Distance From EARTH'S Center"
+      units: "m"
+
+    - name: "MetaData/earthRadiusCurvature"
+      source: variables/earthRadiusCurvature
+      longName: "EARTH'S Loc Radius Of Curvature"
+      units: "m"
+
+    - name: "MetaData/sensorAzimuthAngle"
+      source: variables/sensorAzimuthAngle
+      longName: "Bearing Or Azimuth"
+      units: "degree"
+
+    - name: "MetaData/geoidUndulation"
+      source: variables/geoidUndulation
+      longName: "Geoid Undulation"
+      units: "m"
+
+    - name: "MetaData/latitude2"
+      source: variables/latitude2
+      longName: "Latitude (HIGH ACCURACY)"
+      units: "degree"
+
+    - name: "MetaData/longitude2"
+      source: variables/longitude2
+      longName: "Longitude (HIGH ACCURACY)"
+      units: "degree"
+
+    - name: "MetaData/sensorAzimuthAngleRoseq1"
+      source: variables/sensorAzimuthAngleRoseq1
+      longName: "Bearing Or Azimuth"
+      units: "degree"
+
+    - name: "MetaData/frequency1"
+      source: variables/frequency1
+      longName: "Mean Frequency (1)"
+      units: "Hz"
+
+    - name: "MetaData/frequency2"
+      source: variables/frequency2
+      longName: "Mean Frequency (2)"
+      units: "Hz"
+
+    - name: "MetaData/frequency3"
+      source: variables/frequency3
+      longName: "Mean Frequency (3)"
+      units: "Hz"
+
+    - name: "MetaData/frequency4"
+      source: variables/frequency4
+      longName: "Mean Frequency (4)"
+      units: "Hz"
+
+    - name: "MetaData/frequency5"
+      source: variables/frequency5
+      longName: "Mean Frequency (5)"
+      units: "Hz"
+
+    - name: "MetaData/frequency6"
+      source: variables/frequency6
+      longName: "Mean Frequency (6)"
+      units: "Hz"
+
+    - name: "MetaData/impactParameterRO1"
+      source: variables/impactParameterRO1
+      longName: "Impact Parameter (1)"
+      units: "m"
+
+    - name: "MetaData/impactParameterRO2"
+      source: variables/impactParameterRO2
+      longName: "Impact Parameter (2)"
+      units: "m"
+
+    - name: "MetaData/impactParameterRO3"
+      source: variables/impactParameterRO3
+      longName: "Impact Parameter (3)"
+      units: "m"
+
+    - name: "MetaData/impactParameterRO4"
+      source: variables/impactParameterRO4
+      longName: "Impact Parameter (4)"
+      units: "m"
+
+    - name: "MetaData/impactParameterRO5"
+      source: variables/impactParameterRO5
+      longName: "Impact Parameter (5)"
+      units: "m"
+
+    - name: "MetaData/impactParameterRO6"
+      source: variables/impactParameterRO6
+      longName: "Impact Parameter (6)"
+      units: "m"
+
+    - name: "MetaData/firstOrderStatistics1Roseq21"
+      source: variables/firstOrderStatistics1Roseq21
+      longName: "First Order Statistics (1)"
+
+    - name: "MetaData/firstOrderStatistics1Roseq22"
+      source: variables/firstOrderStatistics1Roseq22
+      longName: "First Order Statistics (2)"
+
+    - name: "MetaData/firstOrderStatistics1Roseq23"
+      source: variables/firstOrderStatistics1Roseq23
+      longName: "First Order Statistics (3)"
+
+    - name: "MetaData/firstOrderStatistics1Roseq24"
+      source: variables/firstOrderStatistics1Roseq24
+      longName: "First Order Statistics (4)"
+
+    - name: "MetaData/firstOrderStatistics1Roseq25"
+      source: variables/firstOrderStatistics1Roseq25
+      longName: "First Order Statistics (5)"
+
+    - name: "MetaData/firstOrderStatistics1Roseq26"
+      source: variables/firstOrderStatistics1Roseq26
+      longName: "First Order Statistics (6)"
+
+    - name: "MetaData/firstOrderStatistics2Roseq21"
+      source: variables/firstOrderStatistics2Roseq21
+      longName: "First Order Statistics (1)"
+
+    - name: "MetaData/firstOrderStatistics2Roseq22"
+      source: variables/firstOrderStatistics2Roseq22
+      longName: "First Order Statistics (2)"
+
+    - name: "MetaData/firstOrderStatistics2Roseq23"
+      source: variables/firstOrderStatistics2Roseq23
+      longName: "First Order Statistics (3)"
+
+    - name: "MetaData/firstOrderStatistics2Roseq24"
+      source: variables/firstOrderStatistics2Roseq24
+      longName: "First Order Statistics (4)"
+
+    - name: "MetaData/firstOrderStatistics2Roseq25"
+      source: variables/firstOrderStatistics2Roseq25
+      longName: "First Order Statistics (5)"
+
+    - name: "MetaData/firstOrderStatistics2Roseq26"
+      source: variables/firstOrderStatistics2Roseq26
+      longName: "First Order Statistics (6)"
+
+    - name: "MetaData/qiWithoutForecastRoseq1"
+      source: variables/qiWithoutForecastRoseq1
+      longName: "Per Cent Confidence"
+      units: "%"
+
+    - name: "MetaData/height"
+      source: variables/height
+      longName: "Height"
+      units: "m"
+
+    - name: "MetaData/firstOrderStatistics1Roseq3"
+      source: variables/firstOrderStatistics1Roseq3
+      longName: "First Order Statistics"
+
+    - name: "MetaData/firstOrderStatistics2Roseq3"
+      source: variables/firstOrderStatistics2Roseq3
+      longName: "First Order Statistics"
+
+    - name: "MetaData/qiWithoutForecastRoseq3"
+      source: variables/qiWithoutForecastRoseq3
+      longName: "Per Cent Confidence"
+      units: "%"
+
+    - name: "MetaData/geopotentialHeightRoseq4"
+      source: variables/geopotentialHeightRoseq4
+      longName: "Geopotential Height"
+      units: "gpm"
+
+    - name: "MetaData/firstOrderStatistics1Roseq4"
+      source: variables/firstOrderStatistics1Roseq4
+      longName: "First Order Statistics"
+
+    - name: "MetaData/firstOrderStatistics2Roseq4"
+      source: variables/firstOrderStatistics2Roseq4
+      longName: "First Order Statistics"
+
+    - name: "MetaData/qiWithoutForecastRoseq4"
+      source: variables/qiWithoutForecastRoseq4
+      longName: "Per Cent Confidence"
+      units: "%"
+
+    - name: "MetaData/verticalSignificanceSatellite"
+      source: variables/verticalSignificanceSatellite
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/geopotentialHeight"
+      source: variables/geopotentialHeight
+      longName: "Geopotential Height"
+      units: "gpm"
+
+    - name: "MetaData/firstOrderStatistics1"
+      source: variables/firstOrderStatistics1
+      longName: "First Order Statistics"
+
+    - name: "MetaData/firstOrderStatistics2"
+      source: variables/firstOrderStatistics2
+      longName: "First Order Statistics"
+
+    - name: "MetaData/qiWithoutForecast2"
+      source: variables/qiWithoutForecast2
+      longName: "Per Cent Confidence"
+      units: "%"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    # ObsValue
+    - name: "ObsValue/inDirOfNorthPoleDistanceFromTheEarthsCenter"
+      source: variables/inDirOfNorthPoleDistanceFromTheEarthsCenter
+      longName: "In Dir Of North POLE, Distance From The EARTH'S Center"
+      units: "m"
+
+    - name: "ObsValue/inDirOfNorthPoleDistanceFromTheEarthsCenter2"
+      source: variables/inDirOfNorthPoleDistanceFromTheEarthsCenter2
+      longName: "In Dir Of North POLE, Distance From The EARTH'S Center"
+      units: "m"
+
+    - name: "ObsValue/inDirOfNorthPoleDistanceFromTheEarthsCenter3"
+      source: variables/inDirOfNorthPoleDistanceFromTheEarthsCenter3
+      longName: "In Dir Of North POLE, Distance From The EARTH'S Center"
+      units: "m"
+
+    - name: "ObsValue/bendingAngle11"
+      source: variables/bendingAngle11
+      longName: "Bending Angle (1)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle12"
+      source: variables/bendingAngle12
+      longName: "Bending Angle (2)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle13"
+      source: variables/bendingAngle13
+      longName: "Bending Angle (3)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle14"
+      source: variables/bendingAngle14
+      longName: "Bending Angle (4)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle15"
+      source: variables/bendingAngle15
+      longName: "Bending Angle (5)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle16"
+      source: variables/bendingAngle16
+      longName: "Bending Angle (6)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle21"
+      source: variables/bendingAngle21
+      longName: "Bending Angle (1)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle22"
+      source: variables/bendingAngle22
+      longName: "Bending Angle (2)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle23"
+      source: variables/bendingAngle23
+      longName: "Bending Angle (3)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle24"
+      source: variables/bendingAngle24
+      longName: "Bending Angle (4)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle25"
+      source: variables/bendingAngle25
+      longName: "Bending Angle (5)"
+      units: "rad"
+
+    - name: "ObsValue/bendingAngle26"
+      source: variables/bendingAngle26
+      longName: "Bending Angle (6)"
+      units: "rad"
+
+    - name: "ObsValue/atmosphericRefractivity1"
+      source: variables/atmosphericRefractivity1
+      longName: "Atmospheric Refractivity"
+      units: "N-units"
+
+    - name: "ObsValue/atmosphericRefractivity2"
+      source: variables/atmosphericRefractivity2
+      longName: "Atmospheric Refractivity"
+      units: "N-units"
+
+    - name: "ObsValue/airPressure1Roseq4"
+      source: variables/airPressure1Roseq4
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/airTemperature1"
+      source: variables/airTemperature1
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/specificHumidity1"
+      source: variables/specificHumidity1
+      longName: "Specific Humidity"
+      units: "kg kg-1"
+
+    - name: "ObsValue/airPressure2Roseq4"
+      source: variables/airPressure2Roseq4
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/airTemperature2"
+      source: variables/airTemperature2
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/specificHumidity2"
+      source: variables/specificHumidity2
+      longName: "Specific Humidity"
+      units: "kg kg-1"
+
+    - name: "ObsValue/airPressure1"
+      source: variables/airPressure1
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/airPressure2"
+      source: variables/airPressure2
+      longName: "Pressure"
+      units: "Pa"
+
+    # QualityMarker
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"

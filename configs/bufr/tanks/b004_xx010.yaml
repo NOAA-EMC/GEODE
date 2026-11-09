@@ -1,0 +1,283 @@
+bufr:
+  subsets:
+    - NC004010
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    observerIdentification:
+      query: "*/OBSVR"
+
+    typeOfCommercialAircraft:
+      query: "*/ACTP"
+
+    heightOfStation:
+      query: "*/HMSL"
+
+    flightLevel:
+      query: "*/FLVLST"
+
+    aircraftTailNumber:
+      query: "*/ACRN"
+
+    phaseOfAircraftFlight:
+      query: "*/POAF"
+
+    speedOfMotionOfMovingObservingPlatform:
+      query: "*/SMMO"
+
+    qiWithoutForecast:
+      query: "*/PCCF"
+
+    # ObsValue
+    instantaneousAltitudeRate:
+      query: "*/IALR"
+
+    airTemperatureTMDBST:
+      query: "*/TMDBST"
+
+    windDirection:
+      query: "*/WDIR"
+
+    windSpeed:
+      query: "*/WSPD"
+
+    rawRelativeHumidity:
+      query: "*/RAWHU"
+
+    globalNavigationSatelliteSystemAltitude:
+      query: "*/GNSA"
+
+    # QualityMarker
+    correctedReportIndicator:
+      query: "*/CORN"
+
+    qualityInformation1:
+      query: "*/QMRKH[1]"
+
+    qualityInformation2:
+      query: "*/QMRKH[2]"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    qualityInformation3:
+      query: "*/QMRKH[3]"
+
+    qualityInformation4:
+      query: "*/QMRKH[4]"
+
+    wind:
+      query: "*/QMWN"
+
+    moisture:
+      query: "*/QMDD"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "MTYP 004-010 TAMDAR from Panasonic (BUFR)"
+
+    - name: "dataCategory"
+      type: string
+      value: "single level upper-air data other than satellite"
+
+    - name: "dataset"
+      type: string
+      value: "aircraft_tamdar"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "true"
+
+    - name: "bufrCategory"
+      type: string
+      value: "004"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "010"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b004/xx010 NC004010"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    - name: "MetaData/observerIdentification"
+      source: variables/observerIdentification
+      longName: "Observer Identification"
+
+    - name: "MetaData/typeOfCommercialAircraft"
+      source: variables/typeOfCommercialAircraft
+      longName: "Type Of Commercial Aircraft"
+
+    - name: "MetaData/heightOfStation"
+      source: variables/heightOfStation
+      longName: "Height Or Altitude"
+      units: "m"
+
+    - name: "MetaData/flightLevel"
+      source: variables/flightLevel
+      longName: "Flight Level"
+      units: "m"
+
+    - name: "MetaData/aircraftTailNumber"
+      source: variables/aircraftTailNumber
+      longName: "Aircraft Registration Number (TAIL NUMBER)"
+
+    - name: "MetaData/phaseOfAircraftFlight"
+      source: variables/phaseOfAircraftFlight
+      longName: "Phase Of Aircraft Flight"
+
+    - name: "MetaData/speedOfMotionOfMovingObservingPlatform"
+      source: variables/speedOfMotionOfMovingObservingPlatform
+      longName: "Speed Of Motion Of Moving Observing Platform"
+      units: "m s-1"
+
+    - name: "MetaData/qiWithoutForecast"
+      source: variables/qiWithoutForecast
+      longName: "Percent Confidence"
+      units: "%"
+
+    # ObsValue
+    - name: "ObsValue/instantaneousAltitudeRate"
+      source: variables/instantaneousAltitudeRate
+      longName: "Instantaneous Altitude Rate"
+      units: "m s-1"
+
+    - name: "ObsValue/airTemperatureTMDBST"
+      source: variables/airTemperatureTMDBST
+      longName: "TEMPERATURE/DRY-BULB Temperature"
+      units: "K"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/rawRelativeHumidity"
+      source: variables/rawRelativeHumidity
+      longName: "Raw Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/globalNavigationSatelliteSystemAltitude"
+      source: variables/globalNavigationSatelliteSystemAltitude
+      longName: "Global navigation satellite system altitude"
+      units: "m"
+
+    # QualityMarker
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"
+
+    - name: "QualityMarker/qualityInformation1"
+      source: variables/qualityInformation1
+      longName: "Quality Information"
+
+    - name: "QualityMarker/qualityInformation2"
+      source: variables/qualityInformation2
+      longName: "Quality Information"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "Sdmedit Quality Mark For Temperature"
+
+    - name: "QualityMarker/qualityInformation3"
+      source: variables/qualityInformation3
+      longName: "Quality Information"
+
+    - name: "QualityMarker/qualityInformation4"
+      source: variables/qualityInformation4
+      longName: "Quality Information"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "Sdmedit Quality Mark For Wind"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "Sdmedit Quality Mark For Moisture"

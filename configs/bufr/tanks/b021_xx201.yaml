@@ -1,0 +1,489 @@
+bufr:
+  subsets:
+    - NC021201
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR[1]"
+        month: "*/MNTH[1]"
+        day: "*/DAYS[1]"
+        hour: "*/HOUR[1]"
+        minute: "*/MINU[1]"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    timeSignificance1:
+      query: "*/TSIG[1]"
+
+    scanLineNumber:
+      query: "*/SLNM"
+
+    sensorScanPosition:
+      query: "*/FOVN"
+
+    earthSurfaceType:
+      query: "*/SFLG"
+
+    rainFlag:
+      query: "*/RFLAG"
+
+    sensorChannelNumber:
+      query: "*/SSMISCHN/CHNM"
+
+    year1:
+      query: "*/SATEPHEM{1}/YEAR"
+
+    year2:
+      query: "*/SATEPHEM{2}/YEAR"
+
+    year3:
+      query: "*/SATEPHEM{3}/YEAR"
+
+    month1:
+      query: "*/SATEPHEM{1}/MNTH"
+
+    month2:
+      query: "*/SATEPHEM{2}/MNTH"
+
+    month3:
+      query: "*/SATEPHEM{3}/MNTH"
+
+    day1:
+      query: "*/SATEPHEM{1}/DAYS"
+
+    day2:
+      query: "*/SATEPHEM{2}/DAYS"
+
+    day3:
+      query: "*/SATEPHEM{3}/DAYS"
+
+    timePeriodOrDisplacement1:
+      query: "*/SATEPHEM{1}/TPSE"
+
+    timePeriodOrDisplacement2:
+      query: "*/SATEPHEM{2}/TPSE"
+
+    timePeriodOrDisplacement3:
+      query: "*/SATEPHEM{3}/TPSE"
+
+    latitudeCLATH1:
+      query: "*/SATEPHEM{1}/CLATH"
+
+    latitudeCLATH2:
+      query: "*/SATEPHEM{2}/CLATH"
+
+    latitudeCLATH3:
+      query: "*/SATEPHEM{3}/CLATH"
+
+    longitudeCLONH1:
+      query: "*/SATEPHEM{1}/CLONH"
+
+    longitudeCLONH2:
+      query: "*/SATEPHEM{2}/CLONH"
+
+    longitudeCLONH3:
+      query: "*/SATEPHEM{3}/CLONH"
+
+    stationElevation1:
+      query: "*/SATEPHEM{1}/SELV"
+
+    stationElevation2:
+      query: "*/SATEPHEM{2}/SELV"
+
+    stationElevation3:
+      query: "*/SATEPHEM{3}/SELV"
+
+    timeSignificance2:
+      query: "*/TSIG[2]"
+
+    year2_2:
+      query: "*/YEAR[2]"
+
+    month2_2:
+      query: "*/MNTH[2]"
+
+    day2_2:
+      query: "*/DAYS[2]"
+
+    hour:
+      query: "*/HOUR[2]"
+
+    minute:
+      query: "*/MINU[2]"
+
+    orbitNumber:
+      query: "*/ORBN"
+
+    ssmisSubframeIdNumber:
+      query: "*/SSID"
+
+    multiplexorHousekeeping1:
+      query: "*/MUHOSEQN{1}/MUHO"
+
+    multiplexorHousekeeping2:
+      query: "*/MUHOSEQN{2}/MUHO"
+
+    multiplexorHousekeeping3:
+      query: "*/MUHOSEQN{3}/MUHO"
+
+    multiplexorHousekeeping4:
+      query: "*/MUHOSEQN{4}/MUHO"
+
+    dimensionalSignificance:
+      query: "*/DIMS"
+
+    latitude2:
+      query: "*/SCLINGEO/CLAT"
+
+    longitude2:
+      query: "*/SCLINGEO/CLON"
+
+    radarIncidenceAngle:
+      query: "*/SCLINGEO/RAIA"
+
+    sensorAzimuthAngle:
+      query: "*/SCLINGEO/BEARAZ"
+
+    # ObsValue
+    brightnessTemperature:
+      query: "*/SSMISCHN/TMBR"
+
+    warmTargetCalibration:
+      query: "*/SSMISCHN/WTCA"
+
+    coldTargetCalibration:
+      query: "*/SSMISCHN/CTCA"
+
+    warmLoadTemperature1:
+      query: "*/WLTMSEQN{1}/WLTM"
+
+    warmLoadTemperature2:
+      query: "*/WLTMSEQN{2}/WLTM"
+
+    warmLoadTemperature3:
+      query: "*/WLTMSEQN{3}/WLTM"
+
+  splits:
+    satId:
+      category:
+        variable: satelliteIdentifier
+
+encoder:
+  dimensions:
+    - name: Sclingeo
+      path: "*/SCLINGEO"
+    - name: Channel
+      source: variables/sensorChannelNumber
+      path: "*/SSMISCHN"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "MTYP 021-201 DMSP SSM/IS Tb (UNIFIED PRE-PROCESSOR)"
+
+    - name: "dataCategory"
+      type: string
+      value: "radiances from satellite"
+
+    - name: "dataset"
+      type: string
+      value: "radiance_ssmis"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "021"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "201"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b021/xx201 NC021201"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier"
+
+    - name: "MetaData/timeSignificance1"
+      source: variables/timeSignificance1
+      longName: "Time Significance"
+
+    - name: "MetaData/scanLineNumber"
+      source: variables/scanLineNumber
+      longName: "Scan Line Number"
+
+    - name: "MetaData/sensorScanPosition"
+      source: variables/sensorScanPosition
+      longName: "Field Of View Number"
+
+    - name: "MetaData/earthSurfaceType"
+      source: variables/earthSurfaceType
+      longName: "Surface Flag"
+
+    - name: "MetaData/rainFlag"
+      source: variables/rainFlag
+      longName: "Rain Flag"
+
+    - name: "MetaData/sensorChannelNumber"
+      source: variables/sensorChannelNumber
+      longName: "Channel Number"
+
+    - name: "MetaData/year1"
+      source: variables/year1
+      longName: "Year (1)"
+      units: "year"
+
+    - name: "MetaData/year2"
+      source: variables/year2
+      longName: "Year (2)"
+      units: "year"
+
+    - name: "MetaData/year3"
+      source: variables/year3
+      longName: "Year (3)"
+      units: "year"
+
+    - name: "MetaData/month1"
+      source: variables/month1
+      longName: "Month (1)"
+      units: "month"
+
+    - name: "MetaData/month2"
+      source: variables/month2
+      longName: "Month (2)"
+      units: "month"
+
+    - name: "MetaData/month3"
+      source: variables/month3
+      longName: "Month (3)"
+      units: "month"
+
+    - name: "MetaData/day1"
+      source: variables/day1
+      longName: "Day (1)"
+      units: "day"
+
+    - name: "MetaData/day2"
+      source: variables/day2
+      longName: "Day (2)"
+      units: "day"
+
+    - name: "MetaData/day3"
+      source: variables/day3
+      longName: "Day (3)"
+      units: "day"
+
+    - name: "MetaData/timePeriodOrDisplacement1"
+      source: variables/timePeriodOrDisplacement1
+      longName: "Time Period Or Displacement (1)"
+      units: "s"
+
+    - name: "MetaData/timePeriodOrDisplacement2"
+      source: variables/timePeriodOrDisplacement2
+      longName: "Time Period Or Displacement (2)"
+      units: "s"
+
+    - name: "MetaData/timePeriodOrDisplacement3"
+      source: variables/timePeriodOrDisplacement3
+      longName: "Time Period Or Displacement (3)"
+      units: "s"
+
+    - name: "MetaData/latitudeCLATH1"
+      source: variables/latitudeCLATH1
+      longName: "Latitude (HIGH ACCURACY) (1)"
+      units: "degree"
+
+    - name: "MetaData/latitudeCLATH2"
+      source: variables/latitudeCLATH2
+      longName: "Latitude (HIGH ACCURACY) (2)"
+      units: "degree"
+
+    - name: "MetaData/latitudeCLATH3"
+      source: variables/latitudeCLATH3
+      longName: "Latitude (HIGH ACCURACY) (3)"
+      units: "degree"
+
+    - name: "MetaData/longitudeCLONH1"
+      source: variables/longitudeCLONH1
+      longName: "Longitude (HIGH ACCURACY) (1)"
+      units: "degree"
+
+    - name: "MetaData/longitudeCLONH2"
+      source: variables/longitudeCLONH2
+      longName: "Longitude (HIGH ACCURACY) (2)"
+      units: "degree"
+
+    - name: "MetaData/longitudeCLONH3"
+      source: variables/longitudeCLONH3
+      longName: "Longitude (HIGH ACCURACY) (3)"
+      units: "degree"
+
+    - name: "MetaData/stationElevation1"
+      source: variables/stationElevation1
+      longName: "Height Of Station (1)"
+      units: "m"
+
+    - name: "MetaData/stationElevation2"
+      source: variables/stationElevation2
+      longName: "Height Of Station (2)"
+      units: "m"
+
+    - name: "MetaData/stationElevation3"
+      source: variables/stationElevation3
+      longName: "Height Of Station (3)"
+      units: "m"
+
+    - name: "MetaData/timeSignificance2"
+      source: variables/timeSignificance2
+      longName: "Time Significance"
+
+    - name: "MetaData/year2_2"
+      source: variables/year2_2
+      longName: "Year"
+      units: "year"
+
+    - name: "MetaData/month2_2"
+      source: variables/month2_2
+      longName: "Month"
+      units: "month"
+
+    - name: "MetaData/day2_2"
+      source: variables/day2_2
+      longName: "Day"
+      units: "day"
+
+    - name: "MetaData/hour"
+      source: variables/hour
+      longName: "Hour"
+      units: "h"
+
+    - name: "MetaData/minute"
+      source: variables/minute
+      longName: "Minute"
+      units: "min"
+
+    - name: "MetaData/orbitNumber"
+      source: variables/orbitNumber
+      longName: "Orbit Number"
+
+    - name: "MetaData/ssmisSubframeIdNumber"
+      source: variables/ssmisSubframeIdNumber
+      longName: "Ssmis Subframe Id Number"
+
+    - name: "MetaData/multiplexorHousekeeping1"
+      source: variables/multiplexorHousekeeping1
+      longName: "Multiplexor Housekeeping (1)"
+      units: "K"
+
+    - name: "MetaData/multiplexorHousekeeping2"
+      source: variables/multiplexorHousekeeping2
+      longName: "Multiplexor Housekeeping (2)"
+      units: "K"
+
+    - name: "MetaData/multiplexorHousekeeping3"
+      source: variables/multiplexorHousekeeping3
+      longName: "Multiplexor Housekeeping (3)"
+      units: "K"
+
+    - name: "MetaData/multiplexorHousekeeping4"
+      source: variables/multiplexorHousekeeping4
+      longName: "Multiplexor Housekeeping (4)"
+      units: "K"
+
+    - name: "MetaData/dimensionalSignificance"
+      source: variables/dimensionalSignificance
+      longName: "Dimensional Significance"
+
+    - name: "MetaData/latitude2"
+      source: variables/latitude2
+      longName: "Latitude (COARSE ACCURACY)"
+      units: "degree"
+
+    - name: "MetaData/longitude2"
+      source: variables/longitude2
+      longName: "Longitude (COARSE ACCURACY)"
+      units: "degree"
+
+    - name: "MetaData/radarIncidenceAngle"
+      source: variables/radarIncidenceAngle
+      longName: "Radar Incidence Angle"
+      units: "degree"
+
+    - name: "MetaData/sensorAzimuthAngle"
+      source: variables/sensorAzimuthAngle
+      longName: "Bearing Or Azimuth"
+      units: "degree"
+
+    # ObsValue
+    - name: "ObsValue/brightnessTemperature"
+      source: variables/brightnessTemperature
+      longName: "Brightness Temperature (HIGH ACCURACY)"
+      units: "K"
+
+    - name: "ObsValue/warmTargetCalibration"
+      source: variables/warmTargetCalibration
+      longName: "Warm Target Calibration"
+
+    - name: "ObsValue/coldTargetCalibration"
+      source: variables/coldTargetCalibration
+      longName: "Cold Target Calibration"
+
+    - name: "ObsValue/warmLoadTemperature1"
+      source: variables/warmLoadTemperature1
+      longName: "Warm Load Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/warmLoadTemperature2"
+      source: variables/warmLoadTemperature2
+      longName: "Warm Load Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/warmLoadTemperature3"
+      source: variables/warmLoadTemperature3
+      longName: "Warm Load Temperature (3)"
+      units: "K"

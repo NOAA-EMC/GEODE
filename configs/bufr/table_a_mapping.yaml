@@ -127,7 +127,7 @@
       format: BUFR
       restricted: false
     103:
-      dataset: surface_buoy_moored
+      dataset: surface_buoy_moored_bufr
       format: BUFR
       restricted: false
     104:
@@ -745,11 +745,11 @@
       format: binary
       restricted: false
     33:
-      dataset: radiance_amsua
+      dataset: radiance_amsua_rars
       format: BUFR
       restricted: false
     36:
-      dataset: radiance_mhs
+      dataset: radiance_mhs_rars
       format: BUFR
       restricted: false
     37:
@@ -761,7 +761,7 @@
       format: BUFR
       restricted: false
     39:
-      dataset: radiance_iasi
+      dataset: radiance_iasi_rars
       format: BUFR
       restricted: false
     42:
@@ -773,11 +773,11 @@
       format: BUFR
       restricted: false
     45:
-      dataset: radiance_abi
+      dataset: radiance_abi_asr
       format: binary
       restricted: false
     46:
-      dataset: radiance_abi
+      dataset: radiance_abi_csr
       format: binary
       restricted: false
     51:
@@ -821,7 +821,7 @@
       format: BUFR
       restricted: false
     212:
-      dataset: radiance_cris
+      dataset: radiance_cris_db
       format: BUFR
       restricted: false
     213:
@@ -829,7 +829,7 @@
       format: BUFR
       restricted: false
     239:
-      dataset: radiance_iasi
+      dataset: radiance_iasi_db
       format: BUFR
       restricted: false
     241:
@@ -917,11 +917,11 @@
       format: BUFR
       restricted: false
     134:
-      dataset: marine_altimeter_sentinel3a
+      dataset: marine_altimeter_sentinel3a_ssha
       format: BUFR
       restricted: false
     135:
-      dataset: marine_altimeter_sentinel3b
+      dataset: marine_altimeter_sentinel3b_ssha
       format: BUFR
       restricted: false
 255:

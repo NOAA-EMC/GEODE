@@ -1,0 +1,1258 @@
+bufr:
+  subsets:
+    - NC000007
+
+  variables:
+    # Not mapped: bufr-query cannot parse these "."-prefixed mnemonics
+    #   */MTGUST/.DTMMXGS
+    #   */MTTPSQ/.DTHMXTM
+    #   */MTTPSQ/.DTHMITM
+    #   */.REHOVI
+    #   */MTRWVR/.REV1RI
+    #   */MTRWVR/.REV2RI
+
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCPTIM{1}/RCYR"
+        month: "*/RCPTIM{1}/RCMO"
+        day: "*/RCPTIM{1}/RCDY"
+        hour: "*/RCPTIM{1}/RCHR"
+        minute: "*/RCPTIM{1}/RCMI"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    sequenceNumber:
+      query: "*/BID{1}/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BID{1}/BUHD"
+
+    bulletinOriginator:
+      query: "*/BID{1}/BORG"
+
+    bulletinTime:
+      query: "*/BID{1}/BULTIM"
+
+    bulletinBBB:
+      query: "*/BID{1}/BBB"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    shortIcaoLocationIndicator:
+      query: "*/ICLX"
+
+    stationElevation:
+      query: "*/SELV"
+
+    typeOfHourlyReport:
+      query: "*/THRPT"
+
+    automatedStationType:
+      query: "*/MTAUTO/AUTO"
+
+    receiptTimeSignificance:
+      query: "*/RCPTIM{1}/RCTS"
+
+    timeOfOccurenceOfWindShiftHours:
+      query: "*/MTWSHF/WSHFTH"
+
+    timeOfOccurenceOfWindShiftMinutes:
+      query: "*/MTWSHF/WSHFTM"
+
+    runwayIdentifier1:
+      query: "*/MTRWVR{1}/RWID"
+
+    runwayIdentifier2:
+      query: "*/MTRWVR{2}/RWID"
+
+    runwayIdentifier3:
+      query: "*/MTRWVR{3}/RWID"
+
+    runwayIdentifier4:
+      query: "*/MTRWVR{4}/RWID"
+
+    runwayIdentifier5:
+      query: "*/MTRWVR{5}/RWID"
+
+    runwayIdentifier6:
+      query: "*/MTRWVR{6}/RWID"
+
+    runwayIdentifier7:
+      query: "*/MTRWVR{7}/RWID"
+
+    runwayIdentifier8:
+      query: "*/MTRWVR{8}/RWID"
+
+    verticalSignificanceSurface1:
+      query: "*/MTRCLD{1}/VSSO"
+
+    verticalSignificanceSurface2:
+      query: "*/MTRCLD{2}/VSSO"
+
+    verticalSignificanceSurface3:
+      query: "*/MTRCLD{3}/VSSO"
+
+    verticalSignificanceSurface4:
+      query: "*/MTRCLD{4}/VSSO"
+
+    verticalSignificanceSurface5:
+      query: "*/MTRCLD{5}/VSSO"
+
+    verticalSignificanceSurface6:
+      query: "*/MTRCLD{6}/VSSO"
+
+    verticalSignificanceSurface7:
+      query: "*/MTRCLD{7}/VSSO"
+
+    verticalSignificanceSurface8:
+      query: "*/MTRCLD{8}/VSSO"
+
+    verticalSignificanceSurface9:
+      query: "*/MTRCLD{9}/VSSO"
+
+    verticalSignificanceSurface10:
+      query: "*/MTRCLD{10}/VSSO"
+
+    verticalSignificanceSurface11:
+      query: "*/MTRCLD{11}/VSSO"
+
+    verticalSignificanceSurface12:
+      query: "*/MTRCLD{12}/VSSO"
+
+    verticalSignificanceSurface13:
+      query: "*/MTRCLD{13}/VSSO"
+
+    verticalSignificanceSurface14:
+      query: "*/MTRCLD{14}/VSSO"
+
+    rawReportString:
+      query: "*/RAWRPT/RRSTG"
+
+    year:
+      query: "*/YEAR"
+
+    month:
+      query: "*/MNTH"
+
+    day:
+      query: "*/DAYS"
+
+    hour:
+      query: "*/HOUR"
+
+    minutes:
+      query: "*/MINU"
+
+    # ObsValue
+    windDirection:
+      query: "*/WDIR"
+
+    windSpeed:
+      query: "*/WSPD"
+
+    maximumWindGustSpeed:
+      query: "*/MTGUST/MXGS"
+
+    extremeCcwWindDirectionOfVariableWind:
+      query: "*/MTVWND/DRC1"
+
+    extremeCwWindDirectionOfVariableWind:
+      query: "*/MTVWND/DRC2"
+
+    airTemperatureTMDB:
+      query: "*/TMDB"
+
+    dewPointTemperature:
+      query: "*/TMDP"
+
+    maximumTemperature1:
+      query: "*/MTTPSQ{1}/MXTM"
+
+    maximumTemperature2:
+      query: "*/MTTPSQ{2}/MXTM"
+
+    maximumTemperature3:
+      query: "*/MTTPSQ{3}/MXTM"
+
+    maximumTemperature4:
+      query: "*/MTTPSQ{4}/MXTM"
+
+    minimumTemperature1:
+      query: "*/MTTPSQ{1}/MITM"
+
+    minimumTemperature2:
+      query: "*/MTTPSQ{2}/MITM"
+
+    minimumTemperature3:
+      query: "*/MTTPSQ{3}/MITM"
+
+    minimumTemperature4:
+      query: "*/MTTPSQ{4}/MITM"
+
+    cityTemperature:
+      query: "*/MTTPCT/CTTP"
+
+    cityMaximumTemperature:
+      query: "*/MTTPCT/CTMX"
+
+    cityMinimumTemperature:
+      query: "*/MTTPCT/CTMN"
+
+    altimeterSetting:
+      query: "*/ALSE"
+
+    pressureReducedToMeanSeaLevel:
+      query: "*/PMSL"
+
+    pressureTendencyCharacteristic:
+      query: "*/CHPT"
+
+    pressureChange3Hour:
+      query: "*/3HPC"
+
+    horizontalVisibility:
+      query: "*/HOVI"
+
+    verticalVisibility:
+      query: "*/VTVI"
+
+    firstRunwayVisualRange1:
+      query: "*/MTRWVR{1}/V1RIM"
+
+    firstRunwayVisualRange2:
+      query: "*/MTRWVR{2}/V1RIM"
+
+    firstRunwayVisualRange3:
+      query: "*/MTRWVR{3}/V1RIM"
+
+    firstRunwayVisualRange4:
+      query: "*/MTRWVR{4}/V1RIM"
+
+    firstRunwayVisualRange5:
+      query: "*/MTRWVR{5}/V1RIM"
+
+    firstRunwayVisualRange6:
+      query: "*/MTRWVR{6}/V1RIM"
+
+    firstRunwayVisualRange7:
+      query: "*/MTRWVR{7}/V1RIM"
+
+    firstRunwayVisualRange8:
+      query: "*/MTRWVR{8}/V1RIM"
+
+    secondRunwayVisualRange1:
+      query: "*/MTRWVR{1}/V2RIM"
+
+    secondRunwayVisualRange2:
+      query: "*/MTRWVR{2}/V2RIM"
+
+    secondRunwayVisualRange3:
+      query: "*/MTRWVR{3}/V2RIM"
+
+    secondRunwayVisualRange4:
+      query: "*/MTRWVR{4}/V2RIM"
+
+    secondRunwayVisualRange5:
+      query: "*/MTRWVR{5}/V2RIM"
+
+    secondRunwayVisualRange6:
+      query: "*/MTRWVR{6}/V2RIM"
+
+    secondRunwayVisualRange7:
+      query: "*/MTRWVR{7}/V2RIM"
+
+    secondRunwayVisualRange8:
+      query: "*/MTRWVR{8}/V2RIM"
+
+    runwayVisualRangeTendency1:
+      query: "*/MTRWVR{1}/RWYT"
+
+    runwayVisualRangeTendency2:
+      query: "*/MTRWVR{2}/RWYT"
+
+    runwayVisualRangeTendency3:
+      query: "*/MTRWVR{3}/RWYT"
+
+    runwayVisualRangeTendency4:
+      query: "*/MTRWVR{4}/RWYT"
+
+    runwayVisualRangeTendency5:
+      query: "*/MTRWVR{5}/RWYT"
+
+    runwayVisualRangeTendency6:
+      query: "*/MTRWVR{6}/RWYT"
+
+    runwayVisualRangeTendency7:
+      query: "*/MTRWVR{7}/RWYT"
+
+    runwayVisualRangeTendency8:
+      query: "*/MTRWVR{8}/RWYT"
+
+    presentWeather1:
+      query: "*/MTRPRW{1}/PRWE"
+
+    presentWeather2:
+      query: "*/MTRPRW{2}/PRWE"
+
+    presentWeather3:
+      query: "*/MTRPRW{3}/PRWE"
+
+    presentWeather4:
+      query: "*/MTRPRW{4}/PRWE"
+
+    presentWeather5:
+      query: "*/MTRPRW{5}/PRWE"
+
+    presentWeather6:
+      query: "*/MTRPRW{6}/PRWE"
+
+    cloudAmount1:
+      query: "*/MTRCLD{1}/CLAM"
+
+    cloudAmount2:
+      query: "*/MTRCLD{2}/CLAM"
+
+    cloudAmount3:
+      query: "*/MTRCLD{3}/CLAM"
+
+    cloudAmount4:
+      query: "*/MTRCLD{4}/CLAM"
+
+    cloudAmount5:
+      query: "*/MTRCLD{5}/CLAM"
+
+    cloudAmount6:
+      query: "*/MTRCLD{6}/CLAM"
+
+    cloudAmount7:
+      query: "*/MTRCLD{7}/CLAM"
+
+    cloudAmount8:
+      query: "*/MTRCLD{8}/CLAM"
+
+    cloudAmount9:
+      query: "*/MTRCLD{9}/CLAM"
+
+    cloudAmount10:
+      query: "*/MTRCLD{10}/CLAM"
+
+    cloudAmount11:
+      query: "*/MTRCLD{11}/CLAM"
+
+    cloudAmount12:
+      query: "*/MTRCLD{12}/CLAM"
+
+    cloudAmount13:
+      query: "*/MTRCLD{13}/CLAM"
+
+    cloudAmount14:
+      query: "*/MTRCLD{14}/CLAM"
+
+    cloudType1:
+      query: "*/MTRCLD{1}/CLTP"
+
+    cloudType2:
+      query: "*/MTRCLD{2}/CLTP"
+
+    cloudType3:
+      query: "*/MTRCLD{3}/CLTP"
+
+    cloudType4:
+      query: "*/MTRCLD{4}/CLTP"
+
+    cloudType5:
+      query: "*/MTRCLD{5}/CLTP"
+
+    cloudType6:
+      query: "*/MTRCLD{6}/CLTP"
+
+    cloudType7:
+      query: "*/MTRCLD{7}/CLTP"
+
+    cloudType8:
+      query: "*/MTRCLD{8}/CLTP"
+
+    cloudType9:
+      query: "*/MTRCLD{9}/CLTP"
+
+    cloudType10:
+      query: "*/MTRCLD{10}/CLTP"
+
+    cloudType11:
+      query: "*/MTRCLD{11}/CLTP"
+
+    cloudType12:
+      query: "*/MTRCLD{12}/CLTP"
+
+    cloudType13:
+      query: "*/MTRCLD{13}/CLTP"
+
+    cloudType14:
+      query: "*/MTRCLD{14}/CLTP"
+
+    heightbasecloud1:
+      query: "*/MTRCLD{1}/HOCB"
+
+    heightbasecloud2:
+      query: "*/MTRCLD{2}/HOCB"
+
+    heightbasecloud3:
+      query: "*/MTRCLD{3}/HOCB"
+
+    heightbasecloud4:
+      query: "*/MTRCLD{4}/HOCB"
+
+    heightbasecloud5:
+      query: "*/MTRCLD{5}/HOCB"
+
+    heightbasecloud6:
+      query: "*/MTRCLD{6}/HOCB"
+
+    heightbasecloud7:
+      query: "*/MTRCLD{7}/HOCB"
+
+    heightbasecloud8:
+      query: "*/MTRCLD{8}/HOCB"
+
+    heightbasecloud9:
+      query: "*/MTRCLD{9}/HOCB"
+
+    heightbasecloud10:
+      query: "*/MTRCLD{10}/HOCB"
+
+    heightbasecloud11:
+      query: "*/MTRCLD{11}/HOCB"
+
+    heightbasecloud12:
+      query: "*/MTRCLD{12}/HOCB"
+
+    heightbasecloud13:
+      query: "*/MTRCLD{13}/HOCB"
+
+    heightbasecloud14:
+      query: "*/MTRCLD{14}/HOCB"
+
+    totalPrecipitationPast1Hour:
+      query: "*/TP01"
+
+    totalPrecipitationPast3Hours:
+      query: "*/MTRPR3/TP03"
+
+    totalPrecipitationPast6Hours:
+      query: "*/MTRPR3/TP06"
+
+    totalPrecipitationPast24Hours:
+      query: "*/MTRPR3/TP24"
+
+    totalSnowDepth:
+      query: "*/MTRMSC/TOSD"
+
+    depthOfFreshSnow:
+      query: "*/MTRMSC/DOFS"
+
+    totalPrecipitation:
+      query: "*/MTRMSC/TOPC"
+
+    totalSunshine:
+      query: "*/MTRMSC/TOSS"
+
+    peakWindDirection:
+      query: "*/PKWDDR"
+
+    peakWindSpeed:
+      query: "*/PKWDSP"
+
+    seaSurfaceTemperature:
+      query: "*/SST1"
+
+    stateOfTheSea:
+      query: "*/SEST"
+
+    # QualityMarker
+    correctedReportIndicator:
+      query: "*/CORN"
+
+    wind:
+      query: "*/QMWN"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    moisture:
+      query: "*/QMDD"
+
+    pressure:
+      query: "*/QMPR"
+
+encoder:
+  dimensions:
+    - name: RawReportChunk
+      path: "*/RAWRPT"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "Mtyp 000-007 Aviation - Metar / Speci"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface land"
+
+    - name: "dataset"
+      type: string
+      value: "surface_metar"
+
+    - name: "dataFormat"
+      type: string
+      value: "WMO FM-15 METAR / WMO FM-16 SPECI"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "000"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "007"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b000/xx007 NC000007"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/shortIcaoLocationIndicator"
+      source: variables/shortIcaoLocationIndicator
+      longName: "Short Icao Location Indicator"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station"
+      units: "m"
+
+    - name: "MetaData/typeOfHourlyReport"
+      source: variables/typeOfHourlyReport
+      longName: "Type Of Hourly Report"
+
+    - name: "MetaData/automatedStationType"
+      source: variables/automatedStationType
+      longName: "Automated Station Type"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/timeOfOccurenceOfWindShiftHours"
+      source: variables/timeOfOccurenceOfWindShiftHours
+      longName: "Time Of Occurence Of Wind Shift (HOURS)"
+      units: "h"
+
+    - name: "MetaData/timeOfOccurenceOfWindShiftMinutes"
+      source: variables/timeOfOccurenceOfWindShiftMinutes
+      longName: "Time Of Occurence Of Wind Shift (MINUTES)"
+      units: "min"
+
+    - name: "MetaData/runwayIdentifier1"
+      source: variables/runwayIdentifier1
+      longName: "Runway Identifier (1)"
+
+    - name: "MetaData/runwayIdentifier2"
+      source: variables/runwayIdentifier2
+      longName: "Runway Identifier (2)"
+
+    - name: "MetaData/runwayIdentifier3"
+      source: variables/runwayIdentifier3
+      longName: "Runway Identifier (3)"
+
+    - name: "MetaData/runwayIdentifier4"
+      source: variables/runwayIdentifier4
+      longName: "Runway Identifier (4)"
+
+    - name: "MetaData/runwayIdentifier5"
+      source: variables/runwayIdentifier5
+      longName: "Runway Identifier (5)"
+
+    - name: "MetaData/runwayIdentifier6"
+      source: variables/runwayIdentifier6
+      longName: "Runway Identifier (6)"
+
+    - name: "MetaData/runwayIdentifier7"
+      source: variables/runwayIdentifier7
+      longName: "Runway Identifier (7)"
+
+    - name: "MetaData/runwayIdentifier8"
+      source: variables/runwayIdentifier8
+      longName: "Runway Identifier (8)"
+
+    - name: "MetaData/verticalSignificanceSurface1"
+      source: variables/verticalSignificanceSurface1
+      longName: "VERT. Significance (SFC OBSERVATION) (1)"
+
+    - name: "MetaData/verticalSignificanceSurface2"
+      source: variables/verticalSignificanceSurface2
+      longName: "VERT. Significance (SFC OBSERVATION) (2)"
+
+    - name: "MetaData/verticalSignificanceSurface3"
+      source: variables/verticalSignificanceSurface3
+      longName: "VERT. Significance (SFC OBSERVATION) (3)"
+
+    - name: "MetaData/verticalSignificanceSurface4"
+      source: variables/verticalSignificanceSurface4
+      longName: "VERT. Significance (SFC OBSERVATION) (4)"
+
+    - name: "MetaData/verticalSignificanceSurface5"
+      source: variables/verticalSignificanceSurface5
+      longName: "VERT. Significance (SFC OBSERVATION) (5)"
+
+    - name: "MetaData/verticalSignificanceSurface6"
+      source: variables/verticalSignificanceSurface6
+      longName: "VERT. Significance (SFC OBSERVATION) (6)"
+
+    - name: "MetaData/verticalSignificanceSurface7"
+      source: variables/verticalSignificanceSurface7
+      longName: "VERT. Significance (SFC OBSERVATION) (7)"
+
+    - name: "MetaData/verticalSignificanceSurface8"
+      source: variables/verticalSignificanceSurface8
+      longName: "VERT. Significance (SFC OBSERVATION) (8)"
+
+    - name: "MetaData/verticalSignificanceSurface9"
+      source: variables/verticalSignificanceSurface9
+      longName: "VERT. Significance (SFC OBSERVATION) (9)"
+
+    - name: "MetaData/verticalSignificanceSurface10"
+      source: variables/verticalSignificanceSurface10
+      longName: "VERT. Significance (SFC OBSERVATION) (10)"
+
+    - name: "MetaData/verticalSignificanceSurface11"
+      source: variables/verticalSignificanceSurface11
+      longName: "VERT. Significance (SFC OBSERVATION) (11)"
+
+    - name: "MetaData/verticalSignificanceSurface12"
+      source: variables/verticalSignificanceSurface12
+      longName: "VERT. Significance (SFC OBSERVATION) (12)"
+
+    - name: "MetaData/verticalSignificanceSurface13"
+      source: variables/verticalSignificanceSurface13
+      longName: "VERT. Significance (SFC OBSERVATION) (13)"
+
+    - name: "MetaData/verticalSignificanceSurface14"
+      source: variables/verticalSignificanceSurface14
+      longName: "VERT. Significance (SFC OBSERVATION) (14)"
+
+    - name: "MetaData/rawReportString"
+      source: variables/rawReportString
+      longName: "Raw Report String"
+
+    - name: "MetaData/year"
+      source: variables/year
+      longName: "Year"
+      units: "year"
+
+    - name: "MetaData/month"
+      source: variables/month
+      longName: "Month"
+      units: "month"
+
+    - name: "MetaData/day"
+      source: variables/day
+      longName: "Day"
+      units: "day"
+
+    - name: "MetaData/hour"
+      source: variables/hour
+      longName: "Hour"
+      units: "h"
+
+    - name: "MetaData/minutes"
+      source: variables/minutes
+      longName: "Minutes"
+      units: "min"
+
+    # ObsValue
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/maximumWindGustSpeed"
+      source: variables/maximumWindGustSpeed
+      longName: "Maximum Wind Gust Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/extremeCcwWindDirectionOfVariableWind"
+      source: variables/extremeCcwWindDirectionOfVariableWind
+      longName: "Extreme Ccw Wind Direction Of Variable Wind"
+      units: "degree"
+
+    - name: "ObsValue/extremeCwWindDirectionOfVariableWind"
+      source: variables/extremeCwWindDirectionOfVariableWind
+      longName: "Extreme Cw Wind Direction Of Variable Wind"
+      units: "degree"
+
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/dewPointTemperature"
+      source: variables/dewPointTemperature
+      longName: "Dew Point Temperature"
+      units: "K"
+
+    - name: "ObsValue/maximumTemperature1"
+      source: variables/maximumTemperature1
+      longName: "Maximum Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/maximumTemperature2"
+      source: variables/maximumTemperature2
+      longName: "Maximum Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/maximumTemperature3"
+      source: variables/maximumTemperature3
+      longName: "Maximum Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/maximumTemperature4"
+      source: variables/maximumTemperature4
+      longName: "Maximum Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature1"
+      source: variables/minimumTemperature1
+      longName: "Minimum Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature2"
+      source: variables/minimumTemperature2
+      longName: "Minimum Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature3"
+      source: variables/minimumTemperature3
+      longName: "Minimum Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature4"
+      source: variables/minimumTemperature4
+      longName: "Minimum Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/cityTemperature"
+      source: variables/cityTemperature
+      longName: "City Temperature"
+      units: "K"
+
+    - name: "ObsValue/cityMaximumTemperature"
+      source: variables/cityMaximumTemperature
+      longName: "City Maximum Temperature"
+      units: "K"
+
+    - name: "ObsValue/cityMinimumTemperature"
+      source: variables/cityMinimumTemperature
+      longName: "City Minimum Temperature"
+      units: "K"
+
+    - name: "ObsValue/altimeterSetting"
+      source: variables/altimeterSetting
+      longName: "Altimeter Setting"
+      units: "Pa"
+
+    - name: "ObsValue/pressureReducedToMeanSeaLevel"
+      source: variables/pressureReducedToMeanSeaLevel
+      longName: "Pressure Reduced To Msl"
+      units: "Pa"
+
+    - name: "ObsValue/pressureTendencyCharacteristic"
+      source: variables/pressureTendencyCharacteristic
+      longName: "Characteristic Of Pressure Tendency"
+
+    - name: "ObsValue/pressureChange3Hour"
+      source: variables/pressureChange3Hour
+      longName: "3 Hour Pressure Change"
+      units: "Pa"
+
+    - name: "ObsValue/horizontalVisibility"
+      source: variables/horizontalVisibility
+      longName: "Horizontal Visibility"
+      units: "m"
+
+    - name: "ObsValue/verticalVisibility"
+      source: variables/verticalVisibility
+      longName: "Vertical Visibility"
+      units: "m"
+
+    - name: "ObsValue/firstRunwayVisualRange1"
+      source: variables/firstRunwayVisualRange1
+      longName: "First Runway Visual Range (1)"
+      units: "m"
+
+    - name: "ObsValue/firstRunwayVisualRange2"
+      source: variables/firstRunwayVisualRange2
+      longName: "First Runway Visual Range (2)"
+      units: "m"
+
+    - name: "ObsValue/firstRunwayVisualRange3"
+      source: variables/firstRunwayVisualRange3
+      longName: "First Runway Visual Range (3)"
+      units: "m"
+
+    - name: "ObsValue/firstRunwayVisualRange4"
+      source: variables/firstRunwayVisualRange4
+      longName: "First Runway Visual Range (4)"
+      units: "m"
+
+    - name: "ObsValue/firstRunwayVisualRange5"
+      source: variables/firstRunwayVisualRange5
+      longName: "First Runway Visual Range (5)"
+      units: "m"
+
+    - name: "ObsValue/firstRunwayVisualRange6"
+      source: variables/firstRunwayVisualRange6
+      longName: "First Runway Visual Range (6)"
+      units: "m"
+
+    - name: "ObsValue/firstRunwayVisualRange7"
+      source: variables/firstRunwayVisualRange7
+      longName: "First Runway Visual Range (7)"
+      units: "m"
+
+    - name: "ObsValue/firstRunwayVisualRange8"
+      source: variables/firstRunwayVisualRange8
+      longName: "First Runway Visual Range (8)"
+      units: "m"
+
+    - name: "ObsValue/secondRunwayVisualRange1"
+      source: variables/secondRunwayVisualRange1
+      longName: "Second Runway Visual Range (1)"
+      units: "m"
+
+    - name: "ObsValue/secondRunwayVisualRange2"
+      source: variables/secondRunwayVisualRange2
+      longName: "Second Runway Visual Range (2)"
+      units: "m"
+
+    - name: "ObsValue/secondRunwayVisualRange3"
+      source: variables/secondRunwayVisualRange3
+      longName: "Second Runway Visual Range (3)"
+      units: "m"
+
+    - name: "ObsValue/secondRunwayVisualRange4"
+      source: variables/secondRunwayVisualRange4
+      longName: "Second Runway Visual Range (4)"
+      units: "m"
+
+    - name: "ObsValue/secondRunwayVisualRange5"
+      source: variables/secondRunwayVisualRange5
+      longName: "Second Runway Visual Range (5)"
+      units: "m"
+
+    - name: "ObsValue/secondRunwayVisualRange6"
+      source: variables/secondRunwayVisualRange6
+      longName: "Second Runway Visual Range (6)"
+      units: "m"
+
+    - name: "ObsValue/secondRunwayVisualRange7"
+      source: variables/secondRunwayVisualRange7
+      longName: "Second Runway Visual Range (7)"
+      units: "m"
+
+    - name: "ObsValue/secondRunwayVisualRange8"
+      source: variables/secondRunwayVisualRange8
+      longName: "Second Runway Visual Range (8)"
+      units: "m"
+
+    - name: "ObsValue/runwayVisualRangeTendency1"
+      source: variables/runwayVisualRangeTendency1
+      longName: "Runway Visual Range Tendency (1)"
+
+    - name: "ObsValue/runwayVisualRangeTendency2"
+      source: variables/runwayVisualRangeTendency2
+      longName: "Runway Visual Range Tendency (2)"
+
+    - name: "ObsValue/runwayVisualRangeTendency3"
+      source: variables/runwayVisualRangeTendency3
+      longName: "Runway Visual Range Tendency (3)"
+
+    - name: "ObsValue/runwayVisualRangeTendency4"
+      source: variables/runwayVisualRangeTendency4
+      longName: "Runway Visual Range Tendency (4)"
+
+    - name: "ObsValue/runwayVisualRangeTendency5"
+      source: variables/runwayVisualRangeTendency5
+      longName: "Runway Visual Range Tendency (5)"
+
+    - name: "ObsValue/runwayVisualRangeTendency6"
+      source: variables/runwayVisualRangeTendency6
+      longName: "Runway Visual Range Tendency (6)"
+
+    - name: "ObsValue/runwayVisualRangeTendency7"
+      source: variables/runwayVisualRangeTendency7
+      longName: "Runway Visual Range Tendency (7)"
+
+    - name: "ObsValue/runwayVisualRangeTendency8"
+      source: variables/runwayVisualRangeTendency8
+      longName: "Runway Visual Range Tendency (8)"
+
+    - name: "ObsValue/presentWeather1"
+      source: variables/presentWeather1
+      longName: "Present Weather (1)"
+
+    - name: "ObsValue/presentWeather2"
+      source: variables/presentWeather2
+      longName: "Present Weather (2)"
+
+    - name: "ObsValue/presentWeather3"
+      source: variables/presentWeather3
+      longName: "Present Weather (3)"
+
+    - name: "ObsValue/presentWeather4"
+      source: variables/presentWeather4
+      longName: "Present Weather (4)"
+
+    - name: "ObsValue/presentWeather5"
+      source: variables/presentWeather5
+      longName: "Present Weather (5)"
+
+    - name: "ObsValue/presentWeather6"
+      source: variables/presentWeather6
+      longName: "Present Weather (6)"
+
+    - name: "ObsValue/cloudAmount1"
+      source: variables/cloudAmount1
+      longName: "Cloud Amount (1)"
+
+    - name: "ObsValue/cloudAmount2"
+      source: variables/cloudAmount2
+      longName: "Cloud Amount (2)"
+
+    - name: "ObsValue/cloudAmount3"
+      source: variables/cloudAmount3
+      longName: "Cloud Amount (3)"
+
+    - name: "ObsValue/cloudAmount4"
+      source: variables/cloudAmount4
+      longName: "Cloud Amount (4)"
+
+    - name: "ObsValue/cloudAmount5"
+      source: variables/cloudAmount5
+      longName: "Cloud Amount (5)"
+
+    - name: "ObsValue/cloudAmount6"
+      source: variables/cloudAmount6
+      longName: "Cloud Amount (6)"
+
+    - name: "ObsValue/cloudAmount7"
+      source: variables/cloudAmount7
+      longName: "Cloud Amount (7)"
+
+    - name: "ObsValue/cloudAmount8"
+      source: variables/cloudAmount8
+      longName: "Cloud Amount (8)"
+
+    - name: "ObsValue/cloudAmount9"
+      source: variables/cloudAmount9
+      longName: "Cloud Amount (9)"
+
+    - name: "ObsValue/cloudAmount10"
+      source: variables/cloudAmount10
+      longName: "Cloud Amount (10)"
+
+    - name: "ObsValue/cloudAmount11"
+      source: variables/cloudAmount11
+      longName: "Cloud Amount (11)"
+
+    - name: "ObsValue/cloudAmount12"
+      source: variables/cloudAmount12
+      longName: "Cloud Amount (12)"
+
+    - name: "ObsValue/cloudAmount13"
+      source: variables/cloudAmount13
+      longName: "Cloud Amount (13)"
+
+    - name: "ObsValue/cloudAmount14"
+      source: variables/cloudAmount14
+      longName: "Cloud Amount (14)"
+
+    - name: "ObsValue/cloudType1"
+      source: variables/cloudType1
+      longName: "Cloud Type (1)"
+
+    - name: "ObsValue/cloudType2"
+      source: variables/cloudType2
+      longName: "Cloud Type (2)"
+
+    - name: "ObsValue/cloudType3"
+      source: variables/cloudType3
+      longName: "Cloud Type (3)"
+
+    - name: "ObsValue/cloudType4"
+      source: variables/cloudType4
+      longName: "Cloud Type (4)"
+
+    - name: "ObsValue/cloudType5"
+      source: variables/cloudType5
+      longName: "Cloud Type (5)"
+
+    - name: "ObsValue/cloudType6"
+      source: variables/cloudType6
+      longName: "Cloud Type (6)"
+
+    - name: "ObsValue/cloudType7"
+      source: variables/cloudType7
+      longName: "Cloud Type (7)"
+
+    - name: "ObsValue/cloudType8"
+      source: variables/cloudType8
+      longName: "Cloud Type (8)"
+
+    - name: "ObsValue/cloudType9"
+      source: variables/cloudType9
+      longName: "Cloud Type (9)"
+
+    - name: "ObsValue/cloudType10"
+      source: variables/cloudType10
+      longName: "Cloud Type (10)"
+
+    - name: "ObsValue/cloudType11"
+      source: variables/cloudType11
+      longName: "Cloud Type (11)"
+
+    - name: "ObsValue/cloudType12"
+      source: variables/cloudType12
+      longName: "Cloud Type (12)"
+
+    - name: "ObsValue/cloudType13"
+      source: variables/cloudType13
+      longName: "Cloud Type (13)"
+
+    - name: "ObsValue/cloudType14"
+      source: variables/cloudType14
+      longName: "Cloud Type (14)"
+
+    - name: "ObsValue/heightbasecloud1"
+      source: variables/heightbasecloud1
+      longName: "Height Of Base Of Cloud (1)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud2"
+      source: variables/heightbasecloud2
+      longName: "Height Of Base Of Cloud (2)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud3"
+      source: variables/heightbasecloud3
+      longName: "Height Of Base Of Cloud (3)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud4"
+      source: variables/heightbasecloud4
+      longName: "Height Of Base Of Cloud (4)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud5"
+      source: variables/heightbasecloud5
+      longName: "Height Of Base Of Cloud (5)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud6"
+      source: variables/heightbasecloud6
+      longName: "Height Of Base Of Cloud (6)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud7"
+      source: variables/heightbasecloud7
+      longName: "Height Of Base Of Cloud (7)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud8"
+      source: variables/heightbasecloud8
+      longName: "Height Of Base Of Cloud (8)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud9"
+      source: variables/heightbasecloud9
+      longName: "Height Of Base Of Cloud (9)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud10"
+      source: variables/heightbasecloud10
+      longName: "Height Of Base Of Cloud (10)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud11"
+      source: variables/heightbasecloud11
+      longName: "Height Of Base Of Cloud (11)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud12"
+      source: variables/heightbasecloud12
+      longName: "Height Of Base Of Cloud (12)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud13"
+      source: variables/heightbasecloud13
+      longName: "Height Of Base Of Cloud (13)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud14"
+      source: variables/heightbasecloud14
+      longName: "Height Of Base Of Cloud (14)"
+      units: "m"
+
+    - name: "ObsValue/totalPrecipitationPast1Hour"
+      source: variables/totalPrecipitationPast1Hour
+      longName: "Total Precipitation Past 1 Hour"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast3Hours"
+      source: variables/totalPrecipitationPast3Hours
+      longName: "Total Precipitation Past 3 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast6Hours"
+      source: variables/totalPrecipitationPast6Hours
+      longName: "Total Precipitation Past 6 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast24Hours"
+      source: variables/totalPrecipitationPast24Hours
+      longName: "Total Precipitation Past 24 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalSnowDepth"
+      source: variables/totalSnowDepth
+      longName: "Total Snow Depth"
+      units: "m"
+
+    - name: "ObsValue/depthOfFreshSnow"
+      source: variables/depthOfFreshSnow
+      longName: "Depth Of Fresh Snow"
+      units: "m"
+
+    - name: "ObsValue/totalPrecipitation"
+      source: variables/totalPrecipitation
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalSunshine"
+      source: variables/totalSunshine
+      longName: "Total Sunshine"
+      units: "min"
+
+    - name: "ObsValue/peakWindDirection"
+      source: variables/peakWindDirection
+      longName: "Peak Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/peakWindSpeed"
+      source: variables/peakWindSpeed
+      longName: "Peak Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/seaSurfaceTemperature"
+      source: variables/seaSurfaceTemperature
+      longName: "Sea Temperature"
+      units: "K"
+
+    - name: "ObsValue/stateOfTheSea"
+      source: variables/stateOfTheSea
+      longName: "State Of The Sea"
+
+    # QualityMarker
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "Sdmedit Quality Mark For Wind"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "Sdmedit Quality Mark For Temperature"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "Sdmedit Quality Mark For Moisture"
+
+    - name: "QualityMarker/pressure"
+      source: variables/pressure
+      longName: "Sdmedit Quality Mark For Pressure"

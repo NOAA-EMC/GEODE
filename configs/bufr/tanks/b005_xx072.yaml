@@ -1,0 +1,1111 @@
+bufr:
+  subsets:
+    - NC005072
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    generatingCenterLong:
+      query: "*/GCLONG"
+
+    satelliteConstellationRO:
+      query: "*/SCLF"
+
+    segmentSizeAtNadirInXDirection:
+      query: "*/SSNX"
+
+    segmentSizeAtNadirInYDirection:
+      query: "*/SSNY"
+
+    satelliteInstrumentData:
+      query: "*/SIDP"
+
+    windComputationMethod:
+      query: "*/SWCM"
+
+    pressure:
+      query: "*/PRLC"
+
+    sensorCentralFrequency:
+      query: "*/SCCF"
+
+    sensorBandWidth:
+      query: "*/SCBW"
+
+    heightAssignmentMethod:
+      query: "*/HAMD"
+
+    tracerCorrelationMethod:
+      query: "*/TCMD"
+
+    landOrSeaQualifier:
+      query: "*/LSQL"
+
+    satelliteZenithAngle:
+      query: "*/SAZA"
+
+    originOfFirstGuessInformation:
+      query: "*/OFGI"
+
+    timeSignificance1:
+      query: "*/TSIG[1]"
+
+    year:
+      query: "*/YEAR"
+
+    month:
+      query: "*/MNTH"
+
+    day:
+      query: "*/DAYS"
+
+    hour:
+      query: "*/HOUR"
+
+    timeSignificance2:
+      query: "*/TSIG[2]"
+
+    timePeriodHours:
+      query: "*/TPHR"
+
+    timeSignificance1Lgrsq11:
+      query: "*/LGRSQ1{1}/TSIG[1]"
+
+    timeSignificance1Lgrsq12:
+      query: "*/LGRSQ1{2}/TSIG[1]"
+
+    timeSignificance1Lgrsq13:
+      query: "*/LGRSQ1{3}/TSIG[1]"
+
+    timeSignificance1Lgrsq14:
+      query: "*/LGRSQ1{4}/TSIG[1]"
+
+    hour11:
+      query: "*/LGRSQ1{1}/HOUR[1]"
+
+    hour12:
+      query: "*/LGRSQ1{2}/HOUR[1]"
+
+    hour13:
+      query: "*/LGRSQ1{3}/HOUR[1]"
+
+    hour14:
+      query: "*/LGRSQ1{4}/HOUR[1]"
+
+    minutes11:
+      query: "*/LGRSQ1{1}/MINU[1]"
+
+    minutes12:
+      query: "*/LGRSQ1{2}/MINU[1]"
+
+    minutes13:
+      query: "*/LGRSQ1{3}/MINU[1]"
+
+    minutes14:
+      query: "*/LGRSQ1{4}/MINU[1]"
+
+    seconds11:
+      query: "*/LGRSQ1{1}/SECO[1]"
+
+    seconds12:
+      query: "*/LGRSQ1{2}/SECO[1]"
+
+    seconds13:
+      query: "*/LGRSQ1{3}/SECO[1]"
+
+    seconds14:
+      query: "*/LGRSQ1{4}/SECO[1]"
+
+    timeSignificance2Lgrsq11:
+      query: "*/LGRSQ1{1}/TSIG[2]"
+
+    timeSignificance2Lgrsq12:
+      query: "*/LGRSQ1{2}/TSIG[2]"
+
+    timeSignificance2Lgrsq13:
+      query: "*/LGRSQ1{3}/TSIG[2]"
+
+    timeSignificance2Lgrsq14:
+      query: "*/LGRSQ1{4}/TSIG[2]"
+
+    hour21:
+      query: "*/LGRSQ1{1}/HOUR[2]"
+
+    hour22:
+      query: "*/LGRSQ1{2}/HOUR[2]"
+
+    hour23:
+      query: "*/LGRSQ1{3}/HOUR[2]"
+
+    hour24:
+      query: "*/LGRSQ1{4}/HOUR[2]"
+
+    minutes21:
+      query: "*/LGRSQ1{1}/MINU[2]"
+
+    minutes22:
+      query: "*/LGRSQ1{2}/MINU[2]"
+
+    minutes23:
+      query: "*/LGRSQ1{3}/MINU[2]"
+
+    minutes24:
+      query: "*/LGRSQ1{4}/MINU[2]"
+
+    seconds21:
+      query: "*/LGRSQ1{1}/SECO[2]"
+
+    seconds22:
+      query: "*/LGRSQ1{2}/SECO[2]"
+
+    seconds23:
+      query: "*/LGRSQ1{3}/SECO[2]"
+
+    seconds24:
+      query: "*/LGRSQ1{4}/SECO[2]"
+
+    heightAssignmentMethodLgrsq21:
+      query: "*/LGRSQ2{1}/HAMD"
+
+    heightAssignmentMethodLgrsq22:
+      query: "*/LGRSQ2{2}/HAMD"
+
+    heightAssignmentMethodLgrsq23:
+      query: "*/LGRSQ2{3}/HAMD"
+
+    heightAssignmentMethodLgrsq24:
+      query: "*/LGRSQ2{4}/HAMD"
+
+    heightAssignmentMethodLgrsq25:
+      query: "*/LGRSQ2{5}/HAMD"
+
+    heightAssignmentMethodLgrsq26:
+      query: "*/LGRSQ2{6}/HAMD"
+
+    heightAssignmentMethodLgrsq27:
+      query: "*/LGRSQ2{7}/HAMD"
+
+    heightAssignmentMethodLgrsq28:
+      query: "*/LGRSQ2{8}/HAMD"
+
+    heightAssignmentMethodLgrsq29:
+      query: "*/LGRSQ2{9}/HAMD"
+
+    heightAssignmentMethodLgrsq210:
+      query: "*/LGRSQ2{10}/HAMD"
+
+    pressureLgrsq21:
+      query: "*/LGRSQ2{1}/PRLC"
+
+    pressureLgrsq22:
+      query: "*/LGRSQ2{2}/PRLC"
+
+    pressureLgrsq23:
+      query: "*/LGRSQ2{3}/PRLC"
+
+    pressureLgrsq24:
+      query: "*/LGRSQ2{4}/PRLC"
+
+    pressureLgrsq25:
+      query: "*/LGRSQ2{5}/PRLC"
+
+    pressureLgrsq26:
+      query: "*/LGRSQ2{6}/PRLC"
+
+    pressureLgrsq27:
+      query: "*/LGRSQ2{7}/PRLC"
+
+    pressureLgrsq28:
+      query: "*/LGRSQ2{8}/PRLC"
+
+    pressureLgrsq29:
+      query: "*/LGRSQ2{9}/PRLC"
+
+    pressureLgrsq210:
+      query: "*/LGRSQ2{10}/PRLC"
+
+    dataPresentIndicator:
+      query: "*/LGRSQ3/DPRI"
+
+    generatingCenterLong1:
+      query: "*/GCLONG[1]"
+
+    windGeneratingApplication1:
+      query: "*/GNAP[1]"
+
+    qiWithoutForecastLgrsq411:
+      query: "*/LGRSQ4[1]{1}/PCCF"
+
+    qiWithoutForecastLgrsq412:
+      query: "*/LGRSQ4[1]{2}/PCCF"
+
+    qiWithoutForecastLgrsq413:
+      query: "*/LGRSQ4[1]{3}/PCCF"
+
+    qiWithoutForecastLgrsq414:
+      query: "*/LGRSQ4[1]{4}/PCCF"
+
+    qiWithoutForecastLgrsq415:
+      query: "*/LGRSQ4[1]{5}/PCCF"
+
+    qiWithoutForecastLgrsq416:
+      query: "*/LGRSQ4[1]{6}/PCCF"
+
+    qiWithoutForecastLgrsq417:
+      query: "*/LGRSQ4[1]{7}/PCCF"
+
+    qiWithoutForecastLgrsq418:
+      query: "*/LGRSQ4[1]{8}/PCCF"
+
+    qiWithoutForecastLgrsq419:
+      query: "*/LGRSQ4[1]{9}/PCCF"
+
+    qiWithoutForecastLgrsq4110:
+      query: "*/LGRSQ4[1]{10}/PCCF"
+
+    generatingCenterLong2:
+      query: "*/GCLONG[2]"
+
+    windGeneratingApplication2:
+      query: "*/GNAP[2]"
+
+    qiWithoutForecastLgrsq421:
+      query: "*/LGRSQ4[2]{1}/PCCF"
+
+    qiWithoutForecastLgrsq422:
+      query: "*/LGRSQ4[2]{2}/PCCF"
+
+    qiWithoutForecastLgrsq423:
+      query: "*/LGRSQ4[2]{3}/PCCF"
+
+    qiWithoutForecastLgrsq424:
+      query: "*/LGRSQ4[2]{4}/PCCF"
+
+    qiWithoutForecastLgrsq425:
+      query: "*/LGRSQ4[2]{5}/PCCF"
+
+    qiWithoutForecastLgrsq426:
+      query: "*/LGRSQ4[2]{6}/PCCF"
+
+    qiWithoutForecastLgrsq427:
+      query: "*/LGRSQ4[2]{7}/PCCF"
+
+    qiWithoutForecastLgrsq428:
+      query: "*/LGRSQ4[2]{8}/PCCF"
+
+    qiWithoutForecastLgrsq429:
+      query: "*/LGRSQ4[2]{9}/PCCF"
+
+    qiWithoutForecastLgrsq4210:
+      query: "*/LGRSQ4[2]{10}/PCCF"
+
+    generatingCenterLong3:
+      query: "*/GCLONG[3]"
+
+    windGeneratingApplication3:
+      query: "*/GNAP[3]"
+
+    qiWithoutForecastLgrsq431:
+      query: "*/LGRSQ4[3]{1}/PCCF"
+
+    qiWithoutForecastLgrsq432:
+      query: "*/LGRSQ4[3]{2}/PCCF"
+
+    qiWithoutForecastLgrsq433:
+      query: "*/LGRSQ4[3]{3}/PCCF"
+
+    qiWithoutForecastLgrsq434:
+      query: "*/LGRSQ4[3]{4}/PCCF"
+
+    qiWithoutForecastLgrsq435:
+      query: "*/LGRSQ4[3]{5}/PCCF"
+
+    qiWithoutForecastLgrsq436:
+      query: "*/LGRSQ4[3]{6}/PCCF"
+
+    qiWithoutForecastLgrsq437:
+      query: "*/LGRSQ4[3]{7}/PCCF"
+
+    qiWithoutForecastLgrsq438:
+      query: "*/LGRSQ4[3]{8}/PCCF"
+
+    qiWithoutForecastLgrsq439:
+      query: "*/LGRSQ4[3]{9}/PCCF"
+
+    qiWithoutForecastLgrsq4310:
+      query: "*/LGRSQ4[3]{10}/PCCF"
+
+    # ObsValue
+    windDirection:
+      query: "*/WDIR"
+
+    windSpeed:
+      query: "*/WSPD"
+
+    coldestClusterTemperature:
+      query: "*/CCST"
+
+    windDirectionLgrsq11:
+      query: "*/LGRSQ1{1}/WDIR"
+
+    windDirectionLgrsq12:
+      query: "*/LGRSQ1{2}/WDIR"
+
+    windDirectionLgrsq13:
+      query: "*/LGRSQ1{3}/WDIR"
+
+    windDirectionLgrsq14:
+      query: "*/LGRSQ1{4}/WDIR"
+
+    windSpeedLgrsq11:
+      query: "*/LGRSQ1{1}/WSPD"
+
+    windSpeedLgrsq12:
+      query: "*/LGRSQ1{2}/WSPD"
+
+    windSpeedLgrsq13:
+      query: "*/LGRSQ1{3}/WSPD"
+
+    windSpeedLgrsq14:
+      query: "*/LGRSQ1{4}/WSPD"
+
+    airTemperature1:
+      query: "*/LGRSQ2{1}/TMDBST"
+
+    airTemperature2:
+      query: "*/LGRSQ2{2}/TMDBST"
+
+    airTemperature3:
+      query: "*/LGRSQ2{3}/TMDBST"
+
+    airTemperature4:
+      query: "*/LGRSQ2{4}/TMDBST"
+
+    airTemperature5:
+      query: "*/LGRSQ2{5}/TMDBST"
+
+    airTemperature6:
+      query: "*/LGRSQ2{6}/TMDBST"
+
+    airTemperature7:
+      query: "*/LGRSQ2{7}/TMDBST"
+
+    airTemperature8:
+      query: "*/LGRSQ2{8}/TMDBST"
+
+    airTemperature9:
+      query: "*/LGRSQ2{9}/TMDBST"
+
+    airTemperature10:
+      query: "*/LGRSQ2{10}/TMDBST"
+
+  splits:
+    satId:
+      category:
+        variable: satelliteIdentifier
+
+encoder:
+  dimensions:
+    - name: Lgrsq3
+      path: "*/LGRSQ3"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "Msg Type 005-072 SSEC/WISC LEO-GEO Winds"
+
+    - name: "dataCategory"
+      type: string
+      value: "single level upper-air data from satellite"
+
+    - name: "dataset"
+      type: string
+      value: "retrieval_amv_leogeo"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "005"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "072"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b005/xx072 NC005072"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier"
+
+    - name: "MetaData/generatingCenterLong"
+      source: variables/generatingCenterLong
+      longName: "ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/satelliteConstellationRO"
+      source: variables/satelliteConstellationRO
+      longName: "Satellite Classification"
+
+    - name: "MetaData/segmentSizeAtNadirInXDirection"
+      source: variables/segmentSizeAtNadirInXDirection
+      longName: "Segment Size At Nadir In X Direction"
+      units: "m"
+
+    - name: "MetaData/segmentSizeAtNadirInYDirection"
+      source: variables/segmentSizeAtNadirInYDirection
+      longName: "Segment Size At Nadir In Y Direction"
+      units: "m"
+
+    - name: "MetaData/satelliteInstrumentData"
+      source: variables/satelliteInstrumentData
+      longName: "Satellite Instrument Used In Data Processing"
+
+    - name: "MetaData/windComputationMethod"
+      source: variables/windComputationMethod
+      longName: "Satellite Derived Wind Calculation Method"
+
+    - name: "MetaData/pressure"
+      source: variables/pressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/sensorCentralFrequency"
+      source: variables/sensorCentralFrequency
+      longName: "Satellite Channel Center Frequecy"
+      units: "Hz"
+
+    - name: "MetaData/sensorBandWidth"
+      source: variables/sensorBandWidth
+      longName: "Satellite Channel Band Width"
+      units: "Hz"
+
+    - name: "MetaData/heightAssignmentMethod"
+      source: variables/heightAssignmentMethod
+      longName: "Height Assignment Method"
+
+    - name: "MetaData/tracerCorrelationMethod"
+      source: variables/tracerCorrelationMethod
+      longName: "Tracer Correlation Method"
+
+    - name: "MetaData/landOrSeaQualifier"
+      source: variables/landOrSeaQualifier
+      longName: "LAND/SEA Qualifier"
+
+    - name: "MetaData/satelliteZenithAngle"
+      source: variables/satelliteZenithAngle
+      longName: "Satellite Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/originOfFirstGuessInformation"
+      source: variables/originOfFirstGuessInformation
+      longName: "Origin Of First Guess Information"
+
+    - name: "MetaData/timeSignificance1"
+      source: variables/timeSignificance1
+      longName: "Time Significance"
+
+    - name: "MetaData/year"
+      source: variables/year
+      longName: "Year"
+      units: "year"
+
+    - name: "MetaData/month"
+      source: variables/month
+      longName: "Month"
+      units: "month"
+
+    - name: "MetaData/day"
+      source: variables/day
+      longName: "Day"
+      units: "day"
+
+    - name: "MetaData/hour"
+      source: variables/hour
+      longName: "Hour"
+      units: "h"
+
+    - name: "MetaData/timeSignificance2"
+      source: variables/timeSignificance2
+      longName: "Time Significance"
+
+    - name: "MetaData/timePeriodHours"
+      source: variables/timePeriodHours
+      longName: "Time Period Or Displacement"
+      units: "h"
+
+    - name: "MetaData/timeSignificance1Lgrsq11"
+      source: variables/timeSignificance1Lgrsq11
+      longName: "Time Significance (1)"
+
+    - name: "MetaData/timeSignificance1Lgrsq12"
+      source: variables/timeSignificance1Lgrsq12
+      longName: "Time Significance (2)"
+
+    - name: "MetaData/timeSignificance1Lgrsq13"
+      source: variables/timeSignificance1Lgrsq13
+      longName: "Time Significance (3)"
+
+    - name: "MetaData/timeSignificance1Lgrsq14"
+      source: variables/timeSignificance1Lgrsq14
+      longName: "Time Significance (4)"
+
+    - name: "MetaData/hour11"
+      source: variables/hour11
+      longName: "Hour (1)"
+      units: "h"
+
+    - name: "MetaData/hour12"
+      source: variables/hour12
+      longName: "Hour (2)"
+      units: "h"
+
+    - name: "MetaData/hour13"
+      source: variables/hour13
+      longName: "Hour (3)"
+      units: "h"
+
+    - name: "MetaData/hour14"
+      source: variables/hour14
+      longName: "Hour (4)"
+      units: "h"
+
+    - name: "MetaData/minutes11"
+      source: variables/minutes11
+      longName: "Minutes (1)"
+      units: "min"
+
+    - name: "MetaData/minutes12"
+      source: variables/minutes12
+      longName: "Minutes (2)"
+      units: "min"
+
+    - name: "MetaData/minutes13"
+      source: variables/minutes13
+      longName: "Minutes (3)"
+      units: "min"
+
+    - name: "MetaData/minutes14"
+      source: variables/minutes14
+      longName: "Minutes (4)"
+      units: "min"
+
+    - name: "MetaData/seconds11"
+      source: variables/seconds11
+      longName: "Seconds (1)"
+      units: "s"
+
+    - name: "MetaData/seconds12"
+      source: variables/seconds12
+      longName: "Seconds (2)"
+      units: "s"
+
+    - name: "MetaData/seconds13"
+      source: variables/seconds13
+      longName: "Seconds (3)"
+      units: "s"
+
+    - name: "MetaData/seconds14"
+      source: variables/seconds14
+      longName: "Seconds (4)"
+      units: "s"
+
+    - name: "MetaData/timeSignificance2Lgrsq11"
+      source: variables/timeSignificance2Lgrsq11
+      longName: "Time Significance (1)"
+
+    - name: "MetaData/timeSignificance2Lgrsq12"
+      source: variables/timeSignificance2Lgrsq12
+      longName: "Time Significance (2)"
+
+    - name: "MetaData/timeSignificance2Lgrsq13"
+      source: variables/timeSignificance2Lgrsq13
+      longName: "Time Significance (3)"
+
+    - name: "MetaData/timeSignificance2Lgrsq14"
+      source: variables/timeSignificance2Lgrsq14
+      longName: "Time Significance (4)"
+
+    - name: "MetaData/hour21"
+      source: variables/hour21
+      longName: "Hour (1)"
+      units: "h"
+
+    - name: "MetaData/hour22"
+      source: variables/hour22
+      longName: "Hour (2)"
+      units: "h"
+
+    - name: "MetaData/hour23"
+      source: variables/hour23
+      longName: "Hour (3)"
+      units: "h"
+
+    - name: "MetaData/hour24"
+      source: variables/hour24
+      longName: "Hour (4)"
+      units: "h"
+
+    - name: "MetaData/minutes21"
+      source: variables/minutes21
+      longName: "Minutes (1)"
+      units: "min"
+
+    - name: "MetaData/minutes22"
+      source: variables/minutes22
+      longName: "Minutes (2)"
+      units: "min"
+
+    - name: "MetaData/minutes23"
+      source: variables/minutes23
+      longName: "Minutes (3)"
+      units: "min"
+
+    - name: "MetaData/minutes24"
+      source: variables/minutes24
+      longName: "Minutes (4)"
+      units: "min"
+
+    - name: "MetaData/seconds21"
+      source: variables/seconds21
+      longName: "Seconds (1)"
+      units: "s"
+
+    - name: "MetaData/seconds22"
+      source: variables/seconds22
+      longName: "Seconds (2)"
+      units: "s"
+
+    - name: "MetaData/seconds23"
+      source: variables/seconds23
+      longName: "Seconds (3)"
+      units: "s"
+
+    - name: "MetaData/seconds24"
+      source: variables/seconds24
+      longName: "Seconds (4)"
+      units: "s"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq21"
+      source: variables/heightAssignmentMethodLgrsq21
+      longName: "Height Assignment Method (1)"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq22"
+      source: variables/heightAssignmentMethodLgrsq22
+      longName: "Height Assignment Method (2)"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq23"
+      source: variables/heightAssignmentMethodLgrsq23
+      longName: "Height Assignment Method (3)"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq24"
+      source: variables/heightAssignmentMethodLgrsq24
+      longName: "Height Assignment Method (4)"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq25"
+      source: variables/heightAssignmentMethodLgrsq25
+      longName: "Height Assignment Method (5)"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq26"
+      source: variables/heightAssignmentMethodLgrsq26
+      longName: "Height Assignment Method (6)"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq27"
+      source: variables/heightAssignmentMethodLgrsq27
+      longName: "Height Assignment Method (7)"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq28"
+      source: variables/heightAssignmentMethodLgrsq28
+      longName: "Height Assignment Method (8)"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq29"
+      source: variables/heightAssignmentMethodLgrsq29
+      longName: "Height Assignment Method (9)"
+
+    - name: "MetaData/heightAssignmentMethodLgrsq210"
+      source: variables/heightAssignmentMethodLgrsq210
+      longName: "Height Assignment Method (10)"
+
+    - name: "MetaData/pressureLgrsq21"
+      source: variables/pressureLgrsq21
+      longName: "Pressure (1)"
+      units: "Pa"
+
+    - name: "MetaData/pressureLgrsq22"
+      source: variables/pressureLgrsq22
+      longName: "Pressure (2)"
+      units: "Pa"
+
+    - name: "MetaData/pressureLgrsq23"
+      source: variables/pressureLgrsq23
+      longName: "Pressure (3)"
+      units: "Pa"
+
+    - name: "MetaData/pressureLgrsq24"
+      source: variables/pressureLgrsq24
+      longName: "Pressure (4)"
+      units: "Pa"
+
+    - name: "MetaData/pressureLgrsq25"
+      source: variables/pressureLgrsq25
+      longName: "Pressure (5)"
+      units: "Pa"
+
+    - name: "MetaData/pressureLgrsq26"
+      source: variables/pressureLgrsq26
+      longName: "Pressure (6)"
+      units: "Pa"
+
+    - name: "MetaData/pressureLgrsq27"
+      source: variables/pressureLgrsq27
+      longName: "Pressure (7)"
+      units: "Pa"
+
+    - name: "MetaData/pressureLgrsq28"
+      source: variables/pressureLgrsq28
+      longName: "Pressure (8)"
+      units: "Pa"
+
+    - name: "MetaData/pressureLgrsq29"
+      source: variables/pressureLgrsq29
+      longName: "Pressure (9)"
+      units: "Pa"
+
+    - name: "MetaData/pressureLgrsq210"
+      source: variables/pressureLgrsq210
+      longName: "Pressure (10)"
+      units: "Pa"
+
+    - name: "MetaData/dataPresentIndicator"
+      source: variables/dataPresentIndicator
+      longName: "Data Present Indicator"
+
+    - name: "MetaData/generatingCenterLong1"
+      source: variables/generatingCenterLong1
+      longName: "ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/windGeneratingApplication1"
+      source: variables/windGeneratingApplication1
+      longName: "Generating Application"
+
+    - name: "MetaData/qiWithoutForecastLgrsq411"
+      source: variables/qiWithoutForecastLgrsq411
+      longName: "Percent Confidence (1)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq412"
+      source: variables/qiWithoutForecastLgrsq412
+      longName: "Percent Confidence (2)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq413"
+      source: variables/qiWithoutForecastLgrsq413
+      longName: "Percent Confidence (3)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq414"
+      source: variables/qiWithoutForecastLgrsq414
+      longName: "Percent Confidence (4)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq415"
+      source: variables/qiWithoutForecastLgrsq415
+      longName: "Percent Confidence (5)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq416"
+      source: variables/qiWithoutForecastLgrsq416
+      longName: "Percent Confidence (6)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq417"
+      source: variables/qiWithoutForecastLgrsq417
+      longName: "Percent Confidence (7)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq418"
+      source: variables/qiWithoutForecastLgrsq418
+      longName: "Percent Confidence (8)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq419"
+      source: variables/qiWithoutForecastLgrsq419
+      longName: "Percent Confidence (9)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq4110"
+      source: variables/qiWithoutForecastLgrsq4110
+      longName: "Percent Confidence (10)"
+      units: "%"
+
+    - name: "MetaData/generatingCenterLong2"
+      source: variables/generatingCenterLong2
+      longName: "ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/windGeneratingApplication2"
+      source: variables/windGeneratingApplication2
+      longName: "Generating Application"
+
+    - name: "MetaData/qiWithoutForecastLgrsq421"
+      source: variables/qiWithoutForecastLgrsq421
+      longName: "Percent Confidence (1)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq422"
+      source: variables/qiWithoutForecastLgrsq422
+      longName: "Percent Confidence (2)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq423"
+      source: variables/qiWithoutForecastLgrsq423
+      longName: "Percent Confidence (3)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq424"
+      source: variables/qiWithoutForecastLgrsq424
+      longName: "Percent Confidence (4)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq425"
+      source: variables/qiWithoutForecastLgrsq425
+      longName: "Percent Confidence (5)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq426"
+      source: variables/qiWithoutForecastLgrsq426
+      longName: "Percent Confidence (6)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq427"
+      source: variables/qiWithoutForecastLgrsq427
+      longName: "Percent Confidence (7)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq428"
+      source: variables/qiWithoutForecastLgrsq428
+      longName: "Percent Confidence (8)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq429"
+      source: variables/qiWithoutForecastLgrsq429
+      longName: "Percent Confidence (9)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq4210"
+      source: variables/qiWithoutForecastLgrsq4210
+      longName: "Percent Confidence (10)"
+      units: "%"
+
+    - name: "MetaData/generatingCenterLong3"
+      source: variables/generatingCenterLong3
+      longName: "ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/windGeneratingApplication3"
+      source: variables/windGeneratingApplication3
+      longName: "Generating Application"
+
+    - name: "MetaData/qiWithoutForecastLgrsq431"
+      source: variables/qiWithoutForecastLgrsq431
+      longName: "Percent Confidence (1)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq432"
+      source: variables/qiWithoutForecastLgrsq432
+      longName: "Percent Confidence (2)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq433"
+      source: variables/qiWithoutForecastLgrsq433
+      longName: "Percent Confidence (3)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq434"
+      source: variables/qiWithoutForecastLgrsq434
+      longName: "Percent Confidence (4)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq435"
+      source: variables/qiWithoutForecastLgrsq435
+      longName: "Percent Confidence (5)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq436"
+      source: variables/qiWithoutForecastLgrsq436
+      longName: "Percent Confidence (6)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq437"
+      source: variables/qiWithoutForecastLgrsq437
+      longName: "Percent Confidence (7)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq438"
+      source: variables/qiWithoutForecastLgrsq438
+      longName: "Percent Confidence (8)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq439"
+      source: variables/qiWithoutForecastLgrsq439
+      longName: "Percent Confidence (9)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastLgrsq4310"
+      source: variables/qiWithoutForecastLgrsq4310
+      longName: "Percent Confidence (10)"
+      units: "%"
+
+    # ObsValue
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/coldestClusterTemperature"
+      source: variables/coldestClusterTemperature
+      longName: "Coldest Cluster Temperature"
+      units: "K"
+
+    - name: "ObsValue/windDirectionLgrsq11"
+      source: variables/windDirectionLgrsq11
+      longName: "Wind Direction (1)"
+      units: "degree"
+
+    - name: "ObsValue/windDirectionLgrsq12"
+      source: variables/windDirectionLgrsq12
+      longName: "Wind Direction (2)"
+      units: "degree"
+
+    - name: "ObsValue/windDirectionLgrsq13"
+      source: variables/windDirectionLgrsq13
+      longName: "Wind Direction (3)"
+      units: "degree"
+
+    - name: "ObsValue/windDirectionLgrsq14"
+      source: variables/windDirectionLgrsq14
+      longName: "Wind Direction (4)"
+      units: "degree"
+
+    - name: "ObsValue/windSpeedLgrsq11"
+      source: variables/windSpeedLgrsq11
+      longName: "Wind Speed (1)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeedLgrsq12"
+      source: variables/windSpeedLgrsq12
+      longName: "Wind Speed (2)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeedLgrsq13"
+      source: variables/windSpeedLgrsq13
+      longName: "Wind Speed (3)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeedLgrsq14"
+      source: variables/windSpeedLgrsq14
+      longName: "Wind Speed (4)"
+      units: "m s-1"
+
+    - name: "ObsValue/airTemperature1"
+      source: variables/airTemperature1
+      longName: "TEMPERATURE/DRY Bulb Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/airTemperature2"
+      source: variables/airTemperature2
+      longName: "TEMPERATURE/DRY Bulb Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/airTemperature3"
+      source: variables/airTemperature3
+      longName: "TEMPERATURE/DRY Bulb Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/airTemperature4"
+      source: variables/airTemperature4
+      longName: "TEMPERATURE/DRY Bulb Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/airTemperature5"
+      source: variables/airTemperature5
+      longName: "TEMPERATURE/DRY Bulb Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/airTemperature6"
+      source: variables/airTemperature6
+      longName: "TEMPERATURE/DRY Bulb Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/airTemperature7"
+      source: variables/airTemperature7
+      longName: "TEMPERATURE/DRY Bulb Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/airTemperature8"
+      source: variables/airTemperature8
+      longName: "TEMPERATURE/DRY Bulb Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/airTemperature9"
+      source: variables/airTemperature9
+      longName: "TEMPERATURE/DRY Bulb Temperature (9)"
+      units: "K"
+
+    - name: "ObsValue/airTemperature10"
+      source: variables/airTemperature10
+      longName: "TEMPERATURE/DRY Bulb Temperature (10)"
+      units: "K"

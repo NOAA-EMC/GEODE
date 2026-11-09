@@ -1,0 +1,126 @@
+bufr:
+  subsets:
+    - NC007002
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    # ObsValue
+    amplitudeofstrike:
+      query: "*/AMPLS"
+
+    polarityofstroke:
+      query: "*/PLRTS"
+
+    otherWeatherPhenomena:
+      query: "*/OWEP"
+
+    numberofflashes:
+      query: "*/NOFL"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Mtype 007-002 Vaisala Lightning (LLDN LONG-RANGE)"
+
+    - name: "dataCategory"
+      type: string
+      value: "synoptic features"
+
+    - name: "dataset"
+      type: string
+      value: "lightning_lldn_restricted"
+
+    - name: "dataFormat"
+      type: string
+      value: "binary"
+
+    - name: "restricted"
+      type: string
+      value: "true"
+
+    - name: "bufrCategory"
+      type: string
+      value: "007"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "002"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b007/xx002 NC007002"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    # ObsValue
+    - name: "ObsValue/amplitudeofstrike"
+      source: variables/amplitudeofstrike
+      longName: "Amplitude Of Lightning Strike"
+      units: "A"
+
+    - name: "ObsValue/polarityofstroke"
+      source: variables/polarityofstroke
+      longName: "Polarity Of Stroke"
+
+    - name: "ObsValue/otherWeatherPhenomena"
+      source: variables/otherWeatherPhenomena
+      longName: "Other Weather Phenomena"
+
+    - name: "ObsValue/numberofflashes"
+      source: variables/numberofflashes
+      longName: "Number Of Flashes (THUNDERSTORM)"

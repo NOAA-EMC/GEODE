@@ -1,0 +1,171 @@
+bufr:
+  subsets:
+    - NC006049
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    radarStationIdentifier:
+      query: "*/SSTN"
+
+    stationElevation:
+      query: "*/HSMSL"
+
+    heightOfSensorAboveGround:
+      query: "*/HSALG"
+
+    antennaAzimuthAngle:
+      query: "*/ANAZ"
+
+    antennaElevationAngle:
+      query: "*/ANEL"
+
+    distanceToGateCenter:
+      query: "*/NL2RF/DIST"
+
+    radarVolumeIdentifier:
+      query: "*/VOID"
+
+    radarScanIdentifier:
+      query: "*/SCID"
+
+    volumeCoveragePattern:
+      query: "*/VOCP"
+
+    # ObsValue
+    horizontalReflectivity:
+      query: "*/NL2RF/HREF"
+
+    # QualityMarker
+    reflectivity:
+      query: "*/QCRF"
+
+encoder:
+  dimensions:
+    - name: ReflectivityGate
+      path: "*/NL2RF"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "M TYPE 006-049 NEXRAD LVL 2 REFLECTIVITY (09z)"
+
+    - name: "dataCategory"
+      type: string
+      value: "radar"
+
+    - name: "dataset"
+      type: string
+      value: "radar_nexrad_l2_reflectivity"
+
+    - name: "dataFormat"
+      type: string
+      value: "binary"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "006"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "049"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b006/xx049 NC006049"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/radarStationIdentifier"
+      source: variables/radarStationIdentifier
+      longName: "Radar Station Identifier (SHORT)"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station Ground Above Msl"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveGround"
+      source: variables/heightOfSensorAboveGround
+      longName: "Height Of Antenna Above Ground"
+      units: "m"
+
+    - name: "MetaData/antennaAzimuthAngle"
+      source: variables/antennaAzimuthAngle
+      longName: "Antenna Azimuth Angle"
+      units: "degree"
+
+    - name: "MetaData/antennaElevationAngle"
+      source: variables/antennaElevationAngle
+      longName: "Antenna Elevation Angle"
+      units: "degree"
+
+    - name: "MetaData/distanceToGateCenter"
+      source: variables/distanceToGateCenter
+      longName: "Distance (FROM Antenna To Gate CENTER)"
+      units: "m"
+
+    - name: "MetaData/radarVolumeIdentifier"
+      source: variables/radarVolumeIdentifier
+      longName: "Radar Volume Id (IN The Form DDHHMM)"
+
+    - name: "MetaData/radarScanIdentifier"
+      source: variables/radarScanIdentifier
+      longName: "Radar Scan Id (RANGE 1-21)"
+
+    - name: "MetaData/volumeCoveragePattern"
+      source: variables/volumeCoveragePattern
+      longName: "Volume Coverage Pattern"
+
+    # ObsValue
+    - name: "ObsValue/horizontalReflectivity"
+      source: variables/horizontalReflectivity
+      longName: "Horizontal Reflectivity"
+      units: "dB"
+
+    # QualityMarker
+    - name: "QualityMarker/reflectivity"
+      source: variables/reflectivity
+      longName: "Quality Mark For Reflectivities Along Radial Line"

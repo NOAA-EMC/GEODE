@@ -1,0 +1,491 @@
+bufr:
+  subsets:
+    - NC001014
+
+  # One row per element of this sequence
+  group_by_variable: timeSignificance
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    stationElevation:
+      query: "*/HSMSL"
+
+    timeSignificance:
+      query: "*/SHRVFFSQ/TSIG"
+
+    year:
+      query: "*/SHRVFFSQ/YEAR"
+
+    month:
+      query: "*/SHRVFFSQ/MNTH"
+
+    day:
+      query: "*/SHRVFFSQ/DAYS"
+
+    hour:
+      query: "*/SHRVFFSQ/HOUR"
+
+    minute:
+      query: "*/SHRVFFSQ/MINU"
+
+    forecastSignificanceShrvhtsq1:
+      query: "*/SHRVFFSQ/SHRVHTSQ{1}/FCTSIG"
+
+    forecastSignificanceShrvhtsq2:
+      query: "*/SHRVFFSQ/SHRVHTSQ{2}/FCTSIG"
+
+    forecastSignificanceShrvhtsq3:
+      query: "*/SHRVFFSQ/SHRVHTSQ{3}/FCTSIG"
+
+    forecastSignificanceShrvhtsq4:
+      query: "*/SHRVFFSQ/SHRVHTSQ{4}/FCTSIG"
+
+    heightSignificance1:
+      query: "*/SHRVFFSQ/SHRVHTSQ{1}/HGTSIG"
+
+    heightSignificance2:
+      query: "*/SHRVFFSQ/SHRVHTSQ{2}/HGTSIG"
+
+    heightSignificance3:
+      query: "*/SHRVFFSQ/SHRVHTSQ{3}/HGTSIG"
+
+    heightSignificance4:
+      query: "*/SHRVFFSQ/SHRVHTSQ{4}/HGTSIG"
+
+    height1:
+      query: "*/SHRVFFSQ/SHRVHTSQ{1}/HEIT"
+
+    height2:
+      query: "*/SHRVFFSQ/SHRVHTSQ{2}/HEIT"
+
+    height3:
+      query: "*/SHRVFFSQ/SHRVHTSQ{3}/HEIT"
+
+    height4:
+      query: "*/SHRVFFSQ/SHRVHTSQ{4}/HEIT"
+
+    forecastSignificanceShrvdcsq1:
+      query: "*/SHRVFFSQ/SHRVDCSQ{1}/FCTSIG"
+
+    forecastSignificanceShrvdcsq2:
+      query: "*/SHRVFFSQ/SHRVDCSQ{2}/FCTSIG"
+
+    forecastSignificanceShrvdcsq3:
+      query: "*/SHRVFFSQ/SHRVDCSQ{3}/FCTSIG"
+
+    forecastSignificanceShrvdcsq4:
+      query: "*/SHRVFFSQ/SHRVDCSQ{4}/FCTSIG"
+
+    dischargeSignificance1:
+      query: "*/SHRVFFSQ/SHRVDCSQ{1}/DCHSIG"
+
+    dischargeSignificance2:
+      query: "*/SHRVFFSQ/SHRVDCSQ{2}/DCHSIG"
+
+    dischargeSignificance3:
+      query: "*/SHRVFFSQ/SHRVDCSQ{3}/DCHSIG"
+
+    dischargeSignificance4:
+      query: "*/SHRVFFSQ/SHRVDCSQ{4}/DCHSIG"
+
+    # ObsValue
+    discharge1:
+      query: "*/SHRVFFSQ/SHRVDCSQ{1}/DCHG"
+
+    discharge2:
+      query: "*/SHRVFFSQ/SHRVDCSQ{2}/DCHG"
+
+    discharge3:
+      query: "*/SHRVFFSQ/SHRVDCSQ{3}/DCHG"
+
+    discharge4:
+      query: "*/SHRVFFSQ/SHRVDCSQ{4}/DCHG"
+
+    # QualityMarker
+    shefRevisionFlagShrvhtsq1:
+      query: "*/SHRVFFSQ/SHRVHTSQ{1}/SHRV"
+
+    shefRevisionFlagShrvhtsq2:
+      query: "*/SHRVFFSQ/SHRVHTSQ{2}/SHRV"
+
+    shefRevisionFlagShrvhtsq3:
+      query: "*/SHRVFFSQ/SHRVHTSQ{3}/SHRV"
+
+    shefRevisionFlagShrvhtsq4:
+      query: "*/SHRVFFSQ/SHRVHTSQ{4}/SHRV"
+
+    shefQualifierFlagShrvhtsq1:
+      query: "*/SHRVFFSQ/SHRVHTSQ{1}/SHQL"
+
+    shefQualifierFlagShrvhtsq2:
+      query: "*/SHRVFFSQ/SHRVHTSQ{2}/SHQL"
+
+    shefQualifierFlagShrvhtsq3:
+      query: "*/SHRVFFSQ/SHRVHTSQ{3}/SHQL"
+
+    shefQualifierFlagShrvhtsq4:
+      query: "*/SHRVFFSQ/SHRVHTSQ{4}/SHQL"
+
+    shefRevisionFlagShrvdcsq1:
+      query: "*/SHRVFFSQ/SHRVDCSQ{1}/SHRV"
+
+    shefRevisionFlagShrvdcsq2:
+      query: "*/SHRVFFSQ/SHRVDCSQ{2}/SHRV"
+
+    shefRevisionFlagShrvdcsq3:
+      query: "*/SHRVFFSQ/SHRVDCSQ{3}/SHRV"
+
+    shefRevisionFlagShrvdcsq4:
+      query: "*/SHRVFFSQ/SHRVDCSQ{4}/SHRV"
+
+    shefQualifierFlagShrvdcsq1:
+      query: "*/SHRVFFSQ/SHRVDCSQ{1}/SHQL"
+
+    shefQualifierFlagShrvdcsq2:
+      query: "*/SHRVFFSQ/SHRVDCSQ{2}/SHQL"
+
+    shefQualifierFlagShrvdcsq3:
+      query: "*/SHRVFFSQ/SHRVDCSQ{3}/SHQL"
+
+    shefQualifierFlagShrvdcsq4:
+      query: "*/SHRVFFSQ/SHRVDCSQ{4}/SHQL"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Message Type 001-014 Rvf River Forecast Data (SHEF)"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface marine"
+
+    - name: "dataset"
+      type: string
+      value: "surface_rvf"
+
+    - name: "dataFormat"
+      type: string
+      value: "SHEF"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "001"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "014"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b001/xx014 NC001014"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station Ground Above Msl"
+      units: "m"
+
+    - name: "MetaData/timeSignificance"
+      source: variables/timeSignificance
+      longName: "Time Significance"
+
+    - name: "MetaData/year"
+      source: variables/year
+      longName: "Year"
+      units: "year"
+
+    - name: "MetaData/month"
+      source: variables/month
+      longName: "Month"
+      units: "month"
+
+    - name: "MetaData/day"
+      source: variables/day
+      longName: "Day"
+      units: "day"
+
+    - name: "MetaData/hour"
+      source: variables/hour
+      longName: "Hour"
+      units: "h"
+
+    - name: "MetaData/minute"
+      source: variables/minute
+      longName: "Minute"
+      units: "min"
+
+    - name: "MetaData/forecastSignificanceShrvhtsq1"
+      source: variables/forecastSignificanceShrvhtsq1
+      longName: "Forecast Significance (1)"
+
+    - name: "MetaData/forecastSignificanceShrvhtsq2"
+      source: variables/forecastSignificanceShrvhtsq2
+      longName: "Forecast Significance (2)"
+
+    - name: "MetaData/forecastSignificanceShrvhtsq3"
+      source: variables/forecastSignificanceShrvhtsq3
+      longName: "Forecast Significance (3)"
+
+    - name: "MetaData/forecastSignificanceShrvhtsq4"
+      source: variables/forecastSignificanceShrvhtsq4
+      longName: "Forecast Significance (4)"
+
+    - name: "MetaData/heightSignificance1"
+      source: variables/heightSignificance1
+      longName: "Height Significance (1)"
+
+    - name: "MetaData/heightSignificance2"
+      source: variables/heightSignificance2
+      longName: "Height Significance (2)"
+
+    - name: "MetaData/heightSignificance3"
+      source: variables/heightSignificance3
+      longName: "Height Significance (3)"
+
+    - name: "MetaData/heightSignificance4"
+      source: variables/heightSignificance4
+      longName: "Height Significance (4)"
+
+    - name: "MetaData/height1"
+      source: variables/height1
+      longName: "Height (1)"
+      units: "m"
+
+    - name: "MetaData/height2"
+      source: variables/height2
+      longName: "Height (2)"
+      units: "m"
+
+    - name: "MetaData/height3"
+      source: variables/height3
+      longName: "Height (3)"
+      units: "m"
+
+    - name: "MetaData/height4"
+      source: variables/height4
+      longName: "Height (4)"
+      units: "m"
+
+    - name: "MetaData/forecastSignificanceShrvdcsq1"
+      source: variables/forecastSignificanceShrvdcsq1
+      longName: "Forecast Significance (1)"
+
+    - name: "MetaData/forecastSignificanceShrvdcsq2"
+      source: variables/forecastSignificanceShrvdcsq2
+      longName: "Forecast Significance (2)"
+
+    - name: "MetaData/forecastSignificanceShrvdcsq3"
+      source: variables/forecastSignificanceShrvdcsq3
+      longName: "Forecast Significance (3)"
+
+    - name: "MetaData/forecastSignificanceShrvdcsq4"
+      source: variables/forecastSignificanceShrvdcsq4
+      longName: "Forecast Significance (4)"
+
+    - name: "MetaData/dischargeSignificance1"
+      source: variables/dischargeSignificance1
+      longName: "Discharge Significance (1)"
+
+    - name: "MetaData/dischargeSignificance2"
+      source: variables/dischargeSignificance2
+      longName: "Discharge Significance (2)"
+
+    - name: "MetaData/dischargeSignificance3"
+      source: variables/dischargeSignificance3
+      longName: "Discharge Significance (3)"
+
+    - name: "MetaData/dischargeSignificance4"
+      source: variables/dischargeSignificance4
+      longName: "Discharge Significance (4)"
+
+    # ObsValue
+    - name: "ObsValue/discharge1"
+      source: variables/discharge1
+      longName: "Discharge (1)"
+      units: "m3 s-1"
+
+    - name: "ObsValue/discharge2"
+      source: variables/discharge2
+      longName: "Discharge (2)"
+      units: "m3 s-1"
+
+    - name: "ObsValue/discharge3"
+      source: variables/discharge3
+      longName: "Discharge (3)"
+      units: "m3 s-1"
+
+    - name: "ObsValue/discharge4"
+      source: variables/discharge4
+      longName: "Discharge (4)"
+      units: "m3 s-1"
+
+    # QualityMarker
+    - name: "QualityMarker/shefRevisionFlagShrvhtsq1"
+      source: variables/shefRevisionFlagShrvhtsq1
+      longName: "Shef Data Revision Flag (1)"
+
+    - name: "QualityMarker/shefRevisionFlagShrvhtsq2"
+      source: variables/shefRevisionFlagShrvhtsq2
+      longName: "Shef Data Revision Flag (2)"
+
+    - name: "QualityMarker/shefRevisionFlagShrvhtsq3"
+      source: variables/shefRevisionFlagShrvhtsq3
+      longName: "Shef Data Revision Flag (3)"
+
+    - name: "QualityMarker/shefRevisionFlagShrvhtsq4"
+      source: variables/shefRevisionFlagShrvhtsq4
+      longName: "Shef Data Revision Flag (4)"
+
+    - name: "QualityMarker/shefQualifierFlagShrvhtsq1"
+      source: variables/shefQualifierFlagShrvhtsq1
+      longName: "Shef Data Qualifier Flag (1)"
+
+    - name: "QualityMarker/shefQualifierFlagShrvhtsq2"
+      source: variables/shefQualifierFlagShrvhtsq2
+      longName: "Shef Data Qualifier Flag (2)"
+
+    - name: "QualityMarker/shefQualifierFlagShrvhtsq3"
+      source: variables/shefQualifierFlagShrvhtsq3
+      longName: "Shef Data Qualifier Flag (3)"
+
+    - name: "QualityMarker/shefQualifierFlagShrvhtsq4"
+      source: variables/shefQualifierFlagShrvhtsq4
+      longName: "Shef Data Qualifier Flag (4)"
+
+    - name: "QualityMarker/shefRevisionFlagShrvdcsq1"
+      source: variables/shefRevisionFlagShrvdcsq1
+      longName: "Shef Data Revision Flag (1)"
+
+    - name: "QualityMarker/shefRevisionFlagShrvdcsq2"
+      source: variables/shefRevisionFlagShrvdcsq2
+      longName: "Shef Data Revision Flag (2)"
+
+    - name: "QualityMarker/shefRevisionFlagShrvdcsq3"
+      source: variables/shefRevisionFlagShrvdcsq3
+      longName: "Shef Data Revision Flag (3)"
+
+    - name: "QualityMarker/shefRevisionFlagShrvdcsq4"
+      source: variables/shefRevisionFlagShrvdcsq4
+      longName: "Shef Data Revision Flag (4)"
+
+    - name: "QualityMarker/shefQualifierFlagShrvdcsq1"
+      source: variables/shefQualifierFlagShrvdcsq1
+      longName: "Shef Data Qualifier Flag (1)"
+
+    - name: "QualityMarker/shefQualifierFlagShrvdcsq2"
+      source: variables/shefQualifierFlagShrvdcsq2
+      longName: "Shef Data Qualifier Flag (2)"
+
+    - name: "QualityMarker/shefQualifierFlagShrvdcsq3"
+      source: variables/shefQualifierFlagShrvdcsq3
+      longName: "Shef Data Qualifier Flag (3)"
+
+    - name: "QualityMarker/shefQualifierFlagShrvdcsq4"
+      source: variables/shefQualifierFlagShrvdcsq4
+      longName: "Shef Data Qualifier Flag (4)"

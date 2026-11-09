@@ -1,0 +1,278 @@
+bufr:
+  subsets:
+    - NC000015
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    wigosIdentifierSeries:
+      query: "*/WGOSIDS"
+
+    wigosIssuerOfIdentifier:
+      query: "*/WGOSISID"
+
+    wigosIssueNumber:
+      query: "*/WGOSISNM"
+
+    wigosLocalIdentifierCharacter:
+      query: "*/WGOSLID"
+
+    stateIdentifier:
+      query: "*/STID"
+
+    nationalStationNumber:
+      query: "*/NSID"
+
+    stationLongName:
+      query: "*/LSTN"
+
+    stationType:
+      query: "*/TOST"
+
+    stationElevation:
+      query: "*/HSMSL"
+
+    heightOfSensorAboveGround1:
+      query: "*/HSALG[1]"
+
+    heightOfSensorAboveGround2:
+      query: "*/HSALG[2]"
+
+    methodOfSnowDepthMeasurement:
+      query: "*/MODM"
+
+    methodOfSnowWaterEquivalentMeasurement:
+      query: "*/MSWEM"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    # ObsValue
+    airTemperature:
+      query: "*/TMDB"
+
+    groundState:
+      query: "*/SOGR"
+
+    totalSnowDepth:
+      query: "*/TOSD"
+
+    snowDensityLiquidWaterContent:
+      query: "*/SDEN"
+
+    snowWaterEquivalent:
+      query: "*/SWEMS"
+
+    # QualityMarker
+    correctedReportIndicator:
+      query: "*/CORN"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Mtyp 000-015 Snow COVER, DEPTH/DENSITY, And Water Equiv"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface land"
+
+    - name: "dataset"
+      type: string
+      value: "surface_snow"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "000"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "015"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b000/xx015 NC000015"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/wigosIdentifierSeries"
+      source: variables/wigosIdentifierSeries
+      longName: "Wigos Identifier Series"
+
+    - name: "MetaData/wigosIssuerOfIdentifier"
+      source: variables/wigosIssuerOfIdentifier
+      longName: "Wigos Issuer Of Identifier"
+
+    - name: "MetaData/wigosIssueNumber"
+      source: variables/wigosIssueNumber
+      longName: "Wigos Issue Number"
+
+    - name: "MetaData/wigosLocalIdentifierCharacter"
+      source: variables/wigosLocalIdentifierCharacter
+      longName: "Wigos Local Identifier (CHARACTER)"
+
+    - name: "MetaData/stateIdentifier"
+      source: variables/stateIdentifier
+      longName: "State identifier"
+
+    - name: "MetaData/nationalStationNumber"
+      source: variables/nationalStationNumber
+      longName: "National station number"
+
+    - name: "MetaData/stationLongName"
+      source: variables/stationLongName
+      longName: "Long station or site name"
+
+    - name: "MetaData/stationType"
+      source: variables/stationType
+      longName: "Type Of Station"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station Ground Above Msl"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveGround1"
+      source: variables/heightOfSensorAboveGround1
+      longName: "Height Of Sensor Above Local Ground"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveGround2"
+      source: variables/heightOfSensorAboveGround2
+      longName: "Height Of Sensor Above Local Ground"
+      units: "m"
+
+    - name: "MetaData/methodOfSnowDepthMeasurement"
+      source: variables/methodOfSnowDepthMeasurement
+      longName: "Method Of Snow Depth Measurement"
+
+    - name: "MetaData/methodOfSnowWaterEquivalentMeasurement"
+      source: variables/methodOfSnowWaterEquivalentMeasurement
+      longName: "Method of snow water equivalent measurement"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    # ObsValue
+    - name: "ObsValue/airTemperature"
+      source: variables/airTemperature
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/groundState"
+      source: variables/groundState
+      longName: "State Of The Ground"
+
+    - name: "ObsValue/totalSnowDepth"
+      source: variables/totalSnowDepth
+      longName: "Total Snow Depth"
+      units: "m"
+
+    - name: "ObsValue/snowDensityLiquidWaterContent"
+      source: variables/snowDensityLiquidWaterContent
+      longName: "Snow density (liquid water content)"
+      units: "kg m-2"
+
+    - name: "ObsValue/snowWaterEquivalent"
+      source: variables/snowWaterEquivalent
+      longName: "Snow water equivalent"
+      units: "kg m-2"
+
+    # QualityMarker
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"

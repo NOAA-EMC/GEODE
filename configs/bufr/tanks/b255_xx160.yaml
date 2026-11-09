@@ -1,0 +1,340 @@
+bufr:
+  subsets:
+    - NC255160
+
+  variables:
+    # Not mapped: see the sequence notes in dev/ush/generate_bufr_tank_yamls.py
+    #   */FILENAME/FNSTG
+
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCPTIM{1}/RCYR"
+        month: "*/RCPTIM{1}/RCMO"
+        day: "*/RCPTIM{1}/RCDY"
+        hour: "*/RCPTIM{1}/RCHR"
+        minute: "*/RCPTIM{1}/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    receiptTimeSignificance:
+      query: "*/RCPTIM{1}/RCTS"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    providerIdentifier1:
+      query: "*/PRVID{1}/PRVSTG"
+
+    providerIdentifier2:
+      query: "*/PRVID{2}/PRVSTG"
+
+    stationElevation:
+      query: "*/SELV"
+
+    riverStageHeightGageHeight:
+      query: "*/RSHM"
+
+    # ObsValue
+    discharge:
+      query: "*/DCHG"
+
+    totalPrecipitationPast5Minutes:
+      query: "*/HYPCP5SQ/TP5M"
+
+    totalPrecipitationPast1Hour:
+      query: "*/HYPCP1SQ/TP01"
+
+    totalPrecipitationPast3Hours:
+      query: "*/HYPCP3SQ/TP03"
+
+    totalPrecipitationPast6Hours:
+      query: "*/HYPCP6SQ/TP06"
+
+    totalPrecipitationPast12Hours:
+      query: "*/HYPC12SQ/TP12"
+
+    totalPrecipitationPast24Hours:
+      query: "*/HYPC24SQ/TP24"
+
+    # QualityMarker
+    fslQcDataHypcp5sq:
+      query: "*/HYPCP5SQ/QCD"
+
+    fslQcAppliedHypcp5sq:
+      query: "*/HYPCP5SQ/QCA"
+
+    fslQcResultsHypcp5sq:
+      query: "*/HYPCP5SQ/QCR"
+
+    fslQcDataHypcp1sq:
+      query: "*/HYPCP1SQ/QCD"
+
+    fslQcAppliedHypcp1sq:
+      query: "*/HYPCP1SQ/QCA"
+
+    fslQcResultsHypcp1sq:
+      query: "*/HYPCP1SQ/QCR"
+
+    fslQcDataHypcp3sq:
+      query: "*/HYPCP3SQ/QCD"
+
+    fslQcAppliedHypcp3sq:
+      query: "*/HYPCP3SQ/QCA"
+
+    fslQcResultsHypcp3sq:
+      query: "*/HYPCP3SQ/QCR"
+
+    fslQcDataHypcp6sq:
+      query: "*/HYPCP6SQ/QCD"
+
+    fslQcAppliedHypcp6sq:
+      query: "*/HYPCP6SQ/QCA"
+
+    fslQcResultsHypcp6sq:
+      query: "*/HYPCP6SQ/QCR"
+
+    fslQcDataHypc12sq:
+      query: "*/HYPC12SQ/QCD"
+
+    fslQcAppliedHypc12sq:
+      query: "*/HYPC12SQ/QCA"
+
+    fslQcResultsHypc12sq:
+      query: "*/HYPC12SQ/QCR"
+
+    fslQcDataHypc24sq:
+      query: "*/HYPC24SQ/QCD"
+
+    fslQcAppliedHypc24sq:
+      query: "*/HYPC24SQ/QCA"
+
+    fslQcResultsHypc24sq:
+      query: "*/HYPC24SQ/QCR"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "MTYP 255-160 Hydro from MADIS: other than above"
+
+    - name: "dataCategory"
+      type: string
+      value: "other"
+
+    - name: "dataset"
+      type: string
+      value: "hydro_madis_other"
+
+    - name: "dataFormat"
+      type: string
+      value: "netCDF"
+
+    - name: "restricted"
+      type: string
+      value: "true"
+
+    - name: "bufrCategory"
+      type: string
+      value: "255"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "160"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b255/xx160 NC255160"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/providerIdentifier1"
+      source: variables/providerIdentifier1
+      longName: "Mesonet Provider Id String (1)"
+
+    - name: "MetaData/providerIdentifier2"
+      source: variables/providerIdentifier2
+      longName: "Mesonet Provider Id String (2)"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station"
+      units: "m"
+
+    - name: "MetaData/riverStageHeightGageHeight"
+      source: variables/riverStageHeightGageHeight
+      longName: "River Stage Height (GAGE HEIGHT)"
+      units: "m"
+
+    # ObsValue
+    - name: "ObsValue/discharge"
+      source: variables/discharge
+      longName: "Discharge"
+      units: "m3 s-1"
+
+    - name: "ObsValue/totalPrecipitationPast5Minutes"
+      source: variables/totalPrecipitationPast5Minutes
+      longName: "Total Precipitation Past 5 Minutes"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast1Hour"
+      source: variables/totalPrecipitationPast1Hour
+      longName: "Total Precipitation Past 1 Hour"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast3Hours"
+      source: variables/totalPrecipitationPast3Hours
+      longName: "Total Precipitation Past 3 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast6Hours"
+      source: variables/totalPrecipitationPast6Hours
+      longName: "Total Precipitation Past 6 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast12Hours"
+      source: variables/totalPrecipitationPast12Hours
+      longName: "Total Precipitation Past 12 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast24Hours"
+      source: variables/totalPrecipitationPast24Hours
+      longName: "Total Precipitation Past 24 Hours"
+      units: "kg m-2"
+
+    # QualityMarker
+    - name: "QualityMarker/fslQcDataHypcp5sq"
+      source: variables/fslQcDataHypcp5sq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedHypcp5sq"
+      source: variables/fslQcAppliedHypcp5sq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsHypcp5sq"
+      source: variables/fslQcResultsHypcp5sq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataHypcp1sq"
+      source: variables/fslQcDataHypcp1sq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedHypcp1sq"
+      source: variables/fslQcAppliedHypcp1sq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsHypcp1sq"
+      source: variables/fslQcResultsHypcp1sq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataHypcp3sq"
+      source: variables/fslQcDataHypcp3sq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedHypcp3sq"
+      source: variables/fslQcAppliedHypcp3sq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsHypcp3sq"
+      source: variables/fslQcResultsHypcp3sq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataHypcp6sq"
+      source: variables/fslQcDataHypcp6sq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedHypcp6sq"
+      source: variables/fslQcAppliedHypcp6sq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsHypcp6sq"
+      source: variables/fslQcResultsHypcp6sq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataHypc12sq"
+      source: variables/fslQcDataHypc12sq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedHypc12sq"
+      source: variables/fslQcAppliedHypc12sq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsHypc12sq"
+      source: variables/fslQcResultsHypc12sq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataHypc24sq"
+      source: variables/fslQcDataHypc24sq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedHypc24sq"
+      source: variables/fslQcAppliedHypc24sq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsHypc24sq"
+      source: variables/fslQcResultsHypc24sq
+      longName: "Fsl \"QC RESULTS\" Flag"

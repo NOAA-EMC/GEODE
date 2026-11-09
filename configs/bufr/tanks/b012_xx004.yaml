@@ -1,0 +1,348 @@
+bufr:
+  subsets:
+    - NC012004
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    stationName:
+      query: "*/STSN"
+
+    stationElevation:
+      query: "*/SELV"
+
+    timeSignificance:
+      query: "*/TSIG"
+
+    timePeriodMinutes:
+      query: "*/TPMI"
+
+    totalNumberWithRespectToAccumulationOrAverage:
+      query: "*/ACAV"
+
+    satelliteConstellationRO:
+      query: "*/GNSSRPSQ/SCLF"
+
+    satelliteTransmitterId:
+      query: "*/GNSSRPSQ/PTID"
+
+    sensorAzimuthAngle:
+      query: "*/GNSSRPSQ/BEARAZ"
+
+    elevation:
+      query: "*/GNSSRPSQ/ELEV"
+
+    sampleScanningModeSignificance1:
+      query: "*/SSMS[1]"
+
+    sampleScanningModeSignificance2:
+      query: "*/SSMS[2]"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    # ObsValue
+    airPressure:
+      query: "*/PRES"
+
+    airTemperature:
+      query: "*/TMDBST"
+
+    relativeHumidity:
+      query: "*/REHU"
+
+    atmosphericPathDelayInSatelliteSignal:
+      query: "*/GNSSRPSQ/APDS"
+
+    estimatedErrorInAtmosphericPathDelay:
+      query: "*/GNSSRPSQ/APDE"
+
+    differenceInPathDelaysForLimbViewsAtExtremes1:
+      query: "*/PDDX[1]"
+
+    estimatedErrorInPathDelayDifference1:
+      query: "*/PDDE[1]"
+
+    differenceInPathDelaysForLimbViewsAtExtremes2:
+      query: "*/PDDX[2]"
+
+    estimatedErrorInPathDelayDifference2:
+      query: "*/PDDE[2]"
+
+    componentOfZenithPathDelayDueToWaterVapour:
+      query: "*/ZPDW"
+
+    totalPrecipitableWater:
+      query: "*/TPWT"
+
+    log10OfIntegratedElectronDensity:
+      query: "*/LIED"
+
+    # QualityMarker
+    qualityFlagsForGroundBasedGnssData:
+      query: "*/QFGN"
+
+    correctedReportIndicator:
+      query: "*/CORN"
+
+encoder:
+  dimensions:
+    - name: Gnssrpsq
+      path: "*/GNSSRPSQ"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "M TYPE 012-004 Ground-based GNSS (GPS, etc.) data"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface data from satellite"
+
+    - name: "dataset"
+      type: string
+      value: "gnss_ground"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "true"
+
+    - name: "bufrCategory"
+      type: string
+      value: "012"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "004"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b012/xx004 NC012004"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/stationName"
+      source: variables/stationName
+      longName: "Station or site name"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station"
+      units: "m"
+
+    - name: "MetaData/timeSignificance"
+      source: variables/timeSignificance
+      longName: "Time significance"
+
+    - name: "MetaData/timePeriodMinutes"
+      source: variables/timePeriodMinutes
+      longName: "Time period or displacement"
+      units: "min"
+
+    - name: "MetaData/totalNumberWithRespectToAccumulationOrAverage"
+      source: variables/totalNumberWithRespectToAccumulationOrAverage
+      longName: "Total number (with respect to accumulation or average)"
+
+    - name: "MetaData/satelliteConstellationRO"
+      source: variables/satelliteConstellationRO
+      longName: "Satellite classification"
+
+    - name: "MetaData/satelliteTransmitterId"
+      source: variables/satelliteTransmitterId
+      longName: "Platform transmitter ID number"
+
+    - name: "MetaData/sensorAzimuthAngle"
+      source: variables/sensorAzimuthAngle
+      longName: "Bearing or azimuth"
+      units: "degree"
+
+    - name: "MetaData/elevation"
+      source: variables/elevation
+      longName: "Elevation"
+      units: "degree"
+
+    - name: "MetaData/sampleScanningModeSignificance1"
+      source: variables/sampleScanningModeSignificance1
+      longName: "Sample scanning mode significance"
+
+    - name: "MetaData/sampleScanningModeSignificance2"
+      source: variables/sampleScanningModeSignificance2
+      longName: "Sample scanning mode significance"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    # ObsValue
+    - name: "ObsValue/airPressure"
+      source: variables/airPressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/airTemperature"
+      source: variables/airTemperature
+      longName: "Temperature/dry-bulb temperature"
+      units: "K"
+
+    - name: "ObsValue/relativeHumidity"
+      source: variables/relativeHumidity
+      longName: "Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/atmosphericPathDelayInSatelliteSignal"
+      source: variables/atmosphericPathDelayInSatelliteSignal
+      longName: "Atmospheric path delay in satellite signal"
+      units: "m"
+
+    - name: "ObsValue/estimatedErrorInAtmosphericPathDelay"
+      source: variables/estimatedErrorInAtmosphericPathDelay
+      longName: "Estimated error in atmospheric path delay"
+      units: "m"
+
+    - name: "ObsValue/differenceInPathDelaysForLimbViewsAtExtremes1"
+      source: variables/differenceInPathDelaysForLimbViewsAtExtremes1
+      longName: "Difference in path delays for limb views at extremes o"
+      units: "m"
+
+    - name: "ObsValue/estimatedErrorInPathDelayDifference1"
+      source: variables/estimatedErrorInPathDelayDifference1
+      longName: "Estimated error in path delay difference"
+      units: "m"
+
+    - name: "ObsValue/differenceInPathDelaysForLimbViewsAtExtremes2"
+      source: variables/differenceInPathDelaysForLimbViewsAtExtremes2
+      longName: "Difference in path delays for limb views at extremes o"
+      units: "m"
+
+    - name: "ObsValue/estimatedErrorInPathDelayDifference2"
+      source: variables/estimatedErrorInPathDelayDifference2
+      longName: "Estimated error in path delay difference"
+      units: "m"
+
+    - name: "ObsValue/componentOfZenithPathDelayDueToWaterVapour"
+      source: variables/componentOfZenithPathDelayDueToWaterVapour
+      longName: "Component of zenith path delay due to water vapour"
+      units: "m"
+
+    - name: "ObsValue/totalPrecipitableWater"
+      source: variables/totalPrecipitableWater
+      longName: "Total Precipitable Water"
+      units: "kg m-2"
+
+    - name: "ObsValue/log10OfIntegratedElectronDensity"
+      source: variables/log10OfIntegratedElectronDensity
+      longName: "Log 10 of integrated electron density"
+      units: "log(m-2)"
+
+    # QualityMarker
+    - name: "QualityMarker/qualityFlagsForGroundBasedGnssData"
+      source: variables/qualityFlagsForGroundBasedGnssData
+      longName: "Quality flags for ground-based GNSS data"
+
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"

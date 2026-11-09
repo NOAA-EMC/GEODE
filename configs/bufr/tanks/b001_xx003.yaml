@@ -1,0 +1,1819 @@
+bufr:
+  subsets:
+    - NC001003
+
+  variables:
+    # Not mapped: bufr-query cannot parse these "."-prefixed mnemonics
+    #   */WNDSQ2/.DTMMXGS
+    #   */TMPSQ3/.DTHMXTM
+    #   */TMPSQ3/.DTHMITM
+    #   */PCPSQ3/.DTHTOPC
+
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCPTIM{1}/RCYR"
+        month: "*/RCPTIM{1}/RCMO"
+        day: "*/RCPTIM{1}/RCDY"
+        hour: "*/RCPTIM{1}/RCHR"
+        minute: "*/RCPTIM{1}/RCMI"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    shipCallSign:
+      query: "*/ID1SQ/SHPC8"
+
+    buoyPlatformIdentifier:
+      query: "*/ID2SQ/BPID"
+
+    stationaryBuoyIdentifier:
+      query: "*/ID3SQ/SBPI"
+
+    stationElevation:
+      query: "*/SELV"
+
+    sequenceNumber:
+      query: "*/BID{1}/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BID{1}/BUHD"
+
+    bulletinOriginator:
+      query: "*/BID{1}/BORG"
+
+    bulletinTime:
+      query: "*/BID{1}/BULTIM"
+
+    bulletinBBB:
+      query: "*/BID{1}/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCPTIM{1}/RCTS"
+
+    indTypeOfStationOperationPastPresentWeather:
+      query: "*/ITSO"
+
+    stationType:
+      query: "*/TOST"
+
+    windInstrumentationType:
+      query: "*/TIWM"
+
+    methodOfSeaSurfaceTemperatureMeasurement:
+      query: "*/MSST"
+
+    methodOfWetBulbTemperatureMeasurement:
+      query: "*/TMPSQ2/MWBT"
+
+    year:
+      query: "*/YEAR"
+
+    month:
+      query: "*/MNTH"
+
+    day:
+      query: "*/DAYS"
+
+    hour:
+      query: "*/HOUR"
+
+    minute:
+      query: "*/MINU"
+
+    timePeriodMinutes1:
+      query: "*/CTWNDS{1}/TPMI"
+
+    timePeriodMinutes2:
+      query: "*/CTWNDS{2}/TPMI"
+
+    timePeriodMinutes3:
+      query: "*/CTWNDS{3}/TPMI"
+
+    timePeriodMinutes4:
+      query: "*/CTWNDS{4}/TPMI"
+
+    timePeriodMinutes5:
+      query: "*/CTWNDS{5}/TPMI"
+
+    timePeriodMinutes6:
+      query: "*/CTWNDS{6}/TPMI"
+
+    timePeriodMinutes7:
+      query: "*/CTWNDS{7}/TPMI"
+
+    timePeriodMinutes8:
+      query: "*/CTWNDS{8}/TPMI"
+
+    timePeriodMinutes9:
+      query: "*/CTWNDS{9}/TPMI"
+
+    timePeriodMinutes10:
+      query: "*/CTWNDS{10}/TPMI"
+
+    timePeriodMinutes11:
+      query: "*/CTWNDS{11}/TPMI"
+
+    timePeriodMinutes12:
+      query: "*/CTWNDS{12}/TPMI"
+
+    rawReportString:
+      query: "*/RAWRPT/RRSTG"
+
+    # ObsValue
+    indicInclusionOmissionOfPrec:
+      query: "*/INPC"
+
+    horizontalVisibility:
+      query: "*/HOVI"
+
+    windDirection:
+      query: "*/WDIR"
+
+    windSpeed:
+      query: "*/WSPD"
+
+    maximumWindGustSpeed:
+      query: "*/WNDSQ2/MXGS"
+
+    v10MeterExtrapolatedWindSpeed:
+      query: "*/XS10"
+
+    v20MeterExtrapolatedWindSpeed:
+      query: "*/XS20"
+
+    airTemperatureTMDB:
+      query: "*/TMDB"
+
+    dewPointTemperature:
+      query: "*/TMDP"
+
+    seaSurfaceTemperatureSST1:
+      query: "*/SST1"
+
+    wetBulbTemperature:
+      query: "*/TMPSQ2/TMWB"
+
+    relativeHumidity:
+      query: "*/TMPSQ2/REHU"
+
+    maximumTemperature:
+      query: "*/TMPSQ3/MXTM"
+
+    minimumTemperature:
+      query: "*/TMPSQ3/MITM"
+
+    airPressure:
+      query: "*/PRES"
+
+    pressureReducedToMeanSeaLevel:
+      query: "*/PMSL"
+
+    pressureTendencyCharacteristic:
+      query: "*/CHPT"
+
+    pressureChange3Hour:
+      query: "*/3HPC"
+
+    totalPrecipitationPast6Hours:
+      query: "*/TP06"
+
+    totalPrecipitationPast1Hour:
+      query: "*/PCPSQ2/TP01"
+
+    totalPrecipitationPast3Hours:
+      query: "*/PCPSQ2/TP03"
+
+    totalPrecipitationPast12Hours:
+      query: "*/PCPSQ2/TP12"
+
+    totalPrecipitationPast24Hours:
+      query: "*/PCPSQ2/TP24"
+
+    totalPrecipitation:
+      query: "*/PCPSQ3/TOPC"
+
+    presentWeather:
+      query: "*/PPWSQ1/PRWE"
+
+    pastWeather1:
+      query: "*/PPWSQ1/PSW1"
+
+    pastWeather2:
+      query: "*/PPWSQ1/PSW2"
+
+    wavePeriod:
+      query: "*/WAVSQ1/POWV"
+
+    waveHeight:
+      query: "*/WAVSQ1/HOWV"
+
+    windWavePeriod:
+      query: "*/WAVSQ2/POWW"
+
+    windWaveHeight:
+      query: "*/WAVSQ2/HOWW"
+
+    swellWaveDirection1:
+      query: "*/WAVSQ3{1}/DOSW"
+
+    swellWaveDirection2:
+      query: "*/WAVSQ3{2}/DOSW"
+
+    swellWaveDirection3:
+      query: "*/WAVSQ3{3}/DOSW"
+
+    swellWaveDirection4:
+      query: "*/WAVSQ3{4}/DOSW"
+
+    swellWavePeriod1:
+      query: "*/WAVSQ3{1}/POSW"
+
+    swellWavePeriod2:
+      query: "*/WAVSQ3{2}/POSW"
+
+    swellWavePeriod3:
+      query: "*/WAVSQ3{3}/POSW"
+
+    swellWavePeriod4:
+      query: "*/WAVSQ3{4}/POSW"
+
+    swellWaveHeight1:
+      query: "*/WAVSQ3{1}/HOSW"
+
+    swellWaveHeight2:
+      query: "*/WAVSQ3{2}/HOSW"
+
+    swellWaveHeight3:
+      query: "*/WAVSQ3{3}/HOSW"
+
+    swellWaveHeight4:
+      query: "*/WAVSQ3{4}/HOSW"
+
+    peakWindDirection:
+      query: "*/PKWDDR"
+
+    peakWindSpeed:
+      query: "*/PKWDSP"
+
+    continuousWindDirectionInDegrees1:
+      query: "*/CTWNDS{1}/WDRC"
+
+    continuousWindDirectionInDegrees2:
+      query: "*/CTWNDS{2}/WDRC"
+
+    continuousWindDirectionInDegrees3:
+      query: "*/CTWNDS{3}/WDRC"
+
+    continuousWindDirectionInDegrees4:
+      query: "*/CTWNDS{4}/WDRC"
+
+    continuousWindDirectionInDegrees5:
+      query: "*/CTWNDS{5}/WDRC"
+
+    continuousWindDirectionInDegrees6:
+      query: "*/CTWNDS{6}/WDRC"
+
+    continuousWindDirectionInDegrees7:
+      query: "*/CTWNDS{7}/WDRC"
+
+    continuousWindDirectionInDegrees8:
+      query: "*/CTWNDS{8}/WDRC"
+
+    continuousWindDirectionInDegrees9:
+      query: "*/CTWNDS{9}/WDRC"
+
+    continuousWindDirectionInDegrees10:
+      query: "*/CTWNDS{10}/WDRC"
+
+    continuousWindDirectionInDegrees11:
+      query: "*/CTWNDS{11}/WDRC"
+
+    continuousWindDirectionInDegrees12:
+      query: "*/CTWNDS{12}/WDRC"
+
+    continuousWindSpeedInMSec1:
+      query: "*/CTWNDS{1}/WDSC"
+
+    continuousWindSpeedInMSec2:
+      query: "*/CTWNDS{2}/WDSC"
+
+    continuousWindSpeedInMSec3:
+      query: "*/CTWNDS{3}/WDSC"
+
+    continuousWindSpeedInMSec4:
+      query: "*/CTWNDS{4}/WDSC"
+
+    continuousWindSpeedInMSec5:
+      query: "*/CTWNDS{5}/WDSC"
+
+    continuousWindSpeedInMSec6:
+      query: "*/CTWNDS{6}/WDSC"
+
+    continuousWindSpeedInMSec7:
+      query: "*/CTWNDS{7}/WDSC"
+
+    continuousWindSpeedInMSec8:
+      query: "*/CTWNDS{8}/WDSC"
+
+    continuousWindSpeedInMSec9:
+      query: "*/CTWNDS{9}/WDSC"
+
+    continuousWindSpeedInMSec10:
+      query: "*/CTWNDS{10}/WDSC"
+
+    continuousWindSpeedInMSec11:
+      query: "*/CTWNDS{11}/WDSC"
+
+    continuousWindSpeedInMSec12:
+      query: "*/CTWNDS{12}/WDSC"
+
+    # QualityMarker
+    correctedReportIndicator:
+      query: "*/CORN"
+
+    wind:
+      query: "*/QMWN"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    moisture:
+      query: "*/QMDD"
+
+    seaSurfaceTemperature:
+      query: "*/QMST"
+
+    pressure:
+      query: "*/QMPR"
+
+    waveHeightQMWH:
+      query: "*/WAVSQ1/QMWH"
+
+    # Not in this tank: other tanks in this dataset have these
+    timePeriodMonths:
+      query: "*/ABSENT"
+      type: int
+
+    timePeriodHours:
+      query: "*/ABSENT"
+      type: int
+
+    timePeriodMinutes:
+      query: "*/ABSENT"
+      type: int
+
+    albedo:
+      query: "*/ABSENT"
+      type: int
+
+    riverStageHeightGageHeight:
+      query: "*/ABSENT"
+      type: float
+
+    depthBelowLandSurfaceShstm1sq:
+      query: "*/ABSENT"
+      type: float
+
+    depthBelowLandSurfaceShstm2sq:
+      query: "*/ABSENT"
+      type: float
+
+    depthBelowLandSurfaceShxst1sq:
+      query: "*/ABSENT"
+      type: float
+
+    depthBelowLandSurfaceShxst2sq:
+      query: "*/ABSENT"
+      type: float
+
+    depthBelowLandSurfaceShist1sq:
+      query: "*/ABSENT"
+      type: float
+
+    depthBelowLandSurfaceShist2sq:
+      query: "*/ABSENT"
+      type: float
+
+    typeOfPrecipitation:
+      query: "*/ABSENT"
+      type: int
+
+    depthOfFreshSnow:
+      query: "*/ABSENT"
+      type: float
+
+    totalSnowDepth:
+      query: "*/ABSENT"
+      type: float
+
+    snowWaterEquivalent:
+      query: "*/ABSENT"
+      type: float
+
+    ObsValue_airTemperature:
+      query: "*/ABSENT"
+      type: float
+
+    waterTemperature:
+      query: "*/ABSENT"
+      type: float
+
+    maximumRelativeHumidity:
+      query: "*/ABSENT"
+      type: int
+
+    minimumRelativeHumidity:
+      query: "*/ABSENT"
+      type: int
+
+    waterConductivity:
+      query: "*/ABSENT"
+      type: float
+
+    cloudAmount:
+      query: "*/ABSENT"
+      type: int
+
+    totalSunshine:
+      query: "*/ABSENT"
+      type: int
+
+    groundState:
+      query: "*/ABSENT"
+      type: int
+
+    tideElevWithRespectToMeanLowerLowWater:
+      query: "*/ABSENT"
+      type: float
+
+    soilTemperatureShstm1sq:
+      query: "*/ABSENT"
+      type: float
+
+    soilTemperatureShstm2sq:
+      query: "*/ABSENT"
+      type: float
+
+    maximumSoilTemperatureShxst1sq:
+      query: "*/ABSENT"
+      type: float
+
+    maximumSoilTemperatureShxst2sq:
+      query: "*/ABSENT"
+      type: float
+
+    minimumSoilTemperatureShist1sq:
+      query: "*/ABSENT"
+      type: float
+
+    minimumSoilTemperatureShist2sq:
+      query: "*/ABSENT"
+      type: float
+
+    shefRevisionFlagShpressq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShpressq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShpmslsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShpmslsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShtopcsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShtopcsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShprtpsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShprtpsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShdofssq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShdofssq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShtosdsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShtosdsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShswemsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShswemsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShtmdbsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShtmdbsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShmxtmsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShmxtmsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShmitmsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShmitmsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShwatmsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShwatmsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShtmwbsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShtmwbsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShrehusq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShrehusq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShmxrhsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShmxrhsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShmirhsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShmirhsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShtmdpsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShtmdpsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShwacnsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShwacnsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShwdirsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShwdirsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShwspdsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShwspdsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShmxgssq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShmxgssq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShpkwdsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShpkwdsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShpkwssq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShpkwssq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShprwesq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShprwesq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShpsw1sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShpsw1sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShclamsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShclamsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShhovisq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShhovisq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShalbdsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShalbdsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShtoshsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShtoshsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShsogrsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShsogrsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShrshmsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShrshmsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShtllwsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShtllwsq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShstm1sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShstm1sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShstm2sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShstm2sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShxst1sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShxst1sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShxst2sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShxst2sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShist1sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShist1sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefRevisionFlagShist2sq:
+      query: "*/ABSENT"
+      type: int
+
+    shefQualifierFlagShist2sq:
+      query: "*/ABSENT"
+      type: int
+
+encoder:
+  dimensions:
+    - name: RawReportChunk
+      path: "*/RAWRPT"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "Message Type 001-003 Surface Marine Buoy (FM 13)"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface marine"
+
+    - name: "dataset"
+      type: string
+      value: "surface_buoy_moored"
+
+    - name: "dataFormat"
+      type: string
+      value: "WMO FM-13 SHIP"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "001"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "003"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b001/xx003 NC001003"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/shipCallSign"
+      source: variables/shipCallSign
+      longName: "Ship Call Sign (8 CHARACTERS)"
+
+    - name: "MetaData/buoyPlatformIdentifier"
+      source: variables/buoyPlatformIdentifier
+      longName: "BUOY/PLATFORM Identifier"
+
+    - name: "MetaData/stationaryBuoyIdentifier"
+      source: variables/stationaryBuoyIdentifier
+      longName: "Stationary Buoy Platform Id"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station"
+      units: "m"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/indTypeOfStationOperationPastPresentWeather"
+      source: variables/indTypeOfStationOperationPastPresentWeather
+      longName: "Ind Type Of Station Operation PAST/PRESENT Weather"
+
+    - name: "MetaData/stationType"
+      source: variables/stationType
+      longName: "Type Of Station"
+
+    - name: "MetaData/windInstrumentationType"
+      source: variables/windInstrumentationType
+      longName: "Type Of Instrumentation For Wind Measurement"
+
+    - name: "MetaData/methodOfSeaSurfaceTemperatureMeasurement"
+      source: variables/methodOfSeaSurfaceTemperatureMeasurement
+      longName: "Method Of Sea Surface Temperature Measurement"
+
+    - name: "MetaData/methodOfWetBulbTemperatureMeasurement"
+      source: variables/methodOfWetBulbTemperatureMeasurement
+      longName: "Method Of Wet Bulb Temperature Measurement"
+
+    - name: "MetaData/year"
+      source: variables/year
+      longName: "Year"
+      units: "year"
+
+    - name: "MetaData/month"
+      source: variables/month
+      longName: "Month"
+      units: "month"
+
+    - name: "MetaData/day"
+      source: variables/day
+      longName: "Day"
+      units: "day"
+
+    - name: "MetaData/hour"
+      source: variables/hour
+      longName: "Hour"
+      units: "h"
+
+    - name: "MetaData/minute"
+      source: variables/minute
+      longName: "Minute"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes1"
+      source: variables/timePeriodMinutes1
+      longName: "Time Period Or Displacement (1)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes2"
+      source: variables/timePeriodMinutes2
+      longName: "Time Period Or Displacement (2)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes3"
+      source: variables/timePeriodMinutes3
+      longName: "Time Period Or Displacement (3)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes4"
+      source: variables/timePeriodMinutes4
+      longName: "Time Period Or Displacement (4)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes5"
+      source: variables/timePeriodMinutes5
+      longName: "Time Period Or Displacement (5)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes6"
+      source: variables/timePeriodMinutes6
+      longName: "Time Period Or Displacement (6)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes7"
+      source: variables/timePeriodMinutes7
+      longName: "Time Period Or Displacement (7)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes8"
+      source: variables/timePeriodMinutes8
+      longName: "Time Period Or Displacement (8)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes9"
+      source: variables/timePeriodMinutes9
+      longName: "Time Period Or Displacement (9)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes10"
+      source: variables/timePeriodMinutes10
+      longName: "Time Period Or Displacement (10)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes11"
+      source: variables/timePeriodMinutes11
+      longName: "Time Period Or Displacement (11)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes12"
+      source: variables/timePeriodMinutes12
+      longName: "Time Period Or Displacement (12)"
+      units: "min"
+
+    - name: "MetaData/rawReportString"
+      source: variables/rawReportString
+      longName: "Raw Report String"
+
+    # ObsValue
+    - name: "ObsValue/indicInclusionOmissionOfPrec"
+      source: variables/indicInclusionOmissionOfPrec
+      longName: "Indic INCLUSION/OMISSION Of Prec"
+
+    - name: "ObsValue/horizontalVisibility"
+      source: variables/horizontalVisibility
+      longName: "Horizontal Visibility"
+      units: "m"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/maximumWindGustSpeed"
+      source: variables/maximumWindGustSpeed
+      longName: "Maximum Wind Speed (GUSTS)"
+      units: "m s-1"
+
+    - name: "ObsValue/v10MeterExtrapolatedWindSpeed"
+      source: variables/v10MeterExtrapolatedWindSpeed
+      longName: "10 Meter Extrapolated Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/v20MeterExtrapolatedWindSpeed"
+      source: variables/v20MeterExtrapolatedWindSpeed
+      longName: "20 Meter Extrapolated Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/dewPointTemperature"
+      source: variables/dewPointTemperature
+      longName: "Dew Point Temperature"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST1"
+      source: variables/seaSurfaceTemperatureSST1
+      longName: "Sea Temperature"
+      units: "K"
+
+    - name: "ObsValue/wetBulbTemperature"
+      source: variables/wetBulbTemperature
+      longName: "Wet Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/relativeHumidity"
+      source: variables/relativeHumidity
+      longName: "Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/maximumTemperature"
+      source: variables/maximumTemperature
+      longName: "Maximum Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumTemperature"
+      source: variables/minimumTemperature
+      longName: "Minimum Temperature"
+      units: "K"
+
+    - name: "ObsValue/airPressure"
+      source: variables/airPressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/pressureReducedToMeanSeaLevel"
+      source: variables/pressureReducedToMeanSeaLevel
+      longName: "Pressure Reduced To Msl"
+      units: "Pa"
+
+    - name: "ObsValue/pressureTendencyCharacteristic"
+      source: variables/pressureTendencyCharacteristic
+      longName: "Characteristic Of Pressure Tendency"
+
+    - name: "ObsValue/pressureChange3Hour"
+      source: variables/pressureChange3Hour
+      longName: "3 Hour Pressure Change"
+      units: "Pa"
+
+    - name: "ObsValue/totalPrecipitationPast6Hours"
+      source: variables/totalPrecipitationPast6Hours
+      longName: "Total Precipitation Past 6 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast1Hour"
+      source: variables/totalPrecipitationPast1Hour
+      longName: "Total Precipitation Past 1 Hour"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast3Hours"
+      source: variables/totalPrecipitationPast3Hours
+      longName: "Total Precipitation Past 3 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast12Hours"
+      source: variables/totalPrecipitationPast12Hours
+      longName: "Total Precipitation Past 12 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitationPast24Hours"
+      source: variables/totalPrecipitationPast24Hours
+      longName: "Total Precipitation Past 24 Hours"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation"
+      source: variables/totalPrecipitation
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent"
+      units: "kg m-2"
+
+    - name: "ObsValue/presentWeather"
+      source: variables/presentWeather
+      longName: "Present Weather"
+
+    - name: "ObsValue/pastWeather1"
+      source: variables/pastWeather1
+      longName: "Past Weather (1)"
+
+    - name: "ObsValue/pastWeather2"
+      source: variables/pastWeather2
+      longName: "Past Weather (2)"
+
+    - name: "ObsValue/wavePeriod"
+      source: variables/wavePeriod
+      longName: "Period Of Waves"
+      units: "s"
+
+    - name: "ObsValue/waveHeight"
+      source: variables/waveHeight
+      longName: "Height Of Waves"
+      units: "m"
+
+    - name: "ObsValue/windWavePeriod"
+      source: variables/windWavePeriod
+      longName: "Period Of Wind Waves"
+      units: "s"
+
+    - name: "ObsValue/windWaveHeight"
+      source: variables/windWaveHeight
+      longName: "Height Of Wind Waves"
+      units: "m"
+
+    - name: "ObsValue/swellWaveDirection1"
+      source: variables/swellWaveDirection1
+      longName: "Direction Of Swell Waves (1)"
+      units: "degree"
+
+    - name: "ObsValue/swellWaveDirection2"
+      source: variables/swellWaveDirection2
+      longName: "Direction Of Swell Waves (2)"
+      units: "degree"
+
+    - name: "ObsValue/swellWaveDirection3"
+      source: variables/swellWaveDirection3
+      longName: "Direction Of Swell Waves (3)"
+      units: "degree"
+
+    - name: "ObsValue/swellWaveDirection4"
+      source: variables/swellWaveDirection4
+      longName: "Direction Of Swell Waves (4)"
+      units: "degree"
+
+    - name: "ObsValue/swellWavePeriod1"
+      source: variables/swellWavePeriod1
+      longName: "Period Of Swell Waves (1)"
+      units: "s"
+
+    - name: "ObsValue/swellWavePeriod2"
+      source: variables/swellWavePeriod2
+      longName: "Period Of Swell Waves (2)"
+      units: "s"
+
+    - name: "ObsValue/swellWavePeriod3"
+      source: variables/swellWavePeriod3
+      longName: "Period Of Swell Waves (3)"
+      units: "s"
+
+    - name: "ObsValue/swellWavePeriod4"
+      source: variables/swellWavePeriod4
+      longName: "Period Of Swell Waves (4)"
+      units: "s"
+
+    - name: "ObsValue/swellWaveHeight1"
+      source: variables/swellWaveHeight1
+      longName: "Height Of Swell Waves (1)"
+      units: "m"
+
+    - name: "ObsValue/swellWaveHeight2"
+      source: variables/swellWaveHeight2
+      longName: "Height Of Swell Waves (2)"
+      units: "m"
+
+    - name: "ObsValue/swellWaveHeight3"
+      source: variables/swellWaveHeight3
+      longName: "Height Of Swell Waves (3)"
+      units: "m"
+
+    - name: "ObsValue/swellWaveHeight4"
+      source: variables/swellWaveHeight4
+      longName: "Height Of Swell Waves (4)"
+      units: "m"
+
+    - name: "ObsValue/peakWindDirection"
+      source: variables/peakWindDirection
+      longName: "Peak Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/peakWindSpeed"
+      source: variables/peakWindSpeed
+      longName: "Peak Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees1"
+      source: variables/continuousWindDirectionInDegrees1
+      longName: "Continuous Wind Direction In Degrees (1)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees2"
+      source: variables/continuousWindDirectionInDegrees2
+      longName: "Continuous Wind Direction In Degrees (2)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees3"
+      source: variables/continuousWindDirectionInDegrees3
+      longName: "Continuous Wind Direction In Degrees (3)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees4"
+      source: variables/continuousWindDirectionInDegrees4
+      longName: "Continuous Wind Direction In Degrees (4)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees5"
+      source: variables/continuousWindDirectionInDegrees5
+      longName: "Continuous Wind Direction In Degrees (5)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees6"
+      source: variables/continuousWindDirectionInDegrees6
+      longName: "Continuous Wind Direction In Degrees (6)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees7"
+      source: variables/continuousWindDirectionInDegrees7
+      longName: "Continuous Wind Direction In Degrees (7)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees8"
+      source: variables/continuousWindDirectionInDegrees8
+      longName: "Continuous Wind Direction In Degrees (8)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees9"
+      source: variables/continuousWindDirectionInDegrees9
+      longName: "Continuous Wind Direction In Degrees (9)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees10"
+      source: variables/continuousWindDirectionInDegrees10
+      longName: "Continuous Wind Direction In Degrees (10)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees11"
+      source: variables/continuousWindDirectionInDegrees11
+      longName: "Continuous Wind Direction In Degrees (11)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindDirectionInDegrees12"
+      source: variables/continuousWindDirectionInDegrees12
+      longName: "Continuous Wind Direction In Degrees (12)"
+      units: "degree"
+
+    - name: "ObsValue/continuousWindSpeedInMSec1"
+      source: variables/continuousWindSpeedInMSec1
+      longName: "Continuous Wind Speed In M/SEC (1)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec2"
+      source: variables/continuousWindSpeedInMSec2
+      longName: "Continuous Wind Speed In M/SEC (2)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec3"
+      source: variables/continuousWindSpeedInMSec3
+      longName: "Continuous Wind Speed In M/SEC (3)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec4"
+      source: variables/continuousWindSpeedInMSec4
+      longName: "Continuous Wind Speed In M/SEC (4)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec5"
+      source: variables/continuousWindSpeedInMSec5
+      longName: "Continuous Wind Speed In M/SEC (5)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec6"
+      source: variables/continuousWindSpeedInMSec6
+      longName: "Continuous Wind Speed In M/SEC (6)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec7"
+      source: variables/continuousWindSpeedInMSec7
+      longName: "Continuous Wind Speed In M/SEC (7)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec8"
+      source: variables/continuousWindSpeedInMSec8
+      longName: "Continuous Wind Speed In M/SEC (8)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec9"
+      source: variables/continuousWindSpeedInMSec9
+      longName: "Continuous Wind Speed In M/SEC (9)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec10"
+      source: variables/continuousWindSpeedInMSec10
+      longName: "Continuous Wind Speed In M/SEC (10)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec11"
+      source: variables/continuousWindSpeedInMSec11
+      longName: "Continuous Wind Speed In M/SEC (11)"
+      units: "m s-1"
+
+    - name: "ObsValue/continuousWindSpeedInMSec12"
+      source: variables/continuousWindSpeedInMSec12
+      longName: "Continuous Wind Speed In M/SEC (12)"
+      units: "m s-1"
+
+    # QualityMarker
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "SDMEDIT/QUIPS Quality Mark For Wind"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "SDMEDIT/QUIPS Quality Mark For Temperature"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "SDMEDIT/QUIPS Quality Mark For Moisture"
+
+    - name: "QualityMarker/seaSurfaceTemperature"
+      source: variables/seaSurfaceTemperature
+      longName: "SDMEDIT/QUIPS Quality Mark For Sea Surface Temperature"
+
+    - name: "QualityMarker/pressure"
+      source: variables/pressure
+      longName: "SDMEDIT/QUIPS Quality Mark For Pressure"
+
+    - name: "QualityMarker/waveHeightQMWH"
+      source: variables/waveHeightQMWH
+      longName: "SDMEDIT/QUIPS Quality Mark For Wave Height"
+
+    # Not in this tank: read as missing so the dataset has one set of variables
+    - name: "MetaData/timePeriodMonths"
+      source: variables/timePeriodMonths
+      longName: "Time Period Or Displacement"
+      units: "month"
+
+    - name: "MetaData/timePeriodHours"
+      source: variables/timePeriodHours
+      longName: "Time Period Or Displacement"
+      units: "h"
+
+    - name: "MetaData/timePeriodMinutes"
+      source: variables/timePeriodMinutes
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/albedo"
+      source: variables/albedo
+      longName: "Albedo"
+      units: "%"
+
+    - name: "MetaData/riverStageHeightGageHeight"
+      source: variables/riverStageHeightGageHeight
+      longName: "River Stage Height (GAGE HEIGHT)"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShstm1sq"
+      source: variables/depthBelowLandSurfaceShstm1sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShstm2sq"
+      source: variables/depthBelowLandSurfaceShstm2sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShxst1sq"
+      source: variables/depthBelowLandSurfaceShxst1sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShxst2sq"
+      source: variables/depthBelowLandSurfaceShxst2sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShist1sq"
+      source: variables/depthBelowLandSurfaceShist1sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "MetaData/depthBelowLandSurfaceShist2sq"
+      source: variables/depthBelowLandSurfaceShist2sq
+      longName: "Depth Below Land Surface"
+      units: "m"
+
+    - name: "ObsValue/typeOfPrecipitation"
+      source: variables/typeOfPrecipitation
+      longName: "Type Of Precipitation"
+
+    - name: "ObsValue/depthOfFreshSnow"
+      source: variables/depthOfFreshSnow
+      longName: "Depth Of Fresh Snow"
+      units: "m"
+
+    - name: "ObsValue/totalSnowDepth"
+      source: variables/totalSnowDepth
+      longName: "Total Snow Depth"
+      units: "m"
+
+    - name: "ObsValue/snowWaterEquivalent"
+      source: variables/snowWaterEquivalent
+      longName: "Snow Water Equivalent"
+      units: "kg m-2"
+
+    - name: "ObsValue/airTemperature"
+      source: variables/ObsValue_airTemperature
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/waterTemperature"
+      source: variables/waterTemperature
+      longName: "Water Temperature"
+      units: "K"
+
+    - name: "ObsValue/maximumRelativeHumidity"
+      source: variables/maximumRelativeHumidity
+      longName: "Maximum Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/minimumRelativeHumidity"
+      source: variables/minimumRelativeHumidity
+      longName: "Minimum Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/waterConductivity"
+      source: variables/waterConductivity
+      longName: "Water Conductivity"
+      units: "S m-1"
+
+    - name: "ObsValue/cloudAmount"
+      source: variables/cloudAmount
+      longName: "Cloud Amount"
+
+    - name: "ObsValue/totalSunshine"
+      source: variables/totalSunshine
+      longName: "Total Sunshine"
+      units: "h"
+
+    - name: "ObsValue/groundState"
+      source: variables/groundState
+      longName: "State Of The Ground"
+
+    - name: "ObsValue/tideElevWithRespectToMeanLowerLowWater"
+      source: variables/tideElevWithRespectToMeanLowerLowWater
+      longName: "Tide ELEV. With Respect To Mean Lower Low Water"
+      units: "m"
+
+    - name: "ObsValue/soilTemperatureShstm1sq"
+      source: variables/soilTemperatureShstm1sq
+      longName: "Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/soilTemperatureShstm2sq"
+      source: variables/soilTemperatureShstm2sq
+      longName: "Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/maximumSoilTemperatureShxst1sq"
+      source: variables/maximumSoilTemperatureShxst1sq
+      longName: "Maximum Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/maximumSoilTemperatureShxst2sq"
+      source: variables/maximumSoilTemperatureShxst2sq
+      longName: "Maximum Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumSoilTemperatureShist1sq"
+      source: variables/minimumSoilTemperatureShist1sq
+      longName: "Minimum Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/minimumSoilTemperatureShist2sq"
+      source: variables/minimumSoilTemperatureShist2sq
+      longName: "Minimum Soil Temperature"
+      units: "K"
+
+    - name: "QualityMarker/shefRevisionFlagShpressq"
+      source: variables/shefRevisionFlagShpressq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpressq"
+      source: variables/shefQualifierFlagShpressq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShpmslsq"
+      source: variables/shefRevisionFlagShpmslsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpmslsq"
+      source: variables/shefQualifierFlagShpmslsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtopcsq"
+      source: variables/shefRevisionFlagShtopcsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtopcsq"
+      source: variables/shefQualifierFlagShtopcsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShprtpsq"
+      source: variables/shefRevisionFlagShprtpsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShprtpsq"
+      source: variables/shefQualifierFlagShprtpsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShdofssq"
+      source: variables/shefRevisionFlagShdofssq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShdofssq"
+      source: variables/shefQualifierFlagShdofssq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtosdsq"
+      source: variables/shefRevisionFlagShtosdsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtosdsq"
+      source: variables/shefQualifierFlagShtosdsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShswemsq"
+      source: variables/shefRevisionFlagShswemsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShswemsq"
+      source: variables/shefQualifierFlagShswemsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtmdbsq"
+      source: variables/shefRevisionFlagShtmdbsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtmdbsq"
+      source: variables/shefQualifierFlagShtmdbsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShmxtmsq"
+      source: variables/shefRevisionFlagShmxtmsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmxtmsq"
+      source: variables/shefQualifierFlagShmxtmsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShmitmsq"
+      source: variables/shefRevisionFlagShmitmsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmitmsq"
+      source: variables/shefQualifierFlagShmitmsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShwatmsq"
+      source: variables/shefRevisionFlagShwatmsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShwatmsq"
+      source: variables/shefQualifierFlagShwatmsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtmwbsq"
+      source: variables/shefRevisionFlagShtmwbsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtmwbsq"
+      source: variables/shefQualifierFlagShtmwbsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShrehusq"
+      source: variables/shefRevisionFlagShrehusq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShrehusq"
+      source: variables/shefQualifierFlagShrehusq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShmxrhsq"
+      source: variables/shefRevisionFlagShmxrhsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmxrhsq"
+      source: variables/shefQualifierFlagShmxrhsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShmirhsq"
+      source: variables/shefRevisionFlagShmirhsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmirhsq"
+      source: variables/shefQualifierFlagShmirhsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtmdpsq"
+      source: variables/shefRevisionFlagShtmdpsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtmdpsq"
+      source: variables/shefQualifierFlagShtmdpsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShwacnsq"
+      source: variables/shefRevisionFlagShwacnsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShwacnsq"
+      source: variables/shefQualifierFlagShwacnsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShwdirsq"
+      source: variables/shefRevisionFlagShwdirsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShwdirsq"
+      source: variables/shefQualifierFlagShwdirsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShwspdsq"
+      source: variables/shefRevisionFlagShwspdsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShwspdsq"
+      source: variables/shefQualifierFlagShwspdsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShmxgssq"
+      source: variables/shefRevisionFlagShmxgssq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShmxgssq"
+      source: variables/shefQualifierFlagShmxgssq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShpkwdsq"
+      source: variables/shefRevisionFlagShpkwdsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpkwdsq"
+      source: variables/shefQualifierFlagShpkwdsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShpkwssq"
+      source: variables/shefRevisionFlagShpkwssq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpkwssq"
+      source: variables/shefQualifierFlagShpkwssq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShprwesq"
+      source: variables/shefRevisionFlagShprwesq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShprwesq"
+      source: variables/shefQualifierFlagShprwesq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShpsw1sq"
+      source: variables/shefRevisionFlagShpsw1sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShpsw1sq"
+      source: variables/shefQualifierFlagShpsw1sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShclamsq"
+      source: variables/shefRevisionFlagShclamsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShclamsq"
+      source: variables/shefQualifierFlagShclamsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShhovisq"
+      source: variables/shefRevisionFlagShhovisq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShhovisq"
+      source: variables/shefQualifierFlagShhovisq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShalbdsq"
+      source: variables/shefRevisionFlagShalbdsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShalbdsq"
+      source: variables/shefQualifierFlagShalbdsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtoshsq"
+      source: variables/shefRevisionFlagShtoshsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtoshsq"
+      source: variables/shefQualifierFlagShtoshsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShsogrsq"
+      source: variables/shefRevisionFlagShsogrsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShsogrsq"
+      source: variables/shefQualifierFlagShsogrsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShrshmsq"
+      source: variables/shefRevisionFlagShrshmsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShrshmsq"
+      source: variables/shefQualifierFlagShrshmsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShtllwsq"
+      source: variables/shefRevisionFlagShtllwsq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShtllwsq"
+      source: variables/shefQualifierFlagShtllwsq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShstm1sq"
+      source: variables/shefRevisionFlagShstm1sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShstm1sq"
+      source: variables/shefQualifierFlagShstm1sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShstm2sq"
+      source: variables/shefRevisionFlagShstm2sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShstm2sq"
+      source: variables/shefQualifierFlagShstm2sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShxst1sq"
+      source: variables/shefRevisionFlagShxst1sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShxst1sq"
+      source: variables/shefQualifierFlagShxst1sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShxst2sq"
+      source: variables/shefRevisionFlagShxst2sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShxst2sq"
+      source: variables/shefQualifierFlagShxst2sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShist1sq"
+      source: variables/shefRevisionFlagShist1sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShist1sq"
+      source: variables/shefQualifierFlagShist1sq
+      longName: "Shef Data Qualifier Flag"
+
+    - name: "QualityMarker/shefRevisionFlagShist2sq"
+      source: variables/shefRevisionFlagShist2sq
+      longName: "Shef Data Revision Flag"
+
+    - name: "QualityMarker/shefQualifierFlagShist2sq"
+      source: variables/shefQualifierFlagShist2sq
+      longName: "Shef Data Qualifier Flag"

@@ -1,0 +1,283 @@
+bufr:
+  subsets:
+    - NC002011
+
+  # One row per element of this sequence
+  group_by_variable: height
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    wmoBlockNumber:
+      query: "*/WMOB"
+
+    wmoStationNumber:
+      query: "*/WMOS"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    stationType:
+      query: "*/TOST"
+
+    radarStationIdentifier:
+      query: "*/SSTN"
+
+    measuringEquipmentType:
+      query: "*/A4ME"
+
+    frequency:
+      query: "*/MEFR"
+
+    stationElevation:
+      query: "*/SELV"
+
+    timeSignificance:
+      query: "*/TSIG"
+
+    timePeriodOrDisplacement:
+      query: "*/TPSE"
+
+    height:
+      query: "*/PFLEV/HEIT"
+
+    noaaWindProfilerQCTestResults:
+      query: "*/PFLEV/NPQC"
+
+    # ObsValue
+    windDirection:
+      query: "*/PFLEV/WDIR"
+
+    windSpeed:
+      query: "*/PFLEV/WSPD"
+
+    standardDeviationHorizontalWindSpeed:
+      query: "*/PFLEV/SDHS"
+
+    windUpward:
+      query: "*/PFLEV/WCMP"
+
+    standardDeviationVerticalWindSpeed:
+      query: "*/PFLEV/SDVS"
+
+    # QualityMarker
+    correctedReportIndicator:
+      query: "*/CORN"
+
+    wind:
+      query: "*/PFLEV/QMWN"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Msg Type 002-011 MULTI-AGENCY Profiler (MAP) Winds"
+
+    - name: "dataCategory"
+      type: string
+      value: "vertical soundings other than satellite"
+
+    - name: "dataset"
+      type: string
+      value: "profiler_map_winds"
+
+    - name: "dataFormat"
+      type: string
+      value: "netCDF"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "002"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "011"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b002/xx011 NC002011"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/wmoBlockNumber"
+      source: variables/wmoBlockNumber
+      longName: "Wmo Block Number"
+
+    - name: "MetaData/wmoStationNumber"
+      source: variables/wmoStationNumber
+      longName: "Wmo Station Number"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/stationType"
+      source: variables/stationType
+      longName: "Type Of Station"
+
+    - name: "MetaData/radarStationIdentifier"
+      source: variables/radarStationIdentifier
+      longName: "Short Station Or Site Name"
+
+    - name: "MetaData/measuringEquipmentType"
+      source: variables/measuringEquipmentType
+      longName: "Type Of Measuring Equipment Used"
+
+    - name: "MetaData/frequency"
+      source: variables/frequency
+      longName: "Mean Frequency"
+      units: "Hz"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station"
+      units: "m"
+
+    - name: "MetaData/timeSignificance"
+      source: variables/timeSignificance
+      longName: "Time Significance"
+
+    - name: "MetaData/timePeriodOrDisplacement"
+      source: variables/timePeriodOrDisplacement
+      longName: "Time Period Or Displacement"
+      units: "s"
+
+    - name: "MetaData/height"
+      source: variables/height
+      longName: "Height"
+      units: "m"
+
+    - name: "MetaData/noaaWindProfilerQCTestResults"
+      source: variables/noaaWindProfilerQCTestResults
+      longName: "Noaa Wind Profiler Q/C Test Results"
+
+    # ObsValue
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/standardDeviationHorizontalWindSpeed"
+      source: variables/standardDeviationHorizontalWindSpeed
+      longName: "Standard Deviation Horizontal Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/windUpward"
+      source: variables/windUpward
+      longName: "W Component"
+      units: "m s-1"
+
+    - name: "ObsValue/standardDeviationVerticalWindSpeed"
+      source: variables/standardDeviationVerticalWindSpeed
+      longName: "Standard Deviation Vertical Wind Speed"
+      units: "m s-1"
+
+    # QualityMarker
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "Sdmedit Quality Mark For Wind"

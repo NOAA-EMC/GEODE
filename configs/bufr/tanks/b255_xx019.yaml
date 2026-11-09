@@ -1,0 +1,964 @@
+bufr:
+  subsets:
+    - NC255019
+
+  variables:
+    # Not mapped: see the sequence notes in dev/ush/generate_bufr_tank_yamls.py
+    #   */FILENAME/FNSTG
+
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCPTIM{1}/RCYR"
+        month: "*/RCPTIM{1}/RCMO"
+        day: "*/RCPTIM{1}/RCDY"
+        hour: "*/RCPTIM{1}/RCHR"
+        minute: "*/RCPTIM{1}/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    receiptTimeSignificance:
+      query: "*/RCPTIM{1}/RCTS"
+
+    restrictionFlag:
+      query: "*/RSRD"
+
+    restrictionExpiration:
+      query: "*/EXPRSRD"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    providerIdentifier1:
+      query: "*/PRVID{1}/PRVSTG"
+
+    providerIdentifier2:
+      query: "*/PRVID{2}/PRVSTG"
+
+    subProviderIdentifier1:
+      query: "*/SPRVID{1}/SPRVSTG"
+
+    subProviderIdentifier2:
+      query: "*/SPRVID{2}/SPRVSTG"
+
+    stationElevation:
+      query: "*/SELV"
+
+    timePeriodHours1:
+      query: "*/MNTOPCSQ{1}/TPHR"
+
+    timePeriodHours2:
+      query: "*/MNTOPCSQ{2}/TPHR"
+
+    timePeriodHours3:
+      query: "*/MNTOPCSQ{3}/TPHR"
+
+    timePeriodHours4:
+      query: "*/MNTOPCSQ{4}/TPHR"
+
+    timePeriodMinutes1:
+      query: "*/MNSORDSQ{1}/TPMI"
+
+    timePeriodMinutes2:
+      query: "*/MNSORDSQ{2}/TPMI"
+
+    # ObsValue
+    airPressure:
+      query: "*/MNPRESSQ/PRES"
+
+    altimeterSetting:
+      query: "*/MNALSESQ/ALSE"
+
+    airTemperatureTMDB:
+      query: "*/MNTMDBSQ/TMDB"
+
+    dewPointTemperature:
+      query: "*/MNTMDPSQ/TMDP"
+
+    windDirection:
+      query: "*/MNWDIRSQ/WDIR"
+
+    windSpeed:
+      query: "*/MNWSPDSQ/WSPD"
+
+    maximumWindGustDirection:
+      query: "*/MNGUSTSQ/MXGD"
+
+    maximumWindGustSpeed:
+      query: "*/MNGUSTSQ/MXGS"
+
+    soilMoistureTension:
+      query: "*/MNSOILSQ/SLMT"
+
+    soilTemperature:
+      query: "*/MNSOILSQ/STEM"
+
+    rainfallWaterEquivalentOfSnowAveragedRate:
+      query: "*/MNREQVSQ/REQV"
+
+    horizontalVisibility:
+      query: "*/MNHOVISQ/HOVI"
+
+    totalPrecipitation1:
+      query: "*/MNTOPCSQ{1}/TOPC"
+
+    totalPrecipitation2:
+      query: "*/MNTOPCSQ{2}/TOPC"
+
+    totalPrecipitation3:
+      query: "*/MNTOPCSQ{3}/TOPC"
+
+    totalPrecipitation4:
+      query: "*/MNTOPCSQ{4}/TOPC"
+
+    diffuseSolarRadiationIntegratedOverPeriodSpec1:
+      query: "*/MNSORDSQ{1}/DFSORD"
+
+    diffuseSolarRadiationIntegratedOverPeriodSpec2:
+      query: "*/MNSORDSQ{2}/DFSORD"
+
+    directSolarRadiationIntegratedOverPeriodSpec1:
+      query: "*/MNSORDSQ{1}/DRSORD"
+
+    directSolarRadiationIntegratedOverPeriodSpec2:
+      query: "*/MNSORDSQ{2}/DRSORD"
+
+    roadTemperature1:
+      query: "*/MNRDWYSQ{1}/RDTM"
+
+    roadTemperature2:
+      query: "*/MNRDWYSQ{2}/RDTM"
+
+    roadTemperature3:
+      query: "*/MNRDWYSQ{3}/RDTM"
+
+    roadTemperature4:
+      query: "*/MNRDWYSQ{4}/RDTM"
+
+    roadTemperature5:
+      query: "*/MNRDWYSQ{5}/RDTM"
+
+    roadTemperature6:
+      query: "*/MNRDWYSQ{6}/RDTM"
+
+    roadTemperature7:
+      query: "*/MNRDWYSQ{7}/RDTM"
+
+    roadTemperature8:
+      query: "*/MNRDWYSQ{8}/RDTM"
+
+    roadLiquidFreezeTemperature1:
+      query: "*/MNRDWYSQ{1}/RLFT"
+
+    roadLiquidFreezeTemperature2:
+      query: "*/MNRDWYSQ{2}/RLFT"
+
+    roadLiquidFreezeTemperature3:
+      query: "*/MNRDWYSQ{3}/RLFT"
+
+    roadLiquidFreezeTemperature4:
+      query: "*/MNRDWYSQ{4}/RLFT"
+
+    roadLiquidFreezeTemperature5:
+      query: "*/MNRDWYSQ{5}/RLFT"
+
+    roadLiquidFreezeTemperature6:
+      query: "*/MNRDWYSQ{6}/RLFT"
+
+    roadLiquidFreezeTemperature7:
+      query: "*/MNRDWYSQ{7}/RLFT"
+
+    roadLiquidFreezeTemperature8:
+      query: "*/MNRDWYSQ{8}/RLFT"
+
+    roadLiquidIcePercent1:
+      query: "*/MNRDWYSQ{1}/RLIP"
+
+    roadLiquidIcePercent2:
+      query: "*/MNRDWYSQ{2}/RLIP"
+
+    roadLiquidIcePercent3:
+      query: "*/MNRDWYSQ{3}/RLIP"
+
+    roadLiquidIcePercent4:
+      query: "*/MNRDWYSQ{4}/RLIP"
+
+    roadLiquidIcePercent5:
+      query: "*/MNRDWYSQ{5}/RLIP"
+
+    roadLiquidIcePercent6:
+      query: "*/MNRDWYSQ{6}/RLIP"
+
+    roadLiquidIcePercent7:
+      query: "*/MNRDWYSQ{7}/RLIP"
+
+    roadLiquidIcePercent8:
+      query: "*/MNRDWYSQ{8}/RLIP"
+
+    roadLiquidDepth1:
+      query: "*/MNRDWYSQ{1}/RDLD"
+
+    roadLiquidDepth2:
+      query: "*/MNRDWYSQ{2}/RDLD"
+
+    roadLiquidDepth3:
+      query: "*/MNRDWYSQ{3}/RDLD"
+
+    roadLiquidDepth4:
+      query: "*/MNRDWYSQ{4}/RDLD"
+
+    roadLiquidDepth5:
+      query: "*/MNRDWYSQ{5}/RDLD"
+
+    roadLiquidDepth6:
+      query: "*/MNRDWYSQ{6}/RDLD"
+
+    roadLiquidDepth7:
+      query: "*/MNRDWYSQ{7}/RDLD"
+
+    roadLiquidDepth8:
+      query: "*/MNRDWYSQ{8}/RDLD"
+
+    roadState1:
+      query: "*/MNRDWYSQ{1}/RDST"
+
+    roadState2:
+      query: "*/MNRDWYSQ{2}/RDST"
+
+    roadState3:
+      query: "*/MNRDWYSQ{3}/RDST"
+
+    roadState4:
+      query: "*/MNRDWYSQ{4}/RDST"
+
+    roadState5:
+      query: "*/MNRDWYSQ{5}/RDST"
+
+    roadState6:
+      query: "*/MNRDWYSQ{6}/RDST"
+
+    roadState7:
+      query: "*/MNRDWYSQ{7}/RDST"
+
+    roadState8:
+      query: "*/MNRDWYSQ{8}/RDST"
+
+    # QualityMarker
+    fslQcDataMnpressq:
+      query: "*/MNPRESSQ/QCD"
+
+    fslQcAppliedMnpressq:
+      query: "*/MNPRESSQ/QCA"
+
+    fslQcResultsMnpressq:
+      query: "*/MNPRESSQ/QCR"
+
+    pressure:
+      query: "*/QMPR"
+
+    fslQcDataMnalsesq:
+      query: "*/MNALSESQ/QCD"
+
+    fslQcAppliedMnalsesq:
+      query: "*/MNALSESQ/QCA"
+
+    fslQcResultsMnalsesq:
+      query: "*/MNALSESQ/QCR"
+
+    fslQcDataMntmdbsq:
+      query: "*/MNTMDBSQ/QCD"
+
+    fslQcAppliedMntmdbsq:
+      query: "*/MNTMDBSQ/QCA"
+
+    fslQcResultsMntmdbsq:
+      query: "*/MNTMDBSQ/QCR"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    fslQcDataMntmdpsq:
+      query: "*/MNTMDPSQ/QCD"
+
+    fslQcAppliedMntmdpsq:
+      query: "*/MNTMDPSQ/QCA"
+
+    fslQcResultsMntmdpsq:
+      query: "*/MNTMDPSQ/QCR"
+
+    moisture:
+      query: "*/QMDD"
+
+    fslQcDataMnwdirsq:
+      query: "*/MNWDIRSQ/QCD"
+
+    fslQcAppliedMnwdirsq:
+      query: "*/MNWDIRSQ/QCA"
+
+    fslQcResultsMnwdirsq:
+      query: "*/MNWDIRSQ/QCR"
+
+    fslQcDataMnwspdsq:
+      query: "*/MNWSPDSQ/QCD"
+
+    fslQcAppliedMnwspdsq:
+      query: "*/MNWSPDSQ/QCA"
+
+    fslQcResultsMnwspdsq:
+      query: "*/MNWSPDSQ/QCR"
+
+    wind:
+      query: "*/QMWN"
+
+    fslQcDataMnreqvsq:
+      query: "*/MNREQVSQ/QCD"
+
+    fslQcAppliedMnreqvsq:
+      query: "*/MNREQVSQ/QCA"
+
+    fslQcResultsMnreqvsq:
+      query: "*/MNREQVSQ/QCR"
+
+    fslQcDataMnhovisq:
+      query: "*/MNHOVISQ/QCD"
+
+    fslQcAppliedMnhovisq:
+      query: "*/MNHOVISQ/QCA"
+
+    fslQcResultsMnhovisq:
+      query: "*/MNHOVISQ/QCR"
+
+    fslQcDataMntopcsq1:
+      query: "*/MNTOPCSQ{1}/QCD"
+
+    fslQcDataMntopcsq2:
+      query: "*/MNTOPCSQ{2}/QCD"
+
+    fslQcDataMntopcsq3:
+      query: "*/MNTOPCSQ{3}/QCD"
+
+    fslQcDataMntopcsq4:
+      query: "*/MNTOPCSQ{4}/QCD"
+
+    fslQcAppliedMntopcsq1:
+      query: "*/MNTOPCSQ{1}/QCA"
+
+    fslQcAppliedMntopcsq2:
+      query: "*/MNTOPCSQ{2}/QCA"
+
+    fslQcAppliedMntopcsq3:
+      query: "*/MNTOPCSQ{3}/QCA"
+
+    fslQcAppliedMntopcsq4:
+      query: "*/MNTOPCSQ{4}/QCA"
+
+    fslQcResultsMntopcsq1:
+      query: "*/MNTOPCSQ{1}/QCR"
+
+    fslQcResultsMntopcsq2:
+      query: "*/MNTOPCSQ{2}/QCR"
+
+    fslQcResultsMntopcsq3:
+      query: "*/MNTOPCSQ{3}/QCR"
+
+    fslQcResultsMntopcsq4:
+      query: "*/MNTOPCSQ{4}/QCR"
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "MTYP 255-019 Mesonet from MADIS: West Texas"
+
+    - name: "dataCategory"
+      type: string
+      value: "other"
+
+    - name: "dataset"
+      type: string
+      value: "mesonet_madis_west-texas"
+
+    - name: "dataFormat"
+      type: string
+      value: "netCDF"
+
+    - name: "restricted"
+      type: string
+      value: "true"
+
+    - name: "bufrCategory"
+      type: string
+      value: "255"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "019"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b255/xx019 NC255019"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    - name: "MetaData/restrictionFlag"
+      source: variables/restrictionFlag
+      longName: "Restrictions On Redistribution"
+
+    - name: "MetaData/restrictionExpiration"
+      source: variables/restrictionExpiration
+      longName: "Expiration Of Restrictions On Redistribution"
+      units: "h"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/providerIdentifier1"
+      source: variables/providerIdentifier1
+      longName: "Mesonet Provider Id String (1)"
+
+    - name: "MetaData/providerIdentifier2"
+      source: variables/providerIdentifier2
+      longName: "Mesonet Provider Id String (2)"
+
+    - name: "MetaData/subProviderIdentifier1"
+      source: variables/subProviderIdentifier1
+      longName: "Mesonet Subprovider Id String (1)"
+
+    - name: "MetaData/subProviderIdentifier2"
+      source: variables/subProviderIdentifier2
+      longName: "Mesonet Subprovider Id String (2)"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station"
+      units: "m"
+
+    - name: "MetaData/timePeriodHours1"
+      source: variables/timePeriodHours1
+      longName: "Time Period Or Displacement (1)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHours2"
+      source: variables/timePeriodHours2
+      longName: "Time Period Or Displacement (2)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHours3"
+      source: variables/timePeriodHours3
+      longName: "Time Period Or Displacement (3)"
+      units: "h"
+
+    - name: "MetaData/timePeriodHours4"
+      source: variables/timePeriodHours4
+      longName: "Time Period Or Displacement (4)"
+      units: "h"
+
+    - name: "MetaData/timePeriodMinutes1"
+      source: variables/timePeriodMinutes1
+      longName: "Time Period Or Displacement (1)"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes2"
+      source: variables/timePeriodMinutes2
+      longName: "Time Period Or Displacement (2)"
+      units: "min"
+
+    # ObsValue
+    - name: "ObsValue/airPressure"
+      source: variables/airPressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/altimeterSetting"
+      source: variables/altimeterSetting
+      longName: "Altimeter Setting"
+      units: "Pa"
+
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/dewPointTemperature"
+      source: variables/dewPointTemperature
+      longName: "Dew Point Temperature"
+      units: "K"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/maximumWindGustDirection"
+      source: variables/maximumWindGustDirection
+      longName: "Maximum Wind Gust Direction"
+      units: "degree"
+
+    - name: "ObsValue/maximumWindGustSpeed"
+      source: variables/maximumWindGustSpeed
+      longName: "Max Wind Speed (GUSTS)"
+      units: "m s-1"
+
+    - name: "ObsValue/soilMoistureTension"
+      source: variables/soilMoistureTension
+      longName: "Soil Moisture Tension"
+      units: "Pa"
+
+    - name: "ObsValue/soilTemperature"
+      source: variables/soilTemperature
+      longName: "Soil Temperature"
+      units: "K"
+
+    - name: "ObsValue/rainfallWaterEquivalentOfSnowAveragedRate"
+      source: variables/rainfallWaterEquivalentOfSnowAveragedRate
+      longName: "RAINFALL/WATER Equivalent Of Snow (AVERAGED RATE)"
+      units: "kg m-2 s-1"
+
+    - name: "ObsValue/horizontalVisibility"
+      source: variables/horizontalVisibility
+      longName: "Horizontal Visibility"
+      units: "m"
+
+    - name: "ObsValue/totalPrecipitation1"
+      source: variables/totalPrecipitation1
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (1)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation2"
+      source: variables/totalPrecipitation2
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (2)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation3"
+      source: variables/totalPrecipitation3
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (3)"
+      units: "kg m-2"
+
+    - name: "ObsValue/totalPrecipitation4"
+      source: variables/totalPrecipitation4
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent (4)"
+      units: "kg m-2"
+
+    - name: "ObsValue/diffuseSolarRadiationIntegratedOverPeriodSpec1"
+      source: variables/diffuseSolarRadiationIntegratedOverPeriodSpec1
+      longName: "Diffuse Solar RADIATION, Integrated Over Period Spec (1)"
+      units: "J m-2"
+
+    - name: "ObsValue/diffuseSolarRadiationIntegratedOverPeriodSpec2"
+      source: variables/diffuseSolarRadiationIntegratedOverPeriodSpec2
+      longName: "Diffuse Solar RADIATION, Integrated Over Period Spec (2)"
+      units: "J m-2"
+
+    - name: "ObsValue/directSolarRadiationIntegratedOverPeriodSpec1"
+      source: variables/directSolarRadiationIntegratedOverPeriodSpec1
+      longName: "Direct Solar RADIATION, Integrated Over Period Spec (1)"
+      units: "J m-2"
+
+    - name: "ObsValue/directSolarRadiationIntegratedOverPeriodSpec2"
+      source: variables/directSolarRadiationIntegratedOverPeriodSpec2
+      longName: "Direct Solar RADIATION, Integrated Over Period Spec (2)"
+      units: "J m-2"
+
+    - name: "ObsValue/roadTemperature1"
+      source: variables/roadTemperature1
+      longName: "Road Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/roadTemperature2"
+      source: variables/roadTemperature2
+      longName: "Road Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/roadTemperature3"
+      source: variables/roadTemperature3
+      longName: "Road Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/roadTemperature4"
+      source: variables/roadTemperature4
+      longName: "Road Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/roadTemperature5"
+      source: variables/roadTemperature5
+      longName: "Road Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/roadTemperature6"
+      source: variables/roadTemperature6
+      longName: "Road Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/roadTemperature7"
+      source: variables/roadTemperature7
+      longName: "Road Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/roadTemperature8"
+      source: variables/roadTemperature8
+      longName: "Road Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/roadLiquidFreezeTemperature1"
+      source: variables/roadLiquidFreezeTemperature1
+      longName: "Road Liquid Freeze Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/roadLiquidFreezeTemperature2"
+      source: variables/roadLiquidFreezeTemperature2
+      longName: "Road Liquid Freeze Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/roadLiquidFreezeTemperature3"
+      source: variables/roadLiquidFreezeTemperature3
+      longName: "Road Liquid Freeze Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/roadLiquidFreezeTemperature4"
+      source: variables/roadLiquidFreezeTemperature4
+      longName: "Road Liquid Freeze Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/roadLiquidFreezeTemperature5"
+      source: variables/roadLiquidFreezeTemperature5
+      longName: "Road Liquid Freeze Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/roadLiquidFreezeTemperature6"
+      source: variables/roadLiquidFreezeTemperature6
+      longName: "Road Liquid Freeze Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/roadLiquidFreezeTemperature7"
+      source: variables/roadLiquidFreezeTemperature7
+      longName: "Road Liquid Freeze Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/roadLiquidFreezeTemperature8"
+      source: variables/roadLiquidFreezeTemperature8
+      longName: "Road Liquid Freeze Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/roadLiquidIcePercent1"
+      source: variables/roadLiquidIcePercent1
+      longName: "Road Liquid Ice Percent (1)"
+      units: "%"
+
+    - name: "ObsValue/roadLiquidIcePercent2"
+      source: variables/roadLiquidIcePercent2
+      longName: "Road Liquid Ice Percent (2)"
+      units: "%"
+
+    - name: "ObsValue/roadLiquidIcePercent3"
+      source: variables/roadLiquidIcePercent3
+      longName: "Road Liquid Ice Percent (3)"
+      units: "%"
+
+    - name: "ObsValue/roadLiquidIcePercent4"
+      source: variables/roadLiquidIcePercent4
+      longName: "Road Liquid Ice Percent (4)"
+      units: "%"
+
+    - name: "ObsValue/roadLiquidIcePercent5"
+      source: variables/roadLiquidIcePercent5
+      longName: "Road Liquid Ice Percent (5)"
+      units: "%"
+
+    - name: "ObsValue/roadLiquidIcePercent6"
+      source: variables/roadLiquidIcePercent6
+      longName: "Road Liquid Ice Percent (6)"
+      units: "%"
+
+    - name: "ObsValue/roadLiquidIcePercent7"
+      source: variables/roadLiquidIcePercent7
+      longName: "Road Liquid Ice Percent (7)"
+      units: "%"
+
+    - name: "ObsValue/roadLiquidIcePercent8"
+      source: variables/roadLiquidIcePercent8
+      longName: "Road Liquid Ice Percent (8)"
+      units: "%"
+
+    - name: "ObsValue/roadLiquidDepth1"
+      source: variables/roadLiquidDepth1
+      longName: "Road Liquid Depth (1)"
+      units: "m"
+
+    - name: "ObsValue/roadLiquidDepth2"
+      source: variables/roadLiquidDepth2
+      longName: "Road Liquid Depth (2)"
+      units: "m"
+
+    - name: "ObsValue/roadLiquidDepth3"
+      source: variables/roadLiquidDepth3
+      longName: "Road Liquid Depth (3)"
+      units: "m"
+
+    - name: "ObsValue/roadLiquidDepth4"
+      source: variables/roadLiquidDepth4
+      longName: "Road Liquid Depth (4)"
+      units: "m"
+
+    - name: "ObsValue/roadLiquidDepth5"
+      source: variables/roadLiquidDepth5
+      longName: "Road Liquid Depth (5)"
+      units: "m"
+
+    - name: "ObsValue/roadLiquidDepth6"
+      source: variables/roadLiquidDepth6
+      longName: "Road Liquid Depth (6)"
+      units: "m"
+
+    - name: "ObsValue/roadLiquidDepth7"
+      source: variables/roadLiquidDepth7
+      longName: "Road Liquid Depth (7)"
+      units: "m"
+
+    - name: "ObsValue/roadLiquidDepth8"
+      source: variables/roadLiquidDepth8
+      longName: "Road Liquid Depth (8)"
+      units: "m"
+
+    - name: "ObsValue/roadState1"
+      source: variables/roadState1
+      longName: "Road State (1)"
+
+    - name: "ObsValue/roadState2"
+      source: variables/roadState2
+      longName: "Road State (2)"
+
+    - name: "ObsValue/roadState3"
+      source: variables/roadState3
+      longName: "Road State (3)"
+
+    - name: "ObsValue/roadState4"
+      source: variables/roadState4
+      longName: "Road State (4)"
+
+    - name: "ObsValue/roadState5"
+      source: variables/roadState5
+      longName: "Road State (5)"
+
+    - name: "ObsValue/roadState6"
+      source: variables/roadState6
+      longName: "Road State (6)"
+
+    - name: "ObsValue/roadState7"
+      source: variables/roadState7
+      longName: "Road State (7)"
+
+    - name: "ObsValue/roadState8"
+      source: variables/roadState8
+      longName: "Road State (8)"
+
+    # QualityMarker
+    - name: "QualityMarker/fslQcDataMnpressq"
+      source: variables/fslQcDataMnpressq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMnpressq"
+      source: variables/fslQcAppliedMnpressq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMnpressq"
+      source: variables/fslQcResultsMnpressq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/pressure"
+      source: variables/pressure
+      longName: "Sdmedit Quality Mark For Pressure"
+
+    - name: "QualityMarker/fslQcDataMnalsesq"
+      source: variables/fslQcDataMnalsesq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMnalsesq"
+      source: variables/fslQcAppliedMnalsesq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMnalsesq"
+      source: variables/fslQcResultsMnalsesq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataMntmdbsq"
+      source: variables/fslQcDataMntmdbsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMntmdbsq"
+      source: variables/fslQcAppliedMntmdbsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMntmdbsq"
+      source: variables/fslQcResultsMntmdbsq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "Sdmedit Quality Mark For Temperature"
+
+    - name: "QualityMarker/fslQcDataMntmdpsq"
+      source: variables/fslQcDataMntmdpsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMntmdpsq"
+      source: variables/fslQcAppliedMntmdpsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMntmdpsq"
+      source: variables/fslQcResultsMntmdpsq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "Sdmedit Quality Mark For Moisture"
+
+    - name: "QualityMarker/fslQcDataMnwdirsq"
+      source: variables/fslQcDataMnwdirsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMnwdirsq"
+      source: variables/fslQcAppliedMnwdirsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMnwdirsq"
+      source: variables/fslQcResultsMnwdirsq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataMnwspdsq"
+      source: variables/fslQcDataMnwspdsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMnwspdsq"
+      source: variables/fslQcAppliedMnwspdsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMnwspdsq"
+      source: variables/fslQcResultsMnwspdsq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "Sdmedit Quality Mark For Wind"
+
+    - name: "QualityMarker/fslQcDataMnreqvsq"
+      source: variables/fslQcDataMnreqvsq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMnreqvsq"
+      source: variables/fslQcAppliedMnreqvsq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMnreqvsq"
+      source: variables/fslQcResultsMnreqvsq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataMnhovisq"
+      source: variables/fslQcDataMnhovisq
+      longName: "Fsl \"QC DATA\" Flag"
+
+    - name: "QualityMarker/fslQcAppliedMnhovisq"
+      source: variables/fslQcAppliedMnhovisq
+      longName: "Fsl \"QC APPLIED\" Flag"
+
+    - name: "QualityMarker/fslQcResultsMnhovisq"
+      source: variables/fslQcResultsMnhovisq
+      longName: "Fsl \"QC RESULTS\" Flag"
+
+    - name: "QualityMarker/fslQcDataMntopcsq1"
+      source: variables/fslQcDataMntopcsq1
+      longName: "Fsl \"QC DATA\" Flag (1)"
+
+    - name: "QualityMarker/fslQcDataMntopcsq2"
+      source: variables/fslQcDataMntopcsq2
+      longName: "Fsl \"QC DATA\" Flag (2)"
+
+    - name: "QualityMarker/fslQcDataMntopcsq3"
+      source: variables/fslQcDataMntopcsq3
+      longName: "Fsl \"QC DATA\" Flag (3)"
+
+    - name: "QualityMarker/fslQcDataMntopcsq4"
+      source: variables/fslQcDataMntopcsq4
+      longName: "Fsl \"QC DATA\" Flag (4)"
+
+    - name: "QualityMarker/fslQcAppliedMntopcsq1"
+      source: variables/fslQcAppliedMntopcsq1
+      longName: "Fsl \"QC APPLIED\" Flag (1)"
+
+    - name: "QualityMarker/fslQcAppliedMntopcsq2"
+      source: variables/fslQcAppliedMntopcsq2
+      longName: "Fsl \"QC APPLIED\" Flag (2)"
+
+    - name: "QualityMarker/fslQcAppliedMntopcsq3"
+      source: variables/fslQcAppliedMntopcsq3
+      longName: "Fsl \"QC APPLIED\" Flag (3)"
+
+    - name: "QualityMarker/fslQcAppliedMntopcsq4"
+      source: variables/fslQcAppliedMntopcsq4
+      longName: "Fsl \"QC APPLIED\" Flag (4)"
+
+    - name: "QualityMarker/fslQcResultsMntopcsq1"
+      source: variables/fslQcResultsMntopcsq1
+      longName: "Fsl \"QC RESULTS\" Flag (1)"
+
+    - name: "QualityMarker/fslQcResultsMntopcsq2"
+      source: variables/fslQcResultsMntopcsq2
+      longName: "Fsl \"QC RESULTS\" Flag (2)"
+
+    - name: "QualityMarker/fslQcResultsMntopcsq3"
+      source: variables/fslQcResultsMntopcsq3
+      longName: "Fsl \"QC RESULTS\" Flag (3)"
+
+    - name: "QualityMarker/fslQcResultsMntopcsq4"
+      source: variables/fslQcResultsMntopcsq4
+      longName: "Fsl \"QC RESULTS\" Flag (4)"

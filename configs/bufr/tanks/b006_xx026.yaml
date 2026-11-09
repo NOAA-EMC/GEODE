@@ -1,0 +1,187 @@
+bufr:
+  subsets:
+    - NC006026
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    radarStationIdentifier:
+      query: "*/SSTN"
+
+    stationElevation:
+      query: "*/HSMSL"
+
+    heightOfSensorAboveGround:
+      query: "*/HSALG"
+
+    antennaAzimuthAngle:
+      query: "*/ANAZ"
+
+    antennaElevationAngle:
+      query: "*/ANEL"
+
+    distanceToGateCenter125m:
+      query: "*/NL2RW/DIST125M"
+
+    radarVolumeIdentifier:
+      query: "*/VOID"
+
+    radarScanIdentifier:
+      query: "*/SCID"
+
+    highNyquistVelocity:
+      query: "*/HNQV"
+
+    volumeCoveragePattern:
+      query: "*/VOCP"
+
+    # ObsValue
+    dopplerMeanRadialVelocity:
+      query: "*/NL2RW/DMVR"
+
+    dopplerVelocitySpectralWidth:
+      query: "*/NL2RW/DVSW"
+
+    # QualityMarker
+    radialWind:
+      query: "*/QCRW"
+
+encoder:
+  dimensions:
+    - name: RadialWindGate
+      path: "*/NL2RW"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "M TYPE 006-026 NEXRAD LVL 2 RADIAL WIND (16z)"
+
+    - name: "dataCategory"
+      type: string
+      value: "radar"
+
+    - name: "dataset"
+      type: string
+      value: "radar_nexrad_l2_wind"
+
+    - name: "dataFormat"
+      type: string
+      value: "binary"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "006"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "026"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b006/xx026 NC006026"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/radarStationIdentifier"
+      source: variables/radarStationIdentifier
+      longName: "Radar Station Identifier (SHORT)"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station Ground Above Msl"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveGround"
+      source: variables/heightOfSensorAboveGround
+      longName: "Height Of Antenna Above Ground"
+      units: "m"
+
+    - name: "MetaData/antennaAzimuthAngle"
+      source: variables/antennaAzimuthAngle
+      longName: "Antenna Azimuth Angle"
+      units: "degree"
+
+    - name: "MetaData/antennaElevationAngle"
+      source: variables/antennaElevationAngle
+      longName: "Antenna Elevation Angle"
+      units: "degree"
+
+    - name: "MetaData/distanceToGateCenter125m"
+      source: variables/distanceToGateCenter125m
+      longName: "Distance (FROM Antenna To Gate CENTER) In Units Of 125"
+      units: "125 m"
+
+    - name: "MetaData/radarVolumeIdentifier"
+      source: variables/radarVolumeIdentifier
+      longName: "Radar Volume Id (IN The Form DDHHMM)"
+
+    - name: "MetaData/radarScanIdentifier"
+      source: variables/radarScanIdentifier
+      longName: "Radar Scan Id (RANGE 1-21)"
+
+    - name: "MetaData/highNyquistVelocity"
+      source: variables/highNyquistVelocity
+      longName: "High Nyquist Velocity"
+      units: "m s-1"
+
+    - name: "MetaData/volumeCoveragePattern"
+      source: variables/volumeCoveragePattern
+      longName: "Volume Coverage Pattern"
+
+    # ObsValue
+    - name: "ObsValue/dopplerMeanRadialVelocity"
+      source: variables/dopplerMeanRadialVelocity
+      longName: "Doppler Mean Radial Velocity"
+      units: "m s-1"
+
+    - name: "ObsValue/dopplerVelocitySpectralWidth"
+      source: variables/dopplerVelocitySpectralWidth
+      longName: "Doppler Velocity Spectral Width"
+      units: "m s-1"
+
+    # QualityMarker
+    - name: "QualityMarker/radialWind"
+      source: variables/radialWind
+      longName: "Quality Mark For Winds Along Radial Line"

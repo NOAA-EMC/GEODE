@@ -1,0 +1,1243 @@
+bufr:
+  subsets:
+    - NC002102
+
+  # One row per element of this sequence
+  group_by_variable: extendedVerticalSoundingSignificance
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    receiptTime:
+      datetime:
+        year: "*/RCPTIM{1}/RCYR"
+        month: "*/RCPTIM{1}/RCMO"
+        day: "*/RCPTIM{1}/RCDY"
+        hour: "*/RCPTIM{1}/RCHR"
+        minute: "*/RCPTIM{1}/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    wigosIdentifierSeries:
+      query: "*/WGOSIDS"
+
+    wigosIssuerOfIdentifier:
+      query: "*/WGOSISID"
+
+    wigosIssueNumber:
+      query: "*/WGOSISNM"
+
+    wigosLocalIdentifierCharacter:
+      query: "*/WGOSLID"
+
+    timeSignificance:
+      query: "*/TSIG"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    wmoBlockNumber1:
+      query: "*/IDLSIPTM{1}/WMOB"
+
+    wmoBlockNumber2:
+      query: "*/IDLSIPTM{2}/WMOB"
+
+    wmoStationNumber1:
+      query: "*/IDLSIPTM{1}/WMOS"
+
+    wmoStationNumber2:
+      query: "*/IDLSIPTM{2}/WMOS"
+
+    shipOrMobileStationIdentifier1:
+      query: "*/IDLSIPTM{1}/SMID"
+
+    shipOrMobileStationIdentifier2:
+      query: "*/IDLSIPTM{2}/SMID"
+
+    radiosondeType1:
+      query: "*/IDLSIPTM{1}/RATP"
+
+    radiosondeType2:
+      query: "*/IDLSIPTM{2}/RATP"
+
+    solarAndInfraredRadiationCorrection1:
+      query: "*/IDLSIPTM{1}/SIRC"
+
+    solarAndInfraredRadiationCorrection2:
+      query: "*/IDLSIPTM{2}/SIRC"
+
+    trackingTechniqueStatusOfSystemUsed1:
+      query: "*/IDLSIPTM{1}/TTSS"
+
+    trackingTechniqueStatusOfSystemUsed2:
+      query: "*/IDLSIPTM{2}/TTSS"
+
+    measuringEquipmentType1:
+      query: "*/IDLSIPTM{1}/A4ME"
+
+    measuringEquipmentType2:
+      query: "*/IDLSIPTM{2}/A4ME"
+
+    stationElevation:
+      query: "*/HSMSL"
+
+    heightOfBarometerAboveMeanSeaLevel:
+      query: "*/HBMSL"
+
+    height:
+      query: "*/HEIT"
+
+    radiosondeSerialNumber:
+      query: "*/RSERL"
+
+    radiosondeAscensionNumber:
+      query: "*/RASCN"
+
+    radiosondeReleaseNumber:
+      query: "*/RRLSE"
+
+    observerIdentification:
+      query: "*/OBSVR"
+
+    radiosondeCompleteness:
+      query: "*/RACP"
+
+    radiosondeConfiguration:
+      query: "*/RCONF"
+
+    correctionAlgorithmsForHumidityMeasurements:
+      query: "*/CAHM"
+
+    radiosondeGroundReceivingSystem:
+      query: "*/RGRSY"
+
+    radiosondeOperatingFrequency:
+      query: "*/RFREQ"
+
+    balloonManufacturer:
+      query: "*/BMFGR"
+
+    typeOfBalloon:
+      query: "*/BTYPE"
+
+    weightOfBalloon:
+      query: "*/BWGHT"
+
+    typeOfBalloonShelter:
+      query: "*/BSHEL"
+
+    typeOfGasUsedInBalloon:
+      query: "*/BGTYP"
+
+    amountOfGasUsedInBalloon:
+      query: "*/BGAMT"
+
+    balloonFlightTrainLength:
+      query: "*/BFTLN"
+
+    typeOfPressureSensor:
+      query: "*/PSENS"
+
+    typeOfTemperatureSensor:
+      query: "*/TSENS"
+
+    typeOfHumiditySensor:
+      query: "*/RHSENS"
+
+    radome:
+      query: "*/RADO"
+
+    geopotentialHeightCalculation:
+      query: "*/GHTC"
+
+    softwareVersion:
+      query: "*/SOFTV"
+
+    reasonForTermination:
+      query: "*/RTERM"
+
+    volumeOfGasUsedInBalloon:
+      query: "*/BGVOL"
+
+    extendedVerticalSoundingSignificance:
+      query: "*/UARLVB/VSIGX"
+
+    longTimePeriodSeconds:
+      query: "*/UARLVB/LTDS"
+
+    latitudeDisplacementHighAccuracy:
+      query: "*/UARLVB/LATDH"
+
+    longitudeDisplacementHighAccuracy:
+      query: "*/UARLVB/LONDH"
+
+    pressure:
+      query: "*/UARLVB/PRLC"
+
+    verticalSignificanceSurface11:
+      query: "*/CLINRVSD{1}/VSSO[1]"
+
+    verticalSignificanceSurface12:
+      query: "*/CLINRVSD{2}/VSSO[1]"
+
+    verticalSignificanceSurface21:
+      query: "*/CLINRVSD{1}/VSSO[2]"
+
+    verticalSignificanceSurface22:
+      query: "*/CLINRVSD{2}/VSSO[2]"
+
+    sequenceNumber:
+      query: "*/BID{1}/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BID{1}/BUHD"
+
+    bulletinOriginator:
+      query: "*/BID{1}/BORG"
+
+    bulletinTime:
+      query: "*/BID{1}/BULTIM"
+
+    bulletinBBB:
+      query: "*/BID{1}/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCPTIM{1}/RCTS"
+
+    # ObsValue
+    geopotential07:
+      query: "*/UARLVB/UAGP07/GP07"
+
+    geopotential10:
+      query: "*/UARLVB/UAGP10/GP10"
+
+    airTemperatureTMDB:
+      query: "*/UARLVB/UATMP/TMDB"
+
+    dewPointTemperature:
+      query: "*/UARLVB/UATMP/TMDP"
+
+    windDirection:
+      query: "*/UARLVB/UAWND/WDIR"
+
+    windSpeed:
+      query: "*/UARLVB/UAWND/WSPD"
+
+    absoluteWindShearIn1KmLayerBelow:
+      query: "*/UARLVB/UAWSH/AWSB"
+
+    absoluteWindShearIn1KmLayerAbove:
+      query: "*/UARLVB/UAWSH/AWSA"
+
+    cloudAmount1:
+      query: "*/CLINRVSD{1}/CLAM"
+
+    cloudAmount2:
+      query: "*/CLINRVSD{2}/CLAM"
+
+    heightbasecloud1:
+      query: "*/CLINRVSD{1}/HOCB"
+
+    heightbasecloud2:
+      query: "*/CLINRVSD{2}/HOCB"
+
+    cloudType11:
+      query: "*/CLINRVSD{1}/CLTP[1]"
+
+    cloudType12:
+      query: "*/CLINRVSD{2}/CLTP[1]"
+
+    cloudType21:
+      query: "*/CLINRVSD{1}/CLTP[2]"
+
+    cloudType22:
+      query: "*/CLINRVSD{2}/CLTP[2]"
+
+    cloudType31:
+      query: "*/CLINRVSD{1}/CLTP[3]"
+
+    cloudType32:
+      query: "*/CLINRVSD{2}/CLTP[3]"
+
+    seaSurfaceTemperature:
+      query: "*/SST1"
+
+    modifiedShowalterStabilityIndex:
+      query: "*/MEANFL/STBS"
+
+    meanWindDirectionForSurface1500mLayer:
+      query: "*/MEANFL/MWDL"
+
+    meanWindSpeedForSurface1500mLayer:
+      query: "*/MEANFL/MWSL"
+
+    meanWindDirectionFor15003000M:
+      query: "*/MEANFL/MWDIRL"
+
+    meanWindSpeedFor15003000M:
+      query: "*/MEANFL/MWSPDL"
+
+    # QualityMarker
+    stationElevationQualityMarkForMobilStations:
+      query: "*/QCEVR"
+
+    pressureQMPR:
+      query: "*/UARLVB/QMPR"
+
+    geopotential:
+      query: "*/UARLVB/QMGP"
+
+    airTemperature:
+      query: "*/UARLVB/UATMP/QMAT"
+
+    moisture:
+      query: "*/UARLVB/UATMP/QMDD"
+
+    wind:
+      query: "*/UARLVB/UAWND/QMWN"
+
+    correctedReportIndicator1:
+      query: "*/CORNSQ{1}/CORN"
+
+    correctedReportIndicator2:
+      query: "*/CORNSQ{2}/CORN"
+
+    # Not in this tank: other tanks in this dataset have these
+    radiosondePartName1:
+      query: "*/UARLVB/ABSENT"
+      type: string
+
+    radiosondePartName2:
+      query: "*/UARLVB/ABSENT"
+      type: string
+
+    windInstrumentationType1:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    windInstrumentationType2:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    verticalSoundingSignificance:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    solarAndInfraredRadiationCorrection:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    trackingTechniqueStatusOfSystemUsed:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeLaunchHour:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeLaunchMinute:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    extrapolatedMandatoryLevelPressure:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    wmoBlockNumber:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    wmoStationNumber:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    wmoRegionNumber:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    seaSurfaceTemperatureSST1:
+      query: "*/UARLVB/ABSENT"
+      type: float
+
+    cloudType1:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    cloudType2:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    cloudType3:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    cloudType4:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    cloudType5:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    cloudType6:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    cloudAmount3:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    cloudAmount4:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    cloudAmount5:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    cloudAmount6:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    heightAboveSurfaceOfBaseOfLowestCloudSeen1:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    heightAboveSurfaceOfBaseOfLowestCloudSeen2:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    heightAboveSurfaceOfBaseOfLowestCloudSeen3:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    heightAboveSurfaceOfBaseOfLowestCloudSeen4:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    heightAboveSurfaceOfBaseOfLowestCloudSeen5:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    heightAboveSurfaceOfBaseOfLowestCloudSeen6:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    meanWindDirectionFor1500m3000mLayer:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    meanWindSpeedFor1500m3000mLayer:
+      query: "*/UARLVB/ABSENT"
+      type: float
+
+    modifiedShowalterStabilityIndexSTBS5:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    extrapolatedMandatoryLevelGeopotential:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    QualityMarker_seaSurfaceTemperature:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode1:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode2:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode3:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode4:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode5:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode6:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode7:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode8:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode9:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode10:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode11:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode12:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode13:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode14:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode15:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode16:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode17:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode18:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode19:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeReportDiagnosticCode20:
+      query: "*/UARLVB/ABSENT"
+      type: int
+
+    radiosondeShipDropOrMobilStationId:
+      query: "*/UARLVB/ABSENT"
+      type: string
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "Msg Type 002-102 Rawinsonde - Mobil Land (BUFR)"
+
+    - name: "dataCategory"
+      type: string
+      value: "vertical soundings other than satellite"
+
+    - name: "dataset"
+      type: string
+      value: "upperair_radiosonde"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "002"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "102"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b002/xx102 NC002102"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/wigosIdentifierSeries"
+      source: variables/wigosIdentifierSeries
+      longName: "Wigos Identifier Series"
+
+    - name: "MetaData/wigosIssuerOfIdentifier"
+      source: variables/wigosIssuerOfIdentifier
+      longName: "Wigos Issuer Of Identifier"
+
+    - name: "MetaData/wigosIssueNumber"
+      source: variables/wigosIssueNumber
+      longName: "Wigos Issue Number"
+
+    - name: "MetaData/wigosLocalIdentifierCharacter"
+      source: variables/wigosLocalIdentifierCharacter
+      longName: "Wigos Local Identifier (CHARACTER)"
+
+    - name: "MetaData/timeSignificance"
+      source: variables/timeSignificance
+      longName: "Time Significance"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/wmoBlockNumber1"
+      source: variables/wmoBlockNumber1
+      longName: "Wmo Block Number (1)"
+
+    - name: "MetaData/wmoBlockNumber2"
+      source: variables/wmoBlockNumber2
+      longName: "Wmo Block Number (2)"
+
+    - name: "MetaData/wmoStationNumber1"
+      source: variables/wmoStationNumber1
+      longName: "Wmo Station Number (1)"
+
+    - name: "MetaData/wmoStationNumber2"
+      source: variables/wmoStationNumber2
+      longName: "Wmo Station Number (2)"
+
+    - name: "MetaData/shipOrMobileStationIdentifier1"
+      source: variables/shipOrMobileStationIdentifier1
+      longName: "Ship Or Mobile Land Station Identifier (1)"
+
+    - name: "MetaData/shipOrMobileStationIdentifier2"
+      source: variables/shipOrMobileStationIdentifier2
+      longName: "Ship Or Mobile Land Station Identifier (2)"
+
+    - name: "MetaData/radiosondeType1"
+      source: variables/radiosondeType1
+      longName: "Radiosonde Type (1)"
+
+    - name: "MetaData/radiosondeType2"
+      source: variables/radiosondeType2
+      longName: "Radiosonde Type (2)"
+
+    - name: "MetaData/solarAndInfraredRadiationCorrection1"
+      source: variables/solarAndInfraredRadiationCorrection1
+      longName: "Solar And Infrared Radiation Correction (1)"
+
+    - name: "MetaData/solarAndInfraredRadiationCorrection2"
+      source: variables/solarAndInfraredRadiationCorrection2
+      longName: "Solar And Infrared Radiation Correction (2)"
+
+    - name: "MetaData/trackingTechniqueStatusOfSystemUsed1"
+      source: variables/trackingTechniqueStatusOfSystemUsed1
+      longName: "Tracking TECHNIQUE/STATUS Of System Used (1)"
+
+    - name: "MetaData/trackingTechniqueStatusOfSystemUsed2"
+      source: variables/trackingTechniqueStatusOfSystemUsed2
+      longName: "Tracking TECHNIQUE/STATUS Of System Used (2)"
+
+    - name: "MetaData/measuringEquipmentType1"
+      source: variables/measuringEquipmentType1
+      longName: "Type Of Measuring Equipment Used (1)"
+
+    - name: "MetaData/measuringEquipmentType2"
+      source: variables/measuringEquipmentType2
+      longName: "Type Of Measuring Equipment Used (2)"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station Ground Above Mean Sea Level"
+      units: "m"
+
+    - name: "MetaData/heightOfBarometerAboveMeanSeaLevel"
+      source: variables/heightOfBarometerAboveMeanSeaLevel
+      longName: "Height Of Barometer Above Mean Sea Level"
+      units: "m"
+
+    - name: "MetaData/height"
+      source: variables/height
+      longName: "Height"
+      units: "m"
+
+    - name: "MetaData/radiosondeSerialNumber"
+      source: variables/radiosondeSerialNumber
+      longName: "Radiosonde Serial Number"
+
+    - name: "MetaData/radiosondeAscensionNumber"
+      source: variables/radiosondeAscensionNumber
+      longName: "Radiosonde Ascension Number"
+
+    - name: "MetaData/radiosondeReleaseNumber"
+      source: variables/radiosondeReleaseNumber
+      longName: "Radiosonde release number"
+
+    - name: "MetaData/observerIdentification"
+      source: variables/observerIdentification
+      longName: "Observer identification"
+
+    - name: "MetaData/radiosondeCompleteness"
+      source: variables/radiosondeCompleteness
+      longName: "Radiosonde completeness"
+
+    - name: "MetaData/radiosondeConfiguration"
+      source: variables/radiosondeConfiguration
+      longName: "Radiosonde configuration"
+
+    - name: "MetaData/correctionAlgorithmsForHumidityMeasurements"
+      source: variables/correctionAlgorithmsForHumidityMeasurements
+      longName: "Correction algorithms for humidity measurements"
+
+    - name: "MetaData/radiosondeGroundReceivingSystem"
+      source: variables/radiosondeGroundReceivingSystem
+      longName: "Radiosonde ground receiving system"
+
+    - name: "MetaData/radiosondeOperatingFrequency"
+      source: variables/radiosondeOperatingFrequency
+      longName: "Radiosonde Operating Frequency"
+      units: "Hz"
+
+    - name: "MetaData/balloonManufacturer"
+      source: variables/balloonManufacturer
+      longName: "Balloon manufacturer"
+
+    - name: "MetaData/typeOfBalloon"
+      source: variables/typeOfBalloon
+      longName: "Type of balloon"
+
+    - name: "MetaData/weightOfBalloon"
+      source: variables/weightOfBalloon
+      longName: "Weight of balloon"
+      units: "kg"
+
+    - name: "MetaData/typeOfBalloonShelter"
+      source: variables/typeOfBalloonShelter
+      longName: "Type of balloon shelter"
+
+    - name: "MetaData/typeOfGasUsedInBalloon"
+      source: variables/typeOfGasUsedInBalloon
+      longName: "Type of gas used in balloon"
+
+    - name: "MetaData/amountOfGasUsedInBalloon"
+      source: variables/amountOfGasUsedInBalloon
+      longName: "Amount of gas used in balloon"
+      units: "kg"
+
+    - name: "MetaData/balloonFlightTrainLength"
+      source: variables/balloonFlightTrainLength
+      longName: "Balloon flight train length"
+      units: "m"
+
+    - name: "MetaData/typeOfPressureSensor"
+      source: variables/typeOfPressureSensor
+      longName: "Type Of Pressure Sensor"
+
+    - name: "MetaData/typeOfTemperatureSensor"
+      source: variables/typeOfTemperatureSensor
+      longName: "Type Of Temperature Sensor"
+
+    - name: "MetaData/typeOfHumiditySensor"
+      source: variables/typeOfHumiditySensor
+      longName: "Type Of Humidity Sensor"
+
+    - name: "MetaData/radome"
+      source: variables/radome
+      longName: "Radome"
+
+    - name: "MetaData/geopotentialHeightCalculation"
+      source: variables/geopotentialHeightCalculation
+      longName: "Geopotential height calculation"
+
+    - name: "MetaData/softwareVersion"
+      source: variables/softwareVersion
+      longName: "Software identification and version number"
+
+    - name: "MetaData/reasonForTermination"
+      source: variables/reasonForTermination
+      longName: "Reason for termination"
+
+    - name: "MetaData/volumeOfGasUsedInBalloon"
+      source: variables/volumeOfGasUsedInBalloon
+      longName: "Volume of gas used in balloon"
+      units: "m3"
+
+    - name: "MetaData/extendedVerticalSoundingSignificance"
+      source: variables/extendedVerticalSoundingSignificance
+      longName: "Extended Vertical Sounding Significance"
+
+    - name: "MetaData/longTimePeriodSeconds"
+      source: variables/longTimePeriodSeconds
+      longName: "Long Time Period Or Displacement"
+      units: "s"
+
+    - name: "MetaData/latitudeDisplacementHighAccuracy"
+      source: variables/latitudeDisplacementHighAccuracy
+      longName: "Latitude Displacement (HIGH ACCURACY)"
+      units: "degree"
+
+    - name: "MetaData/longitudeDisplacementHighAccuracy"
+      source: variables/longitudeDisplacementHighAccuracy
+      longName: "Longitude Displacement (HIGH ACCURACY)"
+      units: "degree"
+
+    - name: "MetaData/pressure"
+      source: variables/pressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/verticalSignificanceSurface11"
+      source: variables/verticalSignificanceSurface11
+      longName: "Vertical Significance (SURFACE OBSERVATIONS) (1)"
+
+    - name: "MetaData/verticalSignificanceSurface12"
+      source: variables/verticalSignificanceSurface12
+      longName: "Vertical Significance (SURFACE OBSERVATIONS) (2)"
+
+    - name: "MetaData/verticalSignificanceSurface21"
+      source: variables/verticalSignificanceSurface21
+      longName: "Vertical Significance (SURFACE OBSERVATIONS) (1)"
+
+    - name: "MetaData/verticalSignificanceSurface22"
+      source: variables/verticalSignificanceSurface22
+      longName: "Vertical Significance (SURFACE OBSERVATIONS) (2)"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    # ObsValue
+    - name: "ObsValue/geopotential07"
+      source: variables/geopotential07
+      longName: "Geopotential"
+      units: "m2 s-2"
+
+    - name: "ObsValue/geopotential10"
+      source: variables/geopotential10
+      longName: "Geopotential"
+      units: "m2 s-2"
+
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/dewPointTemperature"
+      source: variables/dewPointTemperature
+      longName: "Dew Point Temperature"
+      units: "K"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/absoluteWindShearIn1KmLayerBelow"
+      source: variables/absoluteWindShearIn1KmLayerBelow
+      longName: "Absolute Wind Shear In 1 Km Layer Below"
+      units: "m s-1"
+
+    - name: "ObsValue/absoluteWindShearIn1KmLayerAbove"
+      source: variables/absoluteWindShearIn1KmLayerAbove
+      longName: "Absolute Wind Shear In 1 Km Layer Above"
+      units: "m s-1"
+
+    - name: "ObsValue/cloudAmount1"
+      source: variables/cloudAmount1
+      longName: "Cloud Amount (1)"
+
+    - name: "ObsValue/cloudAmount2"
+      source: variables/cloudAmount2
+      longName: "Cloud Amount (2)"
+
+    - name: "ObsValue/heightbasecloud1"
+      source: variables/heightbasecloud1
+      longName: "Height Of Base Of Cloud (1)"
+      units: "m"
+
+    - name: "ObsValue/heightbasecloud2"
+      source: variables/heightbasecloud2
+      longName: "Height Of Base Of Cloud (2)"
+      units: "m"
+
+    - name: "ObsValue/cloudType11"
+      source: variables/cloudType11
+      longName: "Cloud Type (1)"
+
+    - name: "ObsValue/cloudType12"
+      source: variables/cloudType12
+      longName: "Cloud Type (2)"
+
+    - name: "ObsValue/cloudType21"
+      source: variables/cloudType21
+      longName: "Cloud Type (1)"
+
+    - name: "ObsValue/cloudType22"
+      source: variables/cloudType22
+      longName: "Cloud Type (2)"
+
+    - name: "ObsValue/cloudType31"
+      source: variables/cloudType31
+      longName: "Cloud Type (1)"
+
+    - name: "ObsValue/cloudType32"
+      source: variables/cloudType32
+      longName: "Cloud Type (2)"
+
+    - name: "ObsValue/seaSurfaceTemperature"
+      source: variables/seaSurfaceTemperature
+      longName: "SEA/WATER Temperature"
+      units: "K"
+
+    - name: "ObsValue/modifiedShowalterStabilityIndex"
+      source: variables/modifiedShowalterStabilityIndex
+      longName: "Modified Showalter stability index"
+      units: "K"
+
+    - name: "ObsValue/meanWindDirectionForSurface1500mLayer"
+      source: variables/meanWindDirectionForSurface1500mLayer
+      longName: "Mean Wind Direction For SURFACE-1500M Layer"
+      units: "degree"
+
+    - name: "ObsValue/meanWindSpeedForSurface1500mLayer"
+      source: variables/meanWindSpeedForSurface1500mLayer
+      longName: "Mean Wind Speed For SURFACE-1500M Layer"
+      units: "m s-1"
+
+    - name: "ObsValue/meanWindDirectionFor15003000M"
+      source: variables/meanWindDirectionFor15003000M
+      longName: "Mean wind direction for 1 500 - 3 000 m"
+      units: "degree"
+
+    - name: "ObsValue/meanWindSpeedFor15003000M"
+      source: variables/meanWindSpeedFor15003000M
+      longName: "Mean wind speed for 1 500 - 3 000 m"
+      units: "m s-1"
+
+    # QualityMarker
+    - name: "QualityMarker/stationElevationQualityMarkForMobilStations"
+      source: variables/stationElevationQualityMarkForMobilStations
+      longName: "Station Elevation Quality Mark (FOR Mobil STATIONS)"
+
+    - name: "QualityMarker/pressureQMPR"
+      source: variables/pressureQMPR
+      longName: "Sdmedit Quality Mark For Pressure"
+
+    - name: "QualityMarker/geopotential"
+      source: variables/geopotential
+      longName: "Sdmedit Quality Mark For Geopotential"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "Sdmedit Quality Mark For Temperature"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "Sdmedit Quality Mark For Moisture"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "Sdmedit Quality Mark For Wind"
+
+    - name: "QualityMarker/correctedReportIndicator1"
+      source: variables/correctedReportIndicator1
+      longName: "Corrected Report Indicator (1)"
+
+    - name: "QualityMarker/correctedReportIndicator2"
+      source: variables/correctedReportIndicator2
+      longName: "Corrected Report Indicator (2)"
+
+    # Not in this tank: read as missing so the dataset has one set of variables
+    - name: "MetaData/radiosondePartName1"
+      source: variables/radiosondePartName1
+      longName: "Radiosonde Part Name (1)"
+
+    - name: "MetaData/radiosondePartName2"
+      source: variables/radiosondePartName2
+      longName: "Radiosonde Part Name (2)"
+
+    - name: "MetaData/windInstrumentationType1"
+      source: variables/windInstrumentationType1
+      longName: "Type Of Instrumentation For Wind Measurement (1)"
+
+    - name: "MetaData/windInstrumentationType2"
+      source: variables/windInstrumentationType2
+      longName: "Type Of Instrumentation For Wind Measurement (2)"
+
+    - name: "MetaData/verticalSoundingSignificance"
+      source: variables/verticalSoundingSignificance
+      longName: "Vertical Sounding Significance"
+
+    - name: "MetaData/solarAndInfraredRadiationCorrection"
+      source: variables/solarAndInfraredRadiationCorrection
+      longName: "Solar And Infrared Radiation Correction"
+
+    - name: "MetaData/trackingTechniqueStatusOfSystemUsed"
+      source: variables/trackingTechniqueStatusOfSystemUsed
+      longName: "Tracking TECHNIQUE/STATUS Of System Used"
+
+    - name: "MetaData/radiosondeLaunchHour"
+      source: variables/radiosondeLaunchHour
+      longName: "Radiosonde Launch Hour"
+      units: "h"
+
+    - name: "MetaData/radiosondeLaunchMinute"
+      source: variables/radiosondeLaunchMinute
+      longName: "Radiosonde Launch Minute"
+      units: "min"
+
+    - name: "MetaData/extrapolatedMandatoryLevelPressure"
+      source: variables/extrapolatedMandatoryLevelPressure
+      longName: "Extrapolated Mandatory Level Pressure"
+      units: "Pa"
+
+    - name: "MetaData/wmoBlockNumber"
+      source: variables/wmoBlockNumber
+      longName: "Wmo Block Number"
+
+    - name: "MetaData/wmoStationNumber"
+      source: variables/wmoStationNumber
+      longName: "Wmo Station Number"
+
+    - name: "MetaData/wmoRegionNumber"
+      source: variables/wmoRegionNumber
+      longName: "Wmo Region Number"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST1"
+      source: variables/seaSurfaceTemperatureSST1
+      longName: "SEA/WATER Temperature"
+      units: "K"
+
+    - name: "ObsValue/cloudType1"
+      source: variables/cloudType1
+      longName: "Cloud Type (1)"
+
+    - name: "ObsValue/cloudType2"
+      source: variables/cloudType2
+      longName: "Cloud Type (2)"
+
+    - name: "ObsValue/cloudType3"
+      source: variables/cloudType3
+      longName: "Cloud Type (3)"
+
+    - name: "ObsValue/cloudType4"
+      source: variables/cloudType4
+      longName: "Cloud Type (4)"
+
+    - name: "ObsValue/cloudType5"
+      source: variables/cloudType5
+      longName: "Cloud Type (5)"
+
+    - name: "ObsValue/cloudType6"
+      source: variables/cloudType6
+      longName: "Cloud Type (6)"
+
+    - name: "ObsValue/cloudAmount3"
+      source: variables/cloudAmount3
+      longName: "Cloud Amount (3)"
+
+    - name: "ObsValue/cloudAmount4"
+      source: variables/cloudAmount4
+      longName: "Cloud Amount (4)"
+
+    - name: "ObsValue/cloudAmount5"
+      source: variables/cloudAmount5
+      longName: "Cloud Amount (5)"
+
+    - name: "ObsValue/cloudAmount6"
+      source: variables/cloudAmount6
+      longName: "Cloud Amount (6)"
+
+    - name: "ObsValue/heightAboveSurfaceOfBaseOfLowestCloudSeen1"
+      source: variables/heightAboveSurfaceOfBaseOfLowestCloudSeen1
+      longName: "Height Above Surface Of Base Of Lowest Cloud Seen (1)"
+
+    - name: "ObsValue/heightAboveSurfaceOfBaseOfLowestCloudSeen2"
+      source: variables/heightAboveSurfaceOfBaseOfLowestCloudSeen2
+      longName: "Height Above Surface Of Base Of Lowest Cloud Seen (2)"
+
+    - name: "ObsValue/heightAboveSurfaceOfBaseOfLowestCloudSeen3"
+      source: variables/heightAboveSurfaceOfBaseOfLowestCloudSeen3
+      longName: "Height Above Surface Of Base Of Lowest Cloud Seen (3)"
+
+    - name: "ObsValue/heightAboveSurfaceOfBaseOfLowestCloudSeen4"
+      source: variables/heightAboveSurfaceOfBaseOfLowestCloudSeen4
+      longName: "Height Above Surface Of Base Of Lowest Cloud Seen (4)"
+
+    - name: "ObsValue/heightAboveSurfaceOfBaseOfLowestCloudSeen5"
+      source: variables/heightAboveSurfaceOfBaseOfLowestCloudSeen5
+      longName: "Height Above Surface Of Base Of Lowest Cloud Seen (5)"
+
+    - name: "ObsValue/heightAboveSurfaceOfBaseOfLowestCloudSeen6"
+      source: variables/heightAboveSurfaceOfBaseOfLowestCloudSeen6
+      longName: "Height Above Surface Of Base Of Lowest Cloud Seen (6)"
+
+    - name: "ObsValue/meanWindDirectionFor1500m3000mLayer"
+      source: variables/meanWindDirectionFor1500m3000mLayer
+      longName: "Mean Wind Direction For 1500M-3000M Layer"
+      units: "degree"
+
+    - name: "ObsValue/meanWindSpeedFor1500m3000mLayer"
+      source: variables/meanWindSpeedFor1500m3000mLayer
+      longName: "Mean Wind Speed For 1500M-3000M Layer"
+      units: "m s-1"
+
+    - name: "ObsValue/modifiedShowalterStabilityIndexSTBS5"
+      source: variables/modifiedShowalterStabilityIndexSTBS5
+      longName: "Modified Showalter Stability Index"
+
+    - name: "ObsValue/extrapolatedMandatoryLevelGeopotential"
+      source: variables/extrapolatedMandatoryLevelGeopotential
+      longName: "Extrapolated Mandatory Level Geopotential"
+      units: "m2 s-2"
+
+    - name: "QualityMarker/seaSurfaceTemperature"
+      source: variables/QualityMarker_seaSurfaceTemperature
+      longName: "Sdmedit Quality Mark For Sea Surface Temperature"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode1"
+      source: variables/radiosondeReportDiagnosticCode1
+      longName: "Radiosonde Report Diagnostic Code (1)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode2"
+      source: variables/radiosondeReportDiagnosticCode2
+      longName: "Radiosonde Report Diagnostic Code (2)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode3"
+      source: variables/radiosondeReportDiagnosticCode3
+      longName: "Radiosonde Report Diagnostic Code (3)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode4"
+      source: variables/radiosondeReportDiagnosticCode4
+      longName: "Radiosonde Report Diagnostic Code (4)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode5"
+      source: variables/radiosondeReportDiagnosticCode5
+      longName: "Radiosonde Report Diagnostic Code (5)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode6"
+      source: variables/radiosondeReportDiagnosticCode6
+      longName: "Radiosonde Report Diagnostic Code (6)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode7"
+      source: variables/radiosondeReportDiagnosticCode7
+      longName: "Radiosonde Report Diagnostic Code (7)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode8"
+      source: variables/radiosondeReportDiagnosticCode8
+      longName: "Radiosonde Report Diagnostic Code (8)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode9"
+      source: variables/radiosondeReportDiagnosticCode9
+      longName: "Radiosonde Report Diagnostic Code (9)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode10"
+      source: variables/radiosondeReportDiagnosticCode10
+      longName: "Radiosonde Report Diagnostic Code (10)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode11"
+      source: variables/radiosondeReportDiagnosticCode11
+      longName: "Radiosonde Report Diagnostic Code (11)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode12"
+      source: variables/radiosondeReportDiagnosticCode12
+      longName: "Radiosonde Report Diagnostic Code (12)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode13"
+      source: variables/radiosondeReportDiagnosticCode13
+      longName: "Radiosonde Report Diagnostic Code (13)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode14"
+      source: variables/radiosondeReportDiagnosticCode14
+      longName: "Radiosonde Report Diagnostic Code (14)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode15"
+      source: variables/radiosondeReportDiagnosticCode15
+      longName: "Radiosonde Report Diagnostic Code (15)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode16"
+      source: variables/radiosondeReportDiagnosticCode16
+      longName: "Radiosonde Report Diagnostic Code (16)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode17"
+      source: variables/radiosondeReportDiagnosticCode17
+      longName: "Radiosonde Report Diagnostic Code (17)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode18"
+      source: variables/radiosondeReportDiagnosticCode18
+      longName: "Radiosonde Report Diagnostic Code (18)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode19"
+      source: variables/radiosondeReportDiagnosticCode19
+      longName: "Radiosonde Report Diagnostic Code (19)"
+
+    - name: "QualityMarker/radiosondeReportDiagnosticCode20"
+      source: variables/radiosondeReportDiagnosticCode20
+      longName: "Radiosonde Report Diagnostic Code (20)"
+
+    - name: "MetaData/radiosondeShipDropOrMobilStationId"
+      source: variables/radiosondeShipDropOrMobilStationId
+      longName: "Radiosonde SHIP, DROP, Or Mobil Station Id"

@@ -1,0 +1,1043 @@
+bufr:
+  subsets:
+    - NC008017
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLAT"
+
+    longitude:
+      query: "*/CLON"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    instrumentIdentifier:
+      query: "*/SIID"
+
+    solarZenithAngle1:
+      query: "*/SOZA[1]"
+
+    timeSignificance1:
+      query: "*/TSIG[1]"
+
+    solarZenithAngle2:
+      query: "*/SOZA[2]"
+
+    timeSignificance2:
+      query: "*/TSIG[2]"
+
+    solarZenithAngle3:
+      query: "*/SOZA[3]"
+
+    timeSignificance3:
+      query: "*/TSIG[3]"
+
+    remotelySensedSurfaceType:
+      query: "*/RSST"
+
+    orbitNumber:
+      query: "*/ORBN"
+
+    ascendingDescendingOrbitQualifier:
+      query: "*/STKO"
+
+    verticalSignificanceSatellite1:
+      query: "*/VSAT[1]"
+
+    verticalSignificanceSatellite2:
+      query: "*/VSAT[2]"
+
+    totalOzoneQuality:
+      query: "*/SBUVTOQ"
+
+    verticalSignificanceSatellite3:
+      query: "*/VSAT[3]"
+
+    pressure:
+      query: "*/PRLC"
+
+    verticalSignificanceSatellite4:
+      query: "*/VSAT[4]"
+
+    pressure1:
+      query: "*/OZOPQLSQ/PRLC[1]"
+
+    pressure2:
+      query: "*/OZOPQLSQ/PRLC[2]"
+
+    timeSignificance1Ozopqlsq:
+      query: "*/OZOPQLSQ/TSIG[1]"
+
+    timeSignificance2Ozopqlsq:
+      query: "*/OZOPQLSQ/TSIG[2]"
+
+    qiWithoutForecastOzopqlsq:
+      query: "*/OZOPQLSQ/PCCF"
+
+    matrixSignificance1:
+      query: "*/OZOPQLSQ/MTXSIG[1]"
+
+    linearCoefficient:
+      query: "*/OZOPQLSQ/LINCOFSQ/LINCOF"
+
+    matrixSignificance2:
+      query: "*/OZOPQLSQ/MTXSIG[2]"
+
+    atmosphericChemicalOrPhysicalConstituentType1:
+      query: "*/ATCT[1]"
+
+    pressureMixrvqsq1:
+      query: "*/MIXRVQSQ{1}/PRLC"
+
+    pressureMixrvqsq2:
+      query: "*/MIXRVQSQ{2}/PRLC"
+
+    pressureMixrvqsq3:
+      query: "*/MIXRVQSQ{3}/PRLC"
+
+    pressureMixrvqsq4:
+      query: "*/MIXRVQSQ{4}/PRLC"
+
+    pressureMixrvqsq5:
+      query: "*/MIXRVQSQ{5}/PRLC"
+
+    pressureMixrvqsq6:
+      query: "*/MIXRVQSQ{6}/PRLC"
+
+    pressureMixrvqsq7:
+      query: "*/MIXRVQSQ{7}/PRLC"
+
+    pressureMixrvqsq8:
+      query: "*/MIXRVQSQ{8}/PRLC"
+
+    pressureMixrvqsq9:
+      query: "*/MIXRVQSQ{9}/PRLC"
+
+    pressureMixrvqsq10:
+      query: "*/MIXRVQSQ{10}/PRLC"
+
+    pressureMixrvqsq11:
+      query: "*/MIXRVQSQ{11}/PRLC"
+
+    pressureMixrvqsq12:
+      query: "*/MIXRVQSQ{12}/PRLC"
+
+    pressureMixrvqsq13:
+      query: "*/MIXRVQSQ{13}/PRLC"
+
+    pressureMixrvqsq14:
+      query: "*/MIXRVQSQ{14}/PRLC"
+
+    pressureMixrvqsq15:
+      query: "*/MIXRVQSQ{15}/PRLC"
+
+    decimalScaleOfFollowingValues11:
+      query: "*/MIXRVQSQ{1}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues12:
+      query: "*/MIXRVQSQ{2}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues13:
+      query: "*/MIXRVQSQ{3}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues14:
+      query: "*/MIXRVQSQ{4}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues15:
+      query: "*/MIXRVQSQ{5}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues16:
+      query: "*/MIXRVQSQ{6}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues17:
+      query: "*/MIXRVQSQ{7}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues18:
+      query: "*/MIXRVQSQ{8}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues19:
+      query: "*/MIXRVQSQ{9}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues110:
+      query: "*/MIXRVQSQ{10}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues111:
+      query: "*/MIXRVQSQ{11}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues112:
+      query: "*/MIXRVQSQ{12}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues113:
+      query: "*/MIXRVQSQ{13}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues114:
+      query: "*/MIXRVQSQ{14}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues115:
+      query: "*/MIXRVQSQ{15}/DSFTV[1]"
+
+    decimalScaleOfFollowingValues21:
+      query: "*/MIXRVQSQ{1}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues22:
+      query: "*/MIXRVQSQ{2}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues23:
+      query: "*/MIXRVQSQ{3}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues24:
+      query: "*/MIXRVQSQ{4}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues25:
+      query: "*/MIXRVQSQ{5}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues26:
+      query: "*/MIXRVQSQ{6}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues27:
+      query: "*/MIXRVQSQ{7}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues28:
+      query: "*/MIXRVQSQ{8}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues29:
+      query: "*/MIXRVQSQ{9}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues210:
+      query: "*/MIXRVQSQ{10}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues211:
+      query: "*/MIXRVQSQ{11}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues212:
+      query: "*/MIXRVQSQ{12}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues213:
+      query: "*/MIXRVQSQ{13}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues214:
+      query: "*/MIXRVQSQ{14}/DSFTV[2]"
+
+    decimalScaleOfFollowingValues215:
+      query: "*/MIXRVQSQ{15}/DSFTV[2]"
+
+    qiWithoutForecastMixrvqsq1:
+      query: "*/MIXRVQSQ{1}/PCCF"
+
+    qiWithoutForecastMixrvqsq2:
+      query: "*/MIXRVQSQ{2}/PCCF"
+
+    qiWithoutForecastMixrvqsq3:
+      query: "*/MIXRVQSQ{3}/PCCF"
+
+    qiWithoutForecastMixrvqsq4:
+      query: "*/MIXRVQSQ{4}/PCCF"
+
+    qiWithoutForecastMixrvqsq5:
+      query: "*/MIXRVQSQ{5}/PCCF"
+
+    qiWithoutForecastMixrvqsq6:
+      query: "*/MIXRVQSQ{6}/PCCF"
+
+    qiWithoutForecastMixrvqsq7:
+      query: "*/MIXRVQSQ{7}/PCCF"
+
+    qiWithoutForecastMixrvqsq8:
+      query: "*/MIXRVQSQ{8}/PCCF"
+
+    qiWithoutForecastMixrvqsq9:
+      query: "*/MIXRVQSQ{9}/PCCF"
+
+    qiWithoutForecastMixrvqsq10:
+      query: "*/MIXRVQSQ{10}/PCCF"
+
+    qiWithoutForecastMixrvqsq11:
+      query: "*/MIXRVQSQ{11}/PCCF"
+
+    qiWithoutForecastMixrvqsq12:
+      query: "*/MIXRVQSQ{12}/PCCF"
+
+    qiWithoutForecastMixrvqsq13:
+      query: "*/MIXRVQSQ{13}/PCCF"
+
+    qiWithoutForecastMixrvqsq14:
+      query: "*/MIXRVQSQ{14}/PCCF"
+
+    qiWithoutForecastMixrvqsq15:
+      query: "*/MIXRVQSQ{15}/PCCF"
+
+    atmosphericChemicalOrPhysicalConstituentType2:
+      query: "*/ATCT[2]"
+
+    profileOzoneQuality:
+      query: "*/SBUVPOQ"
+
+    spectrographicWavelength1:
+      query: "*/WAVCLDSQ{1}/WAVL"
+
+    spectrographicWavelength2:
+      query: "*/WAVCLDSQ{2}/WAVL"
+
+    spectrographicWavelength3:
+      query: "*/WAVCLDSQ{3}/WAVL"
+
+    spectrographicWavelength4:
+      query: "*/WAVCLDSQ{4}/WAVL"
+
+    spectrographicWavelength5:
+      query: "*/WAVCLDSQ{5}/WAVL"
+
+    spectrographicWavelength6:
+      query: "*/WAVCLDSQ{6}/WAVL"
+
+    spectrographicWavelength7:
+      query: "*/WAVCLDSQ{7}/WAVL"
+
+    spectrographicWavelength8:
+      query: "*/WAVCLDSQ{8}/WAVL"
+
+    # ObsValue
+    airPressure:
+      query: "*/PRES"
+
+    ozoneTotal1:
+      query: "*/OZON[1]"
+
+    aerosolContaminationIndex:
+      query: "*/ACIDX"
+
+    cloudAmount:
+      query: "*/CLDMNT"
+
+    ozoneTotal2:
+      query: "*/OZON[2]"
+
+    ozoneLayer1:
+      query: "*/OZOPQLSQ/OZOP[1]"
+
+    ozoneLayer2:
+      query: "*/OZOPQLSQ/OZOP[2]"
+
+    scaledSignificandOfVolumetricMixingRatio1:
+      query: "*/MIXRVQSQ{1}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio2:
+      query: "*/MIXRVQSQ{2}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio3:
+      query: "*/MIXRVQSQ{3}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio4:
+      query: "*/MIXRVQSQ{4}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio5:
+      query: "*/MIXRVQSQ{5}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio6:
+      query: "*/MIXRVQSQ{6}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio7:
+      query: "*/MIXRVQSQ{7}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio8:
+      query: "*/MIXRVQSQ{8}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio9:
+      query: "*/MIXRVQSQ{9}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio10:
+      query: "*/MIXRVQSQ{10}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio11:
+      query: "*/MIXRVQSQ{11}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio12:
+      query: "*/MIXRVQSQ{12}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio13:
+      query: "*/MIXRVQSQ{13}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio14:
+      query: "*/MIXRVQSQ{14}/MIXRV"
+
+    scaledSignificandOfVolumetricMixingRatio15:
+      query: "*/MIXRVQSQ{15}/MIXRV"
+
+    cloudAmountWavcldsq1:
+      query: "*/WAVCLDSQ{1}/CLDMNT"
+
+    cloudAmountWavcldsq2:
+      query: "*/WAVCLDSQ{2}/CLDMNT"
+
+    cloudAmountWavcldsq3:
+      query: "*/WAVCLDSQ{3}/CLDMNT"
+
+    cloudAmountWavcldsq4:
+      query: "*/WAVCLDSQ{4}/CLDMNT"
+
+    cloudAmountWavcldsq5:
+      query: "*/WAVCLDSQ{5}/CLDMNT"
+
+    cloudAmountWavcldsq6:
+      query: "*/WAVCLDSQ{6}/CLDMNT"
+
+    cloudAmountWavcldsq7:
+      query: "*/WAVCLDSQ{7}/CLDMNT"
+
+    cloudAmountWavcldsq8:
+      query: "*/WAVCLDSQ{8}/CLDMNT"
+
+    # QualityMarker
+    typeOfLimitRepresentedByFollowingValue:
+      query: "*/TLRFV"
+
+  splits:
+    satId:
+      category:
+        variable: satelliteIdentifier
+
+encoder:
+  dimensions:
+    - name: Ozopqlsq
+      path: "*/OZOPQLSQ"
+    - name: Lincofsq
+      path: "*/OZOPQLSQ/LINCOFSQ"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "Mtyp 008-017 Omps Nadir Profile Ozone (VERSION 8 BUFR)"
+
+    - name: "dataCategory"
+      type: string
+      value: "physical / chemical constituents"
+
+    - name: "dataset"
+      type: string
+      value: "retrieval_ozone_omps-np"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "008"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "017"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b008/xx017 NC008017"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier *"
+
+    - name: "MetaData/instrumentIdentifier"
+      source: variables/instrumentIdentifier
+      longName: "Satellite Instruments"
+
+    - name: "MetaData/solarZenithAngle1"
+      source: variables/solarZenithAngle1
+      longName: "Solar Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/timeSignificance1"
+      source: variables/timeSignificance1
+      longName: "Time Significance"
+
+    - name: "MetaData/solarZenithAngle2"
+      source: variables/solarZenithAngle2
+      longName: "Solar Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/timeSignificance2"
+      source: variables/timeSignificance2
+      longName: "Time Significance"
+
+    - name: "MetaData/solarZenithAngle3"
+      source: variables/solarZenithAngle3
+      longName: "Solar Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/timeSignificance3"
+      source: variables/timeSignificance3
+      longName: "Time Significance"
+
+    - name: "MetaData/remotelySensedSurfaceType"
+      source: variables/remotelySensedSurfaceType
+      longName: "Remotely Sensed Surface Type"
+
+    - name: "MetaData/orbitNumber"
+      source: variables/orbitNumber
+      longName: "Orbit Number"
+
+    - name: "MetaData/ascendingDescendingOrbitQualifier"
+      source: variables/ascendingDescendingOrbitQualifier
+      longName: "ASCENDING/DESCENDING Orbit Qualifier"
+
+    - name: "MetaData/verticalSignificanceSatellite1"
+      source: variables/verticalSignificanceSatellite1
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/verticalSignificanceSatellite2"
+      source: variables/verticalSignificanceSatellite2
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/totalOzoneQuality"
+      source: variables/totalOzoneQuality
+      longName: "Total Ozone Quality"
+
+    - name: "MetaData/verticalSignificanceSatellite3"
+      source: variables/verticalSignificanceSatellite3
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/pressure"
+      source: variables/pressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/verticalSignificanceSatellite4"
+      source: variables/verticalSignificanceSatellite4
+      longName: "Vertical Significance (SATELLITE OBSERVATIONS)"
+
+    - name: "MetaData/pressure1"
+      source: variables/pressure1
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/pressure2"
+      source: variables/pressure2
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "MetaData/timeSignificance1Ozopqlsq"
+      source: variables/timeSignificance1Ozopqlsq
+      longName: "Time Significance"
+
+    - name: "MetaData/timeSignificance2Ozopqlsq"
+      source: variables/timeSignificance2Ozopqlsq
+      longName: "Time Significance"
+
+    - name: "MetaData/qiWithoutForecastOzopqlsq"
+      source: variables/qiWithoutForecastOzopqlsq
+      longName: "Per Cent Confidence"
+      units: "%"
+
+    - name: "MetaData/matrixSignificance1"
+      source: variables/matrixSignificance1
+      longName: "Matrix Significance"
+
+    - name: "MetaData/linearCoefficient"
+      source: variables/linearCoefficient
+      longName: "Linear Coefficient"
+
+    - name: "MetaData/matrixSignificance2"
+      source: variables/matrixSignificance2
+      longName: "Matrix Significance"
+
+    - name: "MetaData/atmosphericChemicalOrPhysicalConstituentType1"
+      source: variables/atmosphericChemicalOrPhysicalConstituentType1
+      longName: "Atmospheric Chemical Or Physical Constituent Type"
+
+    - name: "MetaData/pressureMixrvqsq1"
+      source: variables/pressureMixrvqsq1
+      longName: "Pressure (1)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq2"
+      source: variables/pressureMixrvqsq2
+      longName: "Pressure (2)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq3"
+      source: variables/pressureMixrvqsq3
+      longName: "Pressure (3)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq4"
+      source: variables/pressureMixrvqsq4
+      longName: "Pressure (4)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq5"
+      source: variables/pressureMixrvqsq5
+      longName: "Pressure (5)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq6"
+      source: variables/pressureMixrvqsq6
+      longName: "Pressure (6)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq7"
+      source: variables/pressureMixrvqsq7
+      longName: "Pressure (7)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq8"
+      source: variables/pressureMixrvqsq8
+      longName: "Pressure (8)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq9"
+      source: variables/pressureMixrvqsq9
+      longName: "Pressure (9)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq10"
+      source: variables/pressureMixrvqsq10
+      longName: "Pressure (10)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq11"
+      source: variables/pressureMixrvqsq11
+      longName: "Pressure (11)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq12"
+      source: variables/pressureMixrvqsq12
+      longName: "Pressure (12)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq13"
+      source: variables/pressureMixrvqsq13
+      longName: "Pressure (13)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq14"
+      source: variables/pressureMixrvqsq14
+      longName: "Pressure (14)"
+      units: "Pa"
+
+    - name: "MetaData/pressureMixrvqsq15"
+      source: variables/pressureMixrvqsq15
+      longName: "Pressure (15)"
+      units: "Pa"
+
+    - name: "MetaData/decimalScaleOfFollowingValues11"
+      source: variables/decimalScaleOfFollowingValues11
+      longName: "Decimal Scale Of Following Values (1)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues12"
+      source: variables/decimalScaleOfFollowingValues12
+      longName: "Decimal Scale Of Following Values (2)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues13"
+      source: variables/decimalScaleOfFollowingValues13
+      longName: "Decimal Scale Of Following Values (3)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues14"
+      source: variables/decimalScaleOfFollowingValues14
+      longName: "Decimal Scale Of Following Values (4)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues15"
+      source: variables/decimalScaleOfFollowingValues15
+      longName: "Decimal Scale Of Following Values (5)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues16"
+      source: variables/decimalScaleOfFollowingValues16
+      longName: "Decimal Scale Of Following Values (6)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues17"
+      source: variables/decimalScaleOfFollowingValues17
+      longName: "Decimal Scale Of Following Values (7)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues18"
+      source: variables/decimalScaleOfFollowingValues18
+      longName: "Decimal Scale Of Following Values (8)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues19"
+      source: variables/decimalScaleOfFollowingValues19
+      longName: "Decimal Scale Of Following Values (9)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues110"
+      source: variables/decimalScaleOfFollowingValues110
+      longName: "Decimal Scale Of Following Values (10)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues111"
+      source: variables/decimalScaleOfFollowingValues111
+      longName: "Decimal Scale Of Following Values (11)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues112"
+      source: variables/decimalScaleOfFollowingValues112
+      longName: "Decimal Scale Of Following Values (12)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues113"
+      source: variables/decimalScaleOfFollowingValues113
+      longName: "Decimal Scale Of Following Values (13)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues114"
+      source: variables/decimalScaleOfFollowingValues114
+      longName: "Decimal Scale Of Following Values (14)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues115"
+      source: variables/decimalScaleOfFollowingValues115
+      longName: "Decimal Scale Of Following Values (15)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues21"
+      source: variables/decimalScaleOfFollowingValues21
+      longName: "Decimal Scale Of Following Values (1)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues22"
+      source: variables/decimalScaleOfFollowingValues22
+      longName: "Decimal Scale Of Following Values (2)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues23"
+      source: variables/decimalScaleOfFollowingValues23
+      longName: "Decimal Scale Of Following Values (3)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues24"
+      source: variables/decimalScaleOfFollowingValues24
+      longName: "Decimal Scale Of Following Values (4)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues25"
+      source: variables/decimalScaleOfFollowingValues25
+      longName: "Decimal Scale Of Following Values (5)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues26"
+      source: variables/decimalScaleOfFollowingValues26
+      longName: "Decimal Scale Of Following Values (6)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues27"
+      source: variables/decimalScaleOfFollowingValues27
+      longName: "Decimal Scale Of Following Values (7)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues28"
+      source: variables/decimalScaleOfFollowingValues28
+      longName: "Decimal Scale Of Following Values (8)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues29"
+      source: variables/decimalScaleOfFollowingValues29
+      longName: "Decimal Scale Of Following Values (9)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues210"
+      source: variables/decimalScaleOfFollowingValues210
+      longName: "Decimal Scale Of Following Values (10)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues211"
+      source: variables/decimalScaleOfFollowingValues211
+      longName: "Decimal Scale Of Following Values (11)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues212"
+      source: variables/decimalScaleOfFollowingValues212
+      longName: "Decimal Scale Of Following Values (12)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues213"
+      source: variables/decimalScaleOfFollowingValues213
+      longName: "Decimal Scale Of Following Values (13)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues214"
+      source: variables/decimalScaleOfFollowingValues214
+      longName: "Decimal Scale Of Following Values (14)"
+
+    - name: "MetaData/decimalScaleOfFollowingValues215"
+      source: variables/decimalScaleOfFollowingValues215
+      longName: "Decimal Scale Of Following Values (15)"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq1"
+      source: variables/qiWithoutForecastMixrvqsq1
+      longName: "Per Cent Confidence (1)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq2"
+      source: variables/qiWithoutForecastMixrvqsq2
+      longName: "Per Cent Confidence (2)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq3"
+      source: variables/qiWithoutForecastMixrvqsq3
+      longName: "Per Cent Confidence (3)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq4"
+      source: variables/qiWithoutForecastMixrvqsq4
+      longName: "Per Cent Confidence (4)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq5"
+      source: variables/qiWithoutForecastMixrvqsq5
+      longName: "Per Cent Confidence (5)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq6"
+      source: variables/qiWithoutForecastMixrvqsq6
+      longName: "Per Cent Confidence (6)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq7"
+      source: variables/qiWithoutForecastMixrvqsq7
+      longName: "Per Cent Confidence (7)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq8"
+      source: variables/qiWithoutForecastMixrvqsq8
+      longName: "Per Cent Confidence (8)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq9"
+      source: variables/qiWithoutForecastMixrvqsq9
+      longName: "Per Cent Confidence (9)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq10"
+      source: variables/qiWithoutForecastMixrvqsq10
+      longName: "Per Cent Confidence (10)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq11"
+      source: variables/qiWithoutForecastMixrvqsq11
+      longName: "Per Cent Confidence (11)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq12"
+      source: variables/qiWithoutForecastMixrvqsq12
+      longName: "Per Cent Confidence (12)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq13"
+      source: variables/qiWithoutForecastMixrvqsq13
+      longName: "Per Cent Confidence (13)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq14"
+      source: variables/qiWithoutForecastMixrvqsq14
+      longName: "Per Cent Confidence (14)"
+      units: "%"
+
+    - name: "MetaData/qiWithoutForecastMixrvqsq15"
+      source: variables/qiWithoutForecastMixrvqsq15
+      longName: "Per Cent Confidence (15)"
+      units: "%"
+
+    - name: "MetaData/atmosphericChemicalOrPhysicalConstituentType2"
+      source: variables/atmosphericChemicalOrPhysicalConstituentType2
+      longName: "Atmospheric Chemical Or Physical Constituent Type"
+
+    - name: "MetaData/profileOzoneQuality"
+      source: variables/profileOzoneQuality
+      longName: "Profile Ozone Quality"
+
+    - name: "MetaData/spectrographicWavelength1"
+      source: variables/spectrographicWavelength1
+      longName: "Spectrographic Wavelength (1)"
+      units: "m"
+
+    - name: "MetaData/spectrographicWavelength2"
+      source: variables/spectrographicWavelength2
+      longName: "Spectrographic Wavelength (2)"
+      units: "m"
+
+    - name: "MetaData/spectrographicWavelength3"
+      source: variables/spectrographicWavelength3
+      longName: "Spectrographic Wavelength (3)"
+      units: "m"
+
+    - name: "MetaData/spectrographicWavelength4"
+      source: variables/spectrographicWavelength4
+      longName: "Spectrographic Wavelength (4)"
+      units: "m"
+
+    - name: "MetaData/spectrographicWavelength5"
+      source: variables/spectrographicWavelength5
+      longName: "Spectrographic Wavelength (5)"
+      units: "m"
+
+    - name: "MetaData/spectrographicWavelength6"
+      source: variables/spectrographicWavelength6
+      longName: "Spectrographic Wavelength (6)"
+      units: "m"
+
+    - name: "MetaData/spectrographicWavelength7"
+      source: variables/spectrographicWavelength7
+      longName: "Spectrographic Wavelength (7)"
+      units: "m"
+
+    - name: "MetaData/spectrographicWavelength8"
+      source: variables/spectrographicWavelength8
+      longName: "Spectrographic Wavelength (8)"
+      units: "m"
+
+    # ObsValue
+    - name: "ObsValue/airPressure"
+      source: variables/airPressure
+      longName: "Terrain Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/ozoneTotal1"
+      source: variables/ozoneTotal1
+      longName: "Total Ozone"
+      units: "DU"
+
+    - name: "ObsValue/aerosolContaminationIndex"
+      source: variables/aerosolContaminationIndex
+      longName: "Aerosol Contamination Index"
+
+    - name: "ObsValue/cloudAmount"
+      source: variables/cloudAmount
+      longName: "Cloud Amount In Segment"
+      units: "%"
+
+    - name: "ObsValue/ozoneTotal2"
+      source: variables/ozoneTotal2
+      longName: "Total Ozone"
+      units: "DU"
+
+    - name: "ObsValue/ozoneLayer1"
+      source: variables/ozoneLayer1
+      longName: "Ozone P"
+      units: "DU"
+
+    - name: "ObsValue/ozoneLayer2"
+      source: variables/ozoneLayer2
+      longName: "Ozone P"
+      units: "DU"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio1"
+      source: variables/scaledSignificandOfVolumetricMixingRatio1
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (1)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio2"
+      source: variables/scaledSignificandOfVolumetricMixingRatio2
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (2)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio3"
+      source: variables/scaledSignificandOfVolumetricMixingRatio3
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (3)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio4"
+      source: variables/scaledSignificandOfVolumetricMixingRatio4
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (4)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio5"
+      source: variables/scaledSignificandOfVolumetricMixingRatio5
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (5)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio6"
+      source: variables/scaledSignificandOfVolumetricMixingRatio6
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (6)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio7"
+      source: variables/scaledSignificandOfVolumetricMixingRatio7
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (7)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio8"
+      source: variables/scaledSignificandOfVolumetricMixingRatio8
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (8)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio9"
+      source: variables/scaledSignificandOfVolumetricMixingRatio9
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (9)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio10"
+      source: variables/scaledSignificandOfVolumetricMixingRatio10
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (10)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio11"
+      source: variables/scaledSignificandOfVolumetricMixingRatio11
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (11)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio12"
+      source: variables/scaledSignificandOfVolumetricMixingRatio12
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (12)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio13"
+      source: variables/scaledSignificandOfVolumetricMixingRatio13
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (13)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio14"
+      source: variables/scaledSignificandOfVolumetricMixingRatio14
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (14)"
+
+    - name: "ObsValue/scaledSignificandOfVolumetricMixingRatio15"
+      source: variables/scaledSignificandOfVolumetricMixingRatio15
+      longName: "Scaled (SIGNIFICAND OF) Volumetric Mixing Ratio (15)"
+
+    - name: "ObsValue/cloudAmountWavcldsq1"
+      source: variables/cloudAmountWavcldsq1
+      longName: "Cloud Amount In Segment (1)"
+      units: "%"
+
+    - name: "ObsValue/cloudAmountWavcldsq2"
+      source: variables/cloudAmountWavcldsq2
+      longName: "Cloud Amount In Segment (2)"
+      units: "%"
+
+    - name: "ObsValue/cloudAmountWavcldsq3"
+      source: variables/cloudAmountWavcldsq3
+      longName: "Cloud Amount In Segment (3)"
+      units: "%"
+
+    - name: "ObsValue/cloudAmountWavcldsq4"
+      source: variables/cloudAmountWavcldsq4
+      longName: "Cloud Amount In Segment (4)"
+      units: "%"
+
+    - name: "ObsValue/cloudAmountWavcldsq5"
+      source: variables/cloudAmountWavcldsq5
+      longName: "Cloud Amount In Segment (5)"
+      units: "%"
+
+    - name: "ObsValue/cloudAmountWavcldsq6"
+      source: variables/cloudAmountWavcldsq6
+      longName: "Cloud Amount In Segment (6)"
+      units: "%"
+
+    - name: "ObsValue/cloudAmountWavcldsq7"
+      source: variables/cloudAmountWavcldsq7
+      longName: "Cloud Amount In Segment (7)"
+      units: "%"
+
+    - name: "ObsValue/cloudAmountWavcldsq8"
+      source: variables/cloudAmountWavcldsq8
+      longName: "Cloud Amount In Segment (8)"
+      units: "%"
+
+    # QualityMarker
+    - name: "QualityMarker/typeOfLimitRepresentedByFollowingValue"
+      source: variables/typeOfLimitRepresentedByFollowingValue
+      longName: "Type Of Limit Represented By Following Value"

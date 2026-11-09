@@ -1,0 +1,571 @@
+bufr:
+  subsets:
+    - NC021206
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    dataProviderOrigin:
+      query: "*/OGCE"
+
+    instrumentIdentifier1:
+      query: "*/SIID[1]"
+
+    satelliteConstellationRO:
+      query: "*/SCLF"
+
+    inDirectionOf0DegEDistanceFromEarthsCenter:
+      query: "*/PD00"
+
+    inDirectionOf90DegEDistanceFromEarthsCenter:
+      query: "*/PD90"
+
+    satelliteZenithAngle:
+      query: "*/SAZA"
+
+    sensorAzimuthAngle:
+      query: "*/BEARAZ"
+
+    solarZenithAngle:
+      query: "*/SOZA"
+
+    solarAzimuthAngle:
+      query: "*/SOLAZI"
+
+    ascendingDescendingOrbitQualifier:
+      query: "*/STKO"
+
+    scanLineNumber:
+      query: "*/SLNM"
+
+    fieldOfRegardNumber:
+      query: "*/FORN"
+
+    sensorScanPosition:
+      query: "*/FOVN"
+
+    orbitNumber:
+      query: "*/ORBN"
+
+    heightOfStation:
+      query: "*/HMSL"
+
+    landOrSeaQualifier:
+      query: "*/LSQL"
+
+    radianceTypeFlags:
+      query: "*/RDTF"
+
+    typeOfBand1:
+      query: "*/BCFQFSQ{1}/TOBD"
+
+    typeOfBand2:
+      query: "*/BCFQFSQ{2}/TOBD"
+
+    typeOfBand3:
+      query: "*/BCFQFSQ{3}/TOBD"
+
+    waveNumber11:
+      query: "*/BCFQFSQ{1}/WVNM[1]"
+
+    waveNumber12:
+      query: "*/BCFQFSQ{2}/WVNM[1]"
+
+    waveNumber13:
+      query: "*/BCFQFSQ{3}/WVNM[1]"
+
+    waveNumber21:
+      query: "*/BCFQFSQ{1}/WVNM[2]"
+
+    waveNumber22:
+      query: "*/BCFQFSQ{2}/WVNM[2]"
+
+    waveNumber23:
+      query: "*/BCFQFSQ{3}/WVNM[2]"
+
+    startChannel1:
+      query: "*/BCFQFSQ{1}/STCH"
+
+    startChannel2:
+      query: "*/BCFQFSQ{2}/STCH"
+
+    startChannel3:
+      query: "*/BCFQFSQ{3}/STCH"
+
+    endChannel1:
+      query: "*/BCFQFSQ{1}/ENCH"
+
+    endChannel2:
+      query: "*/BCFQFSQ{2}/ENCH"
+
+    endChannel3:
+      query: "*/BCFQFSQ{3}/ENCH"
+
+    typeOfBand1_2:
+      query: "*/TOBD[1]"
+
+    sensorChannelNumberCrchnm:
+      query: "*/CRCHNM/CHNM"
+
+    measurementType:
+      query: "*/MTYP"
+
+    typeOfBand2_2:
+      query: "*/TOBD[2]"
+
+    sensorChannelNumberGcrchn:
+      query: "*/GCRCHN/CHNM"
+
+    typeOfBand3_2:
+      query: "*/TOBD[3]"
+
+    instrumentIdentifier2:
+      query: "*/SIID[2]"
+
+    yAngularPositionOfCenterOfGravity:
+      query: "*/CRISCS{1}/YAPCG"
+
+    zAngularPositionOfCenterOfGravity:
+      query: "*/CRISCS{1}/ZAPCG"
+
+    sensorChannelNumberViirch:
+      query: "*/CRISCS{1}/VIIRCH/CHNM"
+
+    firstOrderStatistics1:
+      query: "*/CRISCS{1}/VIIRCH/FOST[1]"
+
+    firstOrderStatistics2:
+      query: "*/CRISCS{1}/VIIRCH/FOST[2]"
+
+    # ObsValue
+    inDirOfNorthPoleDistanceFromTheEarths:
+      query: "*/PDNP"
+
+    heightOfLandSurface:
+      query: "*/HOLS"
+
+    landFraction:
+      query: "*/ALFR"
+
+    cloudCoverTotal:
+      query: "*/TOCC"
+
+    heightOfTopOfCloud:
+      query: "*/HOCT"
+
+    spectralRadianceCrchnm:
+      query: "*/CRCHNM/SRAD"
+
+    spectralRadianceGcrchn:
+      query: "*/GCRCHN/SRAD"
+
+    cloudFree:
+      query: "*/CRISCS{1}/FCPH"
+
+    channelRadiance1:
+      query: "*/CRISCS{1}/VIIRCH/SCHRAD[1]"
+
+    channelRadiance2:
+      query: "*/CRISCS{1}/VIIRCH/SCHRAD[2]"
+
+    # QualityMarker
+    scanLevelQualityFlags:
+      query: "*/NSQF"
+
+    calibrationQualityFlags1:
+      query: "*/BCFQFSQ{1}/NCQF"
+
+    calibrationQualityFlags2:
+      query: "*/BCFQFSQ{2}/NCQF"
+
+    calibrationQualityFlags3:
+      query: "*/BCFQFSQ{3}/NCQF"
+
+    fieldOfViewQualityFlags1:
+      query: "*/BCFQFSQ{1}/NFQF"
+
+    fieldOfViewQualityFlags2:
+      query: "*/BCFQFSQ{2}/NFQF"
+
+    fieldOfViewQualityFlags3:
+      query: "*/BCFQFSQ{3}/NFQF"
+
+    geolocationQuality:
+      query: "*/NGQI"
+
+    qualityInformation:
+      query: "*/QMRKH"
+
+  splits:
+    satId:
+      category:
+        variable: satelliteIdentifier
+
+encoder:
+  dimensions:
+    - name: Channel
+      source: variables/sensorChannelNumberCrchnm
+      path: "*/CRCHNM"
+    - name: Viirch
+      source: variables/sensorChannelNumberViirch
+      path: "*/CRISCS{1}/VIIRCH"
+    - name: Gcrchn
+      source: variables/sensorChannelNumberGcrchn
+      path: "*/GCRCHN"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "MTYP 021-206 CrIS FULL SPCTRL RADIANCE (431 CHN SUBSET"
+
+    - name: "dataCategory"
+      type: string
+      value: "radiances from satellite"
+
+    - name: "dataset"
+      type: string
+      value: "radiance_cris"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "021"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "206"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b021/xx206 NC021206"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier"
+
+    - name: "MetaData/dataProviderOrigin"
+      source: variables/dataProviderOrigin
+      longName: "Identification Of ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/instrumentIdentifier1"
+      source: variables/instrumentIdentifier1
+      longName: "Satellite Instruments"
+
+    - name: "MetaData/satelliteConstellationRO"
+      source: variables/satelliteConstellationRO
+      longName: "Satellite Classification"
+
+    - name: "MetaData/inDirectionOf0DegEDistanceFromEarthsCenter"
+      source: variables/inDirectionOf0DegEDistanceFromEarthsCenter
+      longName: "In Direction Of 0 Deg E, Distance From EARTH'S Center"
+      units: "m"
+
+    - name: "MetaData/inDirectionOf90DegEDistanceFromEarthsCenter"
+      source: variables/inDirectionOf90DegEDistanceFromEarthsCenter
+      longName: "In Direction Of 90 Deg E, Distance From EARTH'S Center"
+      units: "m"
+
+    - name: "MetaData/satelliteZenithAngle"
+      source: variables/satelliteZenithAngle
+      longName: "Satellite Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/sensorAzimuthAngle"
+      source: variables/sensorAzimuthAngle
+      longName: "Bearing Or Azimuth"
+      units: "degree"
+
+    - name: "MetaData/solarZenithAngle"
+      source: variables/solarZenithAngle
+      longName: "Solar Zenith Angle"
+      units: "degree"
+
+    - name: "MetaData/solarAzimuthAngle"
+      source: variables/solarAzimuthAngle
+      longName: "Solar Azimuth"
+      units: "degree"
+
+    - name: "MetaData/ascendingDescendingOrbitQualifier"
+      source: variables/ascendingDescendingOrbitQualifier
+      longName: "ASCENDING/DESCENDING Orbit Qualifier"
+
+    - name: "MetaData/scanLineNumber"
+      source: variables/scanLineNumber
+      longName: "Scan Line Number"
+
+    - name: "MetaData/fieldOfRegardNumber"
+      source: variables/fieldOfRegardNumber
+      longName: "Field Of Regard Number"
+
+    - name: "MetaData/sensorScanPosition"
+      source: variables/sensorScanPosition
+      longName: "Field Of View Number"
+
+    - name: "MetaData/orbitNumber"
+      source: variables/orbitNumber
+      longName: "Orbit Number"
+
+    - name: "MetaData/heightOfStation"
+      source: variables/heightOfStation
+      longName: "Height Or Altitude"
+      units: "m"
+
+    - name: "MetaData/landOrSeaQualifier"
+      source: variables/landOrSeaQualifier
+      longName: "LAND/SEA Qualifier"
+
+    - name: "MetaData/radianceTypeFlags"
+      source: variables/radianceTypeFlags
+      longName: "Radiance Type Flags"
+
+    - name: "MetaData/typeOfBand1"
+      source: variables/typeOfBand1
+      longName: "Type Of Band (1)"
+
+    - name: "MetaData/typeOfBand2"
+      source: variables/typeOfBand2
+      longName: "Type Of Band (2)"
+
+    - name: "MetaData/typeOfBand3"
+      source: variables/typeOfBand3
+      longName: "Type Of Band (3)"
+
+    - name: "MetaData/waveNumber11"
+      source: variables/waveNumber11
+      longName: "Wave Number (1)"
+      units: "m-1"
+
+    - name: "MetaData/waveNumber12"
+      source: variables/waveNumber12
+      longName: "Wave Number (2)"
+      units: "m-1"
+
+    - name: "MetaData/waveNumber13"
+      source: variables/waveNumber13
+      longName: "Wave Number (3)"
+      units: "m-1"
+
+    - name: "MetaData/waveNumber21"
+      source: variables/waveNumber21
+      longName: "Wave Number (1)"
+      units: "m-1"
+
+    - name: "MetaData/waveNumber22"
+      source: variables/waveNumber22
+      longName: "Wave Number (2)"
+      units: "m-1"
+
+    - name: "MetaData/waveNumber23"
+      source: variables/waveNumber23
+      longName: "Wave Number (3)"
+      units: "m-1"
+
+    - name: "MetaData/startChannel1"
+      source: variables/startChannel1
+      longName: "Start Channel (1)"
+
+    - name: "MetaData/startChannel2"
+      source: variables/startChannel2
+      longName: "Start Channel (2)"
+
+    - name: "MetaData/startChannel3"
+      source: variables/startChannel3
+      longName: "Start Channel (3)"
+
+    - name: "MetaData/endChannel1"
+      source: variables/endChannel1
+      longName: "End Channel (1)"
+
+    - name: "MetaData/endChannel2"
+      source: variables/endChannel2
+      longName: "End Channel (2)"
+
+    - name: "MetaData/endChannel3"
+      source: variables/endChannel3
+      longName: "End Channel (3)"
+
+    - name: "MetaData/typeOfBand1_2"
+      source: variables/typeOfBand1_2
+      longName: "Type Of Band"
+
+    - name: "MetaData/sensorChannelNumberCrchnm"
+      source: variables/sensorChannelNumberCrchnm
+      longName: "Channel Number"
+
+    - name: "MetaData/measurementType"
+      source: variables/measurementType
+      longName: "Measurement Type"
+
+    - name: "MetaData/typeOfBand2_2"
+      source: variables/typeOfBand2_2
+      longName: "Type Of Band"
+
+    - name: "MetaData/sensorChannelNumberGcrchn"
+      source: variables/sensorChannelNumberGcrchn
+      longName: "Channel Number"
+
+    - name: "MetaData/typeOfBand3_2"
+      source: variables/typeOfBand3_2
+      longName: "Type Of Band"
+
+    - name: "MetaData/instrumentIdentifier2"
+      source: variables/instrumentIdentifier2
+      longName: "Satellite Instruments"
+
+    - name: "MetaData/yAngularPositionOfCenterOfGravity"
+      source: variables/yAngularPositionOfCenterOfGravity
+      longName: "Y Angular Position Of Center Of Gravity"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionOfCenterOfGravity"
+      source: variables/zAngularPositionOfCenterOfGravity
+      longName: "Z Angular Position Of Center Of Gravity"
+      units: "degree"
+
+    - name: "MetaData/sensorChannelNumberViirch"
+      source: variables/sensorChannelNumberViirch
+      longName: "Channel Number"
+
+    - name: "MetaData/firstOrderStatistics1"
+      source: variables/firstOrderStatistics1
+      longName: "First Order Statistics"
+
+    - name: "MetaData/firstOrderStatistics2"
+      source: variables/firstOrderStatistics2
+      longName: "First Order Statistics"
+
+    # ObsValue
+    - name: "ObsValue/inDirOfNorthPoleDistanceFromTheEarths"
+      source: variables/inDirOfNorthPoleDistanceFromTheEarths
+      longName: "In DIR. Of North POLE, Distance From The EARTH'S Cente"
+      units: "m"
+
+    - name: "ObsValue/heightOfLandSurface"
+      source: variables/heightOfLandSurface
+      longName: "Height Of Land Surface"
+      units: "m"
+
+    - name: "ObsValue/landFraction"
+      source: variables/landFraction
+      longName: "Land Fraction"
+
+    - name: "ObsValue/cloudCoverTotal"
+      source: variables/cloudCoverTotal
+      longName: "Cloud Cover (TOTAL)"
+      units: "%"
+
+    - name: "ObsValue/heightOfTopOfCloud"
+      source: variables/heightOfTopOfCloud
+      longName: "Height Of Top Of Cloud"
+      units: "m"
+
+    - name: "ObsValue/spectralRadianceCrchnm"
+      source: variables/spectralRadianceCrchnm
+      longName: "Channel Radiance"
+      units: "W m-2 sr-1 cm"
+
+    - name: "ObsValue/spectralRadianceGcrchn"
+      source: variables/spectralRadianceGcrchn
+      longName: "Channel Radiance"
+      units: "W m-2 sr-1 cm"
+
+    - name: "ObsValue/cloudFree"
+      source: variables/cloudFree
+      longName: "Fraction Of Clear Pixels In Hirs Fov"
+
+    - name: "ObsValue/channelRadiance1"
+      source: variables/channelRadiance1
+      longName: "Channel Radiance"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance2"
+      source: variables/channelRadiance2
+      longName: "Channel Radiance"
+      units: "W m-2 sr-1 um-1"
+
+    # QualityMarker
+    - name: "QualityMarker/scanLevelQualityFlags"
+      source: variables/scanLevelQualityFlags
+      longName: "Scan Level Quality Flags"
+
+    - name: "QualityMarker/calibrationQualityFlags1"
+      source: variables/calibrationQualityFlags1
+      longName: "Calibration Quality Flags (1)"
+
+    - name: "QualityMarker/calibrationQualityFlags2"
+      source: variables/calibrationQualityFlags2
+      longName: "Calibration Quality Flags (2)"
+
+    - name: "QualityMarker/calibrationQualityFlags3"
+      source: variables/calibrationQualityFlags3
+      longName: "Calibration Quality Flags (3)"
+
+    - name: "QualityMarker/fieldOfViewQualityFlags1"
+      source: variables/fieldOfViewQualityFlags1
+      longName: "Field Of View Quality Flags (1)"
+
+    - name: "QualityMarker/fieldOfViewQualityFlags2"
+      source: variables/fieldOfViewQualityFlags2
+      longName: "Field Of View Quality Flags (2)"
+
+    - name: "QualityMarker/fieldOfViewQualityFlags3"
+      source: variables/fieldOfViewQualityFlags3
+      longName: "Field Of View Quality Flags (3)"
+
+    - name: "QualityMarker/geolocationQuality"
+      source: variables/geolocationQuality
+      longName: "Geolocation Quality"
+
+    - name: "QualityMarker/qualityInformation"
+      source: variables/qualityInformation
+      longName: "Quality Information"

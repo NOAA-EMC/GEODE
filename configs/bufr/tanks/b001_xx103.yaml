@@ -1,0 +1,1793 @@
+bufr:
+  subsets:
+    - NC001103
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+
+    receiptTime:
+      datetime:
+        year: "*/RCYR"
+        month: "*/RCMO"
+        day: "*/RCDY"
+        hour: "*/RCHR"
+        minute: "*/RCMI"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    stationIdentification:
+      query: "*/RPID"
+
+    wmoRegionNumber:
+      query: "*/WMOR"
+
+    wmoRegionSubArea:
+      query: "*/WMORS4"
+
+    buoyPlatformIdentifier:
+      query: "*/BPID"
+
+    wigosIdentifierSeries:
+      query: "*/WGOSIDS"
+
+    wigosIssuerOfIdentifier:
+      query: "*/WGOSISID"
+
+    wigosIssueNumber:
+      query: "*/WGOSISNM"
+
+    wigosLocalIdentifierCharacter:
+      query: "*/WGOSLID"
+
+    wmoMarineObservingPlatformExtendedIdentifier:
+      query: "*/WMOP"
+
+    stationName:
+      query: "*/STSN"
+
+    buoyType:
+      query: "*/BUYT"
+
+    stationElevation:
+      query: "*/HSMSL"
+
+    heightOfSensorAboveWater1:
+      query: "*/HSAWS[1]"
+
+    heightOfSensorAboveWater2:
+      query: "*/HSAWS[2]"
+
+    timeSignificance1:
+      query: "*/TSIG[1]"
+
+    timePeriodMinutes1:
+      query: "*/TPMI[1]"
+
+    timeSignificance2:
+      query: "*/TSIG[2]"
+
+    timePeriodMinutes2:
+      query: "*/TPMI[2]"
+
+    timePeriodMinutes3:
+      query: "*/TPMI[3]"
+
+    heightOfSensorAboveWater3:
+      query: "*/HSAWS[3]"
+
+    precisionOfTemperatureObservation:
+      query: "*/PCAT"
+
+    depthBelowSeaWaterSurfaceCm:
+      query: "*/DBSSX"
+
+    precisionOfTemperatureObservation2:
+      query: "*/PCAT"
+
+    indicatorForDigitization:
+      query: "*/IDMSMDBS/IDGT"
+
+    methodOfSalinityDepthMeasurement:
+      query: "*/IDMSMDBS/MSDM"
+
+    depthBelowSeaSurfaceBbystsl1:
+      query: "*/IDMSMDBS/BBYSTSL{1}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl2:
+      query: "*/IDMSMDBS/BBYSTSL{2}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl3:
+      query: "*/IDMSMDBS/BBYSTSL{3}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl4:
+      query: "*/IDMSMDBS/BBYSTSL{4}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl5:
+      query: "*/IDMSMDBS/BBYSTSL{5}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl6:
+      query: "*/IDMSMDBS/BBYSTSL{6}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl7:
+      query: "*/IDMSMDBS/BBYSTSL{7}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl8:
+      query: "*/IDMSMDBS/BBYSTSL{8}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl9:
+      query: "*/IDMSMDBS/BBYSTSL{9}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl10:
+      query: "*/IDMSMDBS/BBYSTSL{10}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl11:
+      query: "*/IDMSMDBS/BBYSTSL{11}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl12:
+      query: "*/IDMSMDBS/BBYSTSL{12}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl13:
+      query: "*/IDMSMDBS/BBYSTSL{13}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl14:
+      query: "*/IDMSMDBS/BBYSTSL{14}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl15:
+      query: "*/IDMSMDBS/BBYSTSL{15}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl16:
+      query: "*/IDMSMDBS/BBYSTSL{16}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl17:
+      query: "*/IDMSMDBS/BBYSTSL{17}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl18:
+      query: "*/IDMSMDBS/BBYSTSL{18}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl19:
+      query: "*/IDMSMDBS/BBYSTSL{19}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl20:
+      query: "*/IDMSMDBS/BBYSTSL{20}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl21:
+      query: "*/IDMSMDBS/BBYSTSL{21}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl22:
+      query: "*/IDMSMDBS/BBYSTSL{22}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl23:
+      query: "*/IDMSMDBS/BBYSTSL{23}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl24:
+      query: "*/IDMSMDBS/BBYSTSL{24}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl25:
+      query: "*/IDMSMDBS/BBYSTSL{25}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl26:
+      query: "*/IDMSMDBS/BBYSTSL{26}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl27:
+      query: "*/IDMSMDBS/BBYSTSL{27}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl28:
+      query: "*/IDMSMDBS/BBYSTSL{28}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl29:
+      query: "*/IDMSMDBS/BBYSTSL{29}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl30:
+      query: "*/IDMSMDBS/BBYSTSL{30}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl31:
+      query: "*/IDMSMDBS/BBYSTSL{31}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl32:
+      query: "*/IDMSMDBS/BBYSTSL{32}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl33:
+      query: "*/IDMSMDBS/BBYSTSL{33}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl34:
+      query: "*/IDMSMDBS/BBYSTSL{34}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl35:
+      query: "*/IDMSMDBS/BBYSTSL{35}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl36:
+      query: "*/IDMSMDBS/BBYSTSL{36}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl37:
+      query: "*/IDMSMDBS/BBYSTSL{37}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl38:
+      query: "*/IDMSMDBS/BBYSTSL{38}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl39:
+      query: "*/IDMSMDBS/BBYSTSL{39}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl40:
+      query: "*/IDMSMDBS/BBYSTSL{40}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl41:
+      query: "*/IDMSMDBS/BBYSTSL{41}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl42:
+      query: "*/IDMSMDBS/BBYSTSL{42}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl43:
+      query: "*/IDMSMDBS/BBYSTSL{43}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl44:
+      query: "*/IDMSMDBS/BBYSTSL{44}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl45:
+      query: "*/IDMSMDBS/BBYSTSL{45}/DBSS"
+
+    depthBelowSeaSurfaceBbystsl46:
+      query: "*/IDMSMDBS/BBYSTSL{46}/DBSS"
+
+    timePeriodHours:
+      query: "*/ANCMETOB/TPHR"
+
+    timePeriodMinutes:
+      query: "*/RADNSEQN/TPMI"
+
+    durationTimeOfCurrentCode:
+      query: "*/MOCMDBDS/DTCC"
+
+    depthBelowSeaSurfaceBbycurr:
+      query: "*/MOCMDBDS/BBYCURR/DBSS"
+
+    sequenceNumber:
+      query: "*/SEQNUM"
+
+    bulletinHeader:
+      query: "*/BUHD"
+
+    bulletinOriginator:
+      query: "*/BORG"
+
+    bulletinTime:
+      query: "*/BULTIM"
+
+    bulletinBBB:
+      query: "*/BBB"
+
+    receiptTimeSignificance:
+      query: "*/RCTS"
+
+    # ObsValue
+    airPressure:
+      query: "*/PRES"
+
+    pressureReducedToMeanSeaLevel:
+      query: "*/PMSL"
+
+    airTemperatureTMDB:
+      query: "*/TMDB"
+
+    dewPointTemperature:
+      query: "*/TMDP"
+
+    relativeHumidity:
+      query: "*/REHU"
+
+    windDirection:
+      query: "*/WDIR"
+
+    windSpeed:
+      query: "*/WSPD"
+
+    maximumWindGustSpeed:
+      query: "*/MXGS"
+
+    seaSurfaceTemperatureSST0:
+      query: "*/SST0"
+
+    pressureChange3Hour:
+      query: "*/3HPC"
+
+    pressureTendencyCharacteristic:
+      query: "*/CHPT"
+
+    seaSurfaceTemperatureSST11:
+      query: "*/IDMSMDBS/BBYSTSL{1}/SST1"
+
+    seaSurfaceTemperatureSST12:
+      query: "*/IDMSMDBS/BBYSTSL{2}/SST1"
+
+    seaSurfaceTemperatureSST13:
+      query: "*/IDMSMDBS/BBYSTSL{3}/SST1"
+
+    seaSurfaceTemperatureSST14:
+      query: "*/IDMSMDBS/BBYSTSL{4}/SST1"
+
+    seaSurfaceTemperatureSST15:
+      query: "*/IDMSMDBS/BBYSTSL{5}/SST1"
+
+    seaSurfaceTemperatureSST16:
+      query: "*/IDMSMDBS/BBYSTSL{6}/SST1"
+
+    seaSurfaceTemperatureSST17:
+      query: "*/IDMSMDBS/BBYSTSL{7}/SST1"
+
+    seaSurfaceTemperatureSST18:
+      query: "*/IDMSMDBS/BBYSTSL{8}/SST1"
+
+    seaSurfaceTemperatureSST19:
+      query: "*/IDMSMDBS/BBYSTSL{9}/SST1"
+
+    seaSurfaceTemperatureSST110:
+      query: "*/IDMSMDBS/BBYSTSL{10}/SST1"
+
+    seaSurfaceTemperatureSST111:
+      query: "*/IDMSMDBS/BBYSTSL{11}/SST1"
+
+    seaSurfaceTemperatureSST112:
+      query: "*/IDMSMDBS/BBYSTSL{12}/SST1"
+
+    seaSurfaceTemperatureSST113:
+      query: "*/IDMSMDBS/BBYSTSL{13}/SST1"
+
+    seaSurfaceTemperatureSST114:
+      query: "*/IDMSMDBS/BBYSTSL{14}/SST1"
+
+    seaSurfaceTemperatureSST115:
+      query: "*/IDMSMDBS/BBYSTSL{15}/SST1"
+
+    seaSurfaceTemperatureSST116:
+      query: "*/IDMSMDBS/BBYSTSL{16}/SST1"
+
+    seaSurfaceTemperatureSST117:
+      query: "*/IDMSMDBS/BBYSTSL{17}/SST1"
+
+    seaSurfaceTemperatureSST118:
+      query: "*/IDMSMDBS/BBYSTSL{18}/SST1"
+
+    seaSurfaceTemperatureSST119:
+      query: "*/IDMSMDBS/BBYSTSL{19}/SST1"
+
+    seaSurfaceTemperatureSST120:
+      query: "*/IDMSMDBS/BBYSTSL{20}/SST1"
+
+    seaSurfaceTemperatureSST121:
+      query: "*/IDMSMDBS/BBYSTSL{21}/SST1"
+
+    seaSurfaceTemperatureSST122:
+      query: "*/IDMSMDBS/BBYSTSL{22}/SST1"
+
+    seaSurfaceTemperatureSST123:
+      query: "*/IDMSMDBS/BBYSTSL{23}/SST1"
+
+    seaSurfaceTemperatureSST124:
+      query: "*/IDMSMDBS/BBYSTSL{24}/SST1"
+
+    seaSurfaceTemperatureSST125:
+      query: "*/IDMSMDBS/BBYSTSL{25}/SST1"
+
+    seaSurfaceTemperatureSST126:
+      query: "*/IDMSMDBS/BBYSTSL{26}/SST1"
+
+    seaSurfaceTemperatureSST127:
+      query: "*/IDMSMDBS/BBYSTSL{27}/SST1"
+
+    seaSurfaceTemperatureSST128:
+      query: "*/IDMSMDBS/BBYSTSL{28}/SST1"
+
+    seaSurfaceTemperatureSST129:
+      query: "*/IDMSMDBS/BBYSTSL{29}/SST1"
+
+    seaSurfaceTemperatureSST130:
+      query: "*/IDMSMDBS/BBYSTSL{30}/SST1"
+
+    seaSurfaceTemperatureSST131:
+      query: "*/IDMSMDBS/BBYSTSL{31}/SST1"
+
+    seaSurfaceTemperatureSST132:
+      query: "*/IDMSMDBS/BBYSTSL{32}/SST1"
+
+    seaSurfaceTemperatureSST133:
+      query: "*/IDMSMDBS/BBYSTSL{33}/SST1"
+
+    seaSurfaceTemperatureSST134:
+      query: "*/IDMSMDBS/BBYSTSL{34}/SST1"
+
+    seaSurfaceTemperatureSST135:
+      query: "*/IDMSMDBS/BBYSTSL{35}/SST1"
+
+    seaSurfaceTemperatureSST136:
+      query: "*/IDMSMDBS/BBYSTSL{36}/SST1"
+
+    seaSurfaceTemperatureSST137:
+      query: "*/IDMSMDBS/BBYSTSL{37}/SST1"
+
+    seaSurfaceTemperatureSST138:
+      query: "*/IDMSMDBS/BBYSTSL{38}/SST1"
+
+    seaSurfaceTemperatureSST139:
+      query: "*/IDMSMDBS/BBYSTSL{39}/SST1"
+
+    seaSurfaceTemperatureSST140:
+      query: "*/IDMSMDBS/BBYSTSL{40}/SST1"
+
+    seaSurfaceTemperatureSST141:
+      query: "*/IDMSMDBS/BBYSTSL{41}/SST1"
+
+    seaSurfaceTemperatureSST142:
+      query: "*/IDMSMDBS/BBYSTSL{42}/SST1"
+
+    seaSurfaceTemperatureSST143:
+      query: "*/IDMSMDBS/BBYSTSL{43}/SST1"
+
+    seaSurfaceTemperatureSST144:
+      query: "*/IDMSMDBS/BBYSTSL{44}/SST1"
+
+    seaSurfaceTemperatureSST145:
+      query: "*/IDMSMDBS/BBYSTSL{45}/SST1"
+
+    seaSurfaceTemperatureSST146:
+      query: "*/IDMSMDBS/BBYSTSL{46}/SST1"
+
+    salinity1:
+      query: "*/IDMSMDBS/BBYSTSL{1}/SALN"
+
+    salinity2:
+      query: "*/IDMSMDBS/BBYSTSL{2}/SALN"
+
+    salinity3:
+      query: "*/IDMSMDBS/BBYSTSL{3}/SALN"
+
+    salinity4:
+      query: "*/IDMSMDBS/BBYSTSL{4}/SALN"
+
+    salinity5:
+      query: "*/IDMSMDBS/BBYSTSL{5}/SALN"
+
+    salinity6:
+      query: "*/IDMSMDBS/BBYSTSL{6}/SALN"
+
+    salinity7:
+      query: "*/IDMSMDBS/BBYSTSL{7}/SALN"
+
+    salinity8:
+      query: "*/IDMSMDBS/BBYSTSL{8}/SALN"
+
+    salinity9:
+      query: "*/IDMSMDBS/BBYSTSL{9}/SALN"
+
+    salinity10:
+      query: "*/IDMSMDBS/BBYSTSL{10}/SALN"
+
+    salinity11:
+      query: "*/IDMSMDBS/BBYSTSL{11}/SALN"
+
+    salinity12:
+      query: "*/IDMSMDBS/BBYSTSL{12}/SALN"
+
+    salinity13:
+      query: "*/IDMSMDBS/BBYSTSL{13}/SALN"
+
+    salinity14:
+      query: "*/IDMSMDBS/BBYSTSL{14}/SALN"
+
+    salinity15:
+      query: "*/IDMSMDBS/BBYSTSL{15}/SALN"
+
+    salinity16:
+      query: "*/IDMSMDBS/BBYSTSL{16}/SALN"
+
+    salinity17:
+      query: "*/IDMSMDBS/BBYSTSL{17}/SALN"
+
+    salinity18:
+      query: "*/IDMSMDBS/BBYSTSL{18}/SALN"
+
+    salinity19:
+      query: "*/IDMSMDBS/BBYSTSL{19}/SALN"
+
+    salinity20:
+      query: "*/IDMSMDBS/BBYSTSL{20}/SALN"
+
+    salinity21:
+      query: "*/IDMSMDBS/BBYSTSL{21}/SALN"
+
+    salinity22:
+      query: "*/IDMSMDBS/BBYSTSL{22}/SALN"
+
+    salinity23:
+      query: "*/IDMSMDBS/BBYSTSL{23}/SALN"
+
+    salinity24:
+      query: "*/IDMSMDBS/BBYSTSL{24}/SALN"
+
+    salinity25:
+      query: "*/IDMSMDBS/BBYSTSL{25}/SALN"
+
+    salinity26:
+      query: "*/IDMSMDBS/BBYSTSL{26}/SALN"
+
+    salinity27:
+      query: "*/IDMSMDBS/BBYSTSL{27}/SALN"
+
+    salinity28:
+      query: "*/IDMSMDBS/BBYSTSL{28}/SALN"
+
+    salinity29:
+      query: "*/IDMSMDBS/BBYSTSL{29}/SALN"
+
+    salinity30:
+      query: "*/IDMSMDBS/BBYSTSL{30}/SALN"
+
+    salinity31:
+      query: "*/IDMSMDBS/BBYSTSL{31}/SALN"
+
+    salinity32:
+      query: "*/IDMSMDBS/BBYSTSL{32}/SALN"
+
+    salinity33:
+      query: "*/IDMSMDBS/BBYSTSL{33}/SALN"
+
+    salinity34:
+      query: "*/IDMSMDBS/BBYSTSL{34}/SALN"
+
+    salinity35:
+      query: "*/IDMSMDBS/BBYSTSL{35}/SALN"
+
+    salinity36:
+      query: "*/IDMSMDBS/BBYSTSL{36}/SALN"
+
+    salinity37:
+      query: "*/IDMSMDBS/BBYSTSL{37}/SALN"
+
+    salinity38:
+      query: "*/IDMSMDBS/BBYSTSL{38}/SALN"
+
+    salinity39:
+      query: "*/IDMSMDBS/BBYSTSL{39}/SALN"
+
+    salinity40:
+      query: "*/IDMSMDBS/BBYSTSL{40}/SALN"
+
+    salinity41:
+      query: "*/IDMSMDBS/BBYSTSL{41}/SALN"
+
+    salinity42:
+      query: "*/IDMSMDBS/BBYSTSL{42}/SALN"
+
+    salinity43:
+      query: "*/IDMSMDBS/BBYSTSL{43}/SALN"
+
+    salinity44:
+      query: "*/IDMSMDBS/BBYSTSL{44}/SALN"
+
+    salinity45:
+      query: "*/IDMSMDBS/BBYSTSL{45}/SALN"
+
+    salinity46:
+      query: "*/IDMSMDBS/BBYSTSL{46}/SALN"
+
+    durationOfWaveRecordBasicwav:
+      query: "*/BASICWAV/DOWR"
+
+    significantWaveHeight:
+      query: "*/BASICWAV/SGWH"
+
+    maximumWaveHeight:
+      query: "*/BASICWAV/MXWH"
+
+    averageWavePeriod:
+      query: "*/BASICWAV/AVWP"
+
+    spectralPeakWavePeriod:
+      query: "*/BASICWAV/SPWP"
+
+    directionFromWhichDominantWavesAreComing:
+      query: "*/BASICWAV/DDWC"
+
+    directionalSpreadOfDominantWave:
+      query: "*/BASICWAV/DSDW"
+
+    durationOfWaveRecordSpctrwav:
+      query: "*/SPCTRWAV/DOWR"
+
+    maximumNonDirectionalSpectralWaveDensity:
+      query: "*/SPCTRWAV/MXSWD"
+
+    wavebandCentralFrequency:
+      query: "*/SPCTRWAV/BBYSPWV/WCFR"
+
+    spectralWaveDensity:
+      query: "*/SPCTRWAV/BBYSPWV/SWDE"
+
+    meanDirectionFromWhichWavesAreComing:
+      query: "*/SPCTRWAV/BBYSPWV/MDWC"
+
+    principalDirectionFromWhichWavesAreComing:
+      query: "*/SPCTRWAV/BBYSPWV/PDWC"
+
+    firstNormalizedPolarCoordinateFromFourier:
+      query: "*/SPCTRWAV/BBYSPWV/FNPF"
+
+    secondNormalizedPolarCoordinateFromFourier:
+      query: "*/SPCTRWAV/BBYSPWV/SNPF"
+
+    horizontalVisibility:
+      query: "*/ANCMETOB/HOVI"
+
+    totalPrecipitation:
+      query: "*/ANCMETOB/TOPC"
+
+    longWaveRadiationIntegratedOverPeriodSpecified:
+      query: "*/RADNSEQN/LWRAD"
+
+    shortWaveRadiationIntegratedOverPeriodSpecified:
+      query: "*/RADNSEQN/SWRAD"
+
+    netRadiationIntegratedOverPeriodSpecified:
+      query: "*/RADNSEQN/NRAD"
+
+    globalSolarRadiationHighAccuracyIntegrated:
+      query: "*/RADNSEQN/GSORDH"
+
+    diffuseSolarRadiationHighAccuracyIntegrated:
+      query: "*/RADNSEQN/DFSORD"
+
+    directSolarRadiationHighAccuracyIntegrated:
+      query: "*/RADNSEQN/DRSORD"
+
+    directionOfCurrent:
+      query: "*/MOCMDBDS/BBYCURR/DROC"
+
+    speedOfCurrent:
+      query: "*/MOCMDBDS/BBYCURR/SPOC"
+
+    # QualityMarker
+    pressure:
+      query: "*/QMPR"
+
+    airTemperature:
+      query: "*/QMAT"
+
+    moisture:
+      query: "*/QMDD"
+
+    wind:
+      query: "*/QMWN"
+
+    seaSurfaceTemperature:
+      query: "*/QMST"
+
+    correctedReportIndicator:
+      query: "*/CORN"
+
+encoder:
+  dimensions:
+    # Variable length: appending can fail if the size changes
+    - name: Bbycurr
+      path: "*/MOCMDBDS/BBYCURR"
+    # Variable length: appending can fail if the size changes
+    - name: Bbyspwv
+      path: "*/SPCTRWAV/BBYSPWV"
+
+  globals:
+    - name: "description"
+      type: string
+      value: "Message Type 001-103 Surface Marine Moored Buoy (BUFR)"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface marine"
+
+    - name: "dataset"
+      type: string
+      value: "surface_buoy_moored_bufr"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "001"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "103"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b001/xx103 NC001103"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/receiptTime"
+      source: variables/receiptTime
+      longName: "Receipt Time"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/stationIdentification"
+      source: variables/stationIdentification
+      longName: "Report Identifier"
+
+    - name: "MetaData/wmoRegionNumber"
+      source: variables/wmoRegionNumber
+      longName: "Wmo Region Number"
+
+    - name: "MetaData/wmoRegionSubArea"
+      source: variables/wmoRegionSubArea
+      longName: "WMO Region sub-area"
+
+    - name: "MetaData/buoyPlatformIdentifier"
+      source: variables/buoyPlatformIdentifier
+      longName: "BUOY/PLATFORM Identifier"
+
+    - name: "MetaData/wigosIdentifierSeries"
+      source: variables/wigosIdentifierSeries
+      longName: "Wigos Identifier Series"
+
+    - name: "MetaData/wigosIssuerOfIdentifier"
+      source: variables/wigosIssuerOfIdentifier
+      longName: "Wigos Issuer Of Identifier"
+
+    - name: "MetaData/wigosIssueNumber"
+      source: variables/wigosIssueNumber
+      longName: "Wigos Issue Number"
+
+    - name: "MetaData/wigosLocalIdentifierCharacter"
+      source: variables/wigosLocalIdentifierCharacter
+      longName: "Wigos Local Identifier (CHARACTER)"
+
+    - name: "MetaData/wmoMarineObservingPlatformExtendedIdentifier"
+      source: variables/wmoMarineObservingPlatformExtendedIdentifier
+      longName: "WMO marine observing platform extended identifier"
+
+    - name: "MetaData/stationName"
+      source: variables/stationName
+      longName: "Station or site name"
+
+    - name: "MetaData/buoyType"
+      source: variables/buoyType
+      longName: "Buoy Type"
+
+    - name: "MetaData/stationElevation"
+      source: variables/stationElevation
+      longName: "Height Of Station Ground Above Msl"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveWater1"
+      source: variables/heightOfSensorAboveWater1
+      longName: "Height of sensor above water surface"
+      units: "m"
+
+    - name: "MetaData/heightOfSensorAboveWater2"
+      source: variables/heightOfSensorAboveWater2
+      longName: "Height of sensor above water surface"
+      units: "m"
+
+    - name: "MetaData/timeSignificance1"
+      source: variables/timeSignificance1
+      longName: "Time Significance"
+
+    - name: "MetaData/timePeriodMinutes1"
+      source: variables/timePeriodMinutes1
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/timeSignificance2"
+      source: variables/timeSignificance2
+      longName: "Time Significance"
+
+    - name: "MetaData/timePeriodMinutes2"
+      source: variables/timePeriodMinutes2
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/timePeriodMinutes3"
+      source: variables/timePeriodMinutes3
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/heightOfSensorAboveWater3"
+      source: variables/heightOfSensorAboveWater3
+      longName: "Height of sensor above water surface"
+      units: "m"
+
+    - name: "MetaData/precisionOfTemperatureObservation"
+      source: variables/precisionOfTemperatureObservation
+      longName: "Precision of temperature observation"
+      units: "K"
+
+    - name: "MetaData/depthBelowSeaWaterSurfaceCm"
+      source: variables/depthBelowSeaWaterSurfaceCm
+      longName: "Depth below sea/water surface (cm)"
+      units: "m"
+
+    - name: "MetaData/precisionOfTemperatureObservation2"
+      source: variables/precisionOfTemperatureObservation2
+      longName: "Precision of temperature observation"
+      units: "K"
+
+    - name: "MetaData/indicatorForDigitization"
+      source: variables/indicatorForDigitization
+      longName: "Indicator for digitization"
+
+    - name: "MetaData/methodOfSalinityDepthMeasurement"
+      source: variables/methodOfSalinityDepthMeasurement
+      longName: "Method Of SALINITY/DEPTH Measurement"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl1"
+      source: variables/depthBelowSeaSurfaceBbystsl1
+      longName: "Depth Below Sea Surface (1)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl2"
+      source: variables/depthBelowSeaSurfaceBbystsl2
+      longName: "Depth Below Sea Surface (2)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl3"
+      source: variables/depthBelowSeaSurfaceBbystsl3
+      longName: "Depth Below Sea Surface (3)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl4"
+      source: variables/depthBelowSeaSurfaceBbystsl4
+      longName: "Depth Below Sea Surface (4)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl5"
+      source: variables/depthBelowSeaSurfaceBbystsl5
+      longName: "Depth Below Sea Surface (5)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl6"
+      source: variables/depthBelowSeaSurfaceBbystsl6
+      longName: "Depth Below Sea Surface (6)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl7"
+      source: variables/depthBelowSeaSurfaceBbystsl7
+      longName: "Depth Below Sea Surface (7)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl8"
+      source: variables/depthBelowSeaSurfaceBbystsl8
+      longName: "Depth Below Sea Surface (8)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl9"
+      source: variables/depthBelowSeaSurfaceBbystsl9
+      longName: "Depth Below Sea Surface (9)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl10"
+      source: variables/depthBelowSeaSurfaceBbystsl10
+      longName: "Depth Below Sea Surface (10)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl11"
+      source: variables/depthBelowSeaSurfaceBbystsl11
+      longName: "Depth Below Sea Surface (11)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl12"
+      source: variables/depthBelowSeaSurfaceBbystsl12
+      longName: "Depth Below Sea Surface (12)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl13"
+      source: variables/depthBelowSeaSurfaceBbystsl13
+      longName: "Depth Below Sea Surface (13)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl14"
+      source: variables/depthBelowSeaSurfaceBbystsl14
+      longName: "Depth Below Sea Surface (14)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl15"
+      source: variables/depthBelowSeaSurfaceBbystsl15
+      longName: "Depth Below Sea Surface (15)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl16"
+      source: variables/depthBelowSeaSurfaceBbystsl16
+      longName: "Depth Below Sea Surface (16)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl17"
+      source: variables/depthBelowSeaSurfaceBbystsl17
+      longName: "Depth Below Sea Surface (17)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl18"
+      source: variables/depthBelowSeaSurfaceBbystsl18
+      longName: "Depth Below Sea Surface (18)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl19"
+      source: variables/depthBelowSeaSurfaceBbystsl19
+      longName: "Depth Below Sea Surface (19)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl20"
+      source: variables/depthBelowSeaSurfaceBbystsl20
+      longName: "Depth Below Sea Surface (20)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl21"
+      source: variables/depthBelowSeaSurfaceBbystsl21
+      longName: "Depth Below Sea Surface (21)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl22"
+      source: variables/depthBelowSeaSurfaceBbystsl22
+      longName: "Depth Below Sea Surface (22)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl23"
+      source: variables/depthBelowSeaSurfaceBbystsl23
+      longName: "Depth Below Sea Surface (23)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl24"
+      source: variables/depthBelowSeaSurfaceBbystsl24
+      longName: "Depth Below Sea Surface (24)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl25"
+      source: variables/depthBelowSeaSurfaceBbystsl25
+      longName: "Depth Below Sea Surface (25)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl26"
+      source: variables/depthBelowSeaSurfaceBbystsl26
+      longName: "Depth Below Sea Surface (26)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl27"
+      source: variables/depthBelowSeaSurfaceBbystsl27
+      longName: "Depth Below Sea Surface (27)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl28"
+      source: variables/depthBelowSeaSurfaceBbystsl28
+      longName: "Depth Below Sea Surface (28)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl29"
+      source: variables/depthBelowSeaSurfaceBbystsl29
+      longName: "Depth Below Sea Surface (29)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl30"
+      source: variables/depthBelowSeaSurfaceBbystsl30
+      longName: "Depth Below Sea Surface (30)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl31"
+      source: variables/depthBelowSeaSurfaceBbystsl31
+      longName: "Depth Below Sea Surface (31)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl32"
+      source: variables/depthBelowSeaSurfaceBbystsl32
+      longName: "Depth Below Sea Surface (32)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl33"
+      source: variables/depthBelowSeaSurfaceBbystsl33
+      longName: "Depth Below Sea Surface (33)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl34"
+      source: variables/depthBelowSeaSurfaceBbystsl34
+      longName: "Depth Below Sea Surface (34)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl35"
+      source: variables/depthBelowSeaSurfaceBbystsl35
+      longName: "Depth Below Sea Surface (35)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl36"
+      source: variables/depthBelowSeaSurfaceBbystsl36
+      longName: "Depth Below Sea Surface (36)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl37"
+      source: variables/depthBelowSeaSurfaceBbystsl37
+      longName: "Depth Below Sea Surface (37)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl38"
+      source: variables/depthBelowSeaSurfaceBbystsl38
+      longName: "Depth Below Sea Surface (38)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl39"
+      source: variables/depthBelowSeaSurfaceBbystsl39
+      longName: "Depth Below Sea Surface (39)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl40"
+      source: variables/depthBelowSeaSurfaceBbystsl40
+      longName: "Depth Below Sea Surface (40)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl41"
+      source: variables/depthBelowSeaSurfaceBbystsl41
+      longName: "Depth Below Sea Surface (41)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl42"
+      source: variables/depthBelowSeaSurfaceBbystsl42
+      longName: "Depth Below Sea Surface (42)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl43"
+      source: variables/depthBelowSeaSurfaceBbystsl43
+      longName: "Depth Below Sea Surface (43)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl44"
+      source: variables/depthBelowSeaSurfaceBbystsl44
+      longName: "Depth Below Sea Surface (44)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl45"
+      source: variables/depthBelowSeaSurfaceBbystsl45
+      longName: "Depth Below Sea Surface (45)"
+      units: "m"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbystsl46"
+      source: variables/depthBelowSeaSurfaceBbystsl46
+      longName: "Depth Below Sea Surface (46)"
+      units: "m"
+
+    - name: "MetaData/timePeriodHours"
+      source: variables/timePeriodHours
+      longName: "Time Period Or Displacement"
+      units: "h"
+
+    - name: "MetaData/timePeriodMinutes"
+      source: variables/timePeriodMinutes
+      longName: "Time Period Or Displacement"
+      units: "min"
+
+    - name: "MetaData/durationTimeOfCurrentCode"
+      source: variables/durationTimeOfCurrentCode
+      longName: "Duration & Time Of Current Code"
+
+    - name: "MetaData/depthBelowSeaSurfaceBbycurr"
+      source: variables/depthBelowSeaSurfaceBbycurr
+      longName: "Depth Below Sea Surface"
+      units: "m"
+
+    - name: "MetaData/sequenceNumber"
+      source: variables/sequenceNumber
+      longName: "Channel Sequence Number"
+
+    - name: "MetaData/bulletinHeader"
+      source: variables/bulletinHeader
+      longName: "BULLETIN BEING MONITORED (TTAAii)"
+
+    - name: "MetaData/bulletinOriginator"
+      source: variables/bulletinOriginator
+      longName: "Bulletin Being Monitored (CCCC)"
+
+    - name: "MetaData/bulletinTime"
+      source: variables/bulletinTime
+      longName: "BULLETIN BEING MONITORED (YYGGgg)"
+
+    - name: "MetaData/bulletinBBB"
+      source: variables/bulletinBBB
+      longName: "Bulletin Being Monitored (BBB)"
+
+    - name: "MetaData/receiptTimeSignificance"
+      source: variables/receiptTimeSignificance
+      longName: "Receipt Time Significance"
+
+    # ObsValue
+    - name: "ObsValue/airPressure"
+      source: variables/airPressure
+      longName: "Pressure"
+      units: "Pa"
+
+    - name: "ObsValue/pressureReducedToMeanSeaLevel"
+      source: variables/pressureReducedToMeanSeaLevel
+      longName: "Pressure Reduced To Msl"
+      units: "Pa"
+
+    - name: "ObsValue/airTemperatureTMDB"
+      source: variables/airTemperatureTMDB
+      longName: "TEMPERATURE/DRY Bulb Temperature"
+      units: "K"
+
+    - name: "ObsValue/dewPointTemperature"
+      source: variables/dewPointTemperature
+      longName: "Dew Point Temperature"
+      units: "K"
+
+    - name: "ObsValue/relativeHumidity"
+      source: variables/relativeHumidity
+      longName: "Relative Humidity"
+      units: "%"
+
+    - name: "ObsValue/windDirection"
+      source: variables/windDirection
+      longName: "Wind Direction"
+      units: "degree"
+
+    - name: "ObsValue/windSpeed"
+      source: variables/windSpeed
+      longName: "Wind Speed"
+      units: "m s-1"
+
+    - name: "ObsValue/maximumWindGustSpeed"
+      source: variables/maximumWindGustSpeed
+      longName: "Maximum Wind Speed (GUSTS)"
+      units: "m s-1"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST0"
+      source: variables/seaSurfaceTemperatureSST0
+      longName: "Sea-surface temperature"
+      units: "K"
+
+    - name: "ObsValue/pressureChange3Hour"
+      source: variables/pressureChange3Hour
+      longName: "3 Hour Pressure Change"
+      units: "Pa"
+
+    - name: "ObsValue/pressureTendencyCharacteristic"
+      source: variables/pressureTendencyCharacteristic
+      longName: "Characteristic Of Pressure Tendency"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST11"
+      source: variables/seaSurfaceTemperatureSST11
+      longName: "Sea Temperature (1)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST12"
+      source: variables/seaSurfaceTemperatureSST12
+      longName: "Sea Temperature (2)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST13"
+      source: variables/seaSurfaceTemperatureSST13
+      longName: "Sea Temperature (3)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST14"
+      source: variables/seaSurfaceTemperatureSST14
+      longName: "Sea Temperature (4)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST15"
+      source: variables/seaSurfaceTemperatureSST15
+      longName: "Sea Temperature (5)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST16"
+      source: variables/seaSurfaceTemperatureSST16
+      longName: "Sea Temperature (6)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST17"
+      source: variables/seaSurfaceTemperatureSST17
+      longName: "Sea Temperature (7)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST18"
+      source: variables/seaSurfaceTemperatureSST18
+      longName: "Sea Temperature (8)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST19"
+      source: variables/seaSurfaceTemperatureSST19
+      longName: "Sea Temperature (9)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST110"
+      source: variables/seaSurfaceTemperatureSST110
+      longName: "Sea Temperature (10)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST111"
+      source: variables/seaSurfaceTemperatureSST111
+      longName: "Sea Temperature (11)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST112"
+      source: variables/seaSurfaceTemperatureSST112
+      longName: "Sea Temperature (12)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST113"
+      source: variables/seaSurfaceTemperatureSST113
+      longName: "Sea Temperature (13)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST114"
+      source: variables/seaSurfaceTemperatureSST114
+      longName: "Sea Temperature (14)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST115"
+      source: variables/seaSurfaceTemperatureSST115
+      longName: "Sea Temperature (15)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST116"
+      source: variables/seaSurfaceTemperatureSST116
+      longName: "Sea Temperature (16)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST117"
+      source: variables/seaSurfaceTemperatureSST117
+      longName: "Sea Temperature (17)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST118"
+      source: variables/seaSurfaceTemperatureSST118
+      longName: "Sea Temperature (18)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST119"
+      source: variables/seaSurfaceTemperatureSST119
+      longName: "Sea Temperature (19)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST120"
+      source: variables/seaSurfaceTemperatureSST120
+      longName: "Sea Temperature (20)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST121"
+      source: variables/seaSurfaceTemperatureSST121
+      longName: "Sea Temperature (21)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST122"
+      source: variables/seaSurfaceTemperatureSST122
+      longName: "Sea Temperature (22)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST123"
+      source: variables/seaSurfaceTemperatureSST123
+      longName: "Sea Temperature (23)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST124"
+      source: variables/seaSurfaceTemperatureSST124
+      longName: "Sea Temperature (24)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST125"
+      source: variables/seaSurfaceTemperatureSST125
+      longName: "Sea Temperature (25)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST126"
+      source: variables/seaSurfaceTemperatureSST126
+      longName: "Sea Temperature (26)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST127"
+      source: variables/seaSurfaceTemperatureSST127
+      longName: "Sea Temperature (27)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST128"
+      source: variables/seaSurfaceTemperatureSST128
+      longName: "Sea Temperature (28)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST129"
+      source: variables/seaSurfaceTemperatureSST129
+      longName: "Sea Temperature (29)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST130"
+      source: variables/seaSurfaceTemperatureSST130
+      longName: "Sea Temperature (30)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST131"
+      source: variables/seaSurfaceTemperatureSST131
+      longName: "Sea Temperature (31)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST132"
+      source: variables/seaSurfaceTemperatureSST132
+      longName: "Sea Temperature (32)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST133"
+      source: variables/seaSurfaceTemperatureSST133
+      longName: "Sea Temperature (33)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST134"
+      source: variables/seaSurfaceTemperatureSST134
+      longName: "Sea Temperature (34)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST135"
+      source: variables/seaSurfaceTemperatureSST135
+      longName: "Sea Temperature (35)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST136"
+      source: variables/seaSurfaceTemperatureSST136
+      longName: "Sea Temperature (36)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST137"
+      source: variables/seaSurfaceTemperatureSST137
+      longName: "Sea Temperature (37)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST138"
+      source: variables/seaSurfaceTemperatureSST138
+      longName: "Sea Temperature (38)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST139"
+      source: variables/seaSurfaceTemperatureSST139
+      longName: "Sea Temperature (39)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST140"
+      source: variables/seaSurfaceTemperatureSST140
+      longName: "Sea Temperature (40)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST141"
+      source: variables/seaSurfaceTemperatureSST141
+      longName: "Sea Temperature (41)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST142"
+      source: variables/seaSurfaceTemperatureSST142
+      longName: "Sea Temperature (42)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST143"
+      source: variables/seaSurfaceTemperatureSST143
+      longName: "Sea Temperature (43)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST144"
+      source: variables/seaSurfaceTemperatureSST144
+      longName: "Sea Temperature (44)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST145"
+      source: variables/seaSurfaceTemperatureSST145
+      longName: "Sea Temperature (45)"
+      units: "K"
+
+    - name: "ObsValue/seaSurfaceTemperatureSST146"
+      source: variables/seaSurfaceTemperatureSST146
+      longName: "Sea Temperature (46)"
+      units: "K"
+
+    - name: "ObsValue/salinity1"
+      source: variables/salinity1
+      longName: "Salinity (1)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity2"
+      source: variables/salinity2
+      longName: "Salinity (2)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity3"
+      source: variables/salinity3
+      longName: "Salinity (3)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity4"
+      source: variables/salinity4
+      longName: "Salinity (4)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity5"
+      source: variables/salinity5
+      longName: "Salinity (5)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity6"
+      source: variables/salinity6
+      longName: "Salinity (6)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity7"
+      source: variables/salinity7
+      longName: "Salinity (7)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity8"
+      source: variables/salinity8
+      longName: "Salinity (8)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity9"
+      source: variables/salinity9
+      longName: "Salinity (9)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity10"
+      source: variables/salinity10
+      longName: "Salinity (10)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity11"
+      source: variables/salinity11
+      longName: "Salinity (11)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity12"
+      source: variables/salinity12
+      longName: "Salinity (12)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity13"
+      source: variables/salinity13
+      longName: "Salinity (13)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity14"
+      source: variables/salinity14
+      longName: "Salinity (14)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity15"
+      source: variables/salinity15
+      longName: "Salinity (15)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity16"
+      source: variables/salinity16
+      longName: "Salinity (16)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity17"
+      source: variables/salinity17
+      longName: "Salinity (17)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity18"
+      source: variables/salinity18
+      longName: "Salinity (18)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity19"
+      source: variables/salinity19
+      longName: "Salinity (19)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity20"
+      source: variables/salinity20
+      longName: "Salinity (20)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity21"
+      source: variables/salinity21
+      longName: "Salinity (21)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity22"
+      source: variables/salinity22
+      longName: "Salinity (22)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity23"
+      source: variables/salinity23
+      longName: "Salinity (23)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity24"
+      source: variables/salinity24
+      longName: "Salinity (24)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity25"
+      source: variables/salinity25
+      longName: "Salinity (25)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity26"
+      source: variables/salinity26
+      longName: "Salinity (26)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity27"
+      source: variables/salinity27
+      longName: "Salinity (27)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity28"
+      source: variables/salinity28
+      longName: "Salinity (28)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity29"
+      source: variables/salinity29
+      longName: "Salinity (29)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity30"
+      source: variables/salinity30
+      longName: "Salinity (30)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity31"
+      source: variables/salinity31
+      longName: "Salinity (31)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity32"
+      source: variables/salinity32
+      longName: "Salinity (32)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity33"
+      source: variables/salinity33
+      longName: "Salinity (33)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity34"
+      source: variables/salinity34
+      longName: "Salinity (34)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity35"
+      source: variables/salinity35
+      longName: "Salinity (35)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity36"
+      source: variables/salinity36
+      longName: "Salinity (36)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity37"
+      source: variables/salinity37
+      longName: "Salinity (37)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity38"
+      source: variables/salinity38
+      longName: "Salinity (38)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity39"
+      source: variables/salinity39
+      longName: "Salinity (39)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity40"
+      source: variables/salinity40
+      longName: "Salinity (40)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity41"
+      source: variables/salinity41
+      longName: "Salinity (41)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity42"
+      source: variables/salinity42
+      longName: "Salinity (42)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity43"
+      source: variables/salinity43
+      longName: "Salinity (43)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity44"
+      source: variables/salinity44
+      longName: "Salinity (44)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity45"
+      source: variables/salinity45
+      longName: "Salinity (45)"
+      units: "1e-3"
+
+    - name: "ObsValue/salinity46"
+      source: variables/salinity46
+      longName: "Salinity (46)"
+      units: "1e-3"
+
+    - name: "ObsValue/durationOfWaveRecordBasicwav"
+      source: variables/durationOfWaveRecordBasicwav
+      longName: "Duration of wave record"
+      units: "s"
+
+    - name: "ObsValue/significantWaveHeight"
+      source: variables/significantWaveHeight
+      longName: "Significant wave height"
+      units: "m"
+
+    - name: "ObsValue/maximumWaveHeight"
+      source: variables/maximumWaveHeight
+      longName: "Maximum Wave Height"
+      units: "m"
+
+    - name: "ObsValue/averageWavePeriod"
+      source: variables/averageWavePeriod
+      longName: "Average wave period"
+      units: "s"
+
+    - name: "ObsValue/spectralPeakWavePeriod"
+      source: variables/spectralPeakWavePeriod
+      longName: "Spectral peak wave period"
+      units: "s"
+
+    - name: "ObsValue/directionFromWhichDominantWavesAreComing"
+      source: variables/directionFromWhichDominantWavesAreComing
+      longName: "Direction from which dominant waves are coming"
+      units: "degree"
+
+    - name: "ObsValue/directionalSpreadOfDominantWave"
+      source: variables/directionalSpreadOfDominantWave
+      longName: "Directional spread of dominant wave"
+      units: "degree"
+
+    - name: "ObsValue/durationOfWaveRecordSpctrwav"
+      source: variables/durationOfWaveRecordSpctrwav
+      longName: "Duration of wave record"
+      units: "s"
+
+    - name: "ObsValue/maximumNonDirectionalSpectralWaveDensity"
+      source: variables/maximumNonDirectionalSpectralWaveDensity
+      longName: "Maximum non-directional spectral wave density"
+      units: "m2 s-1"
+
+    - name: "ObsValue/wavebandCentralFrequency"
+      source: variables/wavebandCentralFrequency
+      longName: "Waveband central frequency"
+      units: "Hz"
+
+    - name: "ObsValue/spectralWaveDensity"
+      source: variables/spectralWaveDensity
+      longName: "Spectral wave density"
+      units: "m2 Hz-1"
+
+    - name: "ObsValue/meanDirectionFromWhichWavesAreComing"
+      source: variables/meanDirectionFromWhichWavesAreComing
+      longName: "Mean direction from which waves are coming"
+      units: "degree"
+
+    - name: "ObsValue/principalDirectionFromWhichWavesAreComing"
+      source: variables/principalDirectionFromWhichWavesAreComing
+      longName: "Principal direction from which waves are coming"
+      units: "degree"
+
+    - name: "ObsValue/firstNormalizedPolarCoordinateFromFourier"
+      source: variables/firstNormalizedPolarCoordinateFromFourier
+      longName: "First normalized polar coordinate from Fourier coeffic"
+
+    - name: "ObsValue/secondNormalizedPolarCoordinateFromFourier"
+      source: variables/secondNormalizedPolarCoordinateFromFourier
+      longName: "Second normalized polar coordinate from Fourier coeffi"
+
+    - name: "ObsValue/horizontalVisibility"
+      source: variables/horizontalVisibility
+      longName: "Horizontal Visibility"
+      units: "m"
+
+    - name: "ObsValue/totalPrecipitation"
+      source: variables/totalPrecipitation
+      longName: "Total PRECIPITATION/TOTAL Water Equivalent"
+      units: "kg m-2"
+
+    - name: "ObsValue/longWaveRadiationIntegratedOverPeriodSpecified"
+      source: variables/longWaveRadiationIntegratedOverPeriodSpecified
+      longName: "Long-wave radiation, integrated over period specified"
+      units: "J m-2"
+
+    - name: "ObsValue/shortWaveRadiationIntegratedOverPeriodSpecified"
+      source: variables/shortWaveRadiationIntegratedOverPeriodSpecified
+      longName: "Short-wave radiation, integrated over period specified"
+      units: "J m-2"
+
+    - name: "ObsValue/netRadiationIntegratedOverPeriodSpecified"
+      source: variables/netRadiationIntegratedOverPeriodSpecified
+      longName: "Net radiation, integrated over period specified"
+      units: "J m-2"
+
+    - name: "ObsValue/globalSolarRadiationHighAccuracyIntegrated"
+      source: variables/globalSolarRadiationHighAccuracyIntegrated
+      longName: "Global solar radiation (high accuracy), integrated ove"
+      units: "J m-2"
+
+    - name: "ObsValue/diffuseSolarRadiationHighAccuracyIntegrated"
+      source: variables/diffuseSolarRadiationHighAccuracyIntegrated
+      longName: "Diffuse solar radiation (high accuracy), integrated ov"
+      units: "J m-2"
+
+    - name: "ObsValue/directSolarRadiationHighAccuracyIntegrated"
+      source: variables/directSolarRadiationHighAccuracyIntegrated
+      longName: "Direct solar radiation (high accuracy), integrated ove"
+      units: "J m-2"
+
+    - name: "ObsValue/directionOfCurrent"
+      source: variables/directionOfCurrent
+      longName: "Direction Of Current"
+      units: "degree"
+
+    - name: "ObsValue/speedOfCurrent"
+      source: variables/speedOfCurrent
+      longName: "Speed Of Current"
+      units: "m s-1"
+
+    # QualityMarker
+    - name: "QualityMarker/pressure"
+      source: variables/pressure
+      longName: "SDMEDIT/QUIPS Quality Mark For Pressure"
+
+    - name: "QualityMarker/airTemperature"
+      source: variables/airTemperature
+      longName: "SDMEDIT/QUIPS Quality Mark For Temperature"
+
+    - name: "QualityMarker/moisture"
+      source: variables/moisture
+      longName: "SDMEDIT/QUIPS Quality Mark For Moisture"
+
+    - name: "QualityMarker/wind"
+      source: variables/wind
+      longName: "SDMEDIT/QUIPS Quality Mark For Wind"
+
+    - name: "QualityMarker/seaSurfaceTemperature"
+      source: variables/seaSurfaceTemperature
+      longName: "SDMEDIT/QUIPS Quality Mark For Sea Surface Temperature"
+
+    - name: "QualityMarker/correctedReportIndicator"
+      source: variables/correctedReportIndicator
+      longName: "Corrected Report Indicator"

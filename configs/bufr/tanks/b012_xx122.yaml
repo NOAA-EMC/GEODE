@@ -1,0 +1,941 @@
+bufr:
+  subsets:
+    - NC012122
+
+  variables:
+    # MetaData
+    timestamp:
+      datetime:
+        year: "*/YEAR"
+        month: "*/MNTH"
+        day: "*/DAYS"
+        hour: "*/HOUR"
+        minute: "*/MINU"
+        second: "*/SECO"
+
+    latitude:
+      query: "*/CLATH"
+
+    longitude:
+      query: "*/CLONH"
+
+    dataProviderOrigin:
+      query: "*/OGCE"
+
+    generatingSubCenter:
+      query: "*/GSES"
+
+    softwareIdentification:
+      query: "*/SWID"
+
+    satelliteIdentifier:
+      query: "*/SAID"
+
+    instrumentIdentifier:
+      query: "*/SIID"
+
+    directionOfMotionOfMovingObservingPlatform:
+      query: "*/DOMO"
+
+    pixelSizeOnHorizontal1:
+      query: "*/PSH1"
+
+    orbitNumber:
+      query: "*/ORBN"
+
+    crossTrackCellNumber:
+      query: "*/CTCN"
+
+    beamIdentifier1:
+      query: "*/ASCATSG0{1}/BEAMI"
+
+    beamIdentifier2:
+      query: "*/ASCATSG0{2}/BEAMI"
+
+    beamIdentifier3:
+      query: "*/ASCATSG0{3}/BEAMI"
+
+    radarIncidenceAngle1:
+      query: "*/ASCATSG0{1}/RAIA"
+
+    radarIncidenceAngle2:
+      query: "*/ASCATSG0{2}/RAIA"
+
+    radarIncidenceAngle3:
+      query: "*/ASCATSG0{3}/RAIA"
+
+    antennaAzimuthAngle1:
+      query: "*/ASCATSG0{1}/ANAZ"
+
+    antennaAzimuthAngle2:
+      query: "*/ASCATSG0{2}/ANAZ"
+
+    antennaAzimuthAngle3:
+      query: "*/ASCATSG0{3}/ANAZ"
+
+    softwareIdentification2:
+      query: "*/SWID"
+
+    databaseIdentification:
+      query: "*/DBID"
+
+    softwareIdentification3:
+      query: "*/SWID"
+
+    windGeneratingApplication:
+      query: "*/GNAP"
+
+    qualityFlags:
+      query: "*/WVCQ"
+
+    # ObsValue
+    heightOfAtmosphereUsed:
+      query: "*/HOAU"
+
+    lossPerUnitLengthOfAtmosphereUsed:
+      query: "*/LULAU"
+
+    beamCollocation:
+      query: "*/BEAMC"
+
+    backscatter1:
+      query: "*/ASCATSG0{1}/BKST"
+
+    backscatter2:
+      query: "*/ASCATSG0{2}/BKST"
+
+    backscatter3:
+      query: "*/ASCATSG0{3}/BKST"
+
+    radiometricResolutionNoiseValue1:
+      query: "*/ASCATSG0{1}/RARE"
+
+    radiometricResolutionNoiseValue2:
+      query: "*/ASCATSG0{2}/RARE"
+
+    radiometricResolutionNoiseValue3:
+      query: "*/ASCATSG0{3}/RARE"
+
+    ascatKpEstimateQuality1:
+      query: "*/ASCATSG0{1}/AKPEQ"
+
+    ascatKpEstimateQuality2:
+      query: "*/ASCATSG0{2}/AKPEQ"
+
+    ascatKpEstimateQuality3:
+      query: "*/ASCATSG0{3}/AKPEQ"
+
+    ascatSigma0Usability1:
+      query: "*/ASCATSG0{1}/ASGU"
+
+    ascatSigma0Usability2:
+      query: "*/ASCATSG0{2}/ASGU"
+
+    ascatSigma0Usability3:
+      query: "*/ASCATSG0{3}/ASGU"
+
+    ascatUseOfSyntheticData1:
+      query: "*/ASCATSG0{1}/AUSY"
+
+    ascatUseOfSyntheticData2:
+      query: "*/ASCATSG0{2}/AUSY"
+
+    ascatUseOfSyntheticData3:
+      query: "*/ASCATSG0{3}/AUSY"
+
+    ascatSyntheticDataQuality1:
+      query: "*/ASCATSG0{1}/ASDQ"
+
+    ascatSyntheticDataQuality2:
+      query: "*/ASCATSG0{2}/ASDQ"
+
+    ascatSyntheticDataQuality3:
+      query: "*/ASCATSG0{3}/ASDQ"
+
+    ascatSatelliteOrbitAndAttitudeQuality1:
+      query: "*/ASCATSG0{1}/ASOAQ"
+
+    ascatSatelliteOrbitAndAttitudeQuality2:
+      query: "*/ASCATSG0{2}/ASOAQ"
+
+    ascatSatelliteOrbitAndAttitudeQuality3:
+      query: "*/ASCATSG0{3}/ASOAQ"
+
+    ascatSolarArrayReflectionContamination1:
+      query: "*/ASCATSG0{1}/ASARC"
+
+    ascatSolarArrayReflectionContamination2:
+      query: "*/ASCATSG0{2}/ASARC"
+
+    ascatSolarArrayReflectionContamination3:
+      query: "*/ASCATSG0{3}/ASARC"
+
+    ascatTelemetryPresenceAndQuality1:
+      query: "*/ASCATSG0{1}/ATPQ"
+
+    ascatTelemetryPresenceAndQuality2:
+      query: "*/ASCATSG0{2}/ATPQ"
+
+    ascatTelemetryPresenceAndQuality3:
+      query: "*/ASCATSG0{3}/ATPQ"
+
+    ascatExtrapolatedReferenceFunctionPresence1:
+      query: "*/ASCATSG0{1}/AERFP"
+
+    ascatExtrapolatedReferenceFunctionPresence2:
+      query: "*/ASCATSG0{2}/AERFP"
+
+    ascatExtrapolatedReferenceFunctionPresence3:
+      query: "*/ASCATSG0{3}/AERFP"
+
+    ascatLandFraction1:
+      query: "*/ASCATSG0{1}/ALFR"
+
+    ascatLandFraction2:
+      query: "*/ASCATSG0{2}/ALFR"
+
+    ascatLandFraction3:
+      query: "*/ASCATSG0{3}/ALFR"
+
+    surfaceSoilMoistureMs:
+      query: "*/SSOM"
+
+    estimatedErrorInSurfaceSoilMoisture:
+      query: "*/EESSM"
+
+    backscatter1_2:
+      query: "*/BKST[1]"
+
+    estimatedErrorInSigma0At40DegIncidenceAngle:
+      query: "*/EES40"
+
+    slopeAt40DegIncidenceAngle:
+      query: "*/S40IA"
+
+    estimatedErrorInSlopeAt40DegIncidenceAngle:
+      query: "*/EEL40"
+
+    soilMoistureSensitivity:
+      query: "*/SMOS"
+
+    backscatter2_2:
+      query: "*/BKST[2]"
+
+    wetBackscatter:
+      query: "*/WBKS"
+
+    meanSurfaceSoilMoisture:
+      query: "*/MSSM"
+
+    rainfallDetection:
+      query: "*/RFDT"
+
+    soilMoistureCorrectionFlag:
+      query: "*/SMCF"
+
+    soilMoistureProcessingFlag:
+      query: "*/SMPF"
+
+    soilMoistureQuality:
+      query: "*/SMQL"
+
+    snowCover:
+      query: "*/SNOC"
+
+    frozenLandSurfaceFraction:
+      query: "*/FLSF"
+
+    inundationAndWetlandFraction:
+      query: "*/IWFR"
+
+    topographicComplexity:
+      query: "*/TPCX"
+
+    modelWindSpeedAt10Meters:
+      query: "*/MWS10"
+
+    modelWindDirectionAt10Meters:
+      query: "*/MWD10"
+
+    iceProbability:
+      query: "*/ICEP"
+
+    iceAgeAParameter:
+      query: "*/ICEA"
+
+    numberOfVectorAmbiguities:
+      query: "*/NWVA"
+
+    indexOfSelectedWindVector:
+      query: "*/ISWV"
+
+    windSpeed1:
+      query: "*/AMBIGWND{1}/WS10"
+
+    windSpeed2:
+      query: "*/AMBIGWND{2}/WS10"
+
+    windSpeed3:
+      query: "*/AMBIGWND{3}/WS10"
+
+    windSpeed4:
+      query: "*/AMBIGWND{4}/WS10"
+
+    windSpeed5:
+      query: "*/AMBIGWND{5}/WS10"
+
+    windSpeed6:
+      query: "*/AMBIGWND{6}/WS10"
+
+    windSpeed7:
+      query: "*/AMBIGWND{7}/WS10"
+
+    windSpeed8:
+      query: "*/AMBIGWND{8}/WS10"
+
+    windDirection1:
+      query: "*/AMBIGWND{1}/WD10"
+
+    windDirection2:
+      query: "*/AMBIGWND{2}/WD10"
+
+    windDirection3:
+      query: "*/AMBIGWND{3}/WD10"
+
+    windDirection4:
+      query: "*/AMBIGWND{4}/WD10"
+
+    windDirection5:
+      query: "*/AMBIGWND{5}/WD10"
+
+    windDirection6:
+      query: "*/AMBIGWND{6}/WD10"
+
+    windDirection7:
+      query: "*/AMBIGWND{7}/WD10"
+
+    windDirection8:
+      query: "*/AMBIGWND{8}/WD10"
+
+    backscatterDistance1:
+      query: "*/AMBIGWND{1}/BSCD"
+
+    backscatterDistance2:
+      query: "*/AMBIGWND{2}/BSCD"
+
+    backscatterDistance3:
+      query: "*/AMBIGWND{3}/BSCD"
+
+    backscatterDistance4:
+      query: "*/AMBIGWND{4}/BSCD"
+
+    backscatterDistance5:
+      query: "*/AMBIGWND{5}/BSCD"
+
+    backscatterDistance6:
+      query: "*/AMBIGWND{6}/BSCD"
+
+    backscatterDistance7:
+      query: "*/AMBIGWND{7}/BSCD"
+
+    backscatterDistance8:
+      query: "*/AMBIGWND{8}/BSCD"
+
+    likelihoodComputedForSolution1:
+      query: "*/AMBIGWND{1}/LKCS"
+
+    likelihoodComputedForSolution2:
+      query: "*/AMBIGWND{2}/LKCS"
+
+    likelihoodComputedForSolution3:
+      query: "*/AMBIGWND{3}/LKCS"
+
+    likelihoodComputedForSolution4:
+      query: "*/AMBIGWND{4}/LKCS"
+
+    likelihoodComputedForSolution5:
+      query: "*/AMBIGWND{5}/LKCS"
+
+    likelihoodComputedForSolution6:
+      query: "*/AMBIGWND{6}/LKCS"
+
+    likelihoodComputedForSolution7:
+      query: "*/AMBIGWND{7}/LKCS"
+
+    likelihoodComputedForSolution8:
+      query: "*/AMBIGWND{8}/LKCS"
+
+  splits:
+    satId:
+      category:
+        variable: satelliteIdentifier
+
+encoder:
+  globals:
+    - name: "description"
+      type: string
+      value: "M TYPE 012-122 METOP 50 KM ASCAT scatterometer data"
+
+    - name: "dataCategory"
+      type: string
+      value: "surface data from satellite"
+
+    - name: "dataset"
+      type: string
+      value: "retrieval_osw_ascat"
+
+    - name: "dataFormat"
+      type: string
+      value: "BUFR"
+
+    - name: "restricted"
+      type: string
+      value: "false"
+
+    - name: "bufrCategory"
+      type: string
+      value: "012"
+
+    - name: "bufrLocalSubcategory"
+      type: string
+      value: "122"
+
+    - name: "source"
+      type: string
+      value: "U.S. National Weather Service, National Centers for Environmental Prediction (NCEP)"
+
+    - name: "sourceFiles"
+      type: string
+      value: "NCEP BUFR Tank - b012/xx122 NC012122"
+
+    - name: "converter"
+      type: string
+      value: "bufr-query"
+
+  variables:
+    # MetaData
+    - name: "MetaData/dateTime"
+      source: variables/timestamp
+      longName: "Datetime"
+      units: "seconds since 1970-01-01T00:00:00Z"
+
+    - name: "MetaData/latitude"
+      source: variables/latitude
+      longName: "Latitude"
+      units: "degree_north"
+      range: [-90, 90]
+
+    - name: "MetaData/longitude"
+      source: variables/longitude
+      longName: "Longitude"
+      units: "degree_east"
+
+    - name: "MetaData/dataProviderOrigin"
+      source: variables/dataProviderOrigin
+      longName: "Identification Of ORIGINATING/GENERATING Center"
+
+    - name: "MetaData/generatingSubCenter"
+      source: variables/generatingSubCenter
+      longName: "Identification Of ORIGINATING/GENERATING SUB-CENTER"
+
+    - name: "MetaData/softwareIdentification"
+      source: variables/softwareIdentification
+      longName: "Software Identification"
+
+    - name: "MetaData/satelliteIdentifier"
+      source: variables/satelliteIdentifier
+      longName: "Satellite Identifier"
+
+    - name: "MetaData/instrumentIdentifier"
+      source: variables/instrumentIdentifier
+      longName: "Satellite Instruments"
+
+    - name: "MetaData/directionOfMotionOfMovingObservingPlatform"
+      source: variables/directionOfMotionOfMovingObservingPlatform
+      longName: "Direction Of Motion Of Moving Observing Platform"
+      units: "degree"
+
+    - name: "MetaData/pixelSizeOnHorizontal1"
+      source: variables/pixelSizeOnHorizontal1
+      longName: "Pixel Size On Horizontal - 1"
+      units: "m"
+
+    - name: "MetaData/orbitNumber"
+      source: variables/orbitNumber
+      longName: "Orbit Number"
+
+    - name: "MetaData/crossTrackCellNumber"
+      source: variables/crossTrackCellNumber
+      longName: "Cross Track Cell Number"
+
+    - name: "MetaData/beamIdentifier1"
+      source: variables/beamIdentifier1
+      longName: "Beam Identifier (1)"
+
+    - name: "MetaData/beamIdentifier2"
+      source: variables/beamIdentifier2
+      longName: "Beam Identifier (2)"
+
+    - name: "MetaData/beamIdentifier3"
+      source: variables/beamIdentifier3
+      longName: "Beam Identifier (3)"
+
+    - name: "MetaData/radarIncidenceAngle1"
+      source: variables/radarIncidenceAngle1
+      longName: "Radar Incidence Angle (1)"
+      units: "degree"
+
+    - name: "MetaData/radarIncidenceAngle2"
+      source: variables/radarIncidenceAngle2
+      longName: "Radar Incidence Angle (2)"
+      units: "degree"
+
+    - name: "MetaData/radarIncidenceAngle3"
+      source: variables/radarIncidenceAngle3
+      longName: "Radar Incidence Angle (3)"
+      units: "degree"
+
+    - name: "MetaData/antennaAzimuthAngle1"
+      source: variables/antennaAzimuthAngle1
+      longName: "Antenna Beam Azimuth (1)"
+      units: "degree"
+
+    - name: "MetaData/antennaAzimuthAngle2"
+      source: variables/antennaAzimuthAngle2
+      longName: "Antenna Beam Azimuth (2)"
+      units: "degree"
+
+    - name: "MetaData/antennaAzimuthAngle3"
+      source: variables/antennaAzimuthAngle3
+      longName: "Antenna Beam Azimuth (3)"
+      units: "degree"
+
+    - name: "MetaData/softwareIdentification2"
+      source: variables/softwareIdentification2
+      longName: "Software Identification"
+
+    - name: "MetaData/databaseIdentification"
+      source: variables/databaseIdentification
+      longName: "Database Identification"
+
+    - name: "MetaData/softwareIdentification3"
+      source: variables/softwareIdentification3
+      longName: "Software Identification"
+
+    - name: "MetaData/windGeneratingApplication"
+      source: variables/windGeneratingApplication
+      longName: "Generating Application"
+
+    - name: "MetaData/qualityFlags"
+      source: variables/qualityFlags
+      longName: "Wind Vector Cell Quality"
+
+    # ObsValue
+    - name: "ObsValue/heightOfAtmosphereUsed"
+      source: variables/heightOfAtmosphereUsed
+      longName: "Height Of Atmosphere Used"
+      units: "m"
+
+    - name: "ObsValue/lossPerUnitLengthOfAtmosphereUsed"
+      source: variables/lossPerUnitLengthOfAtmosphereUsed
+      longName: "Loss Per Unit Length Of Atmosphere Used"
+      units: "dB m-1"
+
+    - name: "ObsValue/beamCollocation"
+      source: variables/beamCollocation
+      longName: "Beam Collocation"
+
+    - name: "ObsValue/backscatter1"
+      source: variables/backscatter1
+      longName: "Backscatter (1)"
+      units: "dB"
+
+    - name: "ObsValue/backscatter2"
+      source: variables/backscatter2
+      longName: "Backscatter (2)"
+      units: "dB"
+
+    - name: "ObsValue/backscatter3"
+      source: variables/backscatter3
+      longName: "Backscatter (3)"
+      units: "dB"
+
+    - name: "ObsValue/radiometricResolutionNoiseValue1"
+      source: variables/radiometricResolutionNoiseValue1
+      longName: "Radiometric Resolution (NOISE VALUE) (1)"
+      units: "%"
+
+    - name: "ObsValue/radiometricResolutionNoiseValue2"
+      source: variables/radiometricResolutionNoiseValue2
+      longName: "Radiometric Resolution (NOISE VALUE) (2)"
+      units: "%"
+
+    - name: "ObsValue/radiometricResolutionNoiseValue3"
+      source: variables/radiometricResolutionNoiseValue3
+      longName: "Radiometric Resolution (NOISE VALUE) (3)"
+      units: "%"
+
+    - name: "ObsValue/ascatKpEstimateQuality1"
+      source: variables/ascatKpEstimateQuality1
+      longName: "ASCAT kp ESTIMATE QUALITY (1)"
+
+    - name: "ObsValue/ascatKpEstimateQuality2"
+      source: variables/ascatKpEstimateQuality2
+      longName: "ASCAT kp ESTIMATE QUALITY (2)"
+
+    - name: "ObsValue/ascatKpEstimateQuality3"
+      source: variables/ascatKpEstimateQuality3
+      longName: "ASCAT kp ESTIMATE QUALITY (3)"
+
+    - name: "ObsValue/ascatSigma0Usability1"
+      source: variables/ascatSigma0Usability1
+      longName: "Ascat SIGMA-0 Usability (1)"
+
+    - name: "ObsValue/ascatSigma0Usability2"
+      source: variables/ascatSigma0Usability2
+      longName: "Ascat SIGMA-0 Usability (2)"
+
+    - name: "ObsValue/ascatSigma0Usability3"
+      source: variables/ascatSigma0Usability3
+      longName: "Ascat SIGMA-0 Usability (3)"
+
+    - name: "ObsValue/ascatUseOfSyntheticData1"
+      source: variables/ascatUseOfSyntheticData1
+      longName: "Ascat Use Of Synthetic Data (1)"
+
+    - name: "ObsValue/ascatUseOfSyntheticData2"
+      source: variables/ascatUseOfSyntheticData2
+      longName: "Ascat Use Of Synthetic Data (2)"
+
+    - name: "ObsValue/ascatUseOfSyntheticData3"
+      source: variables/ascatUseOfSyntheticData3
+      longName: "Ascat Use Of Synthetic Data (3)"
+
+    - name: "ObsValue/ascatSyntheticDataQuality1"
+      source: variables/ascatSyntheticDataQuality1
+      longName: "Ascat Synthetic Data Quality (1)"
+
+    - name: "ObsValue/ascatSyntheticDataQuality2"
+      source: variables/ascatSyntheticDataQuality2
+      longName: "Ascat Synthetic Data Quality (2)"
+
+    - name: "ObsValue/ascatSyntheticDataQuality3"
+      source: variables/ascatSyntheticDataQuality3
+      longName: "Ascat Synthetic Data Quality (3)"
+
+    - name: "ObsValue/ascatSatelliteOrbitAndAttitudeQuality1"
+      source: variables/ascatSatelliteOrbitAndAttitudeQuality1
+      longName: "Ascat Satellite Orbit And Attitude Quality (1)"
+
+    - name: "ObsValue/ascatSatelliteOrbitAndAttitudeQuality2"
+      source: variables/ascatSatelliteOrbitAndAttitudeQuality2
+      longName: "Ascat Satellite Orbit And Attitude Quality (2)"
+
+    - name: "ObsValue/ascatSatelliteOrbitAndAttitudeQuality3"
+      source: variables/ascatSatelliteOrbitAndAttitudeQuality3
+      longName: "Ascat Satellite Orbit And Attitude Quality (3)"
+
+    - name: "ObsValue/ascatSolarArrayReflectionContamination1"
+      source: variables/ascatSolarArrayReflectionContamination1
+      longName: "Ascat Solar Array Reflection Contamination (1)"
+
+    - name: "ObsValue/ascatSolarArrayReflectionContamination2"
+      source: variables/ascatSolarArrayReflectionContamination2
+      longName: "Ascat Solar Array Reflection Contamination (2)"
+
+    - name: "ObsValue/ascatSolarArrayReflectionContamination3"
+      source: variables/ascatSolarArrayReflectionContamination3
+      longName: "Ascat Solar Array Reflection Contamination (3)"
+
+    - name: "ObsValue/ascatTelemetryPresenceAndQuality1"
+      source: variables/ascatTelemetryPresenceAndQuality1
+      longName: "Ascat Telemetry Presence And Quality (1)"
+
+    - name: "ObsValue/ascatTelemetryPresenceAndQuality2"
+      source: variables/ascatTelemetryPresenceAndQuality2
+      longName: "Ascat Telemetry Presence And Quality (2)"
+
+    - name: "ObsValue/ascatTelemetryPresenceAndQuality3"
+      source: variables/ascatTelemetryPresenceAndQuality3
+      longName: "Ascat Telemetry Presence And Quality (3)"
+
+    - name: "ObsValue/ascatExtrapolatedReferenceFunctionPresence1"
+      source: variables/ascatExtrapolatedReferenceFunctionPresence1
+      longName: "Ascat Extrapolated Reference Function Presence (1)"
+
+    - name: "ObsValue/ascatExtrapolatedReferenceFunctionPresence2"
+      source: variables/ascatExtrapolatedReferenceFunctionPresence2
+      longName: "Ascat Extrapolated Reference Function Presence (2)"
+
+    - name: "ObsValue/ascatExtrapolatedReferenceFunctionPresence3"
+      source: variables/ascatExtrapolatedReferenceFunctionPresence3
+      longName: "Ascat Extrapolated Reference Function Presence (3)"
+
+    - name: "ObsValue/ascatLandFraction1"
+      source: variables/ascatLandFraction1
+      longName: "Ascat Land Fraction (1)"
+
+    - name: "ObsValue/ascatLandFraction2"
+      source: variables/ascatLandFraction2
+      longName: "Ascat Land Fraction (2)"
+
+    - name: "ObsValue/ascatLandFraction3"
+      source: variables/ascatLandFraction3
+      longName: "Ascat Land Fraction (3)"
+
+    - name: "ObsValue/surfaceSoilMoistureMs"
+      source: variables/surfaceSoilMoistureMs
+      longName: "Surface Soil Moisture (MS)"
+      units: "%"
+
+    - name: "ObsValue/estimatedErrorInSurfaceSoilMoisture"
+      source: variables/estimatedErrorInSurfaceSoilMoisture
+      longName: "Estimated Error In Surface Soil Moisture"
+      units: "%"
+
+    - name: "ObsValue/backscatter1_2"
+      source: variables/backscatter1_2
+      longName: "Backscatter"
+      units: "dB"
+
+    - name: "ObsValue/estimatedErrorInSigma0At40DegIncidenceAngle"
+      source: variables/estimatedErrorInSigma0At40DegIncidenceAngle
+      longName: "Estimated Error In SIGMA-0 At 40 DEG. Incidence Angle"
+      units: "dB"
+
+    - name: "ObsValue/slopeAt40DegIncidenceAngle"
+      source: variables/slopeAt40DegIncidenceAngle
+      longName: "Slope At 40 DEG. Incidence Angle"
+      units: "dB degree-1"
+
+    - name: "ObsValue/estimatedErrorInSlopeAt40DegIncidenceAngle"
+      source: variables/estimatedErrorInSlopeAt40DegIncidenceAngle
+      longName: "Estimated Error In Slope At 40 DEG. Incidence Angle"
+      units: "dB degree-1"
+
+    - name: "ObsValue/soilMoistureSensitivity"
+      source: variables/soilMoistureSensitivity
+      longName: "Soil Moisture Sensitivity"
+      units: "dB"
+
+    - name: "ObsValue/backscatter2_2"
+      source: variables/backscatter2_2
+      longName: "Backscatter"
+      units: "dB"
+
+    - name: "ObsValue/wetBackscatter"
+      source: variables/wetBackscatter
+      longName: "Wet Backscatter"
+      units: "dB"
+
+    - name: "ObsValue/meanSurfaceSoilMoisture"
+      source: variables/meanSurfaceSoilMoisture
+      longName: "Mean Surface Soil Moisture"
+
+    - name: "ObsValue/rainfallDetection"
+      source: variables/rainfallDetection
+      longName: "Rainfall Detection"
+
+    - name: "ObsValue/soilMoistureCorrectionFlag"
+      source: variables/soilMoistureCorrectionFlag
+      longName: "Soil Moisture Correction Flag"
+
+    - name: "ObsValue/soilMoistureProcessingFlag"
+      source: variables/soilMoistureProcessingFlag
+      longName: "Soil Moisture Processing Flag"
+
+    - name: "ObsValue/soilMoistureQuality"
+      source: variables/soilMoistureQuality
+      longName: "Soil Moisture Quality"
+      units: "%"
+
+    - name: "ObsValue/snowCover"
+      source: variables/snowCover
+      longName: "Snow Cover"
+      units: "%"
+
+    - name: "ObsValue/frozenLandSurfaceFraction"
+      source: variables/frozenLandSurfaceFraction
+      longName: "Frozen Land Surface Fraction"
+      units: "%"
+
+    - name: "ObsValue/inundationAndWetlandFraction"
+      source: variables/inundationAndWetlandFraction
+      longName: "Inundation And Wetland Fraction"
+      units: "%"
+
+    - name: "ObsValue/topographicComplexity"
+      source: variables/topographicComplexity
+      longName: "Topographic Complexity"
+      units: "%"
+
+    - name: "ObsValue/modelWindSpeedAt10Meters"
+      source: variables/modelWindSpeedAt10Meters
+      longName: "Model Wind Speed At 10 Meters"
+      units: "m s-1"
+
+    - name: "ObsValue/modelWindDirectionAt10Meters"
+      source: variables/modelWindDirectionAt10Meters
+      longName: "Model Wind Direction At 10 Meters"
+      units: "degree"
+
+    - name: "ObsValue/iceProbability"
+      source: variables/iceProbability
+      longName: "Ice Probability"
+
+    - name: "ObsValue/iceAgeAParameter"
+      source: variables/iceAgeAParameter
+      longName: "Ice Age (\"A\" PARAMETER)"
+      units: "dB"
+
+    - name: "ObsValue/numberOfVectorAmbiguities"
+      source: variables/numberOfVectorAmbiguities
+      longName: "Number Of Vector Ambiguities"
+
+    - name: "ObsValue/indexOfSelectedWindVector"
+      source: variables/indexOfSelectedWindVector
+      longName: "Index Of Selected Wind Vector"
+
+    - name: "ObsValue/windSpeed1"
+      source: variables/windSpeed1
+      longName: "Wind Speed At 10 Meters (1)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeed2"
+      source: variables/windSpeed2
+      longName: "Wind Speed At 10 Meters (2)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeed3"
+      source: variables/windSpeed3
+      longName: "Wind Speed At 10 Meters (3)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeed4"
+      source: variables/windSpeed4
+      longName: "Wind Speed At 10 Meters (4)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeed5"
+      source: variables/windSpeed5
+      longName: "Wind Speed At 10 Meters (5)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeed6"
+      source: variables/windSpeed6
+      longName: "Wind Speed At 10 Meters (6)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeed7"
+      source: variables/windSpeed7
+      longName: "Wind Speed At 10 Meters (7)"
+      units: "m s-1"
+
+    - name: "ObsValue/windSpeed8"
+      source: variables/windSpeed8
+      longName: "Wind Speed At 10 Meters (8)"
+      units: "m s-1"
+
+    - name: "ObsValue/windDirection1"
+      source: variables/windDirection1
+      longName: "Wind Direction At 10 Meters (1)"
+      units: "degree"
+
+    - name: "ObsValue/windDirection2"
+      source: variables/windDirection2
+      longName: "Wind Direction At 10 Meters (2)"
+      units: "degree"
+
+    - name: "ObsValue/windDirection3"
+      source: variables/windDirection3
+      longName: "Wind Direction At 10 Meters (3)"
+      units: "degree"
+
+    - name: "ObsValue/windDirection4"
+      source: variables/windDirection4
+      longName: "Wind Direction At 10 Meters (4)"
+      units: "degree"
+
+    - name: "ObsValue/windDirection5"
+      source: variables/windDirection5
+      longName: "Wind Direction At 10 Meters (5)"
+      units: "degree"
+
+    - name: "ObsValue/windDirection6"
+      source: variables/windDirection6
+      longName: "Wind Direction At 10 Meters (6)"
+      units: "degree"
+
+    - name: "ObsValue/windDirection7"
+      source: variables/windDirection7
+      longName: "Wind Direction At 10 Meters (7)"
+      units: "degree"
+
+    - name: "ObsValue/windDirection8"
+      source: variables/windDirection8
+      longName: "Wind Direction At 10 Meters (8)"
+      units: "degree"
+
+    - name: "ObsValue/backscatterDistance1"
+      source: variables/backscatterDistance1
+      longName: "Backscatter Distance (1)"
+
+    - name: "ObsValue/backscatterDistance2"
+      source: variables/backscatterDistance2
+      longName: "Backscatter Distance (2)"
+
+    - name: "ObsValue/backscatterDistance3"
+      source: variables/backscatterDistance3
+      longName: "Backscatter Distance (3)"
+
+    - name: "ObsValue/backscatterDistance4"
+      source: variables/backscatterDistance4
+      longName: "Backscatter Distance (4)"
+
+    - name: "ObsValue/backscatterDistance5"
+      source: variables/backscatterDistance5
+      longName: "Backscatter Distance (5)"
+
+    - name: "ObsValue/backscatterDistance6"
+      source: variables/backscatterDistance6
+      longName: "Backscatter Distance (6)"
+
+    - name: "ObsValue/backscatterDistance7"
+      source: variables/backscatterDistance7
+      longName: "Backscatter Distance (7)"
+
+    - name: "ObsValue/backscatterDistance8"
+      source: variables/backscatterDistance8
+      longName: "Backscatter Distance (8)"
+
+    - name: "ObsValue/likelihoodComputedForSolution1"
+      source: variables/likelihoodComputedForSolution1
+      longName: "Likelihood Computed For Solution (1)"
+
+    - name: "ObsValue/likelihoodComputedForSolution2"
+      source: variables/likelihoodComputedForSolution2
+      longName: "Likelihood Computed For Solution (2)"
+
+    - name: "ObsValue/likelihoodComputedForSolution3"
+      source: variables/likelihoodComputedForSolution3
+      longName: "Likelihood Computed For Solution (3)"
+
+    - name: "ObsValue/likelihoodComputedForSolution4"
+      source: variables/likelihoodComputedForSolution4
+      longName: "Likelihood Computed For Solution (4)"
+
+    - name: "ObsValue/likelihoodComputedForSolution5"
+      source: variables/likelihoodComputedForSolution5
+      longName: "Likelihood Computed For Solution (5)"
+
+    - name: "ObsValue/likelihoodComputedForSolution6"
+      source: variables/likelihoodComputedForSolution6
+      longName: "Likelihood Computed For Solution (6)"
+
+    - name: "ObsValue/likelihoodComputedForSolution7"
+      source: variables/likelihoodComputedForSolution7
+      longName: "Likelihood Computed For Solution (7)"
+
+    - name: "ObsValue/likelihoodComputedForSolution8"
+      source: variables/likelihoodComputedForSolution8
+      longName: "Likelihood Computed For Solution (8)"
