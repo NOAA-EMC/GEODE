@@ -150,20 +150,110 @@ bufr:
     instrumentIdentifierCrisn20:
       query: "*/CRISN20/SIID"
 
-    yAngularPositionFromCentreOfGravity:
+    yAngularPositionFromCentreOfGravity1:
       query: "*/CRISN20/CRISL1C{1}/YAPCG"
 
-    zAngularPositionFromCentreOfGravity:
+    yAngularPositionFromCentreOfGravity2:
+      query: "*/CRISN20/CRISL1C{2}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity3:
+      query: "*/CRISN20/CRISL1C{3}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity4:
+      query: "*/CRISN20/CRISL1C{4}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity5:
+      query: "*/CRISN20/CRISL1C{5}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity6:
+      query: "*/CRISN20/CRISL1C{6}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity7:
+      query: "*/CRISN20/CRISL1C{7}/YAPCG"
+
+    zAngularPositionFromCentreOfGravity1:
       query: "*/CRISN20/CRISL1C{1}/ZAPCG"
 
-    sensorChannelNumberCrchfs:
+    zAngularPositionFromCentreOfGravity2:
+      query: "*/CRISN20/CRISL1C{2}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity3:
+      query: "*/CRISN20/CRISL1C{3}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity4:
+      query: "*/CRISN20/CRISL1C{4}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity5:
+      query: "*/CRISN20/CRISL1C{5}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity6:
+      query: "*/CRISN20/CRISL1C{6}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity7:
+      query: "*/CRISN20/CRISL1C{7}/ZAPCG"
+
+    sensorChannelNumberCrchfs1:
       query: "*/CRISN20/CRISL1C{1}/CRCHFS/CHNM"
 
-    firstOrderStatistics1:
+    sensorChannelNumberCrchfs2:
+      query: "*/CRISN20/CRISL1C{2}/CRCHFS/CHNM"
+
+    sensorChannelNumberCrchfs3:
+      query: "*/CRISN20/CRISL1C{3}/CRCHFS/CHNM"
+
+    sensorChannelNumberCrchfs4:
+      query: "*/CRISN20/CRISL1C{4}/CRCHFS/CHNM"
+
+    sensorChannelNumberCrchfs5:
+      query: "*/CRISN20/CRISL1C{5}/CRCHFS/CHNM"
+
+    sensorChannelNumberCrchfs6:
+      query: "*/CRISN20/CRISL1C{6}/CRCHFS/CHNM"
+
+    sensorChannelNumberCrchfs7:
+      query: "*/CRISN20/CRISL1C{7}/CRCHFS/CHNM"
+
+    firstOrderStatistics11:
       query: "*/CRISN20/CRISL1C{1}/CRCHFS/FOST[1]"
 
-    firstOrderStatistics2:
+    firstOrderStatistics12:
+      query: "*/CRISN20/CRISL1C{2}/CRCHFS/FOST[1]"
+
+    firstOrderStatistics13:
+      query: "*/CRISN20/CRISL1C{3}/CRCHFS/FOST[1]"
+
+    firstOrderStatistics14:
+      query: "*/CRISN20/CRISL1C{4}/CRCHFS/FOST[1]"
+
+    firstOrderStatistics15:
+      query: "*/CRISN20/CRISL1C{5}/CRCHFS/FOST[1]"
+
+    firstOrderStatistics16:
+      query: "*/CRISN20/CRISL1C{6}/CRCHFS/FOST[1]"
+
+    firstOrderStatistics17:
+      query: "*/CRISN20/CRISL1C{7}/CRCHFS/FOST[1]"
+
+    firstOrderStatistics21:
       query: "*/CRISN20/CRISL1C{1}/CRCHFS/FOST[2]"
+
+    firstOrderStatistics22:
+      query: "*/CRISN20/CRISL1C{2}/CRCHFS/FOST[2]"
+
+    firstOrderStatistics23:
+      query: "*/CRISN20/CRISL1C{3}/CRCHFS/FOST[2]"
+
+    firstOrderStatistics24:
+      query: "*/CRISN20/CRISL1C{4}/CRCHFS/FOST[2]"
+
+    firstOrderStatistics25:
+      query: "*/CRISN20/CRISL1C{5}/CRCHFS/FOST[2]"
+
+    firstOrderStatistics26:
+      query: "*/CRISN20/CRISL1C{6}/CRCHFS/FOST[2]"
+
+    firstOrderStatistics27:
+      query: "*/CRISN20/CRISL1C{7}/CRCHFS/FOST[2]"
 
     sequenceNumber:
       query: "*/SEQNUM"
@@ -208,14 +298,68 @@ bufr:
     spectralRadianceGcrchn:
       query: "*/CRISN20/GCRCHN/SRAD"
 
-    cloudFree:
+    cloudFree1:
       query: "*/CRISN20/CRISL1C{1}/FCPH"
 
-    channelRadiance1:
+    cloudFree2:
+      query: "*/CRISN20/CRISL1C{2}/FCPH"
+
+    cloudFree3:
+      query: "*/CRISN20/CRISL1C{3}/FCPH"
+
+    cloudFree4:
+      query: "*/CRISN20/CRISL1C{4}/FCPH"
+
+    cloudFree5:
+      query: "*/CRISN20/CRISL1C{5}/FCPH"
+
+    cloudFree6:
+      query: "*/CRISN20/CRISL1C{6}/FCPH"
+
+    cloudFree7:
+      query: "*/CRISN20/CRISL1C{7}/FCPH"
+
+    channelRadiance11:
       query: "*/CRISN20/CRISL1C{1}/CRCHFS/SCHRAD[1]"
 
-    channelRadiance2:
+    channelRadiance12:
+      query: "*/CRISN20/CRISL1C{2}/CRCHFS/SCHRAD[1]"
+
+    channelRadiance13:
+      query: "*/CRISN20/CRISL1C{3}/CRCHFS/SCHRAD[1]"
+
+    channelRadiance14:
+      query: "*/CRISN20/CRISL1C{4}/CRCHFS/SCHRAD[1]"
+
+    channelRadiance15:
+      query: "*/CRISN20/CRISL1C{5}/CRCHFS/SCHRAD[1]"
+
+    channelRadiance16:
+      query: "*/CRISN20/CRISL1C{6}/CRCHFS/SCHRAD[1]"
+
+    channelRadiance17:
+      query: "*/CRISN20/CRISL1C{7}/CRCHFS/SCHRAD[1]"
+
+    channelRadiance21:
       query: "*/CRISN20/CRISL1C{1}/CRCHFS/SCHRAD[2]"
+
+    channelRadiance22:
+      query: "*/CRISN20/CRISL1C{2}/CRCHFS/SCHRAD[2]"
+
+    channelRadiance23:
+      query: "*/CRISN20/CRISL1C{3}/CRCHFS/SCHRAD[2]"
+
+    channelRadiance24:
+      query: "*/CRISN20/CRISL1C{4}/CRCHFS/SCHRAD[2]"
+
+    channelRadiance25:
+      query: "*/CRISN20/CRISL1C{5}/CRCHFS/SCHRAD[2]"
+
+    channelRadiance26:
+      query: "*/CRISN20/CRISL1C{6}/CRCHFS/SCHRAD[2]"
+
+    channelRadiance27:
+      query: "*/CRISN20/CRISL1C{7}/CRCHFS/SCHRAD[2]"
 
     # QualityMarker
     scanLevelQualityFlags:
@@ -258,9 +402,27 @@ encoder:
     - name: Crchnm
       source: variables/sensorChannelNumberCrchnm
       path: "*/CRCHNM"
-    - name: Crchfs
-      source: variables/sensorChannelNumberCrchfs
+    - name: Crchfs1
+      source: variables/sensorChannelNumberCrchfs1
       path: "*/CRISN20/CRISL1C{1}/CRCHFS"
+    - name: Crchfs2
+      source: variables/sensorChannelNumberCrchfs2
+      path: "*/CRISN20/CRISL1C{2}/CRCHFS"
+    - name: Crchfs3
+      source: variables/sensorChannelNumberCrchfs3
+      path: "*/CRISN20/CRISL1C{3}/CRCHFS"
+    - name: Crchfs4
+      source: variables/sensorChannelNumberCrchfs4
+      path: "*/CRISN20/CRISL1C{4}/CRCHFS"
+    - name: Crchfs5
+      source: variables/sensorChannelNumberCrchfs5
+      path: "*/CRISN20/CRISL1C{5}/CRCHFS"
+    - name: Crchfs6
+      source: variables/sensorChannelNumberCrchfs6
+      path: "*/CRISN20/CRISL1C{6}/CRCHFS"
+    - name: Crchfs7
+      source: variables/sensorChannelNumberCrchfs7
+      path: "*/CRISN20/CRISL1C{7}/CRCHFS"
     - name: Gcrchn
       source: variables/sensorChannelNumberGcrchn
       path: "*/CRISN20/GCRCHN"
@@ -506,27 +668,159 @@ encoder:
       source: variables/instrumentIdentifierCrisn20
       longName: "Satellite Instruments"
 
-    - name: "MetaData/yAngularPositionFromCentreOfGravity"
-      source: variables/yAngularPositionFromCentreOfGravity
-      longName: "Y Angular Position From Centre Of Gravity"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity1"
+      source: variables/yAngularPositionFromCentreOfGravity1
+      longName: "Y Angular Position From Centre Of Gravity (1)"
       units: "degree"
 
-    - name: "MetaData/zAngularPositionFromCentreOfGravity"
-      source: variables/zAngularPositionFromCentreOfGravity
-      longName: "Z Angular Position From Centre Of Gravity"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity2"
+      source: variables/yAngularPositionFromCentreOfGravity2
+      longName: "Y Angular Position From Centre Of Gravity (2)"
       units: "degree"
 
-    - name: "MetaData/sensorChannelNumberCrchfs"
-      source: variables/sensorChannelNumberCrchfs
-      longName: "Channel Number"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity3"
+      source: variables/yAngularPositionFromCentreOfGravity3
+      longName: "Y Angular Position From Centre Of Gravity (3)"
+      units: "degree"
 
-    - name: "MetaData/firstOrderStatistics1"
-      source: variables/firstOrderStatistics1
-      longName: "First-order statistics"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity4"
+      source: variables/yAngularPositionFromCentreOfGravity4
+      longName: "Y Angular Position From Centre Of Gravity (4)"
+      units: "degree"
 
-    - name: "MetaData/firstOrderStatistics2"
-      source: variables/firstOrderStatistics2
-      longName: "First-order statistics"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity5"
+      source: variables/yAngularPositionFromCentreOfGravity5
+      longName: "Y Angular Position From Centre Of Gravity (5)"
+      units: "degree"
+
+    - name: "MetaData/yAngularPositionFromCentreOfGravity6"
+      source: variables/yAngularPositionFromCentreOfGravity6
+      longName: "Y Angular Position From Centre Of Gravity (6)"
+      units: "degree"
+
+    - name: "MetaData/yAngularPositionFromCentreOfGravity7"
+      source: variables/yAngularPositionFromCentreOfGravity7
+      longName: "Y Angular Position From Centre Of Gravity (7)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity1"
+      source: variables/zAngularPositionFromCentreOfGravity1
+      longName: "Z Angular Position From Centre Of Gravity (1)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity2"
+      source: variables/zAngularPositionFromCentreOfGravity2
+      longName: "Z Angular Position From Centre Of Gravity (2)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity3"
+      source: variables/zAngularPositionFromCentreOfGravity3
+      longName: "Z Angular Position From Centre Of Gravity (3)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity4"
+      source: variables/zAngularPositionFromCentreOfGravity4
+      longName: "Z Angular Position From Centre Of Gravity (4)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity5"
+      source: variables/zAngularPositionFromCentreOfGravity5
+      longName: "Z Angular Position From Centre Of Gravity (5)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity6"
+      source: variables/zAngularPositionFromCentreOfGravity6
+      longName: "Z Angular Position From Centre Of Gravity (6)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity7"
+      source: variables/zAngularPositionFromCentreOfGravity7
+      longName: "Z Angular Position From Centre Of Gravity (7)"
+      units: "degree"
+
+    - name: "MetaData/sensorChannelNumberCrchfs1"
+      source: variables/sensorChannelNumberCrchfs1
+      longName: "Channel Number (1)"
+
+    - name: "MetaData/sensorChannelNumberCrchfs2"
+      source: variables/sensorChannelNumberCrchfs2
+      longName: "Channel Number (2)"
+
+    - name: "MetaData/sensorChannelNumberCrchfs3"
+      source: variables/sensorChannelNumberCrchfs3
+      longName: "Channel Number (3)"
+
+    - name: "MetaData/sensorChannelNumberCrchfs4"
+      source: variables/sensorChannelNumberCrchfs4
+      longName: "Channel Number (4)"
+
+    - name: "MetaData/sensorChannelNumberCrchfs5"
+      source: variables/sensorChannelNumberCrchfs5
+      longName: "Channel Number (5)"
+
+    - name: "MetaData/sensorChannelNumberCrchfs6"
+      source: variables/sensorChannelNumberCrchfs6
+      longName: "Channel Number (6)"
+
+    - name: "MetaData/sensorChannelNumberCrchfs7"
+      source: variables/sensorChannelNumberCrchfs7
+      longName: "Channel Number (7)"
+
+    - name: "MetaData/firstOrderStatistics11"
+      source: variables/firstOrderStatistics11
+      longName: "First-order statistics (1)"
+
+    - name: "MetaData/firstOrderStatistics12"
+      source: variables/firstOrderStatistics12
+      longName: "First-order statistics (2)"
+
+    - name: "MetaData/firstOrderStatistics13"
+      source: variables/firstOrderStatistics13
+      longName: "First-order statistics (3)"
+
+    - name: "MetaData/firstOrderStatistics14"
+      source: variables/firstOrderStatistics14
+      longName: "First-order statistics (4)"
+
+    - name: "MetaData/firstOrderStatistics15"
+      source: variables/firstOrderStatistics15
+      longName: "First-order statistics (5)"
+
+    - name: "MetaData/firstOrderStatistics16"
+      source: variables/firstOrderStatistics16
+      longName: "First-order statistics (6)"
+
+    - name: "MetaData/firstOrderStatistics17"
+      source: variables/firstOrderStatistics17
+      longName: "First-order statistics (7)"
+
+    - name: "MetaData/firstOrderStatistics21"
+      source: variables/firstOrderStatistics21
+      longName: "First-order statistics (1)"
+
+    - name: "MetaData/firstOrderStatistics22"
+      source: variables/firstOrderStatistics22
+      longName: "First-order statistics (2)"
+
+    - name: "MetaData/firstOrderStatistics23"
+      source: variables/firstOrderStatistics23
+      longName: "First-order statistics (3)"
+
+    - name: "MetaData/firstOrderStatistics24"
+      source: variables/firstOrderStatistics24
+      longName: "First-order statistics (4)"
+
+    - name: "MetaData/firstOrderStatistics25"
+      source: variables/firstOrderStatistics25
+      longName: "First-order statistics (5)"
+
+    - name: "MetaData/firstOrderStatistics26"
+      source: variables/firstOrderStatistics26
+      longName: "First-order statistics (6)"
+
+    - name: "MetaData/firstOrderStatistics27"
+      source: variables/firstOrderStatistics27
+      longName: "First-order statistics (7)"
 
     - name: "MetaData/sequenceNumber"
       source: variables/sequenceNumber
@@ -592,18 +886,102 @@ encoder:
       longName: "Channel Radiance"
       units: "W m-2 sr-1 cm"
 
-    - name: "ObsValue/cloudFree"
-      source: variables/cloudFree
-      longName: "Fraction Of Clear Pixels In Hirs Fov"
+    - name: "ObsValue/cloudFree1"
+      source: variables/cloudFree1
+      longName: "Fraction Of Clear Pixels In Hirs Fov (1)"
 
-    - name: "ObsValue/channelRadiance1"
-      source: variables/channelRadiance1
-      longName: "Channel radiance"
+    - name: "ObsValue/cloudFree2"
+      source: variables/cloudFree2
+      longName: "Fraction Of Clear Pixels In Hirs Fov (2)"
+
+    - name: "ObsValue/cloudFree3"
+      source: variables/cloudFree3
+      longName: "Fraction Of Clear Pixels In Hirs Fov (3)"
+
+    - name: "ObsValue/cloudFree4"
+      source: variables/cloudFree4
+      longName: "Fraction Of Clear Pixels In Hirs Fov (4)"
+
+    - name: "ObsValue/cloudFree5"
+      source: variables/cloudFree5
+      longName: "Fraction Of Clear Pixels In Hirs Fov (5)"
+
+    - name: "ObsValue/cloudFree6"
+      source: variables/cloudFree6
+      longName: "Fraction Of Clear Pixels In Hirs Fov (6)"
+
+    - name: "ObsValue/cloudFree7"
+      source: variables/cloudFree7
+      longName: "Fraction Of Clear Pixels In Hirs Fov (7)"
+
+    - name: "ObsValue/channelRadiance11"
+      source: variables/channelRadiance11
+      longName: "Channel radiance (1)"
       units: "W m-2 sr-1 um-1"
 
-    - name: "ObsValue/channelRadiance2"
-      source: variables/channelRadiance2
-      longName: "Channel radiance"
+    - name: "ObsValue/channelRadiance12"
+      source: variables/channelRadiance12
+      longName: "Channel radiance (2)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance13"
+      source: variables/channelRadiance13
+      longName: "Channel radiance (3)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance14"
+      source: variables/channelRadiance14
+      longName: "Channel radiance (4)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance15"
+      source: variables/channelRadiance15
+      longName: "Channel radiance (5)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance16"
+      source: variables/channelRadiance16
+      longName: "Channel radiance (6)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance17"
+      source: variables/channelRadiance17
+      longName: "Channel radiance (7)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance21"
+      source: variables/channelRadiance21
+      longName: "Channel radiance (1)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance22"
+      source: variables/channelRadiance22
+      longName: "Channel radiance (2)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance23"
+      source: variables/channelRadiance23
+      longName: "Channel radiance (3)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance24"
+      source: variables/channelRadiance24
+      longName: "Channel radiance (4)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance25"
+      source: variables/channelRadiance25
+      longName: "Channel radiance (5)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance26"
+      source: variables/channelRadiance26
+      longName: "Channel radiance (6)"
+      units: "W m-2 sr-1 um-1"
+
+    - name: "ObsValue/channelRadiance27"
+      source: variables/channelRadiance27
+      longName: "Channel radiance (7)"
       units: "W m-2 sr-1 um-1"
 
     # QualityMarker

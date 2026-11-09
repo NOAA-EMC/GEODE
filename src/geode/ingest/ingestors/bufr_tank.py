@@ -254,12 +254,34 @@ def split_rows(tree: xr.DataTree, split: dict) -> dict[str, xr.DataTree]:
     return result
 
 
+def record_type(yaml_path: str) -> str | None:
+    """Return the ``recordType`` global of a mapping, if it has one."""
+    with open(yaml_path) as yaml_file:
+        config = yaml.safe_load(yaml_file) or {}
+    for item in config.get("encoder", {}).get("globals") or []:
+        if item["name"] == "recordType":
+            return item["value"]
+    return None
+
+
+def add_record_type(tree: xr.DataTree, label: str) -> xr.DataTree:
+    """Label every row of a tree with the kind of record it came from."""
+    datasets = {node.path: node.to_dataset(inherit=False) for node in tree.subtree}
+    meta = datasets["/MetaData"]
+    labels = np.full(meta.sizes[LocationKey], label, dtype=object)
+    datasets["/MetaData"] = meta.assign(
+        recordType=(LocationKey, labels, {"long_name": "Record Type"})
+    )
+    return xr.DataTree.from_dict(datasets)
+
+
 def tank_mappings(tank_id: str, dataset: str) -> list[tuple[str, str]]:
     """Return (mapping path, data type) for each mapping of a tank.
 
     A tank usually has one mapping, ``bAAA_xxBBB.yaml``. A tank holding several separate
     profiles has one per profile, ``bAAA_xxBBB_<profile>.yaml``, stored as
-    ``<dataset>_<profile>``.
+    ``<dataset>_<profile>``, or stacked in ``<dataset>`` if the mapping sets a
+    ``recordType`` global.
     """
     stem = tank_id.replace("/", "_")
     single = os.path.join(TanksConfigDir, f"{stem}.yaml")
@@ -269,7 +291,8 @@ def tank_mappings(tank_id: str, dataset: str) -> list[tuple[str, str]]:
     mappings = []
     for path in sorted(glob.glob(os.path.join(TanksConfigDir, f"{stem}_*.yaml"))):
         profile = os.path.basename(path)[len(stem) + 1 : -len(".yaml")]
-        mappings.append((path, f"{dataset}_{profile}"))
+        data_type = dataset if record_type(path) else f"{dataset}_{profile}"
+        mappings.append((path, data_type))
     return mappings
 
 
@@ -310,6 +333,9 @@ class MappedBufrTankIngestor(BufrTankIngestor):
             for category, tree in trees.items()
         }
         kept = {k: tree for k, tree in finished.items() if tree is not None}
+        label = record_type(self.bufr_yaml)
+        if label:
+            kept = {k: add_record_type(tree, label) for k, tree in kept.items()}
         if not kept:
             logger.warning(
                 f"No observations decoded from {file_path} for BUFR tank "

@@ -240,3 +240,26 @@ def test_missing_values_in_int64_variables_stay_missing_when_stored(
     )["MetaData/frequency"].values
     assert stored[0] == 1.5e9
     assert np.isnan(stored[1])
+
+
+def _write_mapping(path, record=None):
+    globals_ = (
+        [{"name": "recordType", "type": "string", "value": record}] if record else []
+    )
+    path.write_text(yaml.safe_dump({"encoder": {"globals": globals_}}))
+
+
+def test_tank_mappings_stacks_profiles_with_a_record_type(tmp_path, monkeypatch):
+    monkeypatch.setattr(bufr_tank, "TanksConfigDir", str(tmp_path))
+    _write_mapping(tmp_path / "b001_xx103_surface.yaml", "surface")
+    _write_mapping(tmp_path / "b001_xx103_currents.yaml", "currents")
+
+    mappings = bufr_tank.tank_mappings("b001/xx103", "surface_buoy_moored_bufr")
+
+    assert [data_type for _, data_type in mappings] == ["surface_buoy_moored_bufr"] * 2
+
+
+def test_add_record_type_labels_every_row():
+    tree = bufr_tank.add_record_type(_satellite_tree([1, 2]), "currents")
+
+    assert tree["MetaData/recordType"].values.tolist() == ["currents", "currents"]

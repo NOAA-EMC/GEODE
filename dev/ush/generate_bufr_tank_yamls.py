@@ -24,7 +24,8 @@ Tanks that share a dataset in table_a_mapping.yaml get the same set of variables
 the store cannot append data whose variables differ. See share_variables.
 
 A tank with several unrelated profiles (MULTI_PROFILE_TANKS) gets one mapping per profile,
-bAAA_xxBBB_<profile>.yaml, each stored as its own dataset.
+bAAA_xxBBB_<profile>.yaml, each stored as its own dataset. For STACKED_TANKS the profiles are
+stacked as rows of one dataset, labelled by MetaData/recordType.
 
 Inputs, one file per tank named bAAA_xxBBB.txt. Run these for each tank, inside the
 GEODE container:
@@ -312,6 +313,19 @@ MAX_NUMBERED_WITH_GROUP = 50
 # Tanks holding several unrelated profiles, one mapping per profile: tank -> profile -> sequence
 MULTI_PROFILE_TANKS = {
     "b003_xx010": {"bending_angle": "ROSEQ1", "refractivity": "ROSEQ3", "retrieval": "ROSEQ4"},
+    "b001_xx103": {
+        "surface": None,
+        "temperature_salinity": "IDMSMDBS/BBYSTSL",
+        "currents": "MOCMDBDS/BBYCURR",
+        "wave_spectra": "SPCTRWAV/BBYSPWV",
+    },
+}
+# Tanks whose profiles are stacked as rows of one dataset, labelled by MetaData/recordType,
+# instead of one dataset per profile
+STACKED_TANKS = {"b001_xx103"}
+# Sequences not stored for one tank: tank -> sequence -> reason
+TANK_DROPPED_SEQUENCES = {
+    "b008_xx019": {"RPSEQ3": "BUFR data-present bitmap for quality values that are empty"},
 }
 # A mnemonic no subset contains, for variables a tank does not have
 ABSENT_MNEMONIC = "ABSENT"
@@ -555,9 +569,10 @@ class Plan:
         self.drop = {}  # path -> reason
 
 
-def plan_sequences(dim_paths, queries, sizes, replications):
+def plan_sequences(dim_paths, queries, sizes, replications, tank_dropped=None):
     """Choose group_by, kept dimension or numbered variables for each sequence."""
     plan = Plan()
+    dropped_sequences = {**DROPPED_SEQUENCES, **(tank_dropped or {})}
     paths = concrete_dim_paths(dim_paths, queries)
     channels = {
         path: next(
@@ -577,7 +592,7 @@ def plan_sequences(dim_paths, queries, sizes, replications):
         if not nested(path) and channels[path] is None
         and replications.get(sequence_of(path), ("delayed",))[0] == "delayed"
         and sequence_of(path) not in SINGLE_SEQUENCES | set(TEXT_SEQUENCES)
-        and sequence_of(path) not in DROPPED_SEQUENCES and sequence_of(path) != RAW_REPORT_SEQUENCE
+        and sequence_of(path) not in dropped_sequences and sequence_of(path) != RAW_REPORT_SEQUENCE
         and (sequence_of(path) in VERTICAL_SEQUENCES or size(path) >= LONG_SEQUENCE)
     ]  # fmt: skip
     if candidates:
@@ -607,8 +622,8 @@ def plan_sequences(dim_paths, queries, sizes, replications):
             continue
         seq = sequence_of(path)
         kind, fixed = replications.get(seq, ("delayed", None))
-        if seq in DROPPED_SEQUENCES:
-            plan.drop[path] = DROPPED_SEQUENCES[seq]
+        if seq in dropped_sequences:
+            plan.drop[path] = dropped_sequences[seq]
         elif seq == RAW_REPORT_SEQUENCE:
             if plan.group_path is None:
                 plan.keep[path] = ("RawReportChunk", None, True)
@@ -641,10 +656,11 @@ def plan_sequences(dim_paths, queries, sizes, replications):
             plan.keep[plan.group_path] = (dimension_name(plan.group_path, None), None, True)
             plan.group_path = None
 
-    # A dimension nested in a numbered sequence is read from its first element only
+    # A dimension nested in a fixed-length sequence gets one dimension per element.
+    # A variable-length parent cannot have a stable set of those, so read its first element.
     for path in plan.keep:
         for parent in plan.number:
-            if path.startswith(parent + "/"):
+            if path.startswith(parent + "/") and replications.get(sequence_of(parent), ("delayed",))[0] != "fixed":
                 plan.number[parent] = 1
     return plan
 
@@ -725,7 +741,7 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
     if profile_sequence:
         # Use the location of each level; the report's location becomes a reference point
         for mnemonics, reference in ((("CLATH", "CLAT"), "referenceLatitude"), (("CLONH", "CLON"), "referenceLongitude")):
-            level = [q for q in remaining if q.mnemonic in mnemonics and q.parents == [profile_sequence]]
+            level = [q for q in remaining if q.mnemonic in mnemonics and "/".join(q.parents) == profile_sequence]
             if level:
                 top = next((q for q in remaining if q.mnemonic in mnemonics and not q.parents), None)
                 if top is not None:
@@ -754,7 +770,7 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
     uniquify(remaining, reserved)
 
     said = next((q for q in remaining if q.mnemonic == "SAID" and q.dim == 1 and not q.parents and q.index is None), None)  # fmt: skip
-    plan = plan_sequences(dim_paths, remaining, sizes, replications)
+    plan = plan_sequences(dim_paths, remaining, sizes, replications, TANK_DROPPED_SEQUENCES.get(tank))
     dropped = [q for q in remaining if not expand_query(q, plan)]
     remaining = [item for q in remaining for item in expand_query(q, plan)]
     names = set(reserved)
@@ -778,13 +794,19 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
     if profile:
         said = None  # split by dataset_splits.yaml in the ingestor instead
     dims = []
+    names_by_path = {query.path: query for query in remaining}
     for path, (name, source, varies) in plan.keep.items():
-        written = path
-        for parent, count in plan.number.items():
-            if count == 1 and path.startswith(parent + "/"):
-                written = written.replace(parent + "/", f"{parent}{{1}}/", 1)
-        dims.append((name, written, source, varies))
-
+        parent = next((p for p in plan.number if path.startswith(p + "/")), None)
+        if parent is None:
+            dims.append((name, path, source, varies))
+            continue
+        count = plan.number[parent]
+        for n in range(1, count + 1):
+            written = path.replace(f"{parent}/", f"{parent}{{{n}}}/", 1)
+            element_source = None
+            if source is not None:
+                element_source = names_by_path[source.path.replace(f"{parent[2:]}/", f"{parent[2:]}{{{n}}}/", 1)]
+            dims.append((f"{name}{n}" if count > 1 else name, written, element_source, varies))
     # ---- bufr section
     out = ["bufr:", "  subsets:", f"    - {subset}", ""]
     if group_key:
@@ -846,9 +868,11 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
     if category:
         globs.append(("dataCategory", category))
     if entry:
-        globs.append(("dataset", f"{entry['dataset']}_{profile}" if profile else entry["dataset"]))
+        globs.append(("dataset", f"{entry['dataset']}_{profile}" if profile and tank not in STACKED_TANKS else entry["dataset"]))
         globs.append(("dataFormat", entry["format"]))
         globs.append(("restricted", str(entry["restricted"]).lower()))
+    if tank in STACKED_TANKS:
+        globs.append(("recordType", profile))
     globs += [
         ("bufrCategory", f"{cat:03d}"),
         ("bufrLocalSubcategory", f"{sub:03d}"),
@@ -884,7 +908,7 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
         out.pop()
     return "\n".join(out) + "\n", {"said": said is not None, "dims": len(dims), "vars": len(ordered) + 3 + has_receipt,
                                    "mapped": entry is not None, "subset": subset,
-                                   "dataset": (f"{entry['dataset']}_{profile}" if profile else entry["dataset"]) if entry else None,
+                                   "dataset": (f"{entry['dataset']}_{profile}" if profile and tank not in STACKED_TANKS else entry["dataset"]) if entry else None,
                                    "unparsable": [q.query for q in unparsable],
                                    "group": plan.group_path}  # fmt: skip
 
@@ -1031,8 +1055,8 @@ def main():
             try:
                 subset, dim_paths, queries = parse_listing(path)
                 others = [s for s in profiles.values() if s and s != sequence]
-                queries = [q for q in queries if not (q.parents and q.parents[0] in others)]
-                dim_paths = [p for p in dim_paths if p.split("/")[1] not in others]
+                queries = [q for q in queries if not any(q.path.startswith(f"{o}/") for o in others)]
+                dim_paths = [p for p in dim_paths if not any(p[2:] == o or p[2:].startswith(f"{o}/") for o in others)]
                 table_a, table_b = read_tables(f"{tables_dir}/{tank}.txt")
                 replications = read_replications(f"{tables_dir}/{tank}.txt")
                 text, info = build(

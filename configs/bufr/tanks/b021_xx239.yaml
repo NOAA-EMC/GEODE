@@ -186,14 +186,32 @@ bufr:
     sensorChannelNumberIasichn:
       query: "*/IASICHN/CHNM"
 
-    startChannelIasisc:
+    startChannelIasisc1:
       query: "*/IASISC{1}/STCH"
 
-    endChannelIasisc:
+    startChannelIasisc2:
+      query: "*/IASISC{2}/STCH"
+
+    startChannelIasisc3:
+      query: "*/IASISC{3}/STCH"
+
+    endChannelIasisc1:
       query: "*/IASISC{1}/ENCH"
 
-    databaseIdentification:
+    endChannelIasisc2:
+      query: "*/IASISC{2}/ENCH"
+
+    endChannelIasisc3:
+      query: "*/IASISC{3}/ENCH"
+
+    databaseIdentification1:
       query: "*/IASISC{1}/DBID"
+
+    databaseIdentification2:
+      query: "*/IASISC{2}/DBID"
+
+    databaseIdentification3:
+      query: "*/IASISC{3}/DBID"
 
     instrumentIdentifier2:
       query: "*/SIID[2]"
@@ -201,20 +219,110 @@ bufr:
     avhrrChannelCombination:
       query: "*/AVHCST"
 
-    yAngularPositionFromCentreOfGravity:
+    yAngularPositionFromCentreOfGravity1:
       query: "*/IASIL1CS{1}/YAPCG"
 
-    zAngularPositionFromCentreOfGravity:
+    yAngularPositionFromCentreOfGravity2:
+      query: "*/IASIL1CS{2}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity3:
+      query: "*/IASIL1CS{3}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity4:
+      query: "*/IASIL1CS{4}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity5:
+      query: "*/IASIL1CS{5}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity6:
+      query: "*/IASIL1CS{6}/YAPCG"
+
+    yAngularPositionFromCentreOfGravity7:
+      query: "*/IASIL1CS{7}/YAPCG"
+
+    zAngularPositionFromCentreOfGravity1:
       query: "*/IASIL1CS{1}/ZAPCG"
 
-    sensorChannelNumberAvhrchn:
+    zAngularPositionFromCentreOfGravity2:
+      query: "*/IASIL1CS{2}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity3:
+      query: "*/IASIL1CS{3}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity4:
+      query: "*/IASIL1CS{4}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity5:
+      query: "*/IASIL1CS{5}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity6:
+      query: "*/IASIL1CS{6}/ZAPCG"
+
+    zAngularPositionFromCentreOfGravity7:
+      query: "*/IASIL1CS{7}/ZAPCG"
+
+    sensorChannelNumberAvhrchn1:
       query: "*/IASIL1CS{1}/AVHRCHN/CHNM"
 
-    channelScaleFactor1_2:
+    sensorChannelNumberAvhrchn2:
+      query: "*/IASIL1CS{2}/AVHRCHN/CHNM"
+
+    sensorChannelNumberAvhrchn3:
+      query: "*/IASIL1CS{3}/AVHRCHN/CHNM"
+
+    sensorChannelNumberAvhrchn4:
+      query: "*/IASIL1CS{4}/AVHRCHN/CHNM"
+
+    sensorChannelNumberAvhrchn5:
+      query: "*/IASIL1CS{5}/AVHRCHN/CHNM"
+
+    sensorChannelNumberAvhrchn6:
+      query: "*/IASIL1CS{6}/AVHRCHN/CHNM"
+
+    sensorChannelNumberAvhrchn7:
+      query: "*/IASIL1CS{7}/AVHRCHN/CHNM"
+
+    channelScaleFactor11:
       query: "*/IASIL1CS{1}/AVHRCHN/CHSF[1]"
 
-    channelScaleFactor2_2:
+    channelScaleFactor12:
+      query: "*/IASIL1CS{2}/AVHRCHN/CHSF[1]"
+
+    channelScaleFactor13:
+      query: "*/IASIL1CS{3}/AVHRCHN/CHSF[1]"
+
+    channelScaleFactor14:
+      query: "*/IASIL1CS{4}/AVHRCHN/CHSF[1]"
+
+    channelScaleFactor15:
+      query: "*/IASIL1CS{5}/AVHRCHN/CHSF[1]"
+
+    channelScaleFactor16:
+      query: "*/IASIL1CS{6}/AVHRCHN/CHSF[1]"
+
+    channelScaleFactor17:
+      query: "*/IASIL1CS{7}/AVHRCHN/CHSF[1]"
+
+    channelScaleFactor21:
       query: "*/IASIL1CS{1}/AVHRCHN/CHSF[2]"
+
+    channelScaleFactor22:
+      query: "*/IASIL1CS{2}/AVHRCHN/CHSF[2]"
+
+    channelScaleFactor23:
+      query: "*/IASIL1CS{3}/AVHRCHN/CHSF[2]"
+
+    channelScaleFactor24:
+      query: "*/IASIL1CS{4}/AVHRCHN/CHSF[2]"
+
+    channelScaleFactor25:
+      query: "*/IASIL1CS{5}/AVHRCHN/CHSF[2]"
+
+    channelScaleFactor26:
+      query: "*/IASIL1CS{6}/AVHRCHN/CHSF[2]"
+
+    channelScaleFactor27:
+      query: "*/IASIL1CS{7}/AVHRCHN/CHSF[2]"
 
     surfaceType1:
       query: "*/RSST[1]"
@@ -247,23 +355,95 @@ bufr:
     scaledIasiRadiance:
       query: "*/IASICHN/SCRA"
 
-    scoreQuantizationFactor:
+    scoreQuantizationFactor1:
       query: "*/IASISC{1}/SQFA"
 
-    residualRmsInBand:
+    scoreQuantizationFactor2:
+      query: "*/IASISC{2}/SQFA"
+
+    scoreQuantizationFactor3:
+      query: "*/IASISC{3}/SQFA"
+
+    residualRmsInBand1:
       query: "*/IASISC{1}/RRIB"
 
-    nonNormalisedPrincipalComponentScore:
+    residualRmsInBand2:
+      query: "*/IASISC{2}/RRIB"
+
+    residualRmsInBand3:
+      query: "*/IASISC{3}/RRIB"
+
+    nonNormalisedPrincipalComponentScore1:
       query: "*/IASISC{1}/IASIPCS/NNPCS"
 
-    cloudFree:
+    nonNormalisedPrincipalComponentScore2:
+      query: "*/IASISC{2}/IASIPCS/NNPCS"
+
+    nonNormalisedPrincipalComponentScore3:
+      query: "*/IASISC{3}/IASIPCS/NNPCS"
+
+    cloudFree1:
       query: "*/IASIL1CS{1}/FCPH"
 
-    scaledMeanAvhrrRadiance:
+    cloudFree2:
+      query: "*/IASIL1CS{2}/FCPH"
+
+    cloudFree3:
+      query: "*/IASIL1CS{3}/FCPH"
+
+    cloudFree4:
+      query: "*/IASIL1CS{4}/FCPH"
+
+    cloudFree5:
+      query: "*/IASIL1CS{5}/FCPH"
+
+    cloudFree6:
+      query: "*/IASIL1CS{6}/FCPH"
+
+    cloudFree7:
+      query: "*/IASIL1CS{7}/FCPH"
+
+    scaledMeanAvhrrRadiance1:
       query: "*/IASIL1CS{1}/AVHRCHN/SMRA"
 
-    scaledStandardDeviationAvhrrRadiance:
+    scaledMeanAvhrrRadiance2:
+      query: "*/IASIL1CS{2}/AVHRCHN/SMRA"
+
+    scaledMeanAvhrrRadiance3:
+      query: "*/IASIL1CS{3}/AVHRCHN/SMRA"
+
+    scaledMeanAvhrrRadiance4:
+      query: "*/IASIL1CS{4}/AVHRCHN/SMRA"
+
+    scaledMeanAvhrrRadiance5:
+      query: "*/IASIL1CS{5}/AVHRCHN/SMRA"
+
+    scaledMeanAvhrrRadiance6:
+      query: "*/IASIL1CS{6}/AVHRCHN/SMRA"
+
+    scaledMeanAvhrrRadiance7:
+      query: "*/IASIL1CS{7}/AVHRCHN/SMRA"
+
+    scaledStandardDeviationAvhrrRadiance1:
       query: "*/IASIL1CS{1}/AVHRCHN/SSDR"
+
+    scaledStandardDeviationAvhrrRadiance2:
+      query: "*/IASIL1CS{2}/AVHRCHN/SSDR"
+
+    scaledStandardDeviationAvhrrRadiance3:
+      query: "*/IASIL1CS{3}/AVHRCHN/SSDR"
+
+    scaledStandardDeviationAvhrrRadiance4:
+      query: "*/IASIL1CS{4}/AVHRCHN/SSDR"
+
+    scaledStandardDeviationAvhrrRadiance5:
+      query: "*/IASIL1CS{5}/AVHRCHN/SSDR"
+
+    scaledStandardDeviationAvhrrRadiance6:
+      query: "*/IASIL1CS{6}/AVHRCHN/SSDR"
+
+    scaledStandardDeviationAvhrrRadiance7:
+      query: "*/IASIL1CS{7}/AVHRCHN/SSDR"
 
     cloudAmount:
       query: "*/CLDMNT"
@@ -309,12 +489,36 @@ encoder:
     - name: Channel
       source: variables/sensorChannelNumberIasichn
       path: "*/IASICHN"
-    - name: Avhrchn
-      source: variables/sensorChannelNumberAvhrchn
+    - name: Avhrchn1
+      source: variables/sensorChannelNumberAvhrchn1
       path: "*/IASIL1CS{1}/AVHRCHN"
+    - name: Avhrchn2
+      source: variables/sensorChannelNumberAvhrchn2
+      path: "*/IASIL1CS{2}/AVHRCHN"
+    - name: Avhrchn3
+      source: variables/sensorChannelNumberAvhrchn3
+      path: "*/IASIL1CS{3}/AVHRCHN"
+    - name: Avhrchn4
+      source: variables/sensorChannelNumberAvhrchn4
+      path: "*/IASIL1CS{4}/AVHRCHN"
+    - name: Avhrchn5
+      source: variables/sensorChannelNumberAvhrchn5
+      path: "*/IASIL1CS{5}/AVHRCHN"
+    - name: Avhrchn6
+      source: variables/sensorChannelNumberAvhrchn6
+      path: "*/IASIL1CS{6}/AVHRCHN"
+    - name: Avhrchn7
+      source: variables/sensorChannelNumberAvhrchn7
+      path: "*/IASIL1CS{7}/AVHRCHN"
     # Variable length: appending can fail if the size changes
-    - name: Iasipcs
+    - name: Iasipcs1
       path: "*/IASISC{1}/IASIPCS"
+    # Variable length: appending can fail if the size changes
+    - name: Iasipcs2
+      path: "*/IASISC{2}/IASIPCS"
+    # Variable length: appending can fail if the size changes
+    - name: Iasipcs3
+      path: "*/IASISC{3}/IASIPCS"
 
   globals:
     - name: "description"
@@ -597,17 +801,41 @@ encoder:
       source: variables/sensorChannelNumberIasichn
       longName: "Channel Number"
 
-    - name: "MetaData/startChannelIasisc"
-      source: variables/startChannelIasisc
-      longName: "Start Channel"
+    - name: "MetaData/startChannelIasisc1"
+      source: variables/startChannelIasisc1
+      longName: "Start Channel (1)"
 
-    - name: "MetaData/endChannelIasisc"
-      source: variables/endChannelIasisc
-      longName: "End Channel"
+    - name: "MetaData/startChannelIasisc2"
+      source: variables/startChannelIasisc2
+      longName: "Start Channel (2)"
 
-    - name: "MetaData/databaseIdentification"
-      source: variables/databaseIdentification
-      longName: "Database Identification"
+    - name: "MetaData/startChannelIasisc3"
+      source: variables/startChannelIasisc3
+      longName: "Start Channel (3)"
+
+    - name: "MetaData/endChannelIasisc1"
+      source: variables/endChannelIasisc1
+      longName: "End Channel (1)"
+
+    - name: "MetaData/endChannelIasisc2"
+      source: variables/endChannelIasisc2
+      longName: "End Channel (2)"
+
+    - name: "MetaData/endChannelIasisc3"
+      source: variables/endChannelIasisc3
+      longName: "End Channel (3)"
+
+    - name: "MetaData/databaseIdentification1"
+      source: variables/databaseIdentification1
+      longName: "Database Identification (1)"
+
+    - name: "MetaData/databaseIdentification2"
+      source: variables/databaseIdentification2
+      longName: "Database Identification (2)"
+
+    - name: "MetaData/databaseIdentification3"
+      source: variables/databaseIdentification3
+      longName: "Database Identification (3)"
 
     - name: "MetaData/instrumentIdentifier2"
       source: variables/instrumentIdentifier2
@@ -617,27 +845,159 @@ encoder:
       source: variables/avhrrChannelCombination
       longName: "Avhrr Channel Combination"
 
-    - name: "MetaData/yAngularPositionFromCentreOfGravity"
-      source: variables/yAngularPositionFromCentreOfGravity
-      longName: "Y Angular Position From Centre Of Gravity"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity1"
+      source: variables/yAngularPositionFromCentreOfGravity1
+      longName: "Y Angular Position From Centre Of Gravity (1)"
       units: "degree"
 
-    - name: "MetaData/zAngularPositionFromCentreOfGravity"
-      source: variables/zAngularPositionFromCentreOfGravity
-      longName: "Z Angular Position From Centre Of Gravity"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity2"
+      source: variables/yAngularPositionFromCentreOfGravity2
+      longName: "Y Angular Position From Centre Of Gravity (2)"
       units: "degree"
 
-    - name: "MetaData/sensorChannelNumberAvhrchn"
-      source: variables/sensorChannelNumberAvhrchn
-      longName: "Channel Number"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity3"
+      source: variables/yAngularPositionFromCentreOfGravity3
+      longName: "Y Angular Position From Centre Of Gravity (3)"
+      units: "degree"
 
-    - name: "MetaData/channelScaleFactor1_2"
-      source: variables/channelScaleFactor1_2
-      longName: "Channel Scale Factor"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity4"
+      source: variables/yAngularPositionFromCentreOfGravity4
+      longName: "Y Angular Position From Centre Of Gravity (4)"
+      units: "degree"
 
-    - name: "MetaData/channelScaleFactor2_2"
-      source: variables/channelScaleFactor2_2
-      longName: "Channel Scale Factor"
+    - name: "MetaData/yAngularPositionFromCentreOfGravity5"
+      source: variables/yAngularPositionFromCentreOfGravity5
+      longName: "Y Angular Position From Centre Of Gravity (5)"
+      units: "degree"
+
+    - name: "MetaData/yAngularPositionFromCentreOfGravity6"
+      source: variables/yAngularPositionFromCentreOfGravity6
+      longName: "Y Angular Position From Centre Of Gravity (6)"
+      units: "degree"
+
+    - name: "MetaData/yAngularPositionFromCentreOfGravity7"
+      source: variables/yAngularPositionFromCentreOfGravity7
+      longName: "Y Angular Position From Centre Of Gravity (7)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity1"
+      source: variables/zAngularPositionFromCentreOfGravity1
+      longName: "Z Angular Position From Centre Of Gravity (1)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity2"
+      source: variables/zAngularPositionFromCentreOfGravity2
+      longName: "Z Angular Position From Centre Of Gravity (2)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity3"
+      source: variables/zAngularPositionFromCentreOfGravity3
+      longName: "Z Angular Position From Centre Of Gravity (3)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity4"
+      source: variables/zAngularPositionFromCentreOfGravity4
+      longName: "Z Angular Position From Centre Of Gravity (4)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity5"
+      source: variables/zAngularPositionFromCentreOfGravity5
+      longName: "Z Angular Position From Centre Of Gravity (5)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity6"
+      source: variables/zAngularPositionFromCentreOfGravity6
+      longName: "Z Angular Position From Centre Of Gravity (6)"
+      units: "degree"
+
+    - name: "MetaData/zAngularPositionFromCentreOfGravity7"
+      source: variables/zAngularPositionFromCentreOfGravity7
+      longName: "Z Angular Position From Centre Of Gravity (7)"
+      units: "degree"
+
+    - name: "MetaData/sensorChannelNumberAvhrchn1"
+      source: variables/sensorChannelNumberAvhrchn1
+      longName: "Channel Number (1)"
+
+    - name: "MetaData/sensorChannelNumberAvhrchn2"
+      source: variables/sensorChannelNumberAvhrchn2
+      longName: "Channel Number (2)"
+
+    - name: "MetaData/sensorChannelNumberAvhrchn3"
+      source: variables/sensorChannelNumberAvhrchn3
+      longName: "Channel Number (3)"
+
+    - name: "MetaData/sensorChannelNumberAvhrchn4"
+      source: variables/sensorChannelNumberAvhrchn4
+      longName: "Channel Number (4)"
+
+    - name: "MetaData/sensorChannelNumberAvhrchn5"
+      source: variables/sensorChannelNumberAvhrchn5
+      longName: "Channel Number (5)"
+
+    - name: "MetaData/sensorChannelNumberAvhrchn6"
+      source: variables/sensorChannelNumberAvhrchn6
+      longName: "Channel Number (6)"
+
+    - name: "MetaData/sensorChannelNumberAvhrchn7"
+      source: variables/sensorChannelNumberAvhrchn7
+      longName: "Channel Number (7)"
+
+    - name: "MetaData/channelScaleFactor11"
+      source: variables/channelScaleFactor11
+      longName: "Channel Scale Factor (1)"
+
+    - name: "MetaData/channelScaleFactor12"
+      source: variables/channelScaleFactor12
+      longName: "Channel Scale Factor (2)"
+
+    - name: "MetaData/channelScaleFactor13"
+      source: variables/channelScaleFactor13
+      longName: "Channel Scale Factor (3)"
+
+    - name: "MetaData/channelScaleFactor14"
+      source: variables/channelScaleFactor14
+      longName: "Channel Scale Factor (4)"
+
+    - name: "MetaData/channelScaleFactor15"
+      source: variables/channelScaleFactor15
+      longName: "Channel Scale Factor (5)"
+
+    - name: "MetaData/channelScaleFactor16"
+      source: variables/channelScaleFactor16
+      longName: "Channel Scale Factor (6)"
+
+    - name: "MetaData/channelScaleFactor17"
+      source: variables/channelScaleFactor17
+      longName: "Channel Scale Factor (7)"
+
+    - name: "MetaData/channelScaleFactor21"
+      source: variables/channelScaleFactor21
+      longName: "Channel Scale Factor (1)"
+
+    - name: "MetaData/channelScaleFactor22"
+      source: variables/channelScaleFactor22
+      longName: "Channel Scale Factor (2)"
+
+    - name: "MetaData/channelScaleFactor23"
+      source: variables/channelScaleFactor23
+      longName: "Channel Scale Factor (3)"
+
+    - name: "MetaData/channelScaleFactor24"
+      source: variables/channelScaleFactor24
+      longName: "Channel Scale Factor (4)"
+
+    - name: "MetaData/channelScaleFactor25"
+      source: variables/channelScaleFactor25
+      longName: "Channel Scale Factor (5)"
+
+    - name: "MetaData/channelScaleFactor26"
+      source: variables/channelScaleFactor26
+      longName: "Channel Scale Factor (6)"
+
+    - name: "MetaData/channelScaleFactor27"
+      source: variables/channelScaleFactor27
+      longName: "Channel Scale Factor (7)"
 
     - name: "MetaData/surfaceType1"
       source: variables/surfaceType1
@@ -681,30 +1041,138 @@ encoder:
       longName: "Scaled Iasi Radiance"
       units: "W m-2 sr-1 m"
 
-    - name: "ObsValue/scoreQuantizationFactor"
-      source: variables/scoreQuantizationFactor
-      longName: "Score Quantization Factor"
+    - name: "ObsValue/scoreQuantizationFactor1"
+      source: variables/scoreQuantizationFactor1
+      longName: "Score Quantization Factor (1)"
 
-    - name: "ObsValue/residualRmsInBand"
-      source: variables/residualRmsInBand
-      longName: "Residual Rms In Band"
+    - name: "ObsValue/scoreQuantizationFactor2"
+      source: variables/scoreQuantizationFactor2
+      longName: "Score Quantization Factor (2)"
 
-    - name: "ObsValue/nonNormalisedPrincipalComponentScore"
-      source: variables/nonNormalisedPrincipalComponentScore
-      longName: "NON-NORMALISED Principal Component Score"
+    - name: "ObsValue/scoreQuantizationFactor3"
+      source: variables/scoreQuantizationFactor3
+      longName: "Score Quantization Factor (3)"
 
-    - name: "ObsValue/cloudFree"
-      source: variables/cloudFree
-      longName: "Fraction Of Clear Pixels In Hirs Fov"
+    - name: "ObsValue/residualRmsInBand1"
+      source: variables/residualRmsInBand1
+      longName: "Residual Rms In Band (1)"
 
-    - name: "ObsValue/scaledMeanAvhrrRadiance"
-      source: variables/scaledMeanAvhrrRadiance
-      longName: "Scaled Mean Avhrr Radiance"
+    - name: "ObsValue/residualRmsInBand2"
+      source: variables/residualRmsInBand2
+      longName: "Residual Rms In Band (2)"
+
+    - name: "ObsValue/residualRmsInBand3"
+      source: variables/residualRmsInBand3
+      longName: "Residual Rms In Band (3)"
+
+    - name: "ObsValue/nonNormalisedPrincipalComponentScore1"
+      source: variables/nonNormalisedPrincipalComponentScore1
+      longName: "NON-NORMALISED Principal Component Score (1)"
+
+    - name: "ObsValue/nonNormalisedPrincipalComponentScore2"
+      source: variables/nonNormalisedPrincipalComponentScore2
+      longName: "NON-NORMALISED Principal Component Score (2)"
+
+    - name: "ObsValue/nonNormalisedPrincipalComponentScore3"
+      source: variables/nonNormalisedPrincipalComponentScore3
+      longName: "NON-NORMALISED Principal Component Score (3)"
+
+    - name: "ObsValue/cloudFree1"
+      source: variables/cloudFree1
+      longName: "Fraction Of Clear Pixels In Hirs Fov (1)"
+
+    - name: "ObsValue/cloudFree2"
+      source: variables/cloudFree2
+      longName: "Fraction Of Clear Pixels In Hirs Fov (2)"
+
+    - name: "ObsValue/cloudFree3"
+      source: variables/cloudFree3
+      longName: "Fraction Of Clear Pixels In Hirs Fov (3)"
+
+    - name: "ObsValue/cloudFree4"
+      source: variables/cloudFree4
+      longName: "Fraction Of Clear Pixels In Hirs Fov (4)"
+
+    - name: "ObsValue/cloudFree5"
+      source: variables/cloudFree5
+      longName: "Fraction Of Clear Pixels In Hirs Fov (5)"
+
+    - name: "ObsValue/cloudFree6"
+      source: variables/cloudFree6
+      longName: "Fraction Of Clear Pixels In Hirs Fov (6)"
+
+    - name: "ObsValue/cloudFree7"
+      source: variables/cloudFree7
+      longName: "Fraction Of Clear Pixels In Hirs Fov (7)"
+
+    - name: "ObsValue/scaledMeanAvhrrRadiance1"
+      source: variables/scaledMeanAvhrrRadiance1
+      longName: "Scaled Mean Avhrr Radiance (1)"
       units: "W m-2 sr-1 m"
 
-    - name: "ObsValue/scaledStandardDeviationAvhrrRadiance"
-      source: variables/scaledStandardDeviationAvhrrRadiance
-      longName: "Scaled Standard Deviation Avhrr Radiance"
+    - name: "ObsValue/scaledMeanAvhrrRadiance2"
+      source: variables/scaledMeanAvhrrRadiance2
+      longName: "Scaled Mean Avhrr Radiance (2)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledMeanAvhrrRadiance3"
+      source: variables/scaledMeanAvhrrRadiance3
+      longName: "Scaled Mean Avhrr Radiance (3)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledMeanAvhrrRadiance4"
+      source: variables/scaledMeanAvhrrRadiance4
+      longName: "Scaled Mean Avhrr Radiance (4)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledMeanAvhrrRadiance5"
+      source: variables/scaledMeanAvhrrRadiance5
+      longName: "Scaled Mean Avhrr Radiance (5)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledMeanAvhrrRadiance6"
+      source: variables/scaledMeanAvhrrRadiance6
+      longName: "Scaled Mean Avhrr Radiance (6)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledMeanAvhrrRadiance7"
+      source: variables/scaledMeanAvhrrRadiance7
+      longName: "Scaled Mean Avhrr Radiance (7)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledStandardDeviationAvhrrRadiance1"
+      source: variables/scaledStandardDeviationAvhrrRadiance1
+      longName: "Scaled Standard Deviation Avhrr Radiance (1)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledStandardDeviationAvhrrRadiance2"
+      source: variables/scaledStandardDeviationAvhrrRadiance2
+      longName: "Scaled Standard Deviation Avhrr Radiance (2)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledStandardDeviationAvhrrRadiance3"
+      source: variables/scaledStandardDeviationAvhrrRadiance3
+      longName: "Scaled Standard Deviation Avhrr Radiance (3)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledStandardDeviationAvhrrRadiance4"
+      source: variables/scaledStandardDeviationAvhrrRadiance4
+      longName: "Scaled Standard Deviation Avhrr Radiance (4)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledStandardDeviationAvhrrRadiance5"
+      source: variables/scaledStandardDeviationAvhrrRadiance5
+      longName: "Scaled Standard Deviation Avhrr Radiance (5)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledStandardDeviationAvhrrRadiance6"
+      source: variables/scaledStandardDeviationAvhrrRadiance6
+      longName: "Scaled Standard Deviation Avhrr Radiance (6)"
+      units: "W m-2 sr-1 m"
+
+    - name: "ObsValue/scaledStandardDeviationAvhrrRadiance7"
+      source: variables/scaledStandardDeviationAvhrrRadiance7
+      longName: "Scaled Standard Deviation Avhrr Radiance (7)"
       units: "W m-2 sr-1 m"
 
     - name: "ObsValue/cloudAmount"

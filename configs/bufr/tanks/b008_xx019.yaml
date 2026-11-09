@@ -3,6 +3,9 @@ bufr:
     - NC008019
 
   variables:
+    # Not mapped: see the sequence notes in dev/ush/generate_bufr_tank_yamls.py
+    #   */RPSEQ3/DPRI
+
     # MetaData
     timestamp:
       datetime:
@@ -67,9 +70,6 @@ bufr:
     decimalScaleOfFollowingValues2:
       query: "*/OLPDTSQ/DSFTV[2]"
 
-    dataPresentIndicator:
-      query: "*/RPSEQ3/DPRI"
-
     qualityInfoForLog10OfNumberDensityOfOzone1:
       query: "*/QMRKHSQ/QMLTNDO[1]"
 
@@ -123,9 +123,6 @@ encoder:
       path: "*/OLPDTSQ"
     - name: Qmrkhsq
       path: "*/QMRKHSQ"
-    # Variable length: appending can fail if the size changes
-    - name: Rpseq3
-      path: "*/RPSEQ3"
 
   globals:
     - name: "description"
@@ -254,10 +251,6 @@ encoder:
     - name: "MetaData/decimalScaleOfFollowingValues2"
       source: variables/decimalScaleOfFollowingValues2
       longName: "Decimal Scale Of Following Values"
-
-    - name: "MetaData/dataPresentIndicator"
-      source: variables/dataPresentIndicator
-      longName: "Data Present Indicator"
 
     - name: "MetaData/qualityInfoForLog10OfNumberDensityOfOzone1"
       source: variables/qualityInfoForLog10OfNumberDensityOfOzone1
