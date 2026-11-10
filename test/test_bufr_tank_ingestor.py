@@ -188,15 +188,52 @@ def test_split_rows_groups_several_ids_under_one_name():
     assert result["spire"].sizes["Location"] == 1
 
 
-def test_split_rows_keeps_unlisted_and_missing_ids_in_other(monkeypatch):
-    warnings = []
-    monkeypatch.setattr(bufr_tank.logger, "warning", warnings.append)
-
+def test_split_rows_keeps_unlisted_and_missing_ids_in_other(capsys):
     result = split_rows(_satellite_tree([269, 999, np.nan]), SPLIT)
 
     assert result["other"].sizes["Location"] == 2
     assert sum(tree.sizes["Location"] for tree in result.values()) == 3
-    assert "999" in warnings[0]
+    assert "999" in capsys.readouterr().err
+
+
+def test_split_rows_can_keep_the_number_of_an_unlisted_id():
+    result = split_rows(_satellite_tree([750, 227, np.nan]), SPLIT, unlisted=str)
+
+    assert sorted(result) == ["227", "cosmic2", "other"]
+
+
+def test_satellite_split_uses_names_from_the_table(tmp_path, monkeypatch):
+    names = tmp_path / "satellite_names.yaml"
+    names.write_text("224: npp\n225: n20\n")
+    monkeypatch.setattr(bufr_tank, "SatelliteNamesPath", str(names))
+    mapping = tmp_path / "b021_xx203.yaml"
+    mapping.write_text(
+        yaml.safe_dump(
+            {
+                "encoder": {
+                    "globals": [
+                        {
+                            "name": "satelliteVariable",
+                            "type": "string",
+                            "value": "MetaData/satelliteIdentifier",
+                        }
+                    ]
+                }
+            }
+        )
+    )
+
+    split = bufr_tank.satellite_split(str(mapping))
+    result = split_rows(_satellite_tree([224, 225, 226]), split, unlisted=str)
+
+    assert sorted(result) == ["226", "n20", "npp"]
+
+
+def test_mapping_without_a_satellite_variable_is_not_split(tmp_path):
+    mapping = tmp_path / "b031_xx124.yaml"
+    _write_mapping(mapping)
+
+    assert bufr_tank.satellite_split(str(mapping)) is None
 
 
 def test_tank_mappings_uses_one_file_per_profile(tmp_path, monkeypatch):
@@ -343,3 +380,16 @@ def test_batch_files_are_removed_afterward(tmp_path):
     seen = list(bufr_tank.iter_message_batches(str(path), 80))
 
     assert seen and not any(os.path.exists(batch) for batch in seen)
+
+
+def test_empty_repository_from_an_interrupted_write_is_treated_as_new(
+    tmp_path, monkeypatch
+):
+    manager, path = _manager(tmp_path, monkeypatch)
+    ic.Repository.create(ic.local_filesystem_storage(path))
+
+    manager.put("data", _tree(["a"]))
+
+    repo = ic.Repository.open(ic.local_filesystem_storage(path))
+    root = zarr.open_group(repo.readonly_session("main").store, mode="r")
+    assert root["MetaData/a"].shape == (2,)

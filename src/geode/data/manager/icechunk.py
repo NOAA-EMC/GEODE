@@ -47,6 +47,20 @@ def _check_append_schema(store: Any, data_tree: xr.DataTree, data_type: str) -> 
             )
 
 
+def _has_data(repo: ic.Repository) -> bool:
+    """Whether the repository holds data on main.
+
+    The repository is created before the first write's transaction, so a write that
+    is interrupted leaves an empty repository. That case is a new dataset, not an
+    append.
+    """
+    try:
+        root = zarr.open_group(repo.readonly_session("main").store, mode="r")
+    except zarr.errors.GroupNotFoundError:
+        return False
+    return next(root.keys(), None) is not None
+
+
 class IceChunkDataManager(DataManager):
     def __init__(self):
         super().__init__()
@@ -81,10 +95,9 @@ class IceChunkDataManager(DataManager):
         os.makedirs(os.path.dirname(file_path), exist_ok=True)
 
         storage = ic.local_filesystem_storage(file_path)
-        repository_exists = ic.Repository.exists(storage)
         repo = ic.Repository.open_or_create(storage)
 
-        if repository_exists:
+        if _has_data(repo):
             with repo.transaction("main", message=f"Append to {data_type}") as store:
                 _check_append_schema(store, data_tree, data_type)
                 for node in data_tree.subtree:

@@ -1,0 +1,35 @@
+# Names used when a dataset is split by satellite, stored as <dataset>_<name>.
+#
+# Keys are WMO Common Code Table C-5 satellite identifiers (BUFR SAID). Names follow the
+# curated configs in src/spoc/dump/config/atmosphere. A satellite that is not listed keeps
+# its number, for example radiance_atms_227.
+#
+# GNSS-RO is split by mission instead, in dataset_splits.yaml.
+
+3: metop-b
+4: metop-a
+5: metop-c
+55: m8
+56: m9
+57: m10
+70: m11
+173: h8
+174: h9
+206: n15
+209: n18
+223: n19
+224: npp
+225: n20
+226: n21
+249: f16
+270: g16
+271: g17
+272: g18
+273: g19
+285: f17
+286: f18
+288: gpm
+783: terra
+784: aqua
+785: aura
+854: multi

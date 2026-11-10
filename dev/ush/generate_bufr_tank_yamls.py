@@ -15,13 +15,17 @@ ways:
 - One variable-length vertical or long sequence becomes rows, using group_by_variable.
 - Channels and fixed sequences of LONG_SEQUENCE or more stay as dimensions.
 - Other sequences become numbered variables, using the fixed count from the BUFR table
-  or a limit based on bufr_tank_sequence_sizes.yaml. Anything over the limit is dropped.
+  or a limit based on SPOC's tank/aux/bufr_tank_sequence_sizes.yaml. Anything over the
+  limit is dropped.
 - Extra long variable-length sequences stay as dimensions, with a warning in the YAML.
 - Raw report text stays in pieces for tanks without levels, for the ingestor to join.
   Tanks with levels do not store it, and file names are never stored.
 
 Tanks that share a dataset in table_a_mapping.yaml get the same set of variables, because
 the store cannot append data whose variables differ. See share_variables.
+
+Satellite tanks are split by satellite in the ingestor, through a satelliteVariable
+global, except datasets that already name their satellite (SINGLE_SATELLITE_PREFIXES).
 
 A tank with several unrelated profiles (MULTI_PROFILE_TANKS) gets one mapping per profile,
 bAAA_xxBBB_<profile>.yaml, each stored as its own dataset. For STACKED_TANKS the profiles are
@@ -37,7 +41,7 @@ usage: generate_bufr_tank_yamls.py <queries_dir> <tables_dir> <geode_root> <out_
 
 Example, for one tank:
 
-    generate_bufr_tank_yamls.py queries tables . configs/bufr/tanks b002_xx009
+    generate_bufr_tank_yamls.py queries tables . src/spoc/tank/config b002_xx009
 """
 
 import collections
@@ -327,6 +331,8 @@ STACKED_TANKS = {"b001_xx103"}
 TANK_DROPPED_SEQUENCES = {
     "b008_xx019": {"RPSEQ3": "BUFR data-present bitmap for quality values that are empty"},
 }
+# Datasets that already name their satellite, so they are not split by satellite
+SINGLE_SATELLITE_PREFIXES = ("marine_altimeter_",)
 # A mnemonic no subset contains, for variables a tank does not have
 ABSENT_MNEMONIC = "ABSENT"
 
@@ -391,6 +397,12 @@ def read_curated(geode_root):
                 if query and "/" in entry["name"]:
                     mnem = re.sub(r"[\[{]\d+[\]}]", "", query).split("/")[-1].strip("[]")
                     votes[mnem][tuple(entry["name"].split("/", 1))] += 1
+    if not votes:
+        # Without these, names silently fall back to the BUFR descriptions
+        raise SystemExit(
+            f"No curated configs found under {geode_root}/src/spoc/dump/config/atmosphere; "
+            "initialize the spoc submodule or point geode_root at a checkout that has it"
+        )
     return {m: c.most_common(1)[0][0] for m, c in votes.items()}
 
 
@@ -843,9 +855,6 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
             out.append(f"    # {current}")
         out += [f"    {query.name}:", f'      query: "{query.query}"', ""]
 
-    if said is not None:
-        # No map: a mapped split silently drops satellites that are not listed
-        out += ["  splits:", "    satId:", "      category:", f"        variable: {said.name}", ""]
 
     # ---- encoder section
     out.append("encoder:")
@@ -873,6 +882,9 @@ def build(tank, subset, dim_paths, queries, table_a, table_b, curated, mapping, 
         globs.append(("restricted", str(entry["restricted"]).lower()))
     if tank in STACKED_TANKS:
         globs.append(("recordType", profile))
+    if said is not None and not (entry and entry["dataset"].startswith(SINGLE_SATELLITE_PREFIXES)):
+        # Split by satellite in the ingestor, named from configs/bufr/satellite_names.yaml
+        globs.append(("satelliteVariable", f"{said.group}/{said.name}"))
     globs += [
         ("bufrCategory", f"{cat:03d}"),
         ("bufrLocalSubcategory", f"{sub:03d}"),
@@ -1041,7 +1053,7 @@ def main():
     wanted = sys.argv[5:]
     curated = read_curated(geode_root)
     mapping = read_table_a_mapping(geode_root)
-    sizes_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "bufr_tank_sequence_sizes.yaml")
+    sizes_path = os.path.join(geode_root, "src", "spoc", "tank", "aux", "bufr_tank_sequence_sizes.yaml")
     with open(sizes_path) as handle:
         sizes = yaml.safe_load(handle)
     os.makedirs(out_dir, exist_ok=True)

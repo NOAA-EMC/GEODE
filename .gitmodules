@@ -1,5 +1,5 @@
 [submodule "src/spoc"]
 	path = src/spoc
 	url = https://github.com/noaa-emc/spoc
-	branch = feature/path_finder
+	branch = feature/bufr-tank-queries
 	ignore = all
