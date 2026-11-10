@@ -105,3 +105,27 @@ adding a tank can change the shared variable list for the others.
 
 Mnemonics starting with `.` are left out, with a comment in the YAML, because
 `bufr-query` cannot parse them yet.
+
+## Known limitations
+
+- **GNSS-RO levels without a location.** About 2% of rows in the `gnssro_bending_angle`
+  datasets have no latitude or longitude, and up to 9% for missions with few occultations.
+  These levels are in the source BUFR with an impact parameter and frequency but no
+  location, bending angle or quality value. They are stored as they are.
+- **Radar.** The radar mappings (`b006`) were made by an earlier version of the generator
+  and may not append cleanly from file to file.
+- **Restricted tanks** are refused unless `include_restricted` is set. Stored data does not
+  yet get restricted file permissions.
+- **Open `bufr-query` issues** that affect some tanks:
+    - [#171](https://github.com/NOAA-EMC/bufr-query/issues/171): mnemonics starting with
+      `.` cannot be queried, so they are left out of the mappings. These include the
+      periods of maximum and minimum temperature in some surface tanks.
+    - [#172](https://github.com/NOAA-EMC/bufr-query/issues/172): string values that are
+      not valid UTF-8 make the whole file fail. This affects `b000/xx101` and `b002/xx101`
+      on some days.
+    - [#174](https://github.com/NOAA-EMC/bufr-query/issues/174): a query path that names a
+      non-replicated sequence crashes. The generated mappings avoid such paths.
+    - [#175](https://github.com/NOAA-EMC/bufr-query/issues/175): `datetime` requires a
+      minute, so subsets without one use a query that reads as 0.
+    - [#176](https://github.com/NOAA-EMC/bufr-query/issues/176): category maps drop
+      unlisted values, so GEODE splits datasets itself.
