@@ -393,3 +393,21 @@ def test_empty_repository_from_an_interrupted_write_is_treated_as_new(
     repo = ic.Repository.open(ic.local_filesystem_storage(path))
     root = zarr.open_group(repo.readonly_session("main").store, mode="r")
     assert root["MetaData/a"].shape == (2,)
+
+
+def test_reports_without_grouped_values_keep_their_first_row():
+    # Two reports padded to two levels: the first has a level, the second has none
+    datasets = _datasets([100.0, np.nan, np.nan, np.nan], [5.0, np.nan, np.nan, np.nan])
+
+    result = drop_empty_rows(datasets, LEVELS, reports=2)
+
+    assert result["/"].sizes["Location"] == 2
+    assert result["/MetaData"].pressure.values[0] == 100.0
+    assert np.isnan(result["/MetaData"].pressure.values[1])
+
+
+def test_rows_that_do_not_divide_into_reports_raise():
+    datasets = _datasets([1.0, 2.0, 3.0], [1.0, 2.0, 3.0])
+
+    with pytest.raises(ValueError, match="do not divide"):
+        drop_empty_rows(datasets, LEVELS, reports=2)

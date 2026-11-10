@@ -108,14 +108,31 @@ def _has_value(data: xr.DataArray) -> xr.DataArray:
     return present.any(dim=other_dims) if other_dims else present
 
 
+def report_count(file_path: str, yaml_path: str) -> int:
+    """Count the reports in a file, using the query for the year of its timestamp."""
+    with open(yaml_path) as yaml_file:
+        config = yaml.safe_load(yaml_file)
+    year_query = config["bufr"]["variables"]["timestamp"]["datetime"]["year"]
+    query_set = bufr.QuerySet()
+    query_set.add("year", year_query)
+    with bufr.File(file_path) as bufr_file:
+        return int(bufr_file.execute(query_set).get("year").size)
+
+
 def drop_empty_rows(
-    datasets: dict[str, xr.Dataset], level_names: list[str]
+    datasets: dict[str, xr.Dataset],
+    level_names: list[str],
+    reports: int | None = None,
 ) -> dict[str, xr.Dataset]:
     """Remove rows where every variable from the grouped sequence is missing.
 
     ``group_by_variable`` pads each report to the longest report in the file. A row is
     only removed when all of its level values are missing, so a level with a missing
     coordinate but real data is kept.
+
+    When ``reports`` is given, a report with no values in the grouped sequence keeps its
+    first row, so its report-level values are not lost. Rows are then expected to be
+    ``reports`` blocks of equal length, in report order.
     """
     keep = None
     for full_name in level_names:
@@ -128,6 +145,15 @@ def drop_empty_rows(
 
     if keep is None:
         return datasets
+
+    if reports:
+        if keep.size % reports != 0:
+            raise ValueError(
+                f"{keep.size} grouped rows do not divide into {reports} reports"
+            )
+        blocks = keep.reshape(reports, -1).copy()
+        blocks[~blocks.any(axis=1), 0] = True
+        keep = blocks.ravel()
 
     indices = np.flatnonzero(keep)
     return {
@@ -225,10 +251,12 @@ def store_large_integers_as_float(
     return result
 
 
-def finalize_tree(tree: xr.DataTree, level_names: list[str]) -> xr.DataTree | None:
+def finalize_tree(
+    tree: xr.DataTree, level_names: list[str], reports: int | None = None
+) -> xr.DataTree | None:
     """Apply tank post-processing. Returns None when no observations remain."""
     datasets = {node.path: node.to_dataset(inherit=False) for node in tree.subtree}
-    datasets = join_raw_report(drop_empty_rows(datasets, level_names))
+    datasets = join_raw_report(drop_empty_rows(datasets, level_names, reports))
     datasets = use_variable_length_strings(datasets)
     datasets = store_large_integers_as_float(datasets)
 
@@ -454,11 +482,23 @@ class MappedBufrTankIngestor(BufrTankIngestor):
         decoded = container_to_xarray(
             container, bufr.encoders.Description(self.bufr_yaml)
         )
+        # Read each decoded file into memory in one pass. Selecting rows lazily (padding
+        # removal, splits) makes netCDF read in tiny pieces and was 45x slower overall.
+        # Memory is bounded by bufr_tank.max_batch_bytes.
+        for tree in decoded.values() if isinstance(decoded, dict) else [decoded]:
+            tree.load()
+            tree.close()
         level_names = level_variables(self.bufr_yaml)
+
+        # With one mapping, a report with nothing in the grouped sequence must keep a row
+        # for its other values. A tank with several mappings keeps those elsewhere.
+        reports = None
+        if level_names and len(self.mappings) == 1 and not isinstance(decoded, dict):
+            reports = report_count(file_path, self.bufr_yaml)
 
         trees = decoded if isinstance(decoded, dict) else {None: decoded}
         finished = {
-            category: finalize_tree(tree, level_names)
+            category: finalize_tree(tree, level_names, reports)
             for category, tree in trees.items()
         }
         kept = {k: tree for k, tree in finished.items() if tree is not None}
