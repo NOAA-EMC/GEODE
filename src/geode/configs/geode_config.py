@@ -137,3 +137,6 @@ class GeodeConfig(ConfigBase):
 # create singleton instance of GeodeConfig on module load
 geode_config = GeodeConfig(GeodeConfigPath)
 os.makedirs(geode_config.root_dir, exist_ok=True)
+
+if __name__ == "__main__":
+    print(GeodeConfig.describe(recursive=True))
