@@ -1,4 +1,4 @@
-"""Spatial superobbing (super-observation) filter for GEODE observation DataTrees."""
+"""Spatial superobbing filter for GEODE observation DataTrees."""
 
 from typing import Any, Callable
 import numpy as np
