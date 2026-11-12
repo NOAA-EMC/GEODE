@@ -1,14 +1,30 @@
 # From the NOAA OMD Ocelot project
 import os
 from copy import deepcopy
-from datetime import date, datetime
+from datetime import date, datetime, timezone
 from typing import Any
 
 _MISSING = object()
 
 
-class ConfigItem:
+def _indent(level: int) -> str:
+    return " " * level
+
+
+class ConfigError(Exception):
     pass
+
+
+class ConfigItem:
+    def describe(self, indent: int = 0, recursive: bool = False) -> str:
+        """Indent every line from the supplied absolute indentation level."""
+        return f"{_indent(indent)}{self.__class__.__name__}"
+
+    def describe_with_prefix(
+        self, prefix: str, indent: int = 0, recursive: bool = False
+    ) -> str:
+        description = self.describe(indent, recursive=recursive)
+        return f"{_indent(indent)}{prefix}{description.lstrip()}"
 
 
 class ConfigField(ConfigItem):
@@ -59,7 +75,8 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
         unknown_fields = config_dict.keys() - self._fields.keys()
         if unknown_fields:
             names = ", ".join(sorted(unknown_fields))
-            raise ValueError(f"Unknown field(s) for {type(self).__name__}: {names}")
+            raise ConfigError(f"Unknown field(s) for {type(self).__name__}: {names}. \n"
+                              f"\n{self.describe()}")
 
         for field_name in self._fields:
             field = self._fields[field_name]
@@ -68,9 +85,31 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
                 if isinstance(field, Optional):
                     field.load()
                     continue
-                raise ValueError(f"Missing required field '{field_name}' in config")
+                raise ConfigError(f"Missing required field '{field_name}' in config")
             if isinstance(field, (ConfigBase, ConfigField)):
                 field.load(config_dict[field_name])
+
+    @classmethod
+    def describe(
+        cls, indent: int = 0, recursive: bool = False, type_str: str | None = None
+    ) -> str:
+        """Align headers and fields and end each object block with a newline."""
+        lines = [f"{_indent(indent)}-- {cls.__name__} --"]
+        if type_str is not None:
+            lines.append(f'{_indent(indent)}type: "{type_str}"')
+        for name, field in cls._fields.items():
+            lines.append(
+                field.describe_with_prefix(f"{name}: ", indent, recursive=recursive)
+            )
+        return "\n".join(lines).rstrip("\n") + "\n"
+
+    def describe_with_prefix(
+        self, prefix: str, indent: int = 0, recursive: bool = False
+    ) -> str:
+        return (
+            f"{_indent(indent)}{prefix.rstrip()}\n"
+            f"{self.describe(indent + 4, recursive=recursive)}"
+        )
 
     def to_dict(self) -> dict[str, Any]:
         config_dict = {}
@@ -86,6 +125,9 @@ class ConfigBase(ConfigItem, metaclass=ConfigMeta):
                 value = value_dict
             config_dict[field_name] = value
         return config_dict
+
+    def warn(self, message: str) -> None:
+        print(f"WARNING: {self.__class__.__name__} {message}")
 
     # return the value of the field
     def __getattribute__(self, name):
@@ -107,22 +149,22 @@ class Choices(ConfigField):
     def load(self, value: dict | str) -> None:
         if isinstance(self.choices, list):
             if value not in self.choices:
-                raise ValueError(
+                raise ConfigError(
                     f"Value '{value}' not in allowed choices: {self.choices}"
                 )
             self.choice = value
 
         elif isinstance(self.choices, dict):
             if not isinstance(value, dict):
-                raise TypeError(f"Expected value of type dict but got {type(value)}")
+                raise ConfigError(f"Expected value of type dict but got {type(value)}")
 
             if "type" not in value:
-                raise ValueError(
+                raise ConfigError(
                     f"Missing 'type' key in value: {value}. Possible types are: {list(self.choices.keys())}"
                 )
 
             if value["type"] not in self.choices:
-                raise ValueError(
+                raise ConfigError(
                     f"Value '{value['type']}' not in allowed choices: {list(self.choices.keys())}"
                 )
 
@@ -133,6 +175,20 @@ class Choices(ConfigField):
             )
             self.choice.type = choice_type
 
+    def describe(self, indent: int = 0, recursive: bool = False) -> str:
+        if isinstance(self.choices, dict) and recursive:
+            lines = [f"{_indent(indent)}Choices {{"]
+            choice_indent = indent + 4
+            for name, choice in self.choices.items():
+                description = choice.describe(
+                    choice_indent, recursive=recursive, type_str=name
+                )
+                lines.append(description)
+            lines.append(f"{_indent(indent)}}}")
+            return "\n".join(lines)
+        choices = ", ".join(repr(name) for name in self.choices)
+        return f"{_indent(indent)}Choices {{{choices}}}"
+
 
 class Optional(ConfigField):
     type = None
@@ -141,6 +197,22 @@ class Optional(ConfigField):
         self.inner_type = inner_type
         self.default = default
         self._has_value = False
+
+    def describe(self, indent: int = 0, recursive: bool = False) -> str:
+        description = self.inner_type.describe(indent, recursive=recursive)
+        return self._describe_default(description)
+
+    def describe_with_prefix(
+        self, prefix: str, indent: int = 0, recursive: bool = False
+    ) -> str:
+        description = self.inner_type.describe_with_prefix(
+            prefix, indent, recursive=recursive
+        )
+        return self._describe_default(description)
+
+    def _describe_default(self, description: str) -> str:
+        header, newline, body = description.partition("\n")
+        return f"{header} (default={self.default}){newline}{body}"
 
     @property
     def value(self):
@@ -190,9 +262,14 @@ class ListField(ConfigField):
         super().__init__()
         self.inner_type = inner_type
 
+    def describe(self, indent: int = 0, recursive: bool = False) -> str:
+        return self.inner_type.describe_with_prefix(
+            "ListField of ", indent, recursive=recursive
+        )
+
     def load(self, value):
         if not isinstance(value, list):
-            raise TypeError(
+            raise ConfigError(
                 f"Expected value of type list but got {type(value).__name__}"
             )
 
@@ -208,6 +285,28 @@ class ListField(ConfigField):
         self.value = items
 
 
+class MapField(ConfigField):
+    def __init__(self, value_type: ConfigField | ConfigBase):
+        super().__init__()
+        self.value_type = value_type
+
+    def describe(self, indent: int = 0, recursive: bool = False) -> str:
+        return self.value_type.describe_with_prefix(
+            "MapField of ", indent, recursive=recursive
+        )
+
+    def load(self, value):
+        if not isinstance(value, dict):
+            raise ConfigError(f"Expected value of type dict but got {type(value).__name__}")
+
+        items = {}
+        for key, item in value.items():
+            field = deepcopy(self.value_type)
+            field.load(item)
+            items[str(key)] = field.value if isinstance(field, ConfigField) else field
+        self.value = items
+
+
 class DatetimeField(ConfigField):
     def load(self, value):
         if isinstance(value, str):
@@ -216,9 +315,9 @@ class DatetimeField(ConfigField):
             self.value = value
         elif isinstance(value, date):
             self.value = datetime(
-                value.year, value.month, value.day, tzinfo=datetime.timezone.utc
+                value.year, value.month, value.day, tzinfo=timezone.utc
             )
         else:
-            raise TypeError(
-                f"Expected value of type str or datetime but got {type(value)}"
+            raise ConfigError(
+                f"Expected value of type str, date, or datetime but got {type(value)}"
             )
