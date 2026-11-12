@@ -56,3 +56,6 @@ class DumpConfig(ConfigBase):
 
 # create singleton instance of DumpConfig on module load
 dump_config = DumpConfig(os.path.join(PackageConfigDir, "ncep_dump.yaml"))
+
+if __name__ == "__main__":
+    print(DumpConfig.describe(recursive=True))
