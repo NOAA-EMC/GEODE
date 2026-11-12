@@ -3,7 +3,7 @@ FROM python:3.12
 ARG USERNAME=developer
 ARG GSL_LITE_REF=v1.1.0
 ARG NCEPLIBS_BUFR_REF=v12.3.0
-ARG BUFR_QUERY_REF=v0.0.5
+ARG BUFR_QUERY_REF=develop
 
 RUN useradd -ms /bin/bash ${USERNAME}
 
@@ -62,6 +62,7 @@ RUN git clone --branch "${BUFR_QUERY_REF}" --depth 1 \
 # and cloud storage CLIs for S3/GCS.
 COPY pyproject.toml /tmp/geode/pyproject.toml
 COPY src /tmp/geode/src
+COPY configs /tmp/geode/configs
 RUN python -m pip install --no-cache-dir --upgrade pip && \
     python -m pip install --no-cache-dir "setuptools>=61,!=79.0.1" "/tmp/geode[dev]" pybind11==3.0.1 awscli==1.46.1 gsutil==5.37 && \
     rm -rf /tmp/geode
