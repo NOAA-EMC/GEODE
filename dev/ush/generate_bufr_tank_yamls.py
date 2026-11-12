@@ -335,6 +335,8 @@ TANK_DROPPED_SEQUENCES = {
 SINGLE_SATELLITE_PREFIXES = ("marine_altimeter_",)
 # A mnemonic no subset contains, for variables a tank does not have
 ABSENT_MNEMONIC = "ABSENT"
+# netCDF chunk length along Location; see add_chunks
+CHUNK_ROWS = 1_000_000
 
 
 def camel(text):
@@ -1048,6 +1050,41 @@ def share_variables(texts, types):
     return problems
 
 
+def add_chunks(text):
+    """Give every variable stored only on Location an explicit netCDF chunk size.
+
+    Without one, bufr-query's netCDF encoder makes a single chunk the size of the whole
+    variable. group_by_variable pads every report to the longest one, so a large file
+    can need more than netCDF's 4 GB chunk limit ("NetCDF: Bad chunk sizes"). bufr-query
+    clamps the chunk to the number of locations, so small files are not affected.
+
+    Variables on another dimension keep the default: they are not padded, and bufr-query
+    clamps the extra chunk sizes against the wrong dimension.
+    """
+    config = yaml.safe_load(text)
+    dim_paths = []
+    for dim in config["encoder"].get("dimensions") or []:
+        paths = dim.get("path") or dim.get("paths") or []
+        dim_paths += [paths] if isinstance(paths, str) else paths
+    variables = config["bufr"]["variables"]
+
+    def location_only(source):
+        query = variables[source.split("/")[-1]].get("query")
+        return query is None or not any(query.startswith(f"{path}/") for path in dim_paths)
+
+    out, section = [], None
+    for line in text.split("\n"):
+        out.append(line)
+        if line.startswith("  ") and not line.startswith("   ") and line.strip().endswith(":"):
+            section = line.strip()[:-1]
+        elif not line.startswith(" ") and line.strip():
+            section = None
+        match = re.fullmatch(r"      source: (variables/\S+)", line)
+        if section == "variables" and match and location_only(match.group(1)):
+            out.append(f"      chunks: [{CHUNK_ROWS}]")
+    return "\n".join(out)
+
+
 def main():
     queries_dir, tables_dir, geode_root, out_dir = sys.argv[1:5]
     wanted = sys.argv[5:]
@@ -1090,6 +1127,7 @@ def main():
             problems += share_variables(group, types)
             texts.update(group)
     for tank, text in texts.items():
+        text = add_chunks(text)
         yaml.safe_load(text)
         if not wanted or tank[:10] in wanted:
             with open(f"{out_dir}/{tank}.yaml", "w") as handle:

@@ -112,8 +112,15 @@ Mnemonics starting with `.` are left out, with a comment in the YAML, because
   datasets have no latitude or longitude, and up to 9% for missions with few occultations.
   These levels are in the source BUFR with an impact parameter and frequency but no
   location, bending angle or quality value. They are stored as they are.
-- **Radar.** The radar mappings (`b006`) were made by an earlier version of the generator
-  and may not append cleanly from file to file.
+- **Chunk sizes.** Variables stored only on `Location` set `chunks: [1000000]`, because
+  `bufr-query` otherwise writes each variable as a single netCDF chunk. Tanks grouped by a
+  sequence are padded to the longest report, and radar files then exceeded netCDF's 4 GB
+  chunk limit (`NetCDF: Bad chunk sizes`). Variables on other dimensions keep the default.
+- **HDF5 crash when opening decoded files.** Opening the netCDF file that `bufr-query`
+  writes can crash in HDF5 while it reads string fill values. `container_to_xarray` runs
+  `gc.collect()` before each open, which prevents it. With the chunked mappings the crash
+  happens every time without that call (CrIS direct broadcast and most `b255` tanks), so it
+  must not be removed until the cause is found.
 - **Restricted tanks** are refused unless `include_restricted` is set. Stored data does not
   yet get restricted file permissions.
 - **Open `bufr-query` issues** that affect some tanks:
