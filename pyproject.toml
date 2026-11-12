@@ -33,6 +33,11 @@ geode = "geode.cli:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.data-files]
+"share/geode/configs/bufr" = [
+	"configs/bufr/table_a_mapping.yaml",
+]
+
 [tool.setuptools.package-data]
 "geode.data.filter" = ["regions/*.geojson"]
 
