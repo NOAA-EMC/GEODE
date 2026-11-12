@@ -1,7 +1,7 @@
 # From the NOAA OMD Ocelot project
 import os
 from copy import deepcopy
-from datetime import date, datetime, timezone, UTC
+from datetime import date, datetime, UTC
 from typing import Any
 
 _MISSING = object()
