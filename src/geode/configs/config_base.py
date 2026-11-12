@@ -318,9 +318,7 @@ class DatetimeField(ConfigField):
         elif isinstance(value, datetime):
             self.value = value
         elif isinstance(value, date):
-            self.value = datetime(
-                value.year, value.month, value.day, tzinfo=UTC
-            )
+            self.value = datetime(value.year, value.month, value.day, tzinfo=UTC)
         else:
             raise ConfigError(
                 f"Expected value of type str, date, or datetime but got {type(value)}"
