@@ -87,12 +87,55 @@ class IceChunkDataManager(DataManager):
         repo = ic.Repository.open(storage)
         session = repo.readonly_session("main")
 
-        datatree = xr.open_datatree(
+        # Inspect group metadata without loading array data.
+        raw_tree = xr.open_datatree(
             session.store,
             engine="zarr",
             consolidated=False,
             create_default_indexes=False,
+            decode_times=False,
+            mask_and_scale=False,
         )
+
+        group_options = {}
+
+        for node in raw_tree.subtree:
+            ds = node.to_dataset(inherit=False)
+            mask_options = {}
+
+            for name, var in ds.variables.items():
+                fill_value = var.attrs.get("_FillValue")
+                units = var.attrs.get("units", "")
+
+                # Preserve integer variables and their integer fill values.
+                # Leave CF time variables under normal mask/scale decoding.
+                if (
+                    np.issubdtype(var.dtype, np.integer)
+                    and isinstance(fill_value, (int, np.integer))
+                    and "scale_factor" not in var.attrs
+                    and "add_offset" not in var.attrs
+                    and " since " not in units
+                ):
+                    mask_options[name] = False
+
+            group_options[node.path] = mask_options
+
+        raw_tree.close()
+
+        # Open each group separately so masking options are group-specific.
+        datasets = {}
+
+        for group, mask_options in group_options.items():
+            datasets[group] = xr.open_dataset(
+                session.store,
+                engine="zarr",
+                group=group.lstrip("/") or None,
+                consolidated=False,
+                create_default_indexes=False,
+                mask_and_scale=mask_options,
+            )
+
+        datatree = xr.DataTree.from_dict(datasets)
 
         datatree = apply(datatree, start_time, end_time, filters=filters)
 
