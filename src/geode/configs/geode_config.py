@@ -120,8 +120,10 @@ class BufrTankConfig(ConfigBase):
     include_restricted = Optional(BoolField(), default=False)
     # Ingest BUFR tanks missing from table_a_mapping.yaml under a bAAA_xxBBB dataset name
     allow_unmapped = Optional(BoolField(), default=False)
-    # Decode files larger than this in batches of messages to limit memory; 0 disables
-    max_batch_bytes = Optional(IntField(), default=256 * 1024**2)
+    # Decode files larger than this in batches of messages to limit memory; 0 disables.
+    # bufr-query can use up to about 350x the batch size (ABI clear-sky radiances), so
+    # 128 MB keeps the worst tank near 44 GB.
+    max_batch_bytes = Optional(IntField(), default=128 * 1024**2)
 
     def get_file_path(self, tank_id: str, day: datetime) -> str:
         return os.path.join(self.root_path, day.strftime("%Y%m%d"), tank_id)
