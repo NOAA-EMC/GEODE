@@ -6,7 +6,7 @@ from geode.data.filter import (
     region,  # noqa: F401
     time_window,  # noqa: F401
     variables,  # noqa: F401
-    thinning,  
+    thinning,
     superob,
 )
 from geode.data.filter.apply import apply
