@@ -1,6 +1,7 @@
 """Spatial superobbing filter for GEODE observation DataTrees."""
 
 from typing import Any
+
 import numpy as np
 import pandas as pd
 import xarray as xr

@@ -1,6 +1,7 @@
 """Spatial thinning filter for GEODE observation DataTrees."""
 
 from typing import Any
+
 import numpy as np
 import xarray as xr
 
