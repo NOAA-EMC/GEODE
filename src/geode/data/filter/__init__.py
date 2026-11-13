@@ -4,6 +4,8 @@ from geode.data.filter import (
     geojson,  # noqa: F401
     periodic,  # noqa: F401
     region,  # noqa: F401
+    superob,  # noqa: F401
+    thinning,  # noqa: F401
     time_window,  # noqa: F401
     variables,  # noqa: F401
 )
