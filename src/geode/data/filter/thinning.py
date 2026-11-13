@@ -5,6 +5,7 @@ import numpy as np
 import xarray as xr
 
 from geode.data.filter.base import AndFilter
+from geode.data.filter.distance_utils import cluster_by_distance_flat
 from geode.data.filter.factory import register_filter
 from geode.data.keys import LatitudeKey, LocationKey, LongitudeKey
 
@@ -17,7 +18,6 @@ class ThinningFilter(AndFilter):
         super().__init__(arg)
 
     def apply(self, datatree: xr.DataTree) -> xr.DataTree:
-        # Access latitude and longitude from DataTree (matches BoundingBoxFilter)
         lats = np.asarray(datatree[LatitudeKey].variable.values, dtype=np.float64)
         lons = np.asarray(datatree[LongitudeKey].variable.values, dtype=np.float64)
 
@@ -35,7 +35,10 @@ class ThinningFilter(AndFilter):
 
         # 1. Grid-based thinning (dlat, dlon)
         if grid is not None:
-            dlat, dlon = float(grid[0]), float(grid[1])
+            if isinstance(grid, (int, float)):
+                dlat = dlon = float(grid)
+            else:
+                dlat, dlon = float(grid[0]), float(grid[1])
             selected = self._thin_indices_grid(
                 lats, lons, valid_indices, dlat=dlat, dlon=dlon, strategy=strategy, seed=seed
             )
@@ -49,7 +52,6 @@ class ThinningFilter(AndFilter):
         else:
             return datatree
 
-        # Apply the selected indices across all groups containing the Location dimension
         return datatree.map_over_datasets(
             lambda ds: ds.isel({LocationKey: selected}) if LocationKey in ds.dims else ds
         )
@@ -63,7 +65,7 @@ class ThinningFilter(AndFilter):
         dlon: float,
         strategy: str,
         seed: int,
-    ) -> list[int]:
+    ) -> np.ndarray:
         sub_lats = lats[valid_indices]
         sub_lons = lons[valid_indices] % 360.0
 
@@ -73,31 +75,23 @@ class ThinningFilter(AndFilter):
         max_lon_bins = int(np.ceil(360.0 / dlon)) + 1
         cell_keys = lat_bins * max_lon_bins + lon_bins
 
-        rng = np.random.default_rng(seed)
-        selected: list[int] = []
-        unique_cells = np.unique(cell_keys)
+        # Single O(N log N) sort with secondary tie-breaker key per strategy
+        if strategy == "first":
+            order = np.argsort(cell_keys, kind="stable")
+        elif strategy == "random":
+            rand_keys = np.random.default_rng(seed).random(len(cell_keys))
+            order = np.lexsort((rand_keys, cell_keys))
+        elif strategy == "center":
+            center_lat = (lat_bins + 0.5) * dlat - 90.0
+            center_lon = (lon_bins + 0.5) * dlon
+            dist_sq = (sub_lats - center_lat) ** 2 + (sub_lons - center_lon) ** 2
+            order = np.lexsort((dist_sq, cell_keys))
+        else:
+            raise ValueError(f"Invalid thinning strategy: {strategy}")
 
-        for cell in unique_cells:
-            in_cell_mask = cell_keys == cell
-            in_cell_locs = valid_indices[in_cell_mask]
-
-            if strategy == "first":
-                selected.append(int(in_cell_locs[0]))
-            elif strategy == "random":
-                selected.append(int(rng.choice(in_cell_locs)))
-            elif strategy == "center":
-                c_lat_idx = cell // max_lon_bins
-                c_lon_idx = cell % max_lon_bins
-                center_lat = (c_lat_idx + 0.5) * dlat - 90.0
-                center_lon = (c_lon_idx + 0.5) * dlon
-
-                cl_lats = lats[in_cell_locs]
-                cl_lons = lons[in_cell_locs] % 360.0
-                dist_sq = (cl_lats - center_lat) ** 2 + (cl_lons - center_lon) ** 2
-                selected.append(int(in_cell_locs[np.argmin(dist_sq)]))
-
-        selected.sort()
-        return selected
+        sorted_cells = cell_keys[order]
+        first_in_cell = np.r_[True, sorted_cells[1:] != sorted_cells[:-1]]
+        return np.sort(valid_indices[order[first_in_cell]])
 
     @staticmethod
     def _thin_indices_distance(
@@ -107,31 +101,38 @@ class ThinningFilter(AndFilter):
         distance_km: float,
         strategy: str,
         seed: int,
-    ) -> list[int]:
-        from geode.data.filter.distance_utils import cluster_by_distance
-
-        clusters = cluster_by_distance(
-            lats[valid_indices],
-            lons[valid_indices],
-            distance_km=distance_km,
+    ) -> np.ndarray:
+        sub_lats = lats[valid_indices]
+        sub_lons = lons[valid_indices]
+        flat_indices, group_starts = cluster_by_distance_flat(
+            sub_lats, sub_lons, distance_km=distance_km
         )
-        rng = np.random.default_rng(seed)
-        selected: list[int] = []
+        if len(group_starts) == 0:
+            return np.empty(0, dtype=np.int64)
 
-        for cluster in clusters:
-            orig = valid_indices[cluster]
-            if strategy == "first":
-                selected.append(int(orig[0]))
-            elif strategy == "random":
-                selected.append(int(rng.choice(orig)))
-            elif strategy == "center":
-                c_lats = lats[orig]
-                c_lons = lons[orig]
-                dist_sq = (c_lats - np.mean(c_lats)) ** 2 + (c_lons - np.mean(c_lons)) ** 2
-                selected.append(int(orig[np.argmin(dist_sq)]))
+        orig = valid_indices[flat_indices]
+        counts = np.diff(np.append(group_starts, len(orig)))
 
-        selected.sort()
-        return selected
+        if strategy == "first":
+            selected = orig[group_starts]
+        elif strategy == "random":
+            rng = np.random.default_rng(seed)
+            offsets = rng.integers(0, counts)
+            selected = orig[group_starts + offsets]
+        elif strategy == "center":
+            c_lats = sub_lats[flat_indices]
+            c_lons = sub_lons[flat_indices]
+            mean_lats = np.add.reduceat(c_lats, group_starts) / counts
+            mean_lons = np.add.reduceat(c_lons, group_starts) / counts
+
+            group_ids = np.repeat(np.arange(len(counts)), counts)
+            dist_sq = (c_lats - mean_lats[group_ids]) ** 2 + (c_lons - mean_lons[group_ids]) ** 2
+            order = np.lexsort((dist_sq, group_ids))
+            selected = orig[order[group_starts]]
+        else:
+            raise ValueError(f"Invalid thinning strategy: {strategy}")
+
+        return np.sort(selected)
 
     @classmethod
     def _validate(cls, arg: dict[str, Any]) -> None:
