@@ -126,7 +126,13 @@ def test_grid_superobbing_mean_median_and_encoding(use_empty_data_lake):
         "2021-07-31T22:44:00",
         "2021-07-31T22:45:00",
         filters=[
-            {"superobbing": {"grid": [1.0, 1.25], "aggregation": "median", "min_obs": 2}}
+            {
+                "superobbing": {
+                    "grid": [1.0, 1.25],
+                    "aggregation": "median",
+                    "min_obs": 2,
+                }
+            }
         ],
     )
     np.testing.assert_allclose(
@@ -172,7 +178,9 @@ def test_superobbing_circular_longitude_and_polar_scaling(use_empty_data_lake):
         "polar_wrap_test",
         "2021-07-31T22:44:00",
         "2021-07-31T22:45:00",
-        filters=[{"superobbing": {"grid": [1.0, 1.0], "aggregation": "mean", "min_obs": 2}}],
+        filters=[
+            {"superobbing": {"grid": [1.0, 1.0], "aggregation": "mean", "min_obs": 2}}
+        ],
     )
 
     out_lons = result["MetaData/longitude"].values[:]
@@ -188,7 +196,9 @@ def test_distance_superobbing_and_thinning(use_empty_data_lake):
         dataset,
         "2021-07-31T22:44:00",
         "2021-07-31T22:45:00",
-        filters=[{"superobbing": {"distance": 100.0, "aggregation": "mean", "min_obs": 2}}],
+        filters=[
+            {"superobbing": {"distance": 100.0, "aggregation": "mean", "min_obs": 2}}
+        ],
     )
     assert len(superob_res["MetaData/latitude"].values[:]) == 1
     np.testing.assert_allclose(
