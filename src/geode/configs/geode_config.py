@@ -1,5 +1,4 @@
 import os
-import shutil
 from datetime import datetime
 
 import yaml
@@ -48,19 +47,8 @@ class Wis2Config(ConfigBase):
         return f"{protocol}://everyone:everyone@{self.broker_address}:{self.broker_port}/mqtt"
 
 
-@staticmethod
-def _find_table_path() -> str:
-    gettab_path = shutil.which("gettab")
-    if gettab_path is None:
-        raise FileNotFoundError(
-            "gettab path could not be found. Please ensure it is installed and in your PATH."
-        )
-
-    return os.path.realpath(os.path.join(gettab_path, "..", "..", "tables"))
-
-
 class BufrConfig(ConfigBase):
-    table_path = Optional(ResolvedPathField(), default=_find_table_path())
+    table_path = Optional(ResolvedPathField(), default=None)
 
     @property
     def map_dir(self) -> str:
@@ -149,3 +137,6 @@ class GeodeConfig(ConfigBase):
 # create singleton instance of GeodeConfig on module load
 geode_config = GeodeConfig(GeodeConfigPath)
 os.makedirs(geode_config.root_dir, exist_ok=True)
+
+if __name__ == "__main__":
+    print(GeodeConfig.describe(recursive=True))
