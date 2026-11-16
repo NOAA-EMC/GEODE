@@ -1,5 +1,6 @@
 """Spatial thinning filter for GEODE observation DataTrees."""
 
+import numbers
 from typing import Any
 
 import numpy as np
@@ -9,6 +10,7 @@ from geode.data.filter.base import AndFilter
 from geode.data.filter.distance_utils import (
     cluster_by_distance_flat,
     latlon_to_cartesian,
+    validate_spatial_resolution,
 )
 from geode.data.filter.factory import register_filter
 from geode.data.keys import LatitudeKey, LocationKey, LongitudeKey
@@ -39,7 +41,7 @@ class ThinningFilter(AndFilter):
 
         # 1. Grid-based thinning (dlat, dlon with cos(lat) longitude scaling)
         if grid is not None:
-            if isinstance(grid, (int, float)):
+            if isinstance(grid, numbers.Real):
                 dlat = dlon = float(grid)
             else:
                 dlat, dlon = float(grid[0]), float(grid[1])
@@ -159,9 +161,8 @@ class ThinningFilter(AndFilter):
 
     @classmethod
     def _validate(cls, arg: dict[str, Any]) -> None:
-        if "grid" not in arg and "distance" not in arg:
-            cls._validation_error("Thinning requires either 'grid' or 'distance' key.")
-        if "grid" in arg and "distance" in arg:
-            cls._validation_error("Specify either 'grid' or 'distance', not both.")
+        validate_spatial_resolution(arg, cls._validation_error)
+        if "units" in arg and arg["units"] not in ("km", "deg"):
+            cls._validation_error(f"Invalid units: {arg['units']!r}")
         if "strategy" in arg and arg["strategy"] not in ("center", "first", "random"):
             cls._validation_error(f"Invalid strategy: {arg['strategy']}")

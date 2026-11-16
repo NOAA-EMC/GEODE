@@ -1,5 +1,6 @@
-"""Spatial superobbing filter for GEODE observation DataTrees."""
+"""Spatial superobbing (observation aggregation) filter for GEODE DataTrees."""
 
+import numbers
 from typing import Any
 
 import numpy as np
@@ -7,150 +8,117 @@ import pandas as pd
 import xarray as xr
 
 from geode.data.filter.base import AndFilter
-from geode.data.filter.distance_utils import cluster_by_distance_flat
+from geode.data.filter.distance_utils import (
+    cluster_by_distance_flat,
+    validate_spatial_resolution,
+)
 from geode.data.filter.factory import register_filter
 from geode.data.keys import LatitudeKey, LocationKey, LongitudeKey
 
-_ZARR_ENCODING_KEYS = frozenset(
-    {"chunks", "preferred_chunks", "compressors", "filters", "shards", "serializer"}
-)
-_LON_VAR_NAME = LongitudeKey.split("/")[-1]
-
-
-def _copy_preserved_encoding(
-    source: xr.DataArray, target: xr.DataArray
-) -> xr.DataArray:
-    """Copy non-Zarr encoding metadata (units, _FillValue, dtype) onto target."""
-    if source.encoding:
-        target.encoding = {
-            k: v for k, v in source.encoding.items() if k not in _ZARR_ENCODING_KEYS
-        }
-    return target
+try:
+    from geode.data.keys import DatetimeKey as DateTimeKey
+except ImportError:
+    DateTimeKey = "MetaData/dateTime"
 
 
 @register_filter("superobbing")
-@register_filter("superob")
 class SuperobbingFilter(AndFilter):
-    """Aggregates (superobs) observations along the Location dimension using grid or distance bins."""
+    """Aggregates nearby observations along the Location dimension into superobs."""
 
     def __init__(self, arg: dict[str, Any]):
         super().__init__(arg)
 
     def apply(self, datatree: xr.DataTree) -> xr.DataTree:
+        was_sorted = bool(datatree.attrs.get("is_sorted", False))
+
         lats = np.asarray(datatree[LatitudeKey].variable.values, dtype=np.float64)
         lons = np.asarray(datatree[LongitudeKey].variable.values, dtype=np.float64)
 
         valid_mask = np.isfinite(lats) & np.isfinite(lons)
         valid_indices = np.where(valid_mask)[0]
         if len(valid_indices) == 0:
-            return datatree.map_over_datasets(
+            result = datatree.map_over_datasets(
                 lambda ds: ds.isel({LocationKey: []}) if LocationKey in ds.dims else ds
             )
+            result.attrs["is_sorted"] = was_sorted
+            return result
 
         grid = self.arg.get("grid")
         distance = self.arg.get("distance")
-        aggregation = self.arg.get("aggregation", self.arg.get("method", "mean"))
+        aggregation = self.arg.get("aggregation", "mean")
         min_obs = int(self.arg.get("min_obs", 1))
 
-        # 1. Grid-based binning (dlat, dlon with cos(lat) longitude scaling)
         if grid is not None:
-            if isinstance(grid, (int, float)):
-                dlat, dlon = float(grid), float(grid)
+            if isinstance(grid, numbers.Real):
+                dlat = dlon = float(grid)
             else:
                 dlat, dlon = float(grid[0]), float(grid[1])
-            kept_indices, group_starts = self._cluster_indices_grid(
-                lats, lons, valid_indices, dlat=dlat, dlon=dlon, min_obs=min_obs
+            orig, group_starts, counts = self._cluster_indices_grid(
+                lats,
+                lons,
+                valid_indices,
+                dlat=dlat,
+                dlon=dlon,
             )
-
-        # 2. Distance-based clustering (km or deg)
         elif distance is not None:
             units = self.arg.get("units", "km")
             distance_km = (
                 float(distance) * 111.195 if units == "deg" else float(distance)
             )
-            kept_indices, group_starts = self._cluster_indices_distance(
-                lats, lons, valid_indices, distance_km=distance_km, min_obs=min_obs
+            orig, group_starts, counts = self._cluster_indices_distance(
+                lats,
+                lons,
+                valid_indices,
+                distance_km=distance_km,
             )
         else:
             return datatree
 
-        if len(group_starts) == 0:
-            return datatree.map_over_datasets(
-                lambda ds: ds.isel({LocationKey: []}) if LocationKey in ds.dims else ds
+        keep_mask = counts >= min_obs
+        kept_starts = group_starts[keep_mask]
+        kept_counts = counts[keep_mask]
+
+        first_obs_indices = orig[kept_starts]
+        if len(kept_starts) == 0:
+            kept_indices = np.empty(0, dtype=np.int64)
+            group_ids = np.empty(0, dtype=np.int64)
+            kept_group_starts = np.empty(0, dtype=np.int64)
+        else:
+            member_offsets = np.concatenate(
+                [
+                    np.arange(s, s + c, dtype=np.int64)
+                    for s, c in zip(kept_starts, kept_counts)
+                ]
             )
+            kept_indices = orig[member_offsets]
+            group_ids = np.repeat(
+                np.arange(len(kept_starts), dtype=np.int64), kept_counts
+            )
+            kept_group_starts = np.zeros(len(kept_counts), dtype=np.int64)
+            if len(kept_counts) > 1:
+                kept_group_starts[1:] = np.cumsum(kept_counts[:-1])
 
-        # Restore original scan/time ordering rather than grid-cell key order
-        kept_indices, group_starts = self._sort_clusters_by_obs_order(
-            kept_indices, group_starts
-        )
-
-        return datatree.map_over_datasets(
+        result = datatree.map_over_datasets(
             lambda ds: self._aggregate_dataset(
-                ds, kept_indices, group_starts, aggregation=aggregation
+                ds,
+                kept_indices=kept_indices,
+                first_obs_indices=first_obs_indices,
+                group_ids=group_ids,
+                group_starts=kept_group_starts,
+                counts=kept_counts,
+                aggregation=aggregation,
             )
         )
+        return self._restore_timestamp_order(result, was_sorted=was_sorted)
 
     @staticmethod
-    def _filter_min_obs(
-        flat_indices: np.ndarray,
-        group_starts: np.ndarray,
-        min_obs: int,
-    ) -> tuple[np.ndarray, np.ndarray]:
-        """Vectorized filtering of CSR cluster arrays by minimum observation count."""
-        if len(group_starts) == 0 or min_obs <= 1:
-            return flat_indices, group_starts
-
-        counts = np.diff(np.append(group_starts, len(flat_indices)))
-        valid_groups = counts >= min_obs
-        if not np.any(valid_groups):
-            return np.empty(0, dtype=np.int64), np.empty(0, dtype=np.int64)
-
-        valid_counts = counts[valid_groups]
-        new_starts = np.empty(len(valid_counts), dtype=np.int64)
-        new_starts[0] = 0
-        np.cumsum(valid_counts[:-1], out=new_starts[1:])
-
-        old_starts = group_starts[valid_groups]
-        group_ids = np.repeat(np.arange(len(valid_counts)), valid_counts)
-        intra_offsets = np.arange(len(group_ids)) - new_starts[group_ids]
-        kept_indices = flat_indices[old_starts[group_ids] + intra_offsets]
-        return kept_indices, new_starts
-
-    @staticmethod
-    def _sort_clusters_by_obs_order(
-        kept_indices: np.ndarray,
-        group_starts: np.ndarray,
-    ) -> tuple[np.ndarray, np.ndarray]:
-        """Reorder CSR clusters so output follows original scan/time observation order."""
-        if len(group_starts) <= 1:
-            return kept_indices, group_starts
-
-        counts = np.diff(np.append(group_starts, len(kept_indices)))
-        min_obs_idx = np.minimum.reduceat(kept_indices, group_starts)
-        cluster_order = np.argsort(min_obs_idx, kind="stable")
-
-        sorted_starts = group_starts[cluster_order]
-        sorted_counts = counts[cluster_order]
-
-        new_starts = np.empty(len(sorted_counts), dtype=np.int64)
-        new_starts[0] = 0
-        np.cumsum(sorted_counts[:-1], out=new_starts[1:])
-
-        group_ids = np.repeat(np.arange(len(sorted_counts)), sorted_counts)
-        intra_offsets = np.arange(len(group_ids)) - new_starts[group_ids]
-        new_kept = kept_indices[sorted_starts[group_ids] + intra_offsets]
-        return new_kept, new_starts
-
-    @classmethod
     def _cluster_indices_grid(
-        cls,
         lats: np.ndarray,
         lons: np.ndarray,
         valid_indices: np.ndarray,
         dlat: float,
         dlon: float,
-        min_obs: int = 1,
-    ) -> tuple[np.ndarray, np.ndarray]:
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         sub_lats = lats[valid_indices]
         sub_lons = np.mod(lons[valid_indices], 360.0)
         sub_lons[sub_lons >= 360.0] = 0.0
@@ -167,204 +135,310 @@ class SuperobbingFilter(AndFilter):
         max_lon_bins = int(np.ceil(360.0 / dlon)) + 1
         cell_keys = lat_bins * max_lon_bins + lon_bins
 
-        sort_order = np.argsort(cell_keys, kind="stable")
-        sorted_cells = cell_keys[sort_order]
-        sorted_valid = valid_indices[sort_order]
+        order = np.argsort(cell_keys, kind="stable")
+        sorted_cells = cell_keys[order]
+        starts = np.r_[0, np.where(sorted_cells[1:] != sorted_cells[:-1])[0] + 1]
+        counts = np.diff(np.append(starts, len(order)))
 
-        group_starts = np.r_[
-            0, np.flatnonzero(sorted_cells[1:] != sorted_cells[:-1]) + 1
-        ]
-        return cls._filter_min_obs(sorted_valid, group_starts, min_obs)
+        # Order clusters by their earliest input index
+        sorted_orig = valid_indices[order]
+        cluster_order = np.argsort(sorted_orig[starts], kind="stable")
+        ordered_starts = starts[cluster_order]
+        ordered_counts = counts[cluster_order]
 
-    @classmethod
+        orig = np.concatenate(
+            [sorted_orig[s : s + c] for s, c in zip(ordered_starts, ordered_counts)]
+        )
+        group_starts = np.zeros(len(ordered_counts), dtype=np.int64)
+        if len(ordered_counts) > 1:
+            group_starts[1:] = np.cumsum(ordered_counts[:-1])
+
+        return orig, group_starts, ordered_counts
+
+    @staticmethod
     def _cluster_indices_distance(
-        cls,
         lats: np.ndarray,
         lons: np.ndarray,
         valid_indices: np.ndarray,
         distance_km: float,
-        min_obs: int = 1,
-    ) -> tuple[np.ndarray, np.ndarray]:
-        raw_flat, group_starts = cluster_by_distance_flat(
-            lats[valid_indices],
-            lons[valid_indices],
-            distance_km=distance_km,
+    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        sub_lats = lats[valid_indices]
+        sub_lons = lons[valid_indices]
+        flat_indices, group_starts = cluster_by_distance_flat(
+            sub_lats, sub_lons, distance_km=distance_km
         )
         if len(group_starts) == 0:
-            return np.empty(0, dtype=np.int64), np.empty(0, dtype=np.int64)
+            empty = np.empty(0, dtype=np.int64)
+            return empty, empty, empty
 
-        mapped_flat = valid_indices[raw_flat]
-        return cls._filter_min_obs(mapped_flat, group_starts, min_obs)
+        orig = valid_indices[flat_indices]
+        counts = np.diff(np.append(group_starts, len(orig)))
+        return orig, group_starts, counts
 
     @classmethod
     def _aggregate_dataset(
         cls,
         ds: xr.Dataset,
         kept_indices: np.ndarray,
+        first_obs_indices: np.ndarray,
+        group_ids: np.ndarray,
         group_starts: np.ndarray,
-        aggregation: str = "mean",
+        counts: np.ndarray,
+        aggregation: str,
     ) -> xr.Dataset:
         if LocationKey not in ds.dims:
             return ds
+        if len(first_obs_indices) == 0:
+            return ds.isel({LocationKey: []})
 
-        n_clusters = len(group_starts)
-        first_obs_indices = kept_indices[group_starts]
+        lon_var = LongitudeKey.split("/")[-1]
+        dt_var = DateTimeKey.split("/")[-1]
 
-        new_data_vars = {}
-        for var_name, da in ds.data_vars.items():
+        data_vars: dict[str, xr.DataArray] = {}
+        for name, da in ds.data_vars.items():
             if LocationKey not in da.dims:
-                new_data_vars[var_name] = da
-            else:
-                new_data_vars[var_name] = cls._aggregate_variable(
-                    da,
-                    kept_indices=kept_indices,
-                    group_starts=group_starts,
-                    first_obs_indices=first_obs_indices,
-                    aggregation=aggregation,
-                    is_longitude=(var_name == _LON_VAR_NAME),
-                )
+                data_vars[name] = da
+                continue
 
-        new_coords = {}
-        for coord_name, coord in ds.coords.items():
-            if LocationKey not in coord.dims:
-                new_coords[coord_name] = coord
-            elif coord_name == LocationKey:
-                new_coord = xr.DataArray(
-                    np.arange(n_clusters, dtype=coord.dtype),
-                    dims=[LocationKey],
-                    attrs=coord.attrs,
-                )
-                new_coords[coord_name] = _copy_preserved_encoding(coord, new_coord)
-            else:
-                new_coords[coord_name] = cls._aggregate_variable(
-                    coord,
-                    kept_indices=kept_indices,
-                    group_starts=group_starts,
-                    first_obs_indices=first_obs_indices,
-                    aggregation=aggregation,
-                    is_longitude=(coord_name == _LON_VAR_NAME),
-                )
+            is_longitude = name in (LongitudeKey, lon_var)
+            is_datetime = np.issubdtype(da.dtype, np.datetime64) or name in (
+                DateTimeKey,
+                dt_var,
+            )
+            data_vars[name] = cls._reduce_variable(
+                da,
+                kept_indices=kept_indices,
+                first_obs_indices=first_obs_indices,
+                group_ids=group_ids,
+                group_starts=group_starts,
+                counts=counts,
+                method=aggregation,
+                is_longitude=is_longitude,
+                is_datetime=is_datetime,
+            )
 
-        return xr.Dataset(data_vars=new_data_vars, coords=new_coords, attrs=ds.attrs)
+        coords: dict[str, Any] = {}
+        for name, coord in ds.coords.items():
+            if LocationKey in coord.dims:
+                coords[name] = coord.isel({LocationKey: first_obs_indices})
+            else:
+                coords[name] = coord
+
+        return xr.Dataset(data_vars=data_vars, coords=coords, attrs=ds.attrs)
 
     @staticmethod
-    def _reduceat_nanmean(
-        moved_kept: np.ndarray,
+    def _unwrap_longitudes_per_cluster(
+        lons: np.ndarray,
         group_starts: np.ndarray,
-        out_dtype: np.dtype,
-    ) -> np.ndarray:
-        """Vectorized NaN-aware mean along axis 0 with float64 accumulation."""
-        valid = np.isfinite(moved_kept)
-        zero = (
-            moved_kept.dtype.type(0)
-            if np.issubdtype(moved_kept.dtype, np.number)
-            else 0.0
-        )
-        clean = np.where(valid, moved_kept, zero)
-        sums = np.add.reduceat(clean, group_starts, axis=0, dtype=np.float64)
-        counts = np.add.reduceat(valid, group_starts, axis=0, dtype=np.int32)
-        with np.errstate(divide="ignore", invalid="ignore"):
-            return (sums / counts).astype(out_dtype)
+        counts: np.ndarray,
+    ) -> tuple[np.ndarray, bool]:
+        """Unwrap 1D longitudes around each cluster's circular reference."""
+        use_0_360 = not bool(np.any(lons < 0.0))
+        rad = np.deg2rad(lons)
+        valid = np.isfinite(rad)
+        sin_sum = np.add.reduceat(np.where(valid, np.sin(rad), 0.0), group_starts)
+        cos_sum = np.add.reduceat(np.where(valid, np.cos(rad), 0.0), group_starts)
+        circ_ref = np.rad2deg(np.arctan2(sin_sum, cos_sum))
+        ref_per_obs = np.repeat(circ_ref, counts)
+        unwrapped = ref_per_obs + ((lons - ref_per_obs + 180.0) % 360.0) - 180.0
+        return unwrapped, use_0_360
+
+    @staticmethod
+    def _restore_longitude_convention(lon: np.ndarray, use_0_360: bool) -> np.ndarray:
+        """Wrap reduced longitudes back into the input [0, 360) or [-180, 180) range."""
+        if use_0_360:
+            out = np.mod(lon, 360.0)
+            out[out >= 360.0] = 0.0
+            return out
+        return ((lon + 180.0) % 360.0) - 180.0
 
     @classmethod
-    def _aggregate_variable(
+    def _reduce_variable(
         cls,
         da: xr.DataArray,
         kept_indices: np.ndarray,
-        group_starts: np.ndarray,
         first_obs_indices: np.ndarray,
-        aggregation: str,
+        group_ids: np.ndarray,
+        group_starts: np.ndarray,
+        counts: np.ndarray,
+        method: str,
         is_longitude: bool = False,
+        is_datetime: bool = False,
     ) -> xr.DataArray:
-        loc_axis = da.get_axis_num(LocationKey)
-        vals = da.values
-        n_clusters = len(group_starts)
+        """Reduce a single variable along LocationKey without eager full-array reads."""
+        if len(first_obs_indices) == 0:
+            out = da.isel({LocationKey: []})
+            out.encoding = dict(da.encoding)
+            return out
 
-        # 1. Continuous physical variables (Radiance, BrightnessTemp, Lat, Lon)
-        if np.issubdtype(vals.dtype, np.floating):
-            moved = np.moveaxis(vals, loc_axis, 0)[kept_indices]
+        is_discrete = not (
+            is_longitude or is_datetime or np.issubdtype(da.dtype, np.floating)
+        )
+        if method == "first" or is_discrete:
+            out = da.isel({LocationKey: first_obs_indices})
+            out.encoding = dict(da.encoding)
+            return out
 
-            if aggregation == "mean":
-                if is_longitude:
-                    # Circular mean to handle antimeridian / 0-360 wrap-around
-                    rad = np.radians(moved.astype(np.float64))
-                    mean_sin = cls._reduceat_nanmean(
-                        np.sin(rad), group_starts, np.float64
-                    )
-                    mean_cos = cls._reduceat_nanmean(
-                        np.cos(rad), group_starts, np.float64
-                    )
-                    with np.errstate(invalid="ignore"):
-                        mean_deg = np.degrees(np.arctan2(mean_sin, mean_cos))
-                    # Preserve [0, 360) vs [-180, 180] convention of input array
-                    finite_lons = moved[np.isfinite(moved)]
-                    if (
-                        finite_lons.size > 0
-                        and finite_lons.min() >= 0.0
-                        and finite_lons.max() > 180.0
-                    ):
-                        mean_deg = np.mod(mean_deg, 360.0)
-                    out = mean_deg.astype(vals.dtype)
-                else:
-                    out = cls._reduceat_nanmean(moved, group_starts, vals.dtype)
-                out_arr = np.moveaxis(out, 0, loc_axis)
+        # Slice only kept cluster members BEFORE reading .values from storage
+        da_kept = da.isel({LocationKey: kept_indices})
+        loc_axis = da_kept.get_axis_num(LocationKey)
+        vals = np.asarray(da_kept.values)
+        moved = np.moveaxis(vals, loc_axis, 0)
+        trailing_shape = moved.shape[1:]
+        n_groups = len(group_starts)
 
-            else:  # aggregation == "median"
-                counts = np.diff(np.append(group_starts, len(kept_indices)))
-                ids = np.repeat(np.arange(n_clusters), counts)
-                flat = moved.reshape(len(moved), -1)
-                out = pd.DataFrame(flat).groupby(ids, sort=True).median().to_numpy()
-                out = out.reshape((n_clusters,) + moved.shape[1:]).astype(vals.dtype)
-                out_arr = np.moveaxis(out, 0, loc_axis)
-
-        # 2. Observation Timestamps (per-cluster base + NaT masking)
-        elif np.issubdtype(vals.dtype, np.datetime64):
-            moved = np.moveaxis(vals, loc_axis, 0)[kept_indices]
-            moved_int = moved.view(np.int64)
-            nat_val = np.iinfo(np.int64).min
-            max_val = np.iinfo(np.int64).max
-            valid_dt = moved_int != nat_val
-
-            counts = np.diff(np.append(group_starts, len(kept_indices)))
-            group_ids = np.repeat(np.arange(n_clusters), counts)
-
-            safe_for_min = np.where(valid_dt, moved_int, max_val)
-            cluster_base = np.minimum.reduceat(safe_for_min, group_starts, axis=0)
-            obs_base = cluster_base[group_ids]
-
-            offsets = np.where(valid_dt, moved_int - obs_base, 0)
-            sums = np.add.reduceat(offsets, group_starts, axis=0, dtype=np.int64)
-            valid_counts = np.add.reduceat(
-                valid_dt, group_starts, axis=0, dtype=np.int64
+        if is_longitude:
+            flat_lons = moved.reshape(-1)
+            unwrapped, use_0_360 = cls._unwrap_longitudes_per_cluster(
+                flat_lons, group_starts, counts
             )
-
-            has_valid = valid_counts > 0
-            mean_int = np.where(
-                has_valid,
-                cluster_base + (sums // np.maximum(valid_counts, 1)),
-                nat_val,
+            if method == "mean":
+                valid = np.isfinite(unwrapped)
+                sums = np.add.reduceat(np.where(valid, unwrapped, 0.0), group_starts)
+                valid_counts = np.add.reduceat(valid.astype(np.int64), group_starts)
+                raw_lon = np.where(
+                    valid_counts > 0, sums / np.maximum(valid_counts, 1), np.nan
+                )
+            elif method == "median":
+                raw_lon = (
+                    pd.Series(unwrapped)
+                    .groupby(group_ids, sort=False)
+                    .median()
+                    .to_numpy()
+                )
+            else:
+                raise ValueError(f"Unsupported superob aggregation: {method}")
+            reduced_moved = (
+                cls._restore_longitude_convention(raw_lon, use_0_360)
+                .reshape((n_groups, *trailing_shape))
+                .astype(da.dtype, copy=False)
             )
-            out_arr = np.moveaxis(mean_int.view(vals.dtype), 0, loc_axis)
-
-        # 3. Discrete variables (QC Flags, station IDs, indices, strings)
+        elif np.issubdtype(da.dtype, np.datetime64):
+            unit = np.datetime_data(da.dtype)[0]
+            epoch = np.datetime64("2020-01-01T00:00:00", unit)
+            flat_dt = moved.reshape(-1)
+            is_nat = np.isnat(flat_dt)
+            offsets = np.where(is_nat, np.nan, (flat_dt - epoch).astype(np.int64))
+            if method == "mean":
+                valid = ~is_nat
+                sums = np.add.reduceat(np.where(valid, offsets, 0.0), group_starts)
+                valid_counts = np.add.reduceat(valid.astype(np.int64), group_starts)
+                red_offsets = np.where(
+                    valid_counts > 0, sums / np.maximum(valid_counts, 1), np.nan
+                )
+            elif method == "median":
+                red_offsets = (
+                    pd.Series(offsets)
+                    .groupby(group_ids, sort=False)
+                    .median()
+                    .to_numpy()
+                )
+            else:
+                raise ValueError(f"Unsupported superob aggregation: {method}")
+            is_nan_out = np.isnan(red_offsets)
+            safe_int = np.where(is_nan_out, 0, np.round(red_offsets)).astype(np.int64)
+            td = safe_int.astype(f"timedelta64[{unit}]")
+            reduced_moved = np.where(
+                is_nan_out, np.datetime64("NaT", unit), epoch + td
+            ).reshape((n_groups, *trailing_shape))
         else:
-            out_arr = np.take(vals, first_obs_indices, axis=loc_axis)
+            flat = moved.reshape(len(moved), -1)
+            if method == "mean":
+                valid = np.isfinite(flat)
+                sums = np.add.reduceat(np.where(valid, flat, 0.0), group_starts, axis=0)
+                valid_counts = np.add.reduceat(
+                    valid.astype(np.int64), group_starts, axis=0
+                )
+                reduced_flat = np.where(
+                    valid_counts > 0, sums / np.maximum(valid_counts, 1), np.nan
+                )
+            elif method == "median":
+                reduced_flat = (
+                    pd.DataFrame(flat)
+                    .groupby(group_ids, sort=False)
+                    .median()
+                    .to_numpy()
+                )
+            else:
+                raise ValueError(f"Unsupported superob aggregation: {method}")
 
-        out_da = xr.DataArray(out_arr, dims=da.dims, attrs=da.attrs)
-        return _copy_preserved_encoding(da, out_da)
+            if is_datetime and np.issubdtype(da.dtype, np.integer):
+                reduced_flat = np.round(reduced_flat)
+            reduced_moved = reduced_flat.reshape((n_groups, *trailing_shape)).astype(
+                da.dtype, copy=False
+            )
+
+        out_vals = np.moveaxis(reduced_moved, 0, loc_axis)
+        non_loc_coords = {
+            k: v for k, v in da.coords.items() if LocationKey not in v.dims
+        }
+        out = xr.DataArray(
+            out_vals,
+            dims=da.dims,
+            coords=non_loc_coords,
+            attrs=da.attrs,
+        )
+        out.encoding = dict(da.encoding)
+        return out
+
+    @staticmethod
+    def _restore_timestamp_order(
+        result: xr.DataTree,
+        was_sorted: bool,
+    ) -> xr.DataTree:
+        """Preserve monotonic MetaData/dateTime order when input was sorted."""
+        if not was_sorted:
+            if "is_sorted" in result.attrs:
+                result.attrs["is_sorted"] = False
+            return result
+
+        try:
+            dt_vals = np.asarray(result[DateTimeKey].variable.values)
+        except KeyError:
+            result.attrs["is_sorted"] = False
+            return result
+
+        if dt_vals.size == 0:
+            result.attrs["is_sorted"] = True
+            return result
+
+        has_missing = (
+            np.isnat(dt_vals).any()
+            if np.issubdtype(dt_vals.dtype, np.datetime64)
+            else not np.isfinite(dt_vals).all()
+        )
+        if has_missing:
+            result.attrs["is_sorted"] = False
+            return result
+
+        sort_order = np.argsort(dt_vals, kind="stable")
+        if not np.array_equal(sort_order, np.arange(len(sort_order))):
+            result = result.map_over_datasets(
+                lambda ds: (
+                    ds.isel({LocationKey: sort_order}) if LocationKey in ds.dims else ds
+                )
+            )
+        result.attrs["is_sorted"] = True
+        return result
 
     @classmethod
     def _validate(cls, arg: dict[str, Any]) -> None:
-        if "grid" not in arg and "distance" not in arg:
-            cls._validation_error(
-                "Superobbing requires either 'grid' or 'distance' key."
-            )
-        if "grid" in arg and "distance" in arg:
-            cls._validation_error("Specify either 'grid' or 'distance', not both.")
-        agg = arg.get("aggregation", arg.get("method"))
-        if agg is not None and agg not in ("mean", "median"):
-            cls._validation_error(
-                f"Invalid aggregation: '{agg}'. Must be 'mean' or 'median'."
-            )
-        if "min_obs" in arg and int(arg["min_obs"]) < 1:
-            cls._validation_error("min_obs must be >= 1.")
+        validate_spatial_resolution(arg, cls._validation_error)
+        if "units" in arg and arg["units"] not in ("km", "deg"):
+            cls._validation_error(f"Invalid units: {arg['units']!r}")
+        if "aggregation" in arg and arg["aggregation"] not in (
+            "mean",
+            "median",
+            "first",
+        ):
+            cls._validation_error(f"Invalid aggregation: {arg['aggregation']!r}")
+        if "min_obs" in arg:
+            min_obs = arg["min_obs"]
+            if (
+                isinstance(min_obs, (bool, np.bool_))
+                or not isinstance(min_obs, numbers.Integral)
+                or int(min_obs) < 1
+            ):
+                cls._validation_error(
+                    f"Invalid 'min_obs': {min_obs!r}. Expected an integer >= 1."
+                )

@@ -3,7 +3,9 @@ import pytest
 import xarray as xr
 
 import geode
+from geode.data.filter.base import ValidationError
 from geode.data.filter.superob import SuperobbingFilter
+from geode.data.filter.thinning import ThinningFilter
 from geode.data.manager import data_manager
 
 
@@ -214,6 +216,162 @@ def test_distance_superobbing_and_thinning(use_empty_data_lake):
         filters=[{"thinning": {"distance": 100.0, "strategy": "center"}}],
     )
     assert len(thin_res["MetaData/latitude"].values[:]) == 2
+
+
+@pytest.mark.parametrize(
+    "bad_arg",
+    [
+        {},
+        {"grid": 1.0, "distance": 10.0},
+        {"grid": 0},
+        {"grid": -1.0},
+        {"grid": [1.0, 0.0]},
+        {"grid": [1.0, -0.5]},
+        {"grid": [1.0]},
+        {"grid": [1.0, 2.0, 3.0]},
+        {"grid": [np.nan, 1.0]},
+        {"grid": np.inf},
+        {"grid": True},
+        {"grid": [True, 1.0]},
+        {"distance": 0},
+        {"distance": -5.0},
+        {"distance": np.nan},
+        {"distance": np.inf},
+        {"distance": False},
+    ],
+)
+def test_reject_invalid_spatial_resolution(bad_arg):
+    with pytest.raises(ValidationError):
+        ThinningFilter(bad_arg)
+    with pytest.raises(ValidationError):
+        SuperobbingFilter(bad_arg)
+
+
+def test_superobbing_median_longitude_antimeridian_unwrap():
+    times = np.array(
+        ["2021-07-31T22:44:00", "2021-07-31T22:44:10"],
+        dtype="datetime64[s]",
+    )
+    # Polar cell with grid=[1, 10] straddling the +/-180 antimeridian
+    lats = np.array([89.2, 89.3], dtype=np.float64)
+    lons = np.array([179.9, -179.9], dtype=np.float64)
+
+    dt = xr.DataTree.from_dict(
+        {
+            "/": xr.Dataset(coords={"Location": np.arange(2, dtype=np.int32)}),
+            "/MetaData": xr.Dataset(
+                {
+                    "dateTime": ("Location", times),
+                    "latitude": ("Location", lats),
+                    "longitude": ("Location", lons),
+                }
+            ),
+        }
+    )
+
+    out = SuperobbingFilter(
+        {"grid": [1.0, 10.0], "aggregation": "median", "min_obs": 2}
+    ).apply(dt)
+
+    out_lon = float(out["MetaData/longitude"].values[0])
+    assert np.isclose(abs(out_lon), 180.0, atol=1e-6)
+
+
+def test_superobbing_preserves_sorted_timestamps():
+    # Timestamps [0, 2, 4, 100]s where (0, 3) share cell (0.1, 0.1)/(0.2, 0.2)
+    # and (1, 2) share cell (10.05, 10.05)/(10.10, 10.10);
+    # cluster means are 50s and 3s, which must be re-sorted to [3s, 50s].
+    times = np.array(
+        [
+            "2021-07-31T22:44:00",
+            "2021-07-31T22:44:02",
+            "2021-07-31T22:44:04",
+            "2021-07-31T22:45:40",
+        ],
+        dtype="datetime64[s]",
+    )
+    lats = np.array([0.1, 10.05, 10.10, 0.2], dtype=np.float64)
+    lons = np.array([0.1, 10.05, 10.10, 0.2], dtype=np.float64)
+    bt = np.array([100.0, 200.0, 220.0, 140.0], dtype=np.float32)
+
+    dt = xr.DataTree.from_dict(
+        {
+            "/": xr.Dataset(coords={"Location": np.arange(4, dtype=np.int32)}),
+            "/MetaData": xr.Dataset(
+                {
+                    "dateTime": ("Location", times),
+                    "latitude": ("Location", lats),
+                    "longitude": ("Location", lons),
+                }
+            ),
+            "/ObsValue": xr.Dataset({"brightnessTemperature": ("Location", bt)}),
+        }
+    )
+    dt.attrs["is_sorted"] = True
+
+    out = SuperobbingFilter(
+        {"grid": [1.0, 1.0], "aggregation": "mean", "min_obs": 2}
+    ).apply(dt)
+
+    assert out.attrs.get("is_sorted") is True
+    expected_times = np.array(
+        ["2021-07-31T22:44:03", "2021-07-31T22:44:50"],
+        dtype="datetime64[s]",
+    )
+    np.testing.assert_array_equal(out["MetaData/dateTime"].values, expected_times)
+    np.testing.assert_allclose(
+        out["ObsValue/brightnessTemperature"].values, [210.0, 120.0]
+    )
+
+
+def test_superobbing_avoids_eager_full_materialization():
+    class SliceTrackingArray:
+        def __init__(self, data: np.ndarray):
+            self._data = data
+            self.shape = data.shape
+            self.dtype = data.dtype
+            self.ndim = data.ndim
+            self.accessed_indices: list[np.ndarray] = []
+
+        def __getitem__(self, key):
+            first = key[0] if isinstance(key, tuple) else key
+            if isinstance(first, slice):
+                if first == slice(None):
+                    raise AssertionError(
+                        "Full Location axis read before cluster filtering"
+                    )
+                return self._data[key]
+            self.accessed_indices.append(np.asarray(first))
+            return self._data[key]
+
+        def __array__(self, dtype=None, copy=None):
+            raise AssertionError("Full array materialized before cluster filtering")
+
+        def __array_function__(self, func, types, args, kwargs):
+            return NotImplemented
+
+    raw_bt = np.array(
+        [[200.0, 210.0], [210.0, 220.0], [290.0, 260.0], [300.0, 310.0]],
+        dtype=np.float32,
+    )
+    tracker = SliceTrackingArray(raw_bt)
+    lazy_bt = xr.DataArray(xr.Variable(("Location", "Channel"), tracker, fastpath=True))
+
+    dt = _build_synthetic_atms_datatree()
+    dt["ObsValue"] = dt["ObsValue"].ds.assign(brightnessTemperature=lazy_bt)
+
+    # Index 3 is isolated and discarded by min_obs=2; only indices [0, 1, 2] may be read
+    out = SuperobbingFilter(
+        {"grid": [1.0, 1.25], "aggregation": "mean", "min_obs": 2}
+    ).apply(dt)
+
+    np.testing.assert_allclose(
+        out["ObsValue/brightnessTemperature"].values[0],
+        [700.0 / 3.0, 230.0],
+        rtol=1e-5,
+    )
+    assert len(tracker.accessed_indices) == 1
+    np.testing.assert_array_equal(tracker.accessed_indices[0], [0, 1, 2])
 
 
 if __name__ == "__main__":
