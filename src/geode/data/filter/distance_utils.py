@@ -66,6 +66,67 @@ def validate_spatial_resolution(
         )
 
 
+def parse_grid_resolution(grid: Any) -> tuple[float, float]:
+    """Normalize scalar or 2-element grid specification into ``(dlat, dlon)``."""
+    if np.ndim(grid) == 0:
+        dlat = dlon = float(grid)
+    else:
+        dlat, dlon = float(grid[0]), float(grid[1])
+    return dlat, dlon
+
+
+def compute_reduced_grid_cells(
+    lats: np.ndarray,
+    lons: np.ndarray,
+    dlat: float,
+    dlon: float,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    """Compute equal-area reduced lat/lon grid cell keys and cell centers.
+
+    Returns ``(cell_keys, lat_center, center_lon, norm_lons)``.
+    """
+    norm_lons = np.mod(lons, 360.0)
+    norm_lons[norm_lons >= 360.0] = 0.0
+
+    lat_bins = np.floor((lats + 90.0) / dlat).astype(np.int64)
+    lat_center = np.clip((lat_bins + 0.5) * dlat - 90.0, -90.0, 90.0)
+    n_lon = np.maximum(
+        1, np.round(360.0 * np.cos(np.radians(lat_center)) / dlon)
+    ).astype(np.int64)
+    lon_bins = np.minimum(
+        np.floor(norm_lons / 360.0 * n_lon).astype(np.int64), n_lon - 1
+    )
+    center_lon = (lon_bins + 0.5) * (360.0 / n_lon)
+
+    max_lon_bins = int(np.ceil(360.0 / dlon)) + 1
+    cell_keys = lat_bins * max_lon_bins + lon_bins
+    return cell_keys, lat_center, center_lon, norm_lons
+
+
+def expand_segment_indices(
+    starts: np.ndarray,
+    counts: np.ndarray,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Vectorized expansion of contiguous ``[start, start + count)`` ranges.
+
+    Returns ``(flat_offsets, group_ids, new_starts)`` without Python loops.
+    """
+    n_groups = len(counts)
+    if n_groups == 0:
+        empty = np.empty(0, dtype=np.int64)
+        return empty, empty, empty
+
+    total = int(counts.sum())
+    group_ids = np.repeat(np.arange(n_groups, dtype=np.int64), counts)
+    new_starts = np.zeros(n_groups, dtype=np.int64)
+    if n_groups > 1:
+        new_starts[1:] = np.cumsum(counts[:-1])
+
+    within_offset = np.arange(total, dtype=np.int64) - new_starts[group_ids]
+    flat_offsets = starts[group_ids] + within_offset
+    return flat_offsets, group_ids, new_starts
+
+
 def latlon_to_cartesian(lats: np.ndarray, lons: np.ndarray) -> np.ndarray:
     """Convert latitude/longitude in degrees to 3D unit-sphere Cartesian coordinates."""
     lat_rad = np.radians(lats)

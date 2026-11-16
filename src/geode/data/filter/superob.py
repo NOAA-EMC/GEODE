@@ -10,6 +10,9 @@ import xarray as xr
 from geode.data.filter.base import AndFilter
 from geode.data.filter.distance_utils import (
     cluster_by_distance_flat,
+    compute_reduced_grid_cells,
+    expand_segment_indices,
+    parse_grid_resolution,
     validate_spatial_resolution,
 )
 from geode.data.filter.factory import register_filter
@@ -49,10 +52,7 @@ class SuperobbingFilter(AndFilter):
         min_obs = int(self.arg.get("min_obs", 1))
 
         if grid is not None:
-            if isinstance(grid, numbers.Real):
-                dlat = dlon = float(grid)
-            else:
-                dlat, dlon = float(grid[0]), float(grid[1])
+            dlat, dlon = parse_grid_resolution(grid)
             orig, group_starts, counts = self._cluster_indices_grid(
                 lats,
                 lons,
@@ -79,24 +79,10 @@ class SuperobbingFilter(AndFilter):
         kept_counts = counts[keep_mask]
 
         first_obs_indices = orig[kept_starts]
-        if len(kept_starts) == 0:
-            kept_indices = np.empty(0, dtype=np.int64)
-            group_ids = np.empty(0, dtype=np.int64)
-            kept_group_starts = np.empty(0, dtype=np.int64)
-        else:
-            member_offsets = np.concatenate(
-                [
-                    np.arange(s, s + c, dtype=np.int64)
-                    for s, c in zip(kept_starts, kept_counts)
-                ]
-            )
-            kept_indices = orig[member_offsets]
-            group_ids = np.repeat(
-                np.arange(len(kept_starts), dtype=np.int64), kept_counts
-            )
-            kept_group_starts = np.zeros(len(kept_counts), dtype=np.int64)
-            if len(kept_counts) > 1:
-                kept_group_starts[1:] = np.cumsum(kept_counts[:-1])
+        member_offsets, group_ids, kept_group_starts = expand_segment_indices(
+            kept_starts, kept_counts
+        )
+        kept_indices = orig[member_offsets]
 
         result = datatree.map_over_datasets(
             lambda ds: self._aggregate_dataset(
@@ -120,20 +106,10 @@ class SuperobbingFilter(AndFilter):
         dlon: float,
     ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
         sub_lats = lats[valid_indices]
-        sub_lons = np.mod(lons[valid_indices], 360.0)
-        sub_lons[sub_lons >= 360.0] = 0.0
-
-        lat_bins = np.floor((sub_lats + 90.0) / dlat).astype(np.int64)
-        lat_center = np.clip((lat_bins + 0.5) * dlat - 90.0, -90.0, 90.0)
-        n_lon = np.maximum(
-            1, np.round(360.0 * np.cos(np.radians(lat_center)) / dlon)
-        ).astype(np.int64)
-        lon_bins = np.minimum(
-            np.floor(sub_lons / 360.0 * n_lon).astype(np.int64), n_lon - 1
+        sub_lons = lons[valid_indices]
+        cell_keys, _, _, _ = compute_reduced_grid_cells(
+            sub_lats, sub_lons, dlat=dlat, dlon=dlon
         )
-
-        max_lon_bins = int(np.ceil(360.0 / dlon)) + 1
-        cell_keys = lat_bins * max_lon_bins + lon_bins
 
         order = np.argsort(cell_keys, kind="stable")
         sorted_cells = cell_keys[order]
@@ -146,13 +122,10 @@ class SuperobbingFilter(AndFilter):
         ordered_starts = starts[cluster_order]
         ordered_counts = counts[cluster_order]
 
-        orig = np.concatenate(
-            [sorted_orig[s : s + c] for s, c in zip(ordered_starts, ordered_counts)]
+        flat_offsets, _, group_starts = expand_segment_indices(
+            ordered_starts, ordered_counts
         )
-        group_starts = np.zeros(len(ordered_counts), dtype=np.int64)
-        if len(ordered_counts) > 1:
-            group_starts[1:] = np.cumsum(ordered_counts[:-1])
-
+        orig = sorted_orig[flat_offsets]
         return orig, group_starts, ordered_counts
 
     @staticmethod
@@ -287,7 +260,7 @@ class SuperobbingFilter(AndFilter):
         trailing_shape = moved.shape[1:]
         n_groups = len(group_starts)
 
-        if is_longitude:
+        if is_longitude and trailing_shape == ():
             flat_lons = moved.reshape(-1)
             unwrapped, use_0_360 = cls._unwrap_longitudes_per_cluster(
                 flat_lons, group_starts, counts
@@ -313,7 +286,7 @@ class SuperobbingFilter(AndFilter):
                 .reshape((n_groups, *trailing_shape))
                 .astype(da.dtype, copy=False)
             )
-        elif np.issubdtype(da.dtype, np.datetime64):
+        elif np.issubdtype(da.dtype, np.datetime64) and trailing_shape == ():
             unit = np.datetime_data(da.dtype)[0]
             epoch = np.datetime64("2020-01-01T00:00:00", unit)
             flat_dt = moved.reshape(-1)
@@ -411,8 +384,8 @@ class SuperobbingFilter(AndFilter):
             result.attrs["is_sorted"] = False
             return result
 
-        sort_order = np.argsort(dt_vals, kind="stable")
-        if not np.array_equal(sort_order, np.arange(len(sort_order))):
+        if dt_vals.size > 1 and not np.all(dt_vals[1:] >= dt_vals[:-1]):
+            sort_order = np.argsort(dt_vals, kind="stable")
             result = result.map_over_datasets(
                 lambda ds: (
                     ds.isel({LocationKey: sort_order}) if LocationKey in ds.dims else ds

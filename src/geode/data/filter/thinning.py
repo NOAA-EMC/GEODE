@@ -1,6 +1,5 @@
 """Spatial thinning filter for GEODE observation DataTrees."""
 
-import numbers
 from typing import Any
 
 import numpy as np
@@ -9,7 +8,9 @@ import xarray as xr
 from geode.data.filter.base import AndFilter
 from geode.data.filter.distance_utils import (
     cluster_by_distance_flat,
+    compute_reduced_grid_cells,
     latlon_to_cartesian,
+    parse_grid_resolution,
     validate_spatial_resolution,
 )
 from geode.data.filter.factory import register_filter
@@ -41,10 +42,7 @@ class ThinningFilter(AndFilter):
 
         # 1. Grid-based thinning (dlat, dlon with cos(lat) longitude scaling)
         if grid is not None:
-            if isinstance(grid, numbers.Real):
-                dlat = dlon = float(grid)
-            else:
-                dlat, dlon = float(grid[0]), float(grid[1])
+            dlat, dlon = parse_grid_resolution(grid)
             selected = self._thin_indices_grid(
                 lats,
                 lons,
@@ -88,20 +86,10 @@ class ThinningFilter(AndFilter):
         seed: int,
     ) -> np.ndarray:
         sub_lats = lats[valid_indices]
-        sub_lons = np.mod(lons[valid_indices], 360.0)
-        sub_lons[sub_lons >= 360.0] = 0.0
-
-        lat_bins = np.floor((sub_lats + 90.0) / dlat).astype(np.int64)
-        lat_center = np.clip((lat_bins + 0.5) * dlat - 90.0, -90.0, 90.0)
-        n_lon = np.maximum(
-            1, np.round(360.0 * np.cos(np.radians(lat_center)) / dlon)
-        ).astype(np.int64)
-        lon_bins = np.minimum(
-            np.floor(sub_lons / 360.0 * n_lon).astype(np.int64), n_lon - 1
+        sub_lons = lons[valid_indices]
+        cell_keys, lat_center, center_lon, norm_lons = compute_reduced_grid_cells(
+            sub_lats, sub_lons, dlat=dlat, dlon=dlon
         )
-
-        max_lon_bins = int(np.ceil(360.0 / dlon)) + 1
-        cell_keys = lat_bins * max_lon_bins + lon_bins
 
         # Single O(N log N) sort with secondary tie-breaker key per strategy
         if strategy == "first":
@@ -110,8 +98,7 @@ class ThinningFilter(AndFilter):
             rand_keys = np.random.default_rng(seed).random(len(cell_keys))
             order = np.lexsort((rand_keys, cell_keys))
         elif strategy == "center":
-            center_lon = (lon_bins + 0.5) * (360.0 / n_lon)
-            dist_sq = (sub_lats - lat_center) ** 2 + (sub_lons - center_lon) ** 2
+            dist_sq = (sub_lats - lat_center) ** 2 + (norm_lons - center_lon) ** 2
             order = np.lexsort((dist_sq, cell_keys))
         else:
             raise ValueError(f"Invalid thinning strategy: {strategy}")
