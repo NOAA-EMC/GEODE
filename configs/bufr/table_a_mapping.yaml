@@ -127,7 +127,7 @@
       format: BUFR
       restricted: false
     103:
-      dataset: surface_buoy_moored_bufr
+      dataset: surface_buoy_moored
       format: BUFR
       restricted: false
     104:

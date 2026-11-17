@@ -2,6 +2,7 @@ from importlib.resources import files
 
 import numpy as np
 import pytest
+import xarray as xr
 
 import geode
 import geode.data.filter
@@ -282,6 +283,58 @@ def test_get_periodic(use_data_lake):
         result["MetaData/dateTime"].values,
         expected_times,
     )
+
+
+def test_get_preserves_integer_dtypes(use_empty_data_lake):
+    from geode.data.manager import data_manager
+
+    times = np.array(
+        [
+            "2021-07-31T22:44:00",
+            "2021-07-31T22:44:30",
+        ],
+        dtype="datetime64[s]",
+    )
+
+    station_id = np.array([101, 2147483647], dtype=np.int32)
+    temperature = np.array([12.5, 13.5], dtype=np.float32)
+
+    station_id_var = xr.DataArray(
+        station_id,
+        dims=("Location",),
+        attrs={"long_name": "Station identifier"},
+    )
+    station_id_var.encoding["_FillValue"] = np.int32(2147483647)
+
+    datatree = xr.DataTree.from_dict(
+        {
+            "/": xr.Dataset(coords={"Location": np.arange(2, dtype=np.int32)}),
+            "/MetaData": xr.Dataset(
+                {
+                    "dateTime": ("Location", times),
+                    "stationID": station_id_var,
+                }
+            ),
+            "/ObsValue": xr.Dataset(
+                {
+                    "temperature": ("Location", temperature),
+                }
+            ),
+        }
+    )
+
+    data_manager.put("dtype_test", datatree)
+
+    result = geode.get(
+        "dtype_test",
+        "2021-07-31T22:44:00",
+        "2021-07-31T22:45:00",
+    )
+
+    assert result["MetaData/stationID"].dtype == np.dtype("int32")
+    assert result["ObsValue/temperature"].dtype == np.dtype("float32")
+    assert result["MetaData/dateTime"].dtype == np.dtype("datetime64[ns]")
+    assert result["MetaData/stationID"].values[1] == 2147483647
 
 
 if __name__ == "__main__":

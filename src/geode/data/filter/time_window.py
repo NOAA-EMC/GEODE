@@ -19,21 +19,10 @@ class TimeWindowFilter(AndFilter):
     def apply(self, dt: xr.DataTree) -> xr.DataTree:
         is_sorted = dt.attrs.get(IsSortedFlag, False)
 
-        border = np.timedelta64(0, "s")
-        if not is_sorted:
-            # look 30 minutes beyond the time window for unsorted data
-            border = np.timedelta64(30, "m")
+        if is_sorted:
+            return self._slice_window(dt, np.timedelta64(0, "s"))
 
-        # Decimate the the data tree based on the time window first. This
-        # eliminates the vast majority of irrelevant data points without
-        # loading all the datetime values into memory.
-        dt = self._slice_window(dt, border)
-
-        if not is_sorted:
-            # Filter out any remaining data points outside the time window.
-            dt = self._apply_mask(dt)
-
-        return dt
+        return self._apply_mask(dt)
 
     def _slice_window(self, dt: xr.DataTree, border: np.timedelta64) -> xr.DataTree:
 
