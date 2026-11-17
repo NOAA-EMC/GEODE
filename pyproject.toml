@@ -43,9 +43,6 @@ where = ["src"]
 "share/geode/configs/bufr/tanks" = [
 	"configs/bufr/tanks/*.yaml",
 ]
-"share/geode/configs/bufr" = [
-	"configs/bufr/table_a_mapping.yaml",
-]
 
 [tool.setuptools.package-data]
 "geode.data.filter" = ["regions/*.geojson"]
