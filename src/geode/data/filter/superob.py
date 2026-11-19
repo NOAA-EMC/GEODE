@@ -1,6 +1,7 @@
 """Spatial superobbing (observation aggregation) filter for GEODE DataTrees."""
 
 import numbers
+from dataclasses import dataclass
 from typing import Any
 
 import numpy as np
@@ -22,6 +23,13 @@ try:
     from geode.data.keys import DatetimeKey as DateTimeKey
 except ImportError:
     DateTimeKey = "MetaData/dateTime"
+
+
+@dataclass(frozen=True, slots=True)
+class _ClusterIndices:
+    orig: np.ndarray
+    group_starts: np.ndarray
+    counts: np.ndarray
 
 
 @register_filter("superobbing")
@@ -53,7 +61,7 @@ class SuperobbingFilter(AndFilter):
 
         if grid is not None:
             dlat, dlon = parse_grid_resolution(grid)
-            orig, group_starts, counts = self._cluster_indices_grid(
+            clusters = self._cluster_indices_grid(
                 lats,
                 lons,
                 valid_indices,
@@ -65,7 +73,7 @@ class SuperobbingFilter(AndFilter):
             distance_km = (
                 float(distance) * 111.195 if units == "deg" else float(distance)
             )
-            orig, group_starts, counts = self._cluster_indices_distance(
+            clusters = self._cluster_indices_distance(
                 lats,
                 lons,
                 valid_indices,
@@ -74,23 +82,21 @@ class SuperobbingFilter(AndFilter):
         else:
             return datatree
 
-        keep_mask = counts >= min_obs
-        kept_starts = group_starts[keep_mask]
-        kept_counts = counts[keep_mask]
+        keep_mask = clusters.counts >= min_obs
+        kept_starts = clusters.group_starts[keep_mask]
+        kept_counts = clusters.counts[keep_mask]
 
-        first_obs_indices = orig[kept_starts]
-        member_offsets, group_ids, kept_group_starts = expand_segment_indices(
-            kept_starts, kept_counts
-        )
-        kept_indices = orig[member_offsets]
+        first_obs_indices = clusters.orig[kept_starts]
+        expanded = expand_segment_indices(kept_starts, kept_counts)
+        kept_indices = clusters.orig[expanded.flat_offsets]
 
         result = datatree.map_over_datasets(
             lambda ds: self._aggregate_dataset(
                 ds,
                 kept_indices=kept_indices,
                 first_obs_indices=first_obs_indices,
-                group_ids=group_ids,
-                group_starts=kept_group_starts,
+                group_ids=expanded.group_ids,
+                group_starts=expanded.new_starts,
                 counts=kept_counts,
                 aggregation=aggregation,
             )
@@ -104,12 +110,12 @@ class SuperobbingFilter(AndFilter):
         valid_indices: np.ndarray,
         dlat: float,
         dlon: float,
-    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    ) -> _ClusterIndices:
         sub_lats = lats[valid_indices]
         sub_lons = lons[valid_indices]
-        cell_keys, _, _, _ = compute_reduced_grid_cells(
+        cell_keys = compute_reduced_grid_cells(
             sub_lats, sub_lons, dlat=dlat, dlon=dlon
-        )
+        ).cell_keys
 
         order = np.argsort(cell_keys, kind="stable")
         sorted_cells = cell_keys[order]
@@ -122,11 +128,9 @@ class SuperobbingFilter(AndFilter):
         ordered_starts = starts[cluster_order]
         ordered_counts = counts[cluster_order]
 
-        flat_offsets, _, group_starts = expand_segment_indices(
-            ordered_starts, ordered_counts
-        )
-        orig = sorted_orig[flat_offsets]
-        return orig, group_starts, ordered_counts
+        expanded = expand_segment_indices(ordered_starts, ordered_counts)
+        orig = sorted_orig[expanded.flat_offsets]
+        return _ClusterIndices(orig, expanded.new_starts, ordered_counts)
 
     @staticmethod
     def _cluster_indices_distance(
@@ -134,19 +138,19 @@ class SuperobbingFilter(AndFilter):
         lons: np.ndarray,
         valid_indices: np.ndarray,
         distance_km: float,
-    ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    ) -> _ClusterIndices:
         sub_lats = lats[valid_indices]
         sub_lons = lons[valid_indices]
-        flat_indices, group_starts = cluster_by_distance_flat(
+        flat_clusters = cluster_by_distance_flat(
             sub_lats, sub_lons, distance_km=distance_km
         )
-        if len(group_starts) == 0:
+        if len(flat_clusters.group_starts) == 0:
             empty = np.empty(0, dtype=np.int64)
-            return empty, empty, empty
+            return _ClusterIndices(empty, empty, empty)
 
-        orig = valid_indices[flat_indices]
-        counts = np.diff(np.append(group_starts, len(orig)))
-        return orig, group_starts, counts
+        orig = valid_indices[flat_clusters.flat_indices]
+        counts = np.diff(np.append(flat_clusters.group_starts, len(orig)))
+        return _ClusterIndices(orig, flat_clusters.group_starts, counts)
 
     @classmethod
     def _aggregate_dataset(
@@ -206,24 +210,35 @@ class SuperobbingFilter(AndFilter):
         counts: np.ndarray,
     ) -> tuple[np.ndarray, bool]:
         """Unwrap 1D longitudes around each cluster's circular reference."""
-        use_0_360 = not bool(np.any(lons < 0.0))
-        rad = np.deg2rad(lons)
+        lons_f64 = np.asarray(lons, dtype=np.float64)
+        use_0_360 = not bool(np.any(lons_f64 < 0.0))
+        rad = np.deg2rad(lons_f64)
         valid = np.isfinite(rad)
         sin_sum = np.add.reduceat(np.where(valid, np.sin(rad), 0.0), group_starts)
         cos_sum = np.add.reduceat(np.where(valid, np.cos(rad), 0.0), group_starts)
         circ_ref = np.rad2deg(np.arctan2(sin_sum, cos_sum))
         ref_per_obs = np.repeat(circ_ref, counts)
-        unwrapped = ref_per_obs + ((lons - ref_per_obs + 180.0) % 360.0) - 180.0
+        unwrapped = ref_per_obs + ((lons_f64 - ref_per_obs + 180.0) % 360.0) - 180.0
         return unwrapped, use_0_360
 
     @staticmethod
-    def _restore_longitude_convention(lon: np.ndarray, use_0_360: bool) -> np.ndarray:
+    def _restore_longitude_convention(
+        lon: np.ndarray,
+        use_0_360: bool,
+        dtype: np.dtype[Any] | None = None,
+    ) -> np.ndarray:
         """Wrap reduced longitudes back into the input [0, 360) or [-180, 180) range."""
         if use_0_360:
             out = np.mod(lon, 360.0)
+            if dtype is not None:
+                out = out.astype(dtype, copy=False)
             out[out >= 360.0] = 0.0
             return out
-        return ((lon + 180.0) % 360.0) - 180.0
+        out = ((lon + 180.0) % 360.0) - 180.0
+        if dtype is not None:
+            out = out.astype(dtype, copy=False)
+        out[out >= 180.0] = -180.0
+        return out
 
     @classmethod
     def _reduce_variable(
@@ -281,11 +296,9 @@ class SuperobbingFilter(AndFilter):
                 )
             else:
                 raise ValueError(f"Unsupported superob aggregation: {method}")
-            reduced_moved = (
-                cls._restore_longitude_convention(raw_lon, use_0_360)
-                .reshape((n_groups, *trailing_shape))
-                .astype(da.dtype, copy=False)
-            )
+            reduced_moved = cls._restore_longitude_convention(
+                raw_lon, use_0_360, dtype=da.dtype
+            ).reshape((n_groups, *trailing_shape))
         elif np.issubdtype(da.dtype, np.datetime64) and trailing_shape == ():
             unit = np.datetime_data(da.dtype)[0]
             epoch = np.datetime64("2020-01-01T00:00:00", unit)

@@ -3,6 +3,7 @@
 import math
 import numbers
 from collections.abc import Callable, Mapping
+from dataclasses import dataclass
 from typing import Any, NoReturn
 
 import numpy as np
@@ -13,7 +14,27 @@ except ImportError:
     _cKDTree = None
 
 EARTH_RADIUS_KM = 6371.0
-_INV_SQRT3 = 1.0 / math.sqrt(3.0)
+
+
+@dataclass(frozen=True, slots=True)
+class ReducedGridCells:
+    cell_keys: np.ndarray
+    lat_center: np.ndarray
+    lon_center: np.ndarray
+    norm_lons: np.ndarray
+
+
+@dataclass(frozen=True, slots=True)
+class ExpandedSegments:
+    flat_offsets: np.ndarray
+    group_ids: np.ndarray
+    new_starts: np.ndarray
+
+
+@dataclass(frozen=True, slots=True)
+class FlatClusters:
+    flat_indices: np.ndarray
+    group_starts: np.ndarray
 
 
 def _is_positive_finite_number(value: Any) -> bool:
@@ -80,11 +101,8 @@ def compute_reduced_grid_cells(
     lons: np.ndarray,
     dlat: float,
     dlon: float,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
-    """Compute equal-area reduced lat/lon grid cell keys and cell centers.
-
-    Returns ``(cell_keys, lat_center, center_lon, norm_lons)``.
-    """
+) -> ReducedGridCells:
+    """Compute equal-area reduced lat/lon grid cell keys and cell centers."""
     norm_lons = np.mod(lons, 360.0)
     norm_lons[norm_lons >= 360.0] = 0.0
 
@@ -100,21 +118,23 @@ def compute_reduced_grid_cells(
 
     max_lon_bins = int(np.ceil(360.0 / dlon)) + 1
     cell_keys = lat_bins * max_lon_bins + lon_bins
-    return cell_keys, lat_center, center_lon, norm_lons
+    return ReducedGridCells(
+        cell_keys=cell_keys,
+        lat_center=lat_center,
+        lon_center=center_lon,
+        norm_lons=norm_lons,
+    )
 
 
 def expand_segment_indices(
     starts: np.ndarray,
     counts: np.ndarray,
-) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Vectorized expansion of contiguous ``[start, start + count)`` ranges.
-
-    Returns ``(flat_offsets, group_ids, new_starts)`` without Python loops.
-    """
+) -> ExpandedSegments:
+    """Vectorized expansion of contiguous ``[start, start + count)`` ranges."""
     n_groups = len(counts)
     if n_groups == 0:
         empty = np.empty(0, dtype=np.int64)
-        return empty, empty, empty
+        return ExpandedSegments(empty, empty, empty)
 
     total = int(counts.sum())
     group_ids = np.repeat(np.arange(n_groups, dtype=np.int64), counts)
@@ -124,7 +144,7 @@ def expand_segment_indices(
 
     within_offset = np.arange(total, dtype=np.int64) - new_starts[group_ids]
     flat_offsets = starts[group_ids] + within_offset
-    return flat_offsets, group_ids, new_starts
+    return ExpandedSegments(flat_offsets, group_ids, new_starts)
 
 
 def latlon_to_cartesian(lats: np.ndarray, lons: np.ndarray) -> np.ndarray:
@@ -145,12 +165,12 @@ def cluster_by_distance_flat(
     lats: np.ndarray,
     lons: np.ndarray,
     distance_km: float,
-) -> tuple[np.ndarray, np.ndarray]:
+) -> FlatClusters:
     """Group points within ``distance_km`` using 3D Cartesian voxel leader clustering.
 
-    Returns ``(flat_indices, group_starts)`` where ``flat_indices`` concatenates
-    member indices for each cluster and ``group_starts`` gives the start offset
-    of each cluster in ``flat_indices``.
+    Returns ``FlatClusters`` where ``flat_indices`` concatenates member indices
+    for each cluster and ``group_starts`` gives the start offset of each cluster
+    in ``flat_indices``.
     """
     if not math.isfinite(distance_km) or distance_km <= 0.0:
         raise ValueError(
@@ -159,9 +179,13 @@ def cluster_by_distance_flat(
 
     n_obs = len(lats)
     if n_obs == 0:
-        return np.empty(0, dtype=np.int64), np.empty(0, dtype=np.int64)
+        empty = np.empty(0, dtype=np.int64)
+        return FlatClusters(empty, empty)
     if distance_km >= np.pi * EARTH_RADIUS_KM:
-        return np.arange(n_obs, dtype=np.int64), np.zeros(1, dtype=np.int64)
+        return FlatClusters(
+            np.arange(n_obs, dtype=np.int64),
+            np.zeros(1, dtype=np.int64),
+        )
 
     xyz = latlon_to_cartesian(lats, lons)
     half_angle = min(float(distance_km) / (2.0 * EARTH_RADIUS_KM), np.pi / 2.0)
@@ -170,7 +194,7 @@ def cluster_by_distance_flat(
 
     # Sub-voxel width chord / sqrt(3) guarantees every point in a sub-voxel lies
     # within `chord` of that sub-voxel's first observation.
-    sub_chord = chord * _INV_SQRT3
+    sub_chord = chord / math.sqrt(3.0)
     sub_voxels = np.floor(xyz / sub_chord).astype(np.int64)
     v_min = int(sub_voxels.min())
     v_max = int(sub_voxels.max())
@@ -239,7 +263,10 @@ def cluster_by_distance_flat(
 
     n_clusters = len(leader_indices)
     if n_clusters == 1:
-        return np.arange(n_obs, dtype=np.int64), np.zeros(1, dtype=np.int64)
+        return FlatClusters(
+            np.arange(n_obs, dtype=np.int64),
+            np.zeros(1, dtype=np.int64),
+        )
 
     leaders_xyz = xyz[leader_indices]
 
@@ -300,4 +327,4 @@ def cluster_by_distance_flat(
     group_starts = np.r_[0, np.where(sorted_ids[1:] != sorted_ids[:-1])[0] + 1].astype(
         np.int64, copy=False
     )
-    return flat_indices, group_starts
+    return FlatClusters(flat_indices, group_starts)

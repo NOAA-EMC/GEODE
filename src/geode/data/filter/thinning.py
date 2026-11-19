@@ -87,23 +87,25 @@ class ThinningFilter(AndFilter):
     ) -> np.ndarray:
         sub_lats = lats[valid_indices]
         sub_lons = lons[valid_indices]
-        cell_keys, lat_center, center_lon, norm_lons = compute_reduced_grid_cells(
+        grid_cells = compute_reduced_grid_cells(
             sub_lats, sub_lons, dlat=dlat, dlon=dlon
         )
 
         # Single O(N log N) sort with secondary tie-breaker key per strategy
         if strategy == "first":
-            order = np.argsort(cell_keys, kind="stable")
+            order = np.argsort(grid_cells.cell_keys, kind="stable")
         elif strategy == "random":
-            rand_keys = np.random.default_rng(seed).random(len(cell_keys))
-            order = np.lexsort((rand_keys, cell_keys))
+            rand_keys = np.random.default_rng(seed).random(len(grid_cells.cell_keys))
+            order = np.lexsort((rand_keys, grid_cells.cell_keys))
         elif strategy == "center":
-            dist_sq = (sub_lats - lat_center) ** 2 + (norm_lons - center_lon) ** 2
-            order = np.lexsort((dist_sq, cell_keys))
+            dist_sq = (sub_lats - grid_cells.lat_center) ** 2 + (
+                grid_cells.norm_lons - grid_cells.lon_center
+            ) ** 2
+            order = np.lexsort((dist_sq, grid_cells.cell_keys))
         else:
             raise ValueError(f"Invalid thinning strategy: {strategy}")
 
-        sorted_cells = cell_keys[order]
+        sorted_cells = grid_cells.cell_keys[order]
         first_in_cell = np.r_[True, sorted_cells[1:] != sorted_cells[:-1]]
         return np.sort(valid_indices[order[first_in_cell]])
 
@@ -118,29 +120,31 @@ class ThinningFilter(AndFilter):
     ) -> np.ndarray:
         sub_lats = lats[valid_indices]
         sub_lons = lons[valid_indices]
-        flat_indices, group_starts = cluster_by_distance_flat(
-            sub_lats, sub_lons, distance_km=distance_km
-        )
-        if len(group_starts) == 0:
+        clusters = cluster_by_distance_flat(sub_lats, sub_lons, distance_km=distance_km)
+        if len(clusters.group_starts) == 0:
             return np.empty(0, dtype=np.int64)
 
-        orig = valid_indices[flat_indices]
-        counts = np.diff(np.append(group_starts, len(orig)))
+        orig = valid_indices[clusters.flat_indices]
+        counts = np.diff(np.append(clusters.group_starts, len(orig)))
 
         if strategy == "first":
-            selected = orig[group_starts]
+            selected = orig[clusters.group_starts]
         elif strategy == "random":
             rng = np.random.default_rng(seed)
             offsets = rng.integers(0, counts)
-            selected = orig[group_starts + offsets]
+            selected = orig[clusters.group_starts + offsets]
         elif strategy == "center":
             # 3D Cartesian centroid avoids antimeridian (+/-180 deg) midpoint discontinuity
-            xyz = latlon_to_cartesian(sub_lats[flat_indices], sub_lons[flat_indices])
-            mean_xyz = np.add.reduceat(xyz, group_starts, axis=0) / counts[:, None]
+            xyz = latlon_to_cartesian(
+                sub_lats[clusters.flat_indices], sub_lons[clusters.flat_indices]
+            )
+            mean_xyz = (
+                np.add.reduceat(xyz, clusters.group_starts, axis=0) / counts[:, None]
+            )
             group_ids = np.repeat(np.arange(len(counts)), counts)
             dist_sq = np.sum((xyz - mean_xyz[group_ids]) ** 2, axis=1)
             order = np.lexsort((dist_sq, group_ids))
-            selected = orig[order[group_starts]]
+            selected = orig[order[clusters.group_starts]]
         else:
             raise ValueError(f"Invalid thinning strategy: {strategy}")
 
